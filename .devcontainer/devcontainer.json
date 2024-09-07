@@ -1,0 +1,61 @@
+{
+	"name": "Debian Bullseye C++",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	// X11 Forwarding
+	"mounts": [
+		"source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached"
+	],
+	// Display Forwarding
+	"containerEnv": {
+		"DISPLAY": "${localEnv:DISPLAY}"
+	},
+	"remoteEnv": {
+		"DOCKER_BUILDKIT": "0"
+	},
+	// GUI Session Forwarding
+	"runArgs": [
+		"--net",
+		"host",
+		"-e",
+		"DISPLAY=:0",
+		"-e",
+		"XAUTHORITY=/tmp/.Xauthority",
+		"-v",
+		"${localEnv:HOME}/.Xauthority:/tmp/.Xauthority",
+		"-v",
+		"/run/user/1000/pulse/native:/run/user/1000/pulse/native",
+		"-e",
+		"PULSE_SERVER=unix:/run/user/1000/pulse/native",
+		"-u",
+		"1000:1000"
+	],
+	// Install these extensions.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"rioj7.command-variable",
+				"ms-vscode.cpptools-extension-pack",
+				"twxs.cmake",
+				"eamodio.gitlens",
+				"ms-vscode.cmake-tools",
+				"llvm-vs-code-extensions.vscode-clangd"
+			],
+			"settings": {
+				"[cpp]": {
+					"editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+				},
+				"cmake.configureOnOpen": true,
+				"editor.formatOnSave": true,
+				"C_Cpp.intelliSenseEngine": "disabled",
+				"cmake.preferredGenerators": [
+					"Unix Makefiles"
+				],
+				"cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json",
+				"git.autofetch": true,
+				"clangd.onConfigChanged": "restart"
+			}
+		}
+	}
+}

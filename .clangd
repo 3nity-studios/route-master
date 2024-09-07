@@ -1,0 +1,9 @@
+# CompileFlags:
+  # Add: [-include source/include/pch.hpp]          this was meant to use a pch
+  #                                                 and possibly speed up builds
+  #                                                 but it never worked with vsc
+
+  # CompilationDatabase: build/                     only available in clangd 12+
+
+CompileFlags:
+  Add: [-std=c++17]
