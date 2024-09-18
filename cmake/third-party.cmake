@@ -18,8 +18,24 @@ endif()
 
 set(FETCHCONTENT_UPDATES_DISCONNECTED ON CACHE BOOL "Don't fetch libraries everytime CMake runs")
 set(FETCHCONTENT_QUIET FALSE)
+# this is to prevent redownloading dependencies each time build folders are
+#  removed.
+#  ccache would probably be a more elegant solution tho.
+set(FETCHCONTENT_BASE_DIR ${PROJECT_SOURCE_DIR}/_deps CACHE PATH "Directory to download the dependencies to" FORCE)
 
-set(BUILD_SHARED_LIBS OFF)
+if(RM_STATIC_LINK)
+  set(BUILD_SHARED_LIBS OFF)
+
+  set(SFML_STATIC_LIBRARIES TRUE)
+  add_compile_definitions(SFML_STATIC)
+  
+  set(TMXLITE_STATIC_LIBRARIES TRUE)
+  add_compile_definitions(TMXLITE_STATIC)
+
+  set(DESIGNAR_STATIC_LIBRARIES TRUE)
+else()
+  set(BUILD_SHARED_LIBS ON)
+endif()
 
 if(RM_USE_SYSTEM_JSON)
   find_package(nlohmann_json 3.11.3 REQUIRED)
@@ -27,19 +43,21 @@ else()
   FetchContent_Declare(
     json
     URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
+    URL_HASH SHA256=d6c65aca6b1ed68e7a182f4757257b107ae403032760ed6ef121c9d55e81757d
+    TLS_VERIFY TRUE
     EXCLUDE_FROM_ALL
     SYSTEM
   )
   FetchContent_MakeAvailable(json)
 endif()
 
-if(RM_USE_SYSTEM_DESIGNAR) # one can only dream huh? c:
+if(RM_USE_SYSTEM_DESIGNAR)
   find_package(Designar 2.0.1 REQUIRED)
 else()
   FetchContent_Declare(
     Designar
     GIT_REPOSITORY https://github.com/3nity-studios/DeSiGNAR.git
-    GIT_TAG        v2.0.1
+    GIT_TAG        35295635b580fd0d7aedae4af31f5221652a0d37 # v2.0.1
     GIT_SHALLOW    ON
     GIT_PROGRESS TRUE
     EXCLUDE_FROM_ALL
@@ -50,15 +68,15 @@ endif()
 
 if(RM_USE_SYSTEM_SFML)
   find_package(
-    SFML 2.6
-    COMPONENTS system window graphics audio
+    SFML 3
+    COMPONENTS System Window Graphics Audio
     REQUIRED
   )
 else()
   FetchContent_Declare(
     SFML
     GIT_REPOSITORY   https://github.com/SFML/SFML.git
-    GIT_TAG          2.6.x
+    GIT_TAG          2116a3ba85673e3e30dc637a2cf2e20d1c4aa710 # 3.0.0-rc.1
     GIT_SHALLOW      ON
     GIT_PROGRESS     TRUE
     EXCLUDE_FROM_ALL
@@ -67,39 +85,23 @@ else()
   FetchContent_MakeAvailable(SFML)
 endif()
 
-# avoid error about CMake compatibility being dropped in the future
-# as TMXLite CMakeLists.txt specifies an older CMake version (< 3.5)
-set(CMAKE_ERROR_DEPRECATED OFF CACHE BOOL "" FORCE)
-
-# to find TMXLite properly through FindTMXLITE.cmake as it doesn't provide a
-# tmxliteConfig.cmake to keep up with modern CMake standards
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
-
-# TMXLite doesn't build as a static lib by default so this might prevent future
-# linking errors
-# set(TMXLITE_STATIC_LIB ON CACHE BOOL "")
-
 if(RM_USE_SYSTEM_TMXLITE)
   find_package(
-    TMXLITE 1.4
+    tmxlite 1.4
     REQUIRED
   )
 else()
   FetchContent_Declare(
     tmxlite
-    GIT_REPOSITORY   https://github.com/fallahn/tmxlite.git
-    GIT_TAG          v1.4.4
+    GIT_REPOSITORY   https://github.com/3nity-studios/tmxlite.git
+    GIT_TAG          57dcaf56c68f17951dc1f67657be4bfe0d11a734 # v1.4.4.1
     GIT_SHALLOW      ON
     GIT_PROGRESS     TRUE
+    SOURCE_SUBDIR    tmxlite
     EXCLUDE_FROM_ALL
     SYSTEM
-    # PATCH_COMMAND    ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_LIST_DIR}/TMXLITE_CMakeLists.txt" "${CMAKE_CURRENT_BINARY_DIR}/_deps/tmxlite-src/tmxlite/CMakeLists.txt"
   )
   FetchContent_MakeAvailable(tmxlite)
-  add_subdirectory(${tmxlite_SOURCE_DIR}/tmxlite SYSTEM)
-  set(TMXLITE_LIBRARY_RELEASE tmxlite CACHE STRING "")
-  set(TMXLITE_INCLUDE_DIR ${tmxlite_SOURCE_DIR}/tmxlite/include CACHE STRING "")
-  include_directories(${TMXLITE_INCLUDE_DIR} SYSTEM)
 endif()
 
 if(RM_DEVELOPER_MODE)
@@ -112,7 +114,7 @@ if(RM_DEVELOPER_MODE)
     FetchContent_Declare(
       Catch2
       GIT_REPOSITORY   https://github.com/catchorg/Catch2.git
-      GIT_TAG          v3.7.0
+      GIT_TAG          31588bb4f56b638dd5afc28d3ebff9b9dcefb88d # v3.7.0
       GIT_SHALLOW      ON
       GIT_PROGRESS     TRUE
       EXCLUDE_FROM_ALL

@@ -623,6 +623,7 @@ These are the great projects that make all of this possible:
 * [JSON for Modern C++](https://github.com/nlohmann/json)
 
 Repositories that served as reference:
+* [sfml-game-template](https://github.com/nathandaven/sfml-game-template)
 * [cmake-sfml-project](https://github.com/SFML/cmake-sfml-project)
 * [cmake-sfml-demo](https://github.com/danebulat/cmake-sfml-demo)
 * [cmake-init](https://github.com/friendlyanon/cmake-init)

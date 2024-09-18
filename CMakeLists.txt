@@ -1,16 +1,21 @@
-cmake_minimum_required(VERSION 3.22.1 FATAL_ERROR)
-
-# ---- Export compile commands for completion engines ----
-set(CMAKE_EXPORT_COMPILE_COMMANDS=TRUE)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-# ---- Disabled as we're using presets ----
-# set(CMAKE_CXX_STANDARD 17) # C++17
-# set(CMAKE_CXX_STANDARD_REQUIRED ON) # is required
-# set(CMAKE_CXX_EXTENSIONS OFF) # without compiler extensions like gnu++17
-
+cmake_minimum_required(VERSION 3.30 FATAL_ERROR)
 include(cmake/prelude.cmake)
 
+# avoid warning about deduplicating libraries when linking in CMake 3.29+:
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.29.0")
+  cmake_policy(SET CMP0156 NEW)
+endif()
+
+# ---- Export compile commands for completion engines ----
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS=TRUE)
+
+# ---- Set directory for the resulting binaries ----
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 # ---- Set project version and details ----
+
 project(
     route-master
     VERSION 0.0.1
@@ -19,11 +24,12 @@ project(
     LANGUAGES CXX
 )
 
-include(cmake/project-is-top-level.cmake)
 include(cmake/variables.cmake)
+include(cmake/symlink-dirs.cmake)
 
 # ---- Configurable options ----
 
+option(RM_STATIC_LINK "Link all libraries statically to produce a single-file executable" ON)
 option(RM_USE_SYSTEM_JSON "Use system's installation of nlohmann's JSON library" ON)
 option(RM_USE_SYSTEM_DESIGNAR "Use system's installation of DeSiGNAR library" ON)
 option(RM_USE_SYSTEM_SFML "Use system's installation of SFML library" ON)
@@ -42,23 +48,149 @@ endif()
 
 include(cmake/third-party.cmake)
 
-# ---- Declare target ----
+# ---- Build source code ----
 
-include_directories(${PROJECT_SOURCE_DIR}/source)
-add_subdirectory(source)
+set(INCROOT ${PROJECT_SOURCE_DIR}/include)
+set(SRCROOT ${PROJECT_SOURCE_DIR}/source)
+
+include_directories(${SRCROOT})
+include_directories(${INCROOT})
+include_directories(${PROJECT_SOURCE_DIR}/build/include)
+
+# ---- config
+
+# Generate config.hpp
+configure_file(${INCROOT}/config/config.hpp.in include/config/config.hpp)
+
+set(
+  RM_CONFIG_SRC
+  ${INCROOT}/config/global.hpp
+  ${INCROOT}/config/game.hpp
+  ${SRCROOT}/config/game.cpp
+  # ${INCROOT}/config.hpp
+  ${SRCROOT}/config/config.cpp
+)
+
+# ---- engine
+
+set(
+  RM_ENGINE_SRC
+  ${SRCROOT}/engine/asset_manager.cpp
+  ${INCROOT}/engine/asset_manager.hpp
+  ${SRCROOT}/engine/input_manager.cpp
+  ${INCROOT}/engine/input_manager.hpp
+  ${SRCROOT}/engine/state_machine.cpp
+  ${INCROOT}/engine/state_machine.hpp
+)
+
+# ---- states
+
+set(
+  RM_STATES_SRC
+  ${INCROOT}/states/state.hpp
+  ${INCROOT}/states/main_menu_state.hpp
+  ${SRCROOT}/states/main_menu_state.cpp
+)
+
+# ---- platform
+
+set(RM_PLATFORM_EXTRA_LIBRARIES "")
+
+if(CMAKE_SYSTEM MATCHES "Linux")
+  set(
+    RM_PLATFORM_SPECIFIC
+    ${INCROOT}/platform/linux/linux_platform.hpp
+    ${SRCROOT}/platform/linux/linux_platform.cpp
+  )
+elseif(CMAKE_SYSTEM MATCHES "Windows")
+  set(
+    RM_PLATFORM_SPECIFIC
+    ${INCROOT}/platform/win32/resource.h
+    ${SRCROOT}/platform/win32/resource.rc
+    ${INCROOT}/platform/win32/windows_platform.hpp
+    ${SRCROOT}/platform/win32/windows_platform.cpp
+  )
+elseif(CMAKE_SYSTEM MATCHES "Darwin")
+  set(
+    RM_PLATFORM_SPECIFIC
+    ${INCROOT}/platform/macos/macos_platform.hpp
+    ${SRCROOT}/platform/macos/macos_platform.cpp
+  )
+endif()
+
+set(
+  RM_PLATFORM_GENERIC
+  ${INCROOT}/platform/platform.hpp
+)
+
+set(RM_PLATFORM_SRC ${RM_PLATFORM_GENERIC} ${RM_PLATFORM_SPECIFIC})
+
+# ---- utils
+
+set(
+  RM_UTILS_SRC
+  ${INCROOT}/utils/filesystem.hpp
+)
+
+# ---- Group all modules
+
+set(SRC
+  ${RM_CONFIG_SRC}
+  ${RM_ENGINE_SRC}
+  ${RM_STATES_SRC}
+  ${RM_PLATFORM_SRC}
+  ${RM_UTILS_SRC}
+  ${SRCROOT}/main.cpp
+)
+
+# ---- Declare executable ----
+
+add_executable(route_master_exe ${SRC})
+add_executable(route_master::exe ALIAS route_master_exe)
+set_property(TARGET route_master_exe PROPERTY OUTPUT_NAME route_master)
+
+target_include_directories(
+  route_master_exe
+  PRIVATE
+  "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
+  "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>"
+)
+
+target_link_libraries(
+  route_master_exe
+  PRIVATE
+  SFML::Graphics
+  SFML::Window
+  SFML::Audio
+  SFML::System
+  ##opengl32
+  ##gdi32
+  #freetype
+  #FLAC
+  #vorbisenc
+  #vorbisfile
+  #vorbis
+  #ogg
+  ##winmm
+  nlohmann_json::nlohmann_json
+  Designar::Designar
+  tmxlite::tmxlite
+  ${RM_PLATFORM_EXTRA_LIBRARIES}
+)
+
+symlink_common_dirs(route_master::exe)
+
+# Note: SFML does not properly propagate its requirements and it requires
+#       OpenGL in its install interface when compiled as a static library.
+if(SFML_STATIC_LIBRARIES AND NOT IOS AND NOT WIN32)
+  find_package(OpenGL REQUIRED)
+  target_link_libraries(route_master_exe PRIVATE OpenGL::GL)
+endif()
 
 # ---- Install rules ----
 
 if(NOT CMAKE_SKIP_INSTALL_RULES)
   include(cmake/install-rules.cmake)
-endif()
-
-if(WIN32)
-  add_custom_command(
-    TARGET route-master_exe
-    COMMENT "Copy OpenAL DLL"
-    PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:main>
-    VERBATIM)
 endif()
 
 # ---- Developer mode ----
