@@ -30,11 +30,11 @@ include(cmake/symlink-dirs.cmake)
 # ---- Configurable options ----
 
 option(RM_STATIC_LINK "Link all libraries statically to produce a single-file executable" ON)
-option(RM_USE_SYSTEM_JSON "Use system's installation of nlohmann's JSON library" ON)
-option(RM_USE_SYSTEM_DESIGNAR "Use system's installation of DeSiGNAR library" ON)
-option(RM_USE_SYSTEM_SFML "Use system's installation of SFML library" ON)
-option(RM_USE_SYSTEM_CATCH2 "Use system's installation of Catch2 library" ON)
-option(RM_USE_SYSTEM_TMXLITE "Use system's installation of TMXLITE library" ON)
+option(RM_USE_SYSTEM_JSON "Use system's installation of nlohmann's JSON library" OFF)
+option(RM_USE_SYSTEM_DESIGNAR "Use system's installation of DeSiGNAR library" OFF)
+option(RM_USE_SYSTEM_SFML "Use system's installation of SFML library" OFF)
+option(RM_USE_SYSTEM_CATCH2 "Use system's installation of Catch2 library" OFF)
+option(RM_USE_SYSTEM_TMXLITE "Use system's installation of TMXLITE library" OFF)
 
 option(USE_INSTALL_RESOURCE_PATH "Set resource path to install location" OFF)
 if(NOT USE_INSTALL_RESOURCE_PATH)

@@ -29,8 +29,11 @@ if(RM_STATIC_LINK)
   set(SFML_STATIC_LIBRARIES TRUE)
   add_compile_definitions(SFML_STATIC)
   
-  set(TMXLITE_STATIC_LIBRARIES TRUE)
-  add_compile_definitions(TMXLITE_STATIC)
+  option(TMXLITE_STATIC_LIBRARIES "Search for tmxlite static dependencies" ON)
+  if(TMXLITE_STATIC_LIBRARIES)
+    add_compile_definitions(TMXLITE_STATIC)
+  endif()
+  set(TMXLITE_FETCH_EXTLIBS TRUE CACHE INTERNAL "Automatically download TMXLITE dependencies")
 
   set(DESIGNAR_STATIC_LIBRARIES TRUE)
 else()

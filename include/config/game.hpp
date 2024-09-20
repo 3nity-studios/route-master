@@ -17,36 +17,24 @@ struct GameData
 typedef std::shared_ptr<GameData> GameDataRef;
 class Game
 {
-
   private:
-    // For platform specific methods
     util::Platform _platform;
-
-    // Game Variables
     sf::VideoMode _video_mode;
-
-    // Private Functions
-    void init_variables();
-    void init_window();
-
-    // Game Data ref
     GameDataRef _data = std::make_shared<GameData>();
-
-    // Time data
     const float dt = 1.0f / 60.0f;
     sf::Clock _clock;
 
+    void init_variables();
+    void init_window();
+
   public:
-    // Constructors and Destructors
     Game();
     virtual ~Game();
 
-    // Accessors
     bool is_running() const;
     void run();
 };
 
-// custom exception to use for debugging
 struct GameException : public std::exception
 {
   protected:

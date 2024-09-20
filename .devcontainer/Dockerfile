@@ -92,3 +92,26 @@ RUN apt-get -y -qq update && export DEBIAN_FRONTEND=noninteractive \
     python3-pip \
     && python3 -m pip install codespell
     && rm -rf /var/lib/apt/lists/*
+
+RUN git clone https://github.com/SFML/SFML.git --branch 3.0.0-rc.1 --depth 1 \
+    && cd SFML \
+    && cmake -S . -B build && cmake --build build && cmake --install build \
+    && cd .. && rm -rf SFML \
+    && git clone https://github.com/3nity-studios/tmxlite.git --branch v1.4.4.1 --depth 1 \
+    && cd tmxlite \
+    && cmake -S tmxlite -B build && cmake --build build && cmake --install build \
+    && cd .. && rm -rf tmxlite \
+    && git clone https://github.com/3nity-studios/DeSiGNAR.git --branch v2.0.1 --depth 1 \
+    && cd DeSiGNAR \
+    && cmake -S . -B build && cmake --build build && cmake --install build \
+    && cd .. && rm -rf DeSiGNAR \
+    && git clone https://github.com/catchorg/Catch2.git --branch v3.7.0 --depth 1 \
+    && cd Catch2 \
+    && cmake -S . -B build \
+    && cmake --build build && cmake --install build \
+    && cd .. && rm -rf Catch2 \
+    && git clone https://github.com/nlohmann/json.git --branch v3.11.3 --depth 1 \
+    && cd json \
+    && cmake -S . -B build -DJSON_BuildTests=OFF \
+    && cmake --build build && cmake --install build \
+    && cd .. && rm -rf json
