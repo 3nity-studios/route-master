@@ -25,6 +25,7 @@ project(
 )
 
 include(cmake/variables.cmake)
+include(cmake/folders.cmake)
 include(cmake/symlink-dirs.cmake)
 
 # ---- Configurable options ----
@@ -70,6 +71,14 @@ set(
   # ${INCROOT}/config.hpp
   ${SRCROOT}/config/config.cpp
 )
+add_library(route_master_config ${RM_CONFIG_SRC})
+add_library(route_master::config ALIAS route_master_config)
+target_link_libraries(route_master_config
+  PRIVATE
+  SFML::Graphics
+  SFML::Window
+  SFML::Audio
+  SFML::System)
 
 # ---- engine
 
@@ -82,6 +91,14 @@ set(
   ${SRCROOT}/engine/state_machine.cpp
   ${INCROOT}/engine/state_machine.hpp
 )
+add_library(route_master_engine ${RM_ENGINE_SRC})
+add_library(route_master::engine ALIAS route_master_engine)
+target_link_libraries(route_master_engine
+  PRIVATE
+  SFML::Graphics
+  SFML::Window
+  SFML::Audio
+  SFML::System)
 
 # ---- states
 
@@ -91,6 +108,14 @@ set(
   ${INCROOT}/states/main_menu_state.hpp
   ${SRCROOT}/states/main_menu_state.cpp
 )
+add_library(route_master_states ${RM_STATES_SRC})
+add_library(route_master::states ALIAS route_master_states)
+target_link_libraries(route_master_states
+  PRIVATE
+  SFML::Graphics
+  SFML::Window
+  SFML::Audio
+  SFML::System)
 
 # ---- platform
 
@@ -123,7 +148,19 @@ set(
   ${INCROOT}/platform/platform.hpp
 )
 
-set(RM_PLATFORM_SRC ${RM_PLATFORM_GENERIC} ${RM_PLATFORM_SPECIFIC})
+set(
+  RM_PLATFORM_SRC
+  ${RM_PLATFORM_GENERIC}
+  ${RM_PLATFORM_SPECIFIC}
+)
+add_library(route_master_platform ${RM_PLATFORM_SRC})
+add_library(route_master::platform ALIAS route_master_platform)
+target_link_libraries(route_master_platform
+  PRIVATE
+  SFML::Graphics
+  SFML::Window
+  SFML::Audio
+  SFML::System)
 
 # ---- utils
 
@@ -131,15 +168,23 @@ set(
   RM_UTILS_SRC
   ${INCROOT}/utils/filesystem.hpp
 )
+add_library(route_master_utils ${RM_STATES_SRC})
+add_library(route_master::utils ALIAS route_master_utils)
+target_link_libraries(route_master_utils
+  PRIVATE
+  SFML::Graphics
+  SFML::Window
+  SFML::Audio
+  SFML::System)
 
 # ---- Group all modules
 
 set(SRC
-  ${RM_CONFIG_SRC}
-  ${RM_ENGINE_SRC}
-  ${RM_STATES_SRC}
-  ${RM_PLATFORM_SRC}
-  ${RM_UTILS_SRC}
+  # ${RM_CONFIG_SRC}
+  # ${RM_ENGINE_SRC}
+  # ${RM_STATES_SRC}
+  # ${RM_PLATFORM_SRC}
+  # ${RM_UTILS_SRC}
   ${SRCROOT}/main.cpp
 )
 
@@ -159,6 +204,11 @@ target_include_directories(
 target_link_libraries(
   route_master_exe
   PRIVATE
+  route_master::states
+  route_master::config
+  route_master::platform
+  route_master::engine
+  route_master::utils
   SFML::Graphics
   SFML::Window
   SFML::Audio
@@ -193,14 +243,17 @@ if(NOT CMAKE_SKIP_INSTALL_RULES)
   include(cmake/install-rules.cmake)
 endif()
 
+# ---- End-of-file commands ----
+
+add_folders(Project)
+
 # ---- Developer mode ----
 
-if(NOT RM_DEVELOPER_MODE)
-  return()
+if(RM_DEVELOPER_MODE)
+  include(cmake/dev-mode.cmake)
 elseif(NOT PROJECT_IS_TOP_LEVEL)
   message(
       AUTHOR_WARNING
       "Developer mode is intended for developers of Route Master"
   )
-  include(cmake/dev-mode.cmake)
 endif()
