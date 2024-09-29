@@ -14,6 +14,11 @@ BusStop::BusStop(int _id, std::string _name, float _avg_arrival_time, float _avg
     // empty
 }
 
+int BusStop::get_id()
+{
+    return id;
+}
+
 std::string BusStop::get_name()
 {
     return name;

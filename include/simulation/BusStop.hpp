@@ -30,6 +30,7 @@ class BusStop
     BusStop();
     BusStop(int _id, std::string _name, float _avg_arrival_time, float _avg_waiting_time, float _sd_waiting_time, float _avg_bus_stop, float _sd_bus_stop);
 
+    int get_id();
     std::string get_name();
     PassengerHeap get_passenger_list();
 
