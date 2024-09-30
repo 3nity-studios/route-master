@@ -1,6 +1,5 @@
 #include <string>
-#include <graph.hpp>
-#include "BusStop.hpp"
+#include <Designar/graph.hpp>
 #include "Bus.hpp"
 #include "Employee.hpp"
 
@@ -15,8 +14,8 @@ class City
     City();
     City(int _id, std::string _name, Designar::Graph<BusStop, int> _city_map);
 
-    Designar::SLList<Designar::GraphNode<BusStop, int, Designar::EmptyClass> *> City::get_bus_stops();
-    Designar::SLList<Designar::GraphArc<Designar::GraphNode<BusStop, int, Designar::EmptyClass>, BusStop, int, Designar::EmptyClass> *> City::get_streets();
+    Designar::SLList<Designar::GraphNode<BusStop, int, Designar::EmptyClass> *> get_bus_stops();
+    Designar::SLList<Designar::GraphArc<Designar::GraphNode<BusStop, int, Designar::EmptyClass>, BusStop, int, Designar::EmptyClass> *> get_streets();
     
     
     void add_bus_stop(BusStop bus_stop);

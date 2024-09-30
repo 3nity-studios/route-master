@@ -228,6 +228,35 @@ target_link_libraries(
   ${RM_PLATFORM_EXTRA_LIBRARIES}
 )
 
+set(SIMULATION_TESTS_SOURCES
+    ${CMAKE_CURRENT_LIST_DIR}/tests/src/simulation_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/source/simulation/Bus.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/source/simulation/BusStop.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/source/simulation/City.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/source/simulation/Employee.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/source/simulation/Passenger.cpp
+)
+
+add_executable(simulation_tests ${SIMULATION_TESTS_SOURCES})
+
+target_include_directories(simulation_tests PRIVATE $(CMAKE_CURRENT_LIST_DIR)/include/simulation)
+
+target_link_libraries(
+    simulation_tests PRIVATE
+    route_master::states
+    route_master::config
+    route_master::platform
+    route_master::engine
+    route_master::utils
+    tmxlite::tmxlite
+    nlohmann_json::nlohmann_json
+    Designar::Designar
+)
+target_compile_features(simulation_tests PRIVATE cxx_std_17)
+
+
+
+
 symlink_common_dirs(route_master::exe)
 
 # Note: SFML does not properly propagate its requirements and it requires
