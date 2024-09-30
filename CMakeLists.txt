@@ -36,6 +36,7 @@ option(RM_USE_SYSTEM_DESIGNAR "Use system's installation of DeSiGNAR library" OF
 option(RM_USE_SYSTEM_SFML "Use system's installation of SFML library" OFF)
 option(RM_USE_SYSTEM_CATCH2 "Use system's installation of Catch2 library" OFF)
 option(RM_USE_SYSTEM_TMXLITE "Use system's installation of TMXLITE library" OFF)
+option(RM_USE_SYSTEM_TGUI "Use system's installation of TGUI library" OFF)
 
 option(USE_INSTALL_RESOURCE_PATH "Set resource path to install location" OFF)
 if(NOT USE_INSTALL_RESOURCE_PATH)
@@ -116,6 +117,22 @@ target_link_libraries(route_master_states
   SFML::Window
   SFML::Audio
   SFML::System)
+
+# ---- gui
+
+# set(
+#   RM_GUI_SRC
+#   ${INCROOT}/gui/gui.hpp
+# )
+# add_library(route_master_gui ${RM_GUI_SRC})
+# add_library(route_master::gui ALIAS route_master_gui)
+# target_link_libraries(route_master_gui
+#   PRIVATE
+#   SFML::Graphics
+#   SFML::Window
+#   SFML::Audio
+#   SFML::System)
+
 
 # ---- platform
 
@@ -208,7 +225,9 @@ target_link_libraries(
   route_master::config
   route_master::platform
   route_master::engine
+  # route_master::gui
   route_master::utils
+  TGUI::TGUI
   SFML::Graphics
   SFML::Window
   SFML::Audio

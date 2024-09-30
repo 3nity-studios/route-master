@@ -9,6 +9,8 @@ MainMenuState::MainMenuState(GameDataRef data) : _data(data)
 
 void MainMenuState::init_state()
 {
+    this->_data->gui.setWindow(*this->_data->window);
+    this->_data->gui.loadWidgetsFromFile("assets/screens/main_menu.txt");
 }
 
 void MainMenuState::update_inputs()
@@ -16,6 +18,8 @@ void MainMenuState::update_inputs()
     // Event Polling
     while (const std::optional event = this->_data->window->pollEvent())
     {
+        this->_data->gui.handleEvent(*event);
+
         if (event->is<sf::Event::Closed>())
         {
             this->_data->window->close();
@@ -78,7 +82,7 @@ void MainMenuState::draw_state(float dt __attribute__((unused)))
     this->_data->window->draw(text);
 
     // END SAMPLE RENDER CODE
-
+    this->_data->gui.draw();
     // Displays rendered objects
     this->_data->window->display();
 }
