@@ -233,6 +233,7 @@ set(SIMULATION_TESTS_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/source/simulation/Bus.cpp
     ${CMAKE_CURRENT_LIST_DIR}/source/simulation/BusStop.cpp
     ${CMAKE_CURRENT_LIST_DIR}/source/simulation/City.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/source/simulation/Street.cpp
     ${CMAKE_CURRENT_LIST_DIR}/source/simulation/Employee.cpp
     ${CMAKE_CURRENT_LIST_DIR}/source/simulation/Passenger.cpp
 )
