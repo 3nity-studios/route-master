@@ -76,6 +76,7 @@ add_library(route_master_config ${RM_CONFIG_SRC})
 add_library(route_master::config ALIAS route_master_config)
 target_link_libraries(route_master_config
   PRIVATE
+  TGUI::TGUI
   SFML::Graphics
   SFML::Window
   SFML::Audio
@@ -96,6 +97,7 @@ add_library(route_master_engine ${RM_ENGINE_SRC})
 add_library(route_master::engine ALIAS route_master_engine)
 target_link_libraries(route_master_engine
   PRIVATE
+  TGUI::TGUI
   SFML::Graphics
   SFML::Window
   SFML::Audio
@@ -113,6 +115,7 @@ add_library(route_master_states ${RM_STATES_SRC})
 add_library(route_master::states ALIAS route_master_states)
 target_link_libraries(route_master_states
   PRIVATE
+  TGUI::TGUI
   SFML::Graphics
   SFML::Window
   SFML::Audio
@@ -174,6 +177,7 @@ add_library(route_master_platform ${RM_PLATFORM_SRC})
 add_library(route_master::platform ALIAS route_master_platform)
 target_link_libraries(route_master_platform
   PRIVATE
+  TGUI::TGUI
   SFML::Graphics
   SFML::Window
   SFML::Audio
@@ -189,6 +193,7 @@ add_library(route_master_utils ${RM_STATES_SRC})
 add_library(route_master::utils ALIAS route_master_utils)
 target_link_libraries(route_master_utils
   PRIVATE
+  TGUI::TGUI
   SFML::Graphics
   SFML::Window
   SFML::Audio
