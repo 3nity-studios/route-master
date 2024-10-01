@@ -101,7 +101,7 @@ else()
   FetchContent_Declare(
     tmxlite
     GIT_REPOSITORY   https://github.com/3nity-studios/tmxlite.git
-    GIT_TAG          57dcaf56c68f17951dc1f67657be4bfe0d11a734 # v1.4.4.1
+    GIT_TAG          b8794039176e3c95f1305f84958a515ef8b98e64 # v1.4.4.1
     GIT_SHALLOW      ON
     GIT_PROGRESS     TRUE
     SOURCE_SUBDIR    tmxlite
