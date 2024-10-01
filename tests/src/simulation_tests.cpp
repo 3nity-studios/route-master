@@ -142,7 +142,9 @@ void test_leave_passengers()
     };
 
     Bus bus = Bus("A", 15, passengers, 0);
-    bus.leave_passengers(2); // Current stop
+    BusStop bus_stop(2, "Terminal", 5, 4, 3, 2, 1);
+
+    bus.leave_passengers(bus_stop); // Current stop
 
     bool test_passed = true;
 
@@ -215,6 +217,8 @@ void test_run_simulation() {
     city.add_bus_stop(stop1);
     city.add_bus_stop(stop2);
     city.add_bus_stop(stop3);
+
+    city.initialize_bus_stops();
     
     Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f);
     Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f);
@@ -222,7 +226,7 @@ void test_run_simulation() {
     city.add_street(street1, 1, 2);
     city.add_street(street2, 2, 3);
     
-    std::list<Designar::GraphArc<Designar::GraphNode<BusStop, Street, Designar::EmptyClass>, BusStop, Street, Designar::EmptyClass> *> path;
+    StreetArcList path;
     
     for(int i = 1; i < 3; i++)
     {
@@ -230,7 +234,7 @@ void test_run_simulation() {
         {
             if(street->get_info().get_id() == i )
             {
-                path.push_back(street);
+                path.append(street);
             }
         }
     }
@@ -239,6 +243,169 @@ void test_run_simulation() {
     Employee driver("John", "Doe", 30, 8, 0);
     city.run_simulation(bus, driver, 10, path);
     std::cout << "OK!" << std::endl;
+}
+
+void test_driver_fatigue()
+{
+    std::cout << "Testing driver fatigue ";
+
+    City city;
+    
+    BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
+    BusStop stop2(2, "Stop2", 10.0, 10.0, 3.0, 3.0, 2.0);
+    BusStop stop3(3, "Stop3", 15.0, 15.0, 3.0, 3.0, 2.0);
+    
+    city.add_bus_stop(stop1);
+    city.add_bus_stop(stop2);
+    city.add_bus_stop(stop3);
+
+    city.initialize_bus_stops();
+    
+    Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f);
+    Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f);
+    
+    city.add_street(street1, 1, 2);
+    city.add_street(street2, 2, 3);
+    
+    StreetArcList path;
+    
+    for(int i = 1; i < 3; i++)
+    {
+        for (auto street : city.get_streets())
+        {
+            if(street->get_info().get_id() == i )
+            {
+                path.append(street);
+            }
+        }
+    }
+    
+    Bus bus("Bus1", 15, std::list<Passenger>{}, 0);
+    Employee driver("John", "Doe", 30, 8, 0);
+    city.run_simulation(bus, driver, 10, path);
+    
+    if (driver.get_fatigue() == 100)
+    {
+        std::cout << "OK!" << std::endl;
+    }
+    else
+    {
+        std::cout<< "FAIL!" << std::endl;
+    }
+}
+
+void test_bus_wear()
+{
+    std::cout << "Testing bus wear ";
+
+    City city;
+    
+    BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
+    BusStop stop2(2, "Stop2", 10.0, 10.0, 3.0, 3.0, 2.0);
+    BusStop stop3(3, "Stop3", 15.0, 15.0, 3.0, 3.0, 2.0);
+    
+    city.add_bus_stop(stop1);
+    city.add_bus_stop(stop2);
+    city.add_bus_stop(stop3);
+
+    city.initialize_bus_stops();
+    
+    Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f);
+    Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f);
+    
+    city.add_street(street1, 1, 2);
+    city.add_street(street2, 2, 3);
+    
+    StreetArcList path;
+    
+    for(int i = 1; i < 3; i++)
+    {
+        for (auto street : city.get_streets())
+        {
+            if(street->get_info().get_id() == i )
+            {
+                path.append(street);
+            }
+        }
+    }
+    
+    Bus bus("Bus1", 15, std::list<Passenger>{}, 0);
+    Employee driver("John", "Doe", 30, 8, 0);
+    city.run_simulation(bus, driver, 10, path);
+    
+    if (bus.get_engine_state() == 90 && bus.get_breaks_state() == 80 && bus.get_tires_state() == 80 && bus.get_fuel() == 34)
+    {
+        std::cout << "OK!" << std::endl;
+    }
+    else
+    {
+        std::cout<< "FAIL!" << std::endl;
+    }
+}
+
+void test_simulation_consistency()
+{
+    std::cout << "Testing simulation consistency ";
+
+    City city;
+    
+    BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
+    BusStop stop2(2, "Stop2", 10.0, 10.0, 3.0, 3.0, 2.0);
+    BusStop stop3(3, "Stop3", 15.0, 15.0, 3.0, 3.0, 2.0);
+    
+    city.add_bus_stop(stop1);
+    city.add_bus_stop(stop2);
+    city.add_bus_stop(stop3);
+
+    city.initialize_bus_stops();
+
+    int total_passengers = 0;
+
+    for (auto stop : city.get_bus_stops())
+    {
+        total_passengers += stop->get_info().get_passenger_list().size();
+    }
+    
+    Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f);
+    Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f);
+    
+    city.add_street(street1, 1, 2);
+    city.add_street(street2, 2, 3);
+    
+    StreetArcList path;
+    
+    for(int i = 1; i < 3; i++)
+    {
+        for (auto street : city.get_streets())
+        {
+            if(street->get_info().get_id() == i )
+            {
+                path.append(street);
+            }
+        }
+    }
+    
+    Bus bus("Bus1", 15, std::list<Passenger>{}, 0);
+    Employee driver("John", "Doe", 30, 8, 0);
+    city.run_simulation(bus, driver, 10, path);
+
+    int total_passengers_after_simulation = 0;
+
+    for (auto bus_stop : city.get_bus_stops())
+    {
+        total_passengers_after_simulation += bus_stop->get_info().get_passenger_list().size();
+    }
+
+    total_passengers_after_simulation += bus.get_passenger_list().size();
+    
+    if (total_passengers_after_simulation == total_passengers)
+    {
+        std::cout << "OK!" << std::endl;
+    }
+    else
+    {
+        std::cout<< "FAIL!" << std::endl;
+    }
 }
 
 int main()
@@ -252,6 +419,9 @@ int main()
     test_add_bus_stop();
     test_add_street();
     test_run_simulation();
+    test_driver_fatigue();
+    test_bus_wear();
+    //test_simulation_consistency();
 
     return 0;
 }

@@ -11,12 +11,12 @@ City::City(int _id, std::string _name, Designar::Graph<BusStop, Street> _city_ma
     //empty
 }
 
-Designar::SLList<Designar::GraphNode<BusStop, Street, Designar::EmptyClass> *> City::get_bus_stops()
+BusStopNodeList City::get_bus_stops()
 {
     return city_map.nodes();
 }
 
-Designar::SLList<Designar::GraphArc<Designar::GraphNode<BusStop, Street, Designar::EmptyClass>, BusStop, Street, Designar::EmptyClass> *> City::get_streets()
+StreetArcList City::get_streets()
 {
     return city_map.arcs();
 }
@@ -57,22 +57,23 @@ void City::initialize_bus_stops()
 {
     auto streets = city_map.arcs();
 
-    for(auto stop : city_map.nodes())
+    for(auto &stop : city_map.nodes())
     {
         stop->get_info().generate_passengers();
     }
 }
 
-void City::run_simulation(Bus &bus, Employee &driver, int time, std::list<Designar::GraphArc<Designar::GraphNode<BusStop, Street, Designar::EmptyClass>, BusStop, Street, Designar::EmptyClass> *> path)
+void City::run_simulation(Bus &bus, Employee &driver, int time, StreetArcList path)
 {
-    auto current_stop = path.front()->get_src_node()->get_info();
+    BusStop current_stop = path.get_first()->get_src_node()->get_info();
     int spent_time = 0;
     for(auto track : path)
     {
-        bus.leave_passengers(current_stop.get_id());
+        bus.leave_passengers(current_stop);
         bus.add_passengers(time, current_stop);
 
         driver.calc_fatigue(track->get_info().get_distance());
+        bus.calc_wear(track->get_info().get_distance());
         // bus.move(track->get_info());
 
         // TODO: Abort simulation if bus breaks or if driver is too tired
