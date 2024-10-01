@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Passenger.hpp>
 #include <queue>
 #include <string>
@@ -41,4 +43,8 @@ class BusStop
 
     void add_passenger(Passenger passenger);
     Passenger pop_first_passenger();
+
+    bool operator==(const BusStop& other) const {
+        return this->id == other.id;
+    }
 };

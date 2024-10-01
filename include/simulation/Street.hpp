@@ -23,4 +23,8 @@ class Street
     
     int get_distance();
     int get_travel_time();
+
+    bool operator==(const Street& other) const {
+        return this->id == other.id;
+    }
 };

@@ -1,5 +1,6 @@
 #include <iostream>
-#include <Bus.hpp>
+#include "City.hpp"
+#include "Bus.hpp"
 
 void test_passenger_generation()
 {
@@ -164,6 +165,82 @@ void test_leave_passengers()
     }
 }
 
+void test_city_constructor() {
+    Designar::Graph<BusStop, Street> city_map;
+    City city(1, "TestCity", city_map);
+    std::cout << "Testing city constructor OK!" << std::endl;
+}
+
+void test_add_bus_stop() {
+    std::cout << "Testing leave passengers ";
+
+    City city;
+    BusStop bus_stop(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
+    city.add_bus_stop(bus_stop);
+    auto bus_stops = city.get_bus_stops();
+    if (!bus_stops.is_empty() && bus_stops.get_first()->get_info() == bus_stop) {
+        std::cout << "OK!" << std::endl;
+    } else {
+        std::cout << "FAIL!" << std::endl;
+    }
+}
+
+void test_add_street() {
+    std::cout << "Testing adding bus stop to city ";
+
+    City city;
+    BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
+    BusStop stop2(2, "Stop2", 5.0, 5.0, 3.0, 3.0, 2.0);
+    city.add_bus_stop(stop1);
+    city.add_bus_stop(stop2);
+    Street street_info(1, "Street1", 100, 10.0f, 2.0f, 0.1f);
+    city.add_street(street_info, 1, 2);
+    auto streets = city.get_streets();
+    if (!streets.is_empty() && streets.get_first()->get_info() == street_info) {
+        std::cout << "OK!" << std::endl;
+    } else {
+        std::cout << "FAIL!" << std::endl;
+    }
+}
+
+void test_run_simulation() {
+    std::cout << "Testing run simulation ";
+
+    City city;
+    
+    BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
+    BusStop stop2(2, "Stop2", 10.0, 10.0, 3.0, 3.0, 2.0);
+    BusStop stop3(3, "Stop3", 15.0, 15.0, 3.0, 3.0, 2.0);
+    
+    city.add_bus_stop(stop1);
+    city.add_bus_stop(stop2);
+    city.add_bus_stop(stop3);
+    
+    Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f);
+    Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f);
+    
+    city.add_street(street1, 1, 2);
+    city.add_street(street2, 2, 3);
+    
+    std::list<Designar::GraphArc<Designar::GraphNode<BusStop, Street, Designar::EmptyClass>, BusStop, Street, Designar::EmptyClass> *> path;
+    
+    for(int i = 1; i < 3; i++)
+    {
+        for (auto street : city.get_streets())
+        {
+            if(street->get_info().get_id() == i )
+            {
+                path.push_back(street);
+            }
+        }
+    }
+    
+    Bus bus("Bus1", 15, std::list<Passenger>{}, 0);
+    Employee driver("John", "Doe", 30, 8, 0);
+    city.run_simulation(bus, driver, 10, path);
+    std::cout << "OK!" << std::endl;
+}
+
 int main()
 {
     test_passenger_generation();
@@ -171,6 +248,10 @@ int main()
     test_future_passengers_dont_get_on_bus();
     test_gone_passengers_dont_get_on_bus();
     test_leave_passengers();
+    test_city_constructor();
+    test_add_bus_stop();
+    test_add_street();
+    test_run_simulation();
 
     return 0;
 }
