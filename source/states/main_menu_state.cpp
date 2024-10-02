@@ -9,6 +9,8 @@ MainMenuState::MainMenuState(GameDataRef data) : _data(data)
 
 void MainMenuState::init_state()
 {
+    this->_data->gui.setWindow(*this->_data->window);
+    this->_data->gui.loadWidgetsFromFile("assets/screens/main_menu.txt");
 }
 
 void MainMenuState::update_inputs()
@@ -16,6 +18,8 @@ void MainMenuState::update_inputs()
     // Event Polling
     while (const std::optional event = this->_data->window->pollEvent())
     {
+        this->_data->gui.handleEvent(*event);
+
         if (event->is<sf::Event::Closed>())
         {
             this->_data->window->close();
@@ -71,14 +75,14 @@ void MainMenuState::draw_state(float dt __attribute__((unused)))
     // set the text style
     text.setStyle(sf::Text::Bold | sf::Text::Underlined);
 
-    text.setPosition({(this->_data->window->getSize().x / 2) - (text.getLocalBounds().size.x / 2),
-                      (this->_data->window->getSize().y / 2) - (text.getLocalBounds().size.y / 2)});
+    text.setPosition({(static_cast<float>(this->_data->window->getSize().x / 2)) - (text.getLocalBounds().size.x / 2),
+                      (static_cast<float>(this->_data->window->getSize().y / 2)) - (text.getLocalBounds().size.y / 2)});
 
     // inside the main loop, between window.clear() and window.display()
     this->_data->window->draw(text);
 
     // END SAMPLE RENDER CODE
-
+    this->_data->gui.draw();
     // Displays rendered objects
     this->_data->window->display();
 }

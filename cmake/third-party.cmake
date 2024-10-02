@@ -38,6 +38,8 @@ if(RM_STATIC_LINK)
   set(TMXLITE_FETCH_EXTLIBS TRUE CACHE INTERNAL "Automatically download TMXLITE dependencies")
 
   set(DESIGNAR_STATIC_LIBRARIES TRUE)
+  set(TGUI_STATIC_LIBRARIES TRUE)
+  set(TGUI_BACKEND SFML_GRAPHICS)
 else()
   set(BUILD_SHARED_LIBS ON)
 endif()
@@ -107,6 +109,24 @@ else()
     SYSTEM
   )
   FetchContent_MakeAvailable(tmxlite)
+endif()
+
+if(RM_USE_SYSTEM_TGUI)
+  find_package(
+    TGUI 1.5.0
+    REQUIRED
+  )
+else()
+  FetchContent_Declare(
+    TGUI
+    GIT_REPOSITORY   https://github.com/texus/TGUI.git
+    GIT_TAG          2c355bcc67b97dc6abf8b5d8b8cd1874338000e4 # v1.5.0
+    GIT_SHALLOW      ON
+    GIT_PROGRESS     TRUE
+    EXCLUDE_FROM_ALL
+    SYSTEM
+  )
+  FetchContent_MakeAvailable(TGUI)
 endif()
 
 if(RM_DEVELOPER_MODE)

@@ -3,6 +3,8 @@
 #include "engine/input_manager.hpp"
 #include "engine/state_machine.hpp"
 #include "platform/platform.hpp"
+#include <TGUI/Backend/SFML-Graphics.hpp>
+#include <TGUI/TGUI.hpp>
 
 #pragma once
 
@@ -12,6 +14,7 @@ struct GameData
     Engine::StateMachine states;
     Engine::InputManager inputs;
     Engine::AssetManager assets;
+    tgui::Gui gui;
 };
 
 typedef std::shared_ptr<GameData> GameDataRef;

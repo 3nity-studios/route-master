@@ -36,6 +36,7 @@ option(RM_USE_SYSTEM_DESIGNAR "Use system's installation of DeSiGNAR library" OF
 option(RM_USE_SYSTEM_SFML "Use system's installation of SFML library" OFF)
 option(RM_USE_SYSTEM_CATCH2 "Use system's installation of Catch2 library" OFF)
 option(RM_USE_SYSTEM_TMXLITE "Use system's installation of TMXLITE library" OFF)
+option(RM_USE_SYSTEM_TGUI "Use system's installation of TGUI library" OFF)
 
 option(USE_INSTALL_RESOURCE_PATH "Set resource path to install location" OFF)
 if(NOT USE_INSTALL_RESOURCE_PATH)
@@ -75,6 +76,7 @@ add_library(route_master_config ${RM_CONFIG_SRC})
 add_library(route_master::config ALIAS route_master_config)
 target_link_libraries(route_master_config
   PRIVATE
+  TGUI::TGUI
   SFML::Graphics
   SFML::Window
   SFML::Audio
@@ -95,6 +97,7 @@ add_library(route_master_engine ${RM_ENGINE_SRC})
 add_library(route_master::engine ALIAS route_master_engine)
 target_link_libraries(route_master_engine
   PRIVATE
+  TGUI::TGUI
   SFML::Graphics
   SFML::Window
   SFML::Audio
@@ -112,10 +115,27 @@ add_library(route_master_states ${RM_STATES_SRC})
 add_library(route_master::states ALIAS route_master_states)
 target_link_libraries(route_master_states
   PRIVATE
+  TGUI::TGUI
   SFML::Graphics
   SFML::Window
   SFML::Audio
   SFML::System)
+
+# ---- gui
+
+# set(
+#   RM_GUI_SRC
+#   ${INCROOT}/gui/gui.hpp
+# )
+# add_library(route_master_gui ${RM_GUI_SRC})
+# add_library(route_master::gui ALIAS route_master_gui)
+# target_link_libraries(route_master_gui
+#   PRIVATE
+#   SFML::Graphics
+#   SFML::Window
+#   SFML::Audio
+#   SFML::System)
+
 
 # ---- platform
 
@@ -157,6 +177,7 @@ add_library(route_master_platform ${RM_PLATFORM_SRC})
 add_library(route_master::platform ALIAS route_master_platform)
 target_link_libraries(route_master_platform
   PRIVATE
+  TGUI::TGUI
   SFML::Graphics
   SFML::Window
   SFML::Audio
@@ -172,6 +193,7 @@ add_library(route_master_utils ${RM_STATES_SRC})
 add_library(route_master::utils ALIAS route_master_utils)
 target_link_libraries(route_master_utils
   PRIVATE
+  TGUI::TGUI
   SFML::Graphics
   SFML::Window
   SFML::Audio
@@ -208,7 +230,9 @@ target_link_libraries(
   route_master::config
   route_master::platform
   route_master::engine
+  # route_master::gui
   route_master::utils
+  TGUI::TGUI
   SFML::Graphics
   SFML::Window
   SFML::Audio
