@@ -1,6 +1,6 @@
-#include <random>
 #include <ctime>
-#include "Street.hpp"
+#include <random>
+#include "simulation/Street.hpp"
 
 Street::Street() : id(0), name(""), distance(0), avg_travel_time(60), sd_travel_time(5), singular_event_odds(0.01)
 {

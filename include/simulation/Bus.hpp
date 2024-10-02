@@ -1,9 +1,9 @@
 #pragma once
 
-#include <string>
-#include <list>
 #include <queue>
-#include <BusStop.hpp>
+#include <list>
+#include <string>
+#include "simulation/BusStop.hpp"
 
 class Bus
 {

@@ -1,5 +1,4 @@
-#include <Bus.hpp>
-#include <iostream>
+#include "simulation/Bus.hpp"
 
 Bus::Bus() : id(0), name(""), max_capacity(0), current_passengers(std::list<Passenger>{}), time_in_bus_stop(0), engine_state(100), breaks_state(100), tires_state(100), fuel(100)
 {

@@ -1,6 +1,6 @@
 #include <iostream>
-#include "City.hpp"
-#include "Bus.hpp"
+#include "simulation/City.hpp"
+#include "simulation/Bus.hpp"
 
 void test_passenger_generation()
 {

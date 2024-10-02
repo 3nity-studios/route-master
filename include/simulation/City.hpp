@@ -1,8 +1,8 @@
 #include <string>
 #include <Designar/graph.hpp>
-#include "Bus.hpp"
-#include "Employee.hpp"
-#include "Street.hpp"
+#include "simulation/Bus.hpp"
+#include "simulation/Employee.hpp"
+#include "simulation/Street.hpp"
 
 using BusStopNodeList = Designar::SLList<Designar::GraphNode<BusStop, Street, Designar::EmptyClass> *>;
 using StreetArcList = Designar::SLList<Designar::GraphArc<Designar::GraphNode<BusStop, Street, Designar::EmptyClass>, BusStop, Street, Designar::EmptyClass> *>;

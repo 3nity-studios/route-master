@@ -1,4 +1,4 @@
-#include <Passenger.hpp>
+#include "simulation/Passenger.hpp"
 
 Passenger::Passenger() : arrival_time(0), waiting_time(0), bus_stop(0)
 {
