@@ -65,12 +65,13 @@ void City::initialize_bus_stops()
 
 void City::run_simulation(Bus &bus, Employee &driver, int time, StreetArcList path)
 {
-    BusStop current_stop = path.get_first()->get_src_node()->get_info();
+    // BusStop current_stop = path.get_first()->get_src_node()->get_info();
+    bus.reset();
     int spent_time = 0;
     for(auto track : path)
     {
-        bus.leave_passengers(current_stop);
-        bus.add_passengers(time, current_stop);
+        bus.leave_passengers(path.get_first()->get_src_node()->get_info());
+        bus.add_passengers(time, path.get_first()->get_src_node()->get_info());
 
         driver.calc_fatigue(track->get_info().get_distance());
         bus.calc_wear(track->get_info().get_distance());
@@ -78,7 +79,7 @@ void City::run_simulation(Bus &bus, Employee &driver, int time, StreetArcList pa
 
         // TODO: Abort simulation if bus breaks or if driver is too tired
 
-        current_stop = track->get_tgt_node()->get_info();
+        // current_stop = track->get_tgt_node()->get_info();
         spent_time += track->get_info().get_travel_time();
     }
 }

@@ -41,6 +41,31 @@ void test_get_passengers_on_bus()
     }
 }
 
+void test_passengers_leave_stop()
+{
+    std::cout << "Testing passengers leave bus stop ";
+
+    BusStop bus_stop = BusStop(0, "A", 5, 5, 3, 3, 2);
+    bus_stop.generate_passengers();
+
+    int initial_passenger_count = bus_stop.get_passenger_list().size();
+
+    Bus bus = Bus("A", 15, std::list<Passenger>{}, 0);
+    bus.add_passengers(3, bus_stop);
+
+    int final_passenger_count = bus_stop.get_passenger_list().size();
+
+    if (final_passenger_count < initial_passenger_count)
+    {
+        std::cout << "OK!" << std::endl;
+    }
+    else
+    {
+        std::cout << "FAIL!" << std::endl;
+        std::cout << "Expected <" << initial_passenger_count << " Got: " << final_passenger_count << std::endl;
+    }
+}
+
 void test_future_passengers_dont_get_on_bus()
 {
     std::cout << "Testing that future passengers don't get on the bus ";
@@ -174,7 +199,7 @@ void test_city_constructor() {
 }
 
 void test_add_bus_stop() {
-    std::cout << "Testing leave passengers ";
+    std::cout << "Testing adding bus stop to city ";
 
     City city;
     BusStop bus_stop(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
@@ -188,7 +213,7 @@ void test_add_bus_stop() {
 }
 
 void test_add_street() {
-    std::cout << "Testing adding bus stop to city ";
+    std::cout << "Testing adding street to city ";
 
     City city;
     BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
@@ -291,6 +316,7 @@ void test_driver_fatigue()
     else
     {
         std::cout<< "FAIL!" << std::endl;
+        std::cout << "Expected: 100 Got: " << driver.get_fatigue() << std::endl;
     }
 }
 
@@ -340,6 +366,8 @@ void test_bus_wear()
     else
     {
         std::cout<< "FAIL!" << std::endl;
+        std::cout << "Expected: Engine: 90 Breaks: 80 Tires: 80 Fuel: 34" << std::endl;
+        std::cout << "Got: Engine: " << bus.get_engine_state() << " Breaks: " << bus.get_breaks_state() << " Tires: " << bus.get_tires_state() << " Fuel: " << bus.get_fuel() << std::endl;
     }
 }
 
@@ -393,10 +421,10 @@ void test_simulation_consistency()
 
     for (auto bus_stop : city.get_bus_stops())
     {
-        total_passengers_after_simulation += bus_stop->get_info().get_passenger_list().size();
+        total_passengers_after_simulation += bus_stop->get_info().get_passenger_list().size() + bus_stop->get_info().get_gone_passengers();
     }
 
-    total_passengers_after_simulation += bus.get_passenger_list().size();
+    total_passengers_after_simulation += bus.get_attended_passengers();
     
     if (total_passengers_after_simulation == total_passengers)
     {
@@ -405,6 +433,7 @@ void test_simulation_consistency()
     else
     {
         std::cout<< "FAIL!" << std::endl;
+        std::cout << "Expected: " << total_passengers << " Got: " << total_passengers_after_simulation << std::endl;
     }
 }
 
@@ -412,6 +441,7 @@ int main()
 {
     test_passenger_generation();
     test_get_passengers_on_bus();
+    test_passengers_leave_stop();
     test_future_passengers_dont_get_on_bus();
     test_gone_passengers_dont_get_on_bus();
     test_leave_passengers();
@@ -421,7 +451,7 @@ int main()
     test_run_simulation();
     test_driver_fatigue();
     test_bus_wear();
-    //test_simulation_consistency();
+    test_simulation_consistency();
 
     return 0;
 }

@@ -1,4 +1,5 @@
 #include <Bus.hpp>
+#include <iostream>
 
 Bus::Bus() : name(""), max_capacity(0), current_passengers(std::list<Passenger>{}), time_in_bus_stop(0), engine_state(100), breaks_state(100), tires_state(100), fuel(100)
 {
@@ -53,20 +54,17 @@ int Bus::get_fuel()
 
 void Bus::leave_passengers(BusStop &current_stop)
 {
-    std::list<Passenger> aux = current_passengers;
-    current_passengers.clear();
+    std::list<Passenger> aux;
 
-    for (Passenger passenger : aux)
+    for (Passenger passenger : current_passengers)
     {
         if (passenger.get_bus_stop() != current_stop.get_id())
         {
-            current_passengers.push_back(passenger);
-        }
-        else
-        {
-            current_stop.add_passenger(passenger);
+            aux.push_back(passenger);
         }
     }
+
+    current_passengers = aux;
 }
 
 void Bus::add_passengers(int simulation_time, BusStop &bus_stop)
@@ -75,26 +73,28 @@ void Bus::add_passengers(int simulation_time, BusStop &bus_stop)
 
     while (!bus_stop.get_passenger_list().empty())
     {
-        Passenger first_passenger = bus_stop.get_passenger_list().top();
+        Passenger first_passenger = bus_stop.pop_first_passenger();
 
         if (((simulation_time + time_in_bus_stop) < first_passenger.get_arrival_time()) || (current_passengers.size() >= max_capacity))
         {
+            aux.push_back(first_passenger);
             break;
         }
 
-        if ((first_passenger.get_arrival_time() + first_passenger.get_waiting_time()) < simulation_time)
+        if ((first_passenger.get_arrival_time() + first_passenger.get_waiting_time()) < simulation_time) // Gone passengers
         {
-            aux.push_back(bus_stop.pop_first_passenger());
+            bus_stop.add_gone_passengers(1);
             continue;
         }
 
         if (true) //Aquí va la condición que determina si el pasajero va a una parada de la ruta del bus actual (Por ahora todos se suben)
         {
-            current_passengers.push_back(bus_stop.pop_first_passenger());
+            current_passengers.push_back(first_passenger);
+            attended_passengers += 1;
         }
         else
         {
-            aux.push_back(bus_stop.pop_first_passenger());
+            aux.push_back(first_passenger);
         }
     }
 
@@ -102,6 +102,17 @@ void Bus::add_passengers(int simulation_time, BusStop &bus_stop)
     {
         bus_stop.add_passenger(passenger);
     }
+}
+
+int Bus::get_attended_passengers()
+{
+    return attended_passengers;
+}
+
+void Bus::reset()
+{
+    current_passengers.clear();
+    attended_passengers = 0;
 }
 
 void Bus::calc_wear(int km)

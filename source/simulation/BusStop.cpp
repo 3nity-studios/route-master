@@ -52,8 +52,24 @@ Passenger BusStop::pop_first_passenger()
     return aux;
 }
 
+int BusStop::get_gone_passengers()
+{
+    return gone_passengers;
+}
+
+void BusStop::add_gone_passengers(int num)
+{
+    gone_passengers += num;
+}
+
 void BusStop::generate_passengers()
 {
+    gone_passengers = 0;
+    while(!passenger_list.empty())
+    {
+        passenger_list.pop();
+    }
+
     // Seed with a real random value, if available
     std::random_device rd;
 

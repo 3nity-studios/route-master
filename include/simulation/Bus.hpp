@@ -12,6 +12,7 @@ class Bus
     std::string name; 
     int max_capacity;
     std::list<Passenger> current_passengers;
+    int attended_passengers;
     int time_in_bus_stop;
     int engine_state;
     int breaks_state;
@@ -34,6 +35,8 @@ class Bus
 
     void leave_passengers(BusStop &current_stop);
     void add_passengers(int simulation_time, BusStop &bus_stop);
+    int get_attended_passengers();
+    void reset();
 
     void calc_wear(int km);
 };

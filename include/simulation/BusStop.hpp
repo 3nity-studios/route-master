@@ -21,6 +21,7 @@ class BusStop
     int id;
     std::string name; 
     PassengerHeap passenger_list;
+    int gone_passengers;
     float avg_arrival_time;
     float avg_waiting_time;
     float sd_waiting_time;
@@ -40,6 +41,8 @@ class BusStop
     void set_passenger_list(PassengerHeap _passenger_list);
 
     void generate_passengers();
+    int get_gone_passengers();
+    void add_gone_passengers(int num);
 
     void add_passenger(Passenger passenger);
     Passenger pop_first_passenger();
