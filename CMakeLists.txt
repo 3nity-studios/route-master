@@ -57,7 +57,7 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/source)
 
 include_directories(${SRCROOT})
 include_directories(${INCROOT})
-include_directories(${PROJECT_SOURCE_DIR}/build/include)
+include_directories(${CMAKE_BINARY_DIR}/include)
 
 # ---- config
 
