@@ -18,12 +18,11 @@ class City
     City();
     City(int _id, std::string _name, Designar::Graph<BusStop, Street> _city_map);
 
-    BusStopNodeList get_bus_stops();
-    StreetArcList get_streets();
+    BusStopNodeList get_bus_stops() const noexcept;
+    StreetArcList get_streets() const noexcept;
     
-    
-    void add_bus_stop(BusStop bus_stop);
-    void add_street(Street street_info, int src_id, int tgt_id); 
+    void add_bus_stop(const BusStop& bus_stop);
+    void add_street(const Street& street_info, const int& src_id, const int& tgt_id); 
 
     void initialize_bus_stops();
     void run_simulation(Bus &bus, Employee &driver, int time, StreetArcList path);

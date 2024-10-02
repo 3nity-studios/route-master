@@ -33,19 +33,19 @@ class BusStop
     BusStop();
     BusStop(int _id, std::string _name, float _avg_arrival_time, float _avg_waiting_time, float _sd_waiting_time, float _avg_bus_stop, float _sd_bus_stop);
 
-    int get_id();
-    std::string get_name();
-    PassengerHeap get_passenger_list();
+    int get_id() const noexcept;
+    std::string get_name() const noexcept;
+    void set_name(const std::string& _name);
 
-    void set_name(std::string _name);
-    void set_passenger_list(PassengerHeap _passenger_list);
+    PassengerHeap get_passenger_list() const noexcept;
+    void set_passenger_list(const PassengerHeap& _passenger_list);
 
     void generate_passengers();
-    int get_gone_passengers();
-    void add_gone_passengers(int num);
-
-    void add_passenger(Passenger passenger);
+    void add_passenger(const Passenger& passenger);
     Passenger pop_first_passenger();
+
+    int get_gone_passengers() const noexcept;
+    void add_gone_passengers(const int& num);
 
     bool operator==(const BusStop& other) const {
         return this->id == other.id;

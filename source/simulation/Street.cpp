@@ -14,24 +14,28 @@ Street::Street(int _id, std::string _name, int _distance, float _avg_travel_time
     //empty
 }
 
-int Street::get_id() {
+int Street::get_id() const noexcept
+{
     return id;
 }
 
-void Street::set_name(std::string _name) {
-    name = _name;
-}
-
-std::string Street::get_name() {
+std::string Street::get_name() const noexcept
+{
     return name;
 }
 
-int Street::get_distance()
+void Street::set_name(const std::string& _name)
+{
+    name = _name;
+}
+
+int Street::get_distance() const noexcept
 {
     return distance;
 }
 
-int Street::get_travel_time() {
+int Street::get_travel_time() const
+{
 
     // Seed with a real random value, if available
     std::random_device rd;

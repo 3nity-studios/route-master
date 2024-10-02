@@ -1,53 +1,58 @@
 #include <Bus.hpp>
 #include <iostream>
 
-Bus::Bus() : name(""), max_capacity(0), current_passengers(std::list<Passenger>{}), time_in_bus_stop(0), engine_state(100), breaks_state(100), tires_state(100), fuel(100)
+Bus::Bus() : id(0), name(""), max_capacity(0), current_passengers(std::list<Passenger>{}), time_in_bus_stop(0), engine_state(100), breaks_state(100), tires_state(100), fuel(100)
 {
     //empty
 }
 
-Bus::Bus(std::string _name, int _max_capacity, std::list<Passenger> _current_passengers, int _time_in_bus_stop) 
-    : name(_name), max_capacity(_max_capacity), current_passengers(_current_passengers), time_in_bus_stop(_time_in_bus_stop), engine_state(100), breaks_state(100), tires_state(100), fuel(100)
+Bus::Bus(int _id, std::string _name, int _max_capacity, std::list<Passenger> _current_passengers, int _time_in_bus_stop) 
+    : id(_id), name(_name), max_capacity(_max_capacity), current_passengers(_current_passengers), time_in_bus_stop(_time_in_bus_stop), engine_state(100), breaks_state(100), tires_state(100), fuel(100)
 {
     //empty
 }
 
-std::string Bus::get_name()
+int Bus::get_id() const noexcept
+{
+    return id;
+}
+
+std::string Bus::get_name() const noexcept
 {
     return name; 
 }
 
-int Bus::get_max_capacity()
+int Bus::get_max_capacity() const noexcept
 {
     return max_capacity;
 }
 
-std::list<Passenger> Bus::get_passenger_list()
+std::list<Passenger> Bus::get_passenger_list() const noexcept
 {
     return current_passengers;
 }
 
-int Bus::get_time_in_bus_stop()
+int Bus::get_time_in_bus_stop() const noexcept
 {
     return time_in_bus_stop;
 }
 
-int Bus::get_engine_state()
+int Bus::get_engine_state() const noexcept
 {
     return engine_state;
 }
 
-int Bus::get_breaks_state()
+int Bus::get_breaks_state() const noexcept
 {
     return breaks_state;
 }
 
-int Bus::get_tires_state()
+int Bus::get_tires_state() const noexcept
 {
     return tires_state;
 }
 
-int Bus::get_fuel()
+int Bus::get_fuel() const noexcept
 {
     return fuel;
 }
@@ -67,7 +72,7 @@ void Bus::leave_passengers(BusStop &current_stop)
     current_passengers = aux;
 }
 
-void Bus::add_passengers(int simulation_time, BusStop &bus_stop)
+void Bus::add_passengers(const int& simulation_time, BusStop &bus_stop)
 {
     std::list<Passenger> aux;
 
@@ -104,7 +109,7 @@ void Bus::add_passengers(int simulation_time, BusStop &bus_stop)
     }
 }
 
-int Bus::get_attended_passengers()
+int Bus::get_attended_passengers() const noexcept
 {
     return attended_passengers;
 }

@@ -14,52 +14,29 @@ BusStop::BusStop(int _id, std::string _name, float _avg_arrival_time, float _avg
     // empty
 }
 
-int BusStop::get_id()
+int BusStop::get_id() const noexcept
 {
     return id;
 }
 
-std::string BusStop::get_name()
+std::string BusStop::get_name() const noexcept
 {
     return name;
 }
 
-PassengerHeap BusStop::get_passenger_list()
-{
-    return passenger_list;
-}
-
-void BusStop::set_name(std::string _name)
+void BusStop::set_name(const std::string& _name)
 {
     name = _name;
 }
 
-void BusStop::set_passenger_list(PassengerHeap _passenger_list)
+PassengerHeap BusStop::get_passenger_list() const noexcept
+{
+    return passenger_list;
+}
+
+void BusStop::set_passenger_list(const PassengerHeap& _passenger_list)
 {
     passenger_list = _passenger_list;
-}
-
-void BusStop::add_passenger(Passenger passenger)
-{
-    passenger_list.push(passenger);
-}
-
-Passenger BusStop::pop_first_passenger()
-{
-    Passenger aux = passenger_list.top();
-    passenger_list.pop();
-
-    return aux;
-}
-
-int BusStop::get_gone_passengers()
-{
-    return gone_passengers;
-}
-
-void BusStop::add_gone_passengers(int num)
-{
-    gone_passengers += num;
 }
 
 void BusStop::generate_passengers()
@@ -100,4 +77,27 @@ void BusStop::generate_passengers()
         // Add the passenger to the passenger list
         passenger_list.push(passenger);
     }
+}
+
+void BusStop::add_passenger(const Passenger& passenger)
+{
+    passenger_list.push(passenger);
+}
+
+Passenger BusStop::pop_first_passenger()
+{
+    Passenger aux = passenger_list.top();
+    passenger_list.pop();
+
+    return aux;
+}
+
+int BusStop::get_gone_passengers() const noexcept
+{
+    return gone_passengers;
+}
+
+void BusStop::add_gone_passengers(const int& num)
+{
+    gone_passengers += num;
 }

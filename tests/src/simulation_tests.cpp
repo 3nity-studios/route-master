@@ -18,7 +18,7 @@ void test_get_passengers_on_bus()
     BusStop bus_stop = BusStop(0, "A", 5, 5, 3, 3, 2);
     bus_stop.generate_passengers();
 
-    Bus bus = Bus("A", 15, std::list<Passenger>{}, 0);
+    Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 0);
     bus.add_passengers(3, bus_stop);
 
     bool test_passed = true;
@@ -50,7 +50,7 @@ void test_passengers_leave_stop()
 
     int initial_passenger_count = bus_stop.get_passenger_list().size();
 
-    Bus bus = Bus("A", 15, std::list<Passenger>{}, 0);
+    Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 0);
     bus.add_passengers(3, bus_stop);
 
     int final_passenger_count = bus_stop.get_passenger_list().size();
@@ -73,7 +73,7 @@ void test_future_passengers_dont_get_on_bus()
     BusStop bus_stop = BusStop(0, "A", 5, 5, 3, 3, 2);
     bus_stop.generate_passengers();
 
-    Bus bus = Bus("A", 15, std::list<Passenger>{}, 2);
+    Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 2);
     bus.add_passengers(3, bus_stop); // Current timestep is 3
 
     bool test_passed = true;
@@ -120,7 +120,7 @@ void test_gone_passengers_dont_get_on_bus()
     BusStop bus_stop = BusStop(0, "A", 5, 5, 3, 3, 2);
     bus_stop.generate_passengers();
 
-    Bus bus = Bus("A", 15, std::list<Passenger>{}, 2);
+    Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 2);
     bus.add_passengers(3, bus_stop); // Current timestep is 3
 
     bool test_passed = true;
@@ -166,7 +166,7 @@ void test_leave_passengers()
         Passenger(2, 0, 3)
     };
 
-    Bus bus = Bus("A", 15, passengers, 0);
+    Bus bus = Bus(0, "A", 15, passengers, 0);
     BusStop bus_stop(2, "Terminal", 5, 4, 3, 2, 1);
 
     bus.leave_passengers(bus_stop); // Current stop
@@ -264,7 +264,7 @@ void test_run_simulation() {
         }
     }
     
-    Bus bus("Bus1", 15, std::list<Passenger>{}, 0);
+    Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
     Employee driver("John", "Doe", 30, 8, 0);
     city.run_simulation(bus, driver, 10, path);
     std::cout << "OK!" << std::endl;
@@ -305,7 +305,7 @@ void test_driver_fatigue()
         }
     }
     
-    Bus bus("Bus1", 15, std::list<Passenger>{}, 0);
+    Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
     Employee driver("John", "Doe", 30, 8, 0);
     city.run_simulation(bus, driver, 10, path);
     
@@ -355,7 +355,7 @@ void test_bus_wear()
         }
     }
     
-    Bus bus("Bus1", 15, std::list<Passenger>{}, 0);
+    Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
     Employee driver("John", "Doe", 30, 8, 0);
     city.run_simulation(bus, driver, 10, path);
     
@@ -413,7 +413,7 @@ void test_simulation_consistency()
         }
     }
     
-    Bus bus("Bus1", 15, std::list<Passenger>{}, 0);
+    Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
     Employee driver("John", "Doe", 30, 8, 0);
     city.run_simulation(bus, driver, 10, path);
 

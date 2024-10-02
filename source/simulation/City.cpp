@@ -11,22 +11,22 @@ City::City(int _id, std::string _name, Designar::Graph<BusStop, Street> _city_ma
     //empty
 }
 
-BusStopNodeList City::get_bus_stops()
+BusStopNodeList City::get_bus_stops() const noexcept
 {
     return city_map.nodes();
 }
 
-StreetArcList City::get_streets()
+StreetArcList City::get_streets() const noexcept
 {
     return city_map.arcs();
 }
 
-void City::add_bus_stop(BusStop bus_stop)
+void City::add_bus_stop(const BusStop& bus_stop)
 {
     city_map.insert_node(bus_stop);
 }
 
-void City::add_street(Street street_info, int src_id, int tgt_id)
+void City::add_street(const Street& street_info, const int& src_id, const int& tgt_id)
 {   
 
     Designar::GraphNode<BusStop, Street, Designar::EmptyClass> *src_stop = nullptr, *tgt_stop = nullptr;
