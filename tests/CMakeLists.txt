@@ -48,12 +48,14 @@ target_link_libraries(
     tmxlite::tmxlite
     nlohmann_json::nlohmann_json
     Designar::Designar
+    Catch2::Catch2WithMain
 )
 target_compile_features(simulation_tests PRIVATE cxx_std_17)
 
 # add_test(NAME route_master_test COMMAND route_master_test)
 
 catch_discover_tests(route_master_test)
+catch_discover_tests(simulation_tests)
 
 # ---- End-of-file commands ----
 

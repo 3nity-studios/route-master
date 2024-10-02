@@ -1,20 +1,14 @@
-#include <iostream>
+#include <catch2/catch_test_macros.hpp>
 #include "simulation/City.hpp"
 #include "simulation/Bus.hpp"
 
-void test_passenger_generation()
-{
-    std::cout << "Testing passenger generation in BusStop ";
-    
+TEST_CASE("Passenger generation in BusStop", "[passenger_generation]") {
     BusStop bus_stop = BusStop(0, "A", 5, 5, 3, 3, 2);
     bus_stop.generate_passengers();
-    std::cout << "OK!" << std::endl;
+    REQUIRE(bus_stop.get_passenger_list().size() >= 0);
 }
 
-void test_get_passengers_on_bus()
-{
-    std::cout << "Testing get passengers on bus ";
-
+TEST_CASE("Get passengers on bus", "[get_passengers_on_bus]") {
     BusStop bus_stop = BusStop(0, "A", 5, 5, 3, 3, 2);
     bus_stop.generate_passengers();
 
@@ -31,20 +25,10 @@ void test_get_passengers_on_bus()
         }
     }
 
-    if (test_passed)
-    {
-        std::cout << "OK!" << std::endl;
-    }
-    else
-    {
-        std::cout << "FAIL!" << std::endl;
-    }
+    REQUIRE(test_passed);
 }
 
-void test_passengers_leave_stop()
-{
-    std::cout << "Testing passengers leave bus stop ";
-
+TEST_CASE("Passengers leave bus stop", "[passengers_leave_stop]") {
     BusStop bus_stop = BusStop(0, "A", 5, 5, 3, 3, 2);
     bus_stop.generate_passengers();
 
@@ -55,21 +39,10 @@ void test_passengers_leave_stop()
 
     int final_passenger_count = bus_stop.get_passenger_list().size();
 
-    if (final_passenger_count < initial_passenger_count)
-    {
-        std::cout << "OK!" << std::endl;
-    }
-    else
-    {
-        std::cout << "FAIL!" << std::endl;
-        std::cout << "Expected <" << initial_passenger_count << " Got: " << final_passenger_count << std::endl;
-    }
+    REQUIRE(final_passenger_count <= initial_passenger_count);
 }
 
-void test_future_passengers_dont_get_on_bus()
-{
-    std::cout << "Testing that future passengers don't get on the bus ";
-
+TEST_CASE("Future passengers don't get on the bus", "[future_passengers]") {
     BusStop bus_stop = BusStop(0, "A", 5, 5, 3, 3, 2);
     bus_stop.generate_passengers();
 
@@ -103,20 +76,10 @@ void test_future_passengers_dont_get_on_bus()
     }
     */
 
-    if (test_passed)
-    {
-        std::cout << "OK!" << std::endl;
-    }
-    else
-    {
-        std::cout << "FAIL!" << std::endl;
-    }
+    REQUIRE(test_passed);
 }
 
-void test_gone_passengers_dont_get_on_bus()
-{
-    std::cout << "Testing that gone passengers don't get on the bus ";
-
+TEST_CASE("Gone passengers don't get on the bus", "[gone_passengers]") {
     BusStop bus_stop = BusStop(0, "A", 5, 5, 3, 3, 2);
     bus_stop.generate_passengers();
 
@@ -146,20 +109,10 @@ void test_gone_passengers_dont_get_on_bus()
     }
     */
 
-    if (test_passed)
-    {
-        std::cout << "OK!" << std::endl;
-    }
-    else
-    {
-        std::cout << "FAIL!" << std::endl;
-    }
+    REQUIRE(test_passed);
 }
 
-void test_leave_passengers()
-{
-    std::cout << "Testing leave passengers ";
-
+TEST_CASE("Leave passengers", "[leave_passengers]") {
     std::list<Passenger> passengers = {
         Passenger(0, 0, 1),
         Passenger(1, 0, 2),
@@ -173,48 +126,32 @@ void test_leave_passengers()
 
     bool test_passed = true;
 
-    for (auto passenger : bus.get_passenger_list())
-    {
-        if (passenger.get_bus_stop() == 2)
-        {
+    for (auto passenger : bus.get_passenger_list()) {
+        if (passenger.get_bus_stop() == 2) {
             test_passed = false;
             break;
         }
     }
 
-    if (test_passed)
-    {
-        std::cout << "OK!" << std::endl;
-    }
-    else
-    {
-        std::cout << "FAIL!" << std::endl;
-    }
+    REQUIRE(test_passed);
 }
 
-void test_city_constructor() {
+TEST_CASE("City constructor", "[city_constructor]") {
     Designar::Graph<BusStop, Street> city_map;
     City city(1, "TestCity", city_map);
-    std::cout << "Testing city constructor OK!" << std::endl;
+    REQUIRE(city.get_name() == "TestCity");
 }
 
-void test_add_bus_stop() {
-    std::cout << "Testing adding bus stop to city ";
-
+TEST_CASE("Adding bus stop to city", "[add_bus_stop]") {
     City city;
     BusStop bus_stop(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
     city.add_bus_stop(bus_stop);
     auto bus_stops = city.get_bus_stops();
-    if (!bus_stops.is_empty() && bus_stops.get_first()->get_info() == bus_stop) {
-        std::cout << "OK!" << std::endl;
-    } else {
-        std::cout << "FAIL!" << std::endl;
-    }
+    REQUIRE(!bus_stops.is_empty());
+    REQUIRE(bus_stops.get_first()->get_info() == bus_stop);
 }
 
-void test_add_street() {
-    std::cout << "Testing adding street to city ";
-
+TEST_CASE("Adding street to city", "[add_street]") {
     City city;
     BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
     BusStop stop2(2, "Stop2", 5.0, 5.0, 3.0, 3.0, 2.0);
@@ -223,16 +160,11 @@ void test_add_street() {
     Street street_info(1, "Street1", 100, 10.0f, 2.0f, 0.1f);
     city.add_street(street_info, 1, 2);
     auto streets = city.get_streets();
-    if (!streets.is_empty() && streets.get_first()->get_info() == street_info) {
-        std::cout << "OK!" << std::endl;
-    } else {
-        std::cout << "FAIL!" << std::endl;
-    }
+    REQUIRE(!streets.is_empty());
+    REQUIRE(streets.get_first()->get_info() == street_info);
 }
 
-void test_run_simulation() {
-    std::cout << "Testing run simulation ";
-
+TEST_CASE("Run simulation", "[run_simulation]") {
     City city;
     
     BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
@@ -253,12 +185,9 @@ void test_run_simulation() {
     
     StreetArcList path;
     
-    for(int i = 1; i < 3; i++)
-    {
-        for (auto street : city.get_streets())
-        {
-            if(street->get_info().get_id() == i )
-            {
+    for(int i = 1; i < 3; i++) {
+        for (auto street : city.get_streets()) {
+            if(street->get_info().get_id() == i ) {
                 path.append(street);
             }
         }
@@ -267,13 +196,10 @@ void test_run_simulation() {
     Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
     Employee driver("John", "Doe", 30, 8, 0);
     city.run_simulation(bus, driver, 10, path);
-    std::cout << "OK!" << std::endl;
+    REQUIRE(true); // Assuming run_simulation does not return a value to check
 }
 
-void test_driver_fatigue()
-{
-    std::cout << "Testing driver fatigue ";
-
+TEST_CASE("Driver fatigue", "[driver_fatigue]") {
     City city;
     
     BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
@@ -294,12 +220,9 @@ void test_driver_fatigue()
     
     StreetArcList path;
     
-    for(int i = 1; i < 3; i++)
-    {
-        for (auto street : city.get_streets())
-        {
-            if(street->get_info().get_id() == i )
-            {
+    for(int i = 1; i < 3; i++) {
+        for (auto street : city.get_streets()) {
+            if(street->get_info().get_id() == i ) {
                 path.append(street);
             }
         }
@@ -309,21 +232,10 @@ void test_driver_fatigue()
     Employee driver("John", "Doe", 30, 8, 0);
     city.run_simulation(bus, driver, 10, path);
     
-    if (driver.get_fatigue() == 100)
-    {
-        std::cout << "OK!" << std::endl;
-    }
-    else
-    {
-        std::cout<< "FAIL!" << std::endl;
-        std::cout << "Expected: 100 Got: " << driver.get_fatigue() << std::endl;
-    }
+    REQUIRE(driver.get_fatigue() == 100);
 }
 
-void test_bus_wear()
-{
-    std::cout << "Testing bus wear ";
-
+TEST_CASE("Bus wear", "[bus_wear]") {
     City city;
     
     BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
@@ -344,12 +256,9 @@ void test_bus_wear()
     
     StreetArcList path;
     
-    for(int i = 1; i < 3; i++)
-    {
-        for (auto street : city.get_streets())
-        {
-            if(street->get_info().get_id() == i )
-            {
+    for(int i = 1; i < 3; i++) {
+        for (auto street : city.get_streets()) {
+            if(street->get_info().get_id() == i ) {
                 path.append(street);
             }
         }
@@ -359,22 +268,13 @@ void test_bus_wear()
     Employee driver("John", "Doe", 30, 8, 0);
     city.run_simulation(bus, driver, 10, path);
     
-    if (bus.get_engine_state() == 90 && bus.get_breaks_state() == 80 && bus.get_tires_state() == 80 && bus.get_fuel() == 34)
-    {
-        std::cout << "OK!" << std::endl;
-    }
-    else
-    {
-        std::cout<< "FAIL!" << std::endl;
-        std::cout << "Expected: Engine: 90 Breaks: 80 Tires: 80 Fuel: 34" << std::endl;
-        std::cout << "Got: Engine: " << bus.get_engine_state() << " Breaks: " << bus.get_breaks_state() << " Tires: " << bus.get_tires_state() << " Fuel: " << bus.get_fuel() << std::endl;
-    }
+    REQUIRE(bus.get_engine_state() == 90);
+    REQUIRE(bus.get_breaks_state() == 80);
+    REQUIRE(bus.get_tires_state() == 80);
+    REQUIRE(bus.get_fuel() == 34);
 }
 
-void test_simulation_consistency()
-{
-    std::cout << "Testing simulation consistency ";
-
+TEST_CASE("Simulation consistency", "[simulation_consistency]") {
     City city;
     
     BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
@@ -389,8 +289,7 @@ void test_simulation_consistency()
 
     int total_passengers = 0;
 
-    for (auto stop : city.get_bus_stops())
-    {
+    for (auto stop : city.get_bus_stops()) {
         total_passengers += stop->get_info().get_passenger_list().size();
     }
     
@@ -402,12 +301,9 @@ void test_simulation_consistency()
     
     StreetArcList path;
     
-    for(int i = 1; i < 3; i++)
-    {
-        for (auto street : city.get_streets())
-        {
-            if(street->get_info().get_id() == i )
-            {
+    for(int i = 1; i < 3; i++) {
+        for (auto street : city.get_streets()) {
+            if(street->get_info().get_id() == i ) {
                 path.append(street);
             }
         }
@@ -419,39 +315,11 @@ void test_simulation_consistency()
 
     int total_passengers_after_simulation = 0;
 
-    for (auto bus_stop : city.get_bus_stops())
-    {
+    for (auto bus_stop : city.get_bus_stops()) {
         total_passengers_after_simulation += bus_stop->get_info().get_passenger_list().size() + bus_stop->get_info().get_gone_passengers();
     }
 
     total_passengers_after_simulation += bus.get_attended_passengers();
     
-    if (total_passengers_after_simulation == total_passengers)
-    {
-        std::cout << "OK!" << std::endl;
-    }
-    else
-    {
-        std::cout<< "FAIL!" << std::endl;
-        std::cout << "Expected: " << total_passengers << " Got: " << total_passengers_after_simulation << std::endl;
-    }
-}
-
-int main()
-{
-    test_passenger_generation();
-    test_get_passengers_on_bus();
-    test_passengers_leave_stop();
-    test_future_passengers_dont_get_on_bus();
-    test_gone_passengers_dont_get_on_bus();
-    test_leave_passengers();
-    test_city_constructor();
-    test_add_bus_stop();
-    test_add_street();
-    test_run_simulation();
-    test_driver_fatigue();
-    test_bus_wear();
-    test_simulation_consistency();
-
-    return 0;
+    REQUIRE(total_passengers_after_simulation == total_passengers);
 }

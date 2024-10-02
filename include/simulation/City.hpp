@@ -18,6 +18,8 @@ class City
     City();
     City(int _id, std::string _name, Designar::Graph<BusStop, Street> _city_map);
 
+    int get_id() const noexcept;
+    std::string get_name() const noexcept;
     BusStopNodeList get_bus_stops() const noexcept;
     StreetArcList get_streets() const noexcept;
     

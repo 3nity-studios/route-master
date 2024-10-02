@@ -11,6 +11,16 @@ City::City(int _id, std::string _name, Designar::Graph<BusStop, Street> _city_ma
     //empty
 }
 
+int City::get_id() const noexcept
+{
+    return id;
+}
+
+std::string City::get_name() const noexcept
+{
+    return name;
+}
+
 BusStopNodeList City::get_bus_stops() const noexcept
 {
     return city_map.nodes();

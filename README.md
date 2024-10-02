@@ -446,6 +446,12 @@ cmake --build build
 An executable should be generated somewhere in the build folder (presumably
 in the build/bin folder)
 
+To build tests, use the following commands:
+```sh
+cmake -S . -B build -DRM_DEVELOPER_MODE=TRUE -DBUILD_TESTING=TRUE
+cmake --build build
+```
+
 ### Install
 
 This project doesn't require any special command-line flags to install to keep
