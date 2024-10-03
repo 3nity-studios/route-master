@@ -57,7 +57,7 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/source)
 
 include_directories(${SRCROOT})
 include_directories(${INCROOT})
-include_directories(${PROJECT_SOURCE_DIR}/build/include)
+include_directories(${CMAKE_BINARY_DIR}/include)
 
 # ---- config
 
@@ -110,6 +110,8 @@ set(
   ${INCROOT}/states/state.hpp
   ${INCROOT}/states/main_menu_state.hpp
   ${SRCROOT}/states/main_menu_state.cpp
+  ${INCROOT}/states/simulation_state.hpp
+  ${SRCROOT}/states/simulation_state.cpp
 )
 add_library(route_master_states ${RM_STATES_SRC})
 add_library(route_master::states ALIAS route_master_states)

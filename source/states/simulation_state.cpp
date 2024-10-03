@@ -1,19 +1,32 @@
-#include "states/main_menu_state.hpp"
+#include "states/simulation_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
 #include <string>
 
-MainMenuState::MainMenuState(GameDataRef data) : _data(data)
+SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers")
+{
+    for (int i = 4; i < 23; i++)
+    {
+        times.push_back(std::make_pair<int, int>(i % 2, i * 1));
+    }
+
+    stops_number = 10;
+}
+
+SimulationState::SimulationState(GameDataRef data, std::list<std::pair<int, int>> _simulation_times,
+                                 int _simulation_stops_number)
+    : _data(data), times(_simulation_times), stops_number(_simulation_stops_number), first_time(true),
+      status("Picking up passengers")
 {
 }
 
-void MainMenuState::init_state()
+void SimulationState::init_state()
 {
-    this->_data->gui.setWindow(*this->_data->window);
-    this->_data->gui.loadWidgetsFromFile("assets/screens/main_menu.txt");
+    init_bus_stops();
+    init_bus();
 }
 
-void MainMenuState::update_inputs()
+void SimulationState::update_inputs()
 {
     // Event Polling
     while (const std::optional event = this->_data->window->pollEvent())
@@ -31,7 +44,7 @@ void MainMenuState::update_inputs()
             // When the enter key is pressed, switch to the next handler type
             if (keyPress->code == sf::Keyboard::Key::Escape)
             {
-                this->_data->window->close();
+                this->_data->states.remove_state();
                 break;
             }
         }
@@ -39,12 +52,13 @@ void MainMenuState::update_inputs()
 }
 
 // marks dt to not warn compiler
-void MainMenuState::update_state(float dt __attribute__((unused)))
+void SimulationState::update_state(float dt __attribute__((unused)))
 {
+    update_bus();
 }
 
 // marks dt to not warn compiler
-void MainMenuState::draw_state(float dt __attribute__((unused)))
+void SimulationState::draw_state(float dt __attribute__((unused)))
 {
     // just for fun, heres hello world text
     // SAMPLE RENDER CODE:
@@ -64,7 +78,7 @@ void MainMenuState::draw_state(float dt __attribute__((unused)))
     }
 
     // set the string to display
-    text.setString("Hello world!");
+    text.setString(status);
 
     // set the character size
     text.setCharacterSize(24); // in pixels, not points!
@@ -82,7 +96,82 @@ void MainMenuState::draw_state(float dt __attribute__((unused)))
     this->_data->window->draw(text);
 
     // END SAMPLE RENDER CODE
-    this->_data->gui.draw();
+
+    for (auto bus_stop : bus_stops)
+    {
+        this->_data->window->draw(bus_stop);
+    }
+
+    this->_data->window->draw(bus);
+
     // Displays rendered objects
     this->_data->window->display();
+}
+
+void SimulationState::init_bus_stops()
+{
+    float distance = 5.f;
+
+    for (int i = 0; i < stops_number; i++)
+    {
+        sf::RectangleShape bus_stop;
+
+        bus_stop.setSize(sf::Vector2f(25.f, 25.f));
+
+        bus_stop.setPosition(sf::Vector2f(distance, 50.f));
+
+        bus_stops.push_back(bus_stop);
+
+        distance += 75.f;
+    }
+}
+
+void SimulationState::init_bus()
+{
+    bus.setSize(sf::Vector2f(25.f, 10.f));
+
+    bus.setPosition(sf::Vector2f(5.f, 20.f));
+
+    bus.setFillColor(sf::Color::Blue);
+}
+
+void SimulationState::update_bus()
+{
+    if (times.empty())
+    {
+        return;
+    }
+
+    if (first_time)
+    {
+        simulation_clock.restart();
+        first_time = false;
+    }
+
+    auto time = times.front();
+
+    if (time.first == 0 && simulation_clock.getElapsedTime().asSeconds() >= time.second)
+    {
+        times.pop_front();
+        time = times.front();
+        simulation_clock.restart();
+        bus_speed = sf::Vector2f(75.f / (time.second * 60.f), 0.f);
+        status = "Traveling";
+    }
+    else if (time.first == 1 && simulation_clock.getElapsedTime().asSeconds() >= time.second)
+    {
+        times.pop_front();
+        time = times.front();
+        simulation_clock.restart();
+        bus_speed = sf::Vector2f(0.f, 0.f);
+        status = "Picking up and dropping off passengers";
+    }
+
+    bus.move(bus_speed);
+}
+
+void SimulationState::set_simulation_parameters(std::list<std::pair<int, int>> _times, int _stops_number)
+{
+    times = _times;
+    stops_number = _stops_number;
 }
