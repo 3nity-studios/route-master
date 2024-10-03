@@ -3,23 +3,23 @@
 #include "config/global.hpp"
 #include <string>
 
-#include <iostream>
-
-MainMenuState::MainMenuState(GameDataRef data) : _data(data)
+MainMenuState::MainMenuState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers")
 {
     for (int i = 4; i < 23; i++)
     {
         times.push_back(std::make_pair<int, int>(i%2, i*1));
     }
-    first_time = true;
-    state = "Picking up passengers";
+
+    stops_number = 10;
+}
+
+MainMenuState::MainMenuState(GameDataRef data, std::list<std::pair<int, int>> _simulation_times, int _simulation_stops_number) : _data(data), times(_simulation_times), stops_number(_simulation_stops_number), first_time(true), status("Picking up passengers")
+{
 }
 
 void MainMenuState::init_state()
 {
-    this->_data->gui.setWindow(*this->_data->window);
-    this->_data->gui.loadWidgetsFromFile("assets/screens/main_menu.txt");
-    init_bus_stops(10);
+    init_bus_stops();
     init_bus();
 }
 
@@ -75,7 +75,7 @@ void MainMenuState::draw_state(float dt __attribute__((unused)))
     }
 
     // set the string to display
-    text.setString(state);
+    text.setString(status);
 
     // set the character size
     text.setCharacterSize(24); // in pixels, not points!
@@ -105,11 +105,11 @@ void MainMenuState::draw_state(float dt __attribute__((unused)))
     this->_data->window->display();
 }
 
-void MainMenuState::init_bus_stops(int bus_stops_amount)
+void MainMenuState::init_bus_stops()
 { 
     float distance = 5.f;
 
-    for (int i = 0; i < bus_stops_amount; i++)
+    for (int i = 0; i < stops_number; i++)
     {
         sf::RectangleShape bus_stop;
 
@@ -147,16 +147,13 @@ void MainMenuState::update_bus()
 
     auto time = times.front();
 
-    std::cout<<time.first<<std::endl;
-    std::cout<<simulation_clock.getElapsedTime().asSeconds()<<std::endl;
-
     if (time.first == 0 && simulation_clock.getElapsedTime().asSeconds() >= time.second)
     {
         times.pop_front();
         time = times.front();
         simulation_clock.restart();
         bus_speed = sf::Vector2f(75.f/(time.second * 60.f), 0.f);
-        state = "Traveling";
+        status = "Traveling";
     }
     else if (time.first == 1 && simulation_clock.getElapsedTime().asSeconds() >= time.second)
     {
@@ -164,8 +161,14 @@ void MainMenuState::update_bus()
         time = times.front();
         simulation_clock.restart();
         bus_speed = sf::Vector2f(0.f,0.f);
-        state = "Picking up passengers";
+        status = "Picking up and dropping off passengers";
     }
 
     bus.move(bus_speed);
+}
+
+void MainMenuState::set_simulation_parameters(std::list<std::pair<int, int>> _times, int _stops_number)
+{
+    times = _times;
+    stops_number = _stops_number;
 }
