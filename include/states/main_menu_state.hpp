@@ -2,6 +2,7 @@
 
 #include "config/game.hpp"
 #include "config/global.hpp"
+#include "states/simulation_state.hpp"
 #include "states/state.hpp"
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>

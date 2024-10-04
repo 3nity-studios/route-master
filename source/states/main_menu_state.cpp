@@ -1,4 +1,5 @@
 #include "states/main_menu_state.hpp"
+#include "states/simulation_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
 #include <string>
@@ -19,6 +20,9 @@ void MainMenuState::update_inputs()
     while (const std::optional event = this->_data->window->pollEvent())
     {
         this->_data->gui.handleEvent(*event);
+        this->_data->gui.get<tgui::Button>("play_button")->onPress([this] {
+            this->_data->states.add_state(Engine::StateRef(new SimulationState(this->_data)), false);
+        });
 
         if (event->is<sf::Event::Closed>())
         {

@@ -103,6 +103,34 @@ target_link_libraries(route_master_engine
   SFML::Audio
   SFML::System)
 
+# ---- simulation
+
+set(
+  RM_SIMULATION_SRC
+  ${INCROOT}/simulation/Bus.hpp
+  ${INCROOT}/simulation/BusStop.hpp
+  ${INCROOT}/simulation/City.hpp
+  ${INCROOT}/simulation/Employee.hpp
+  ${INCROOT}/simulation/Passenger.hpp
+  ${INCROOT}/simulation/Street.hpp
+  ${SRCROOT}/simulation/Bus.cpp
+  ${SRCROOT}/simulation/BusStop.cpp
+  ${SRCROOT}/simulation/City.cpp
+  ${SRCROOT}/simulation/Employee.cpp
+  ${SRCROOT}/simulation/Passenger.cpp
+  ${SRCROOT}/simulation/Street.cpp
+)
+add_library(route_master_simulation ${RM_SIMULATION_SRC})
+add_library(route_master::simulation ALIAS route_master_simulation)
+target_link_libraries(route_master_simulation
+  PRIVATE
+  SFML::Graphics
+  SFML::Window
+  SFML::Audio
+  SFML::System
+  TGUI::TGUI
+  Designar::Designar)
+
 # ---- states
 
 set(
@@ -110,6 +138,8 @@ set(
   ${INCROOT}/states/state.hpp
   ${INCROOT}/states/main_menu_state.hpp
   ${SRCROOT}/states/main_menu_state.cpp
+  ${INCROOT}/states/simulation_state.hpp
+  ${SRCROOT}/states/simulation_state.cpp
 )
 add_library(route_master_states ${RM_STATES_SRC})
 add_library(route_master::states ALIAS route_master_states)
@@ -119,23 +149,8 @@ target_link_libraries(route_master_states
   SFML::Graphics
   SFML::Window
   SFML::Audio
-  SFML::System)
-
-# ---- gui
-
-# set(
-#   RM_GUI_SRC
-#   ${INCROOT}/gui/gui.hpp
-# )
-# add_library(route_master_gui ${RM_GUI_SRC})
-# add_library(route_master::gui ALIAS route_master_gui)
-# target_link_libraries(route_master_gui
-#   PRIVATE
-#   SFML::Graphics
-#   SFML::Window
-#   SFML::Audio
-#   SFML::System)
-
+  SFML::System
+  route_master::simulation)
 
 # ---- platform
 
@@ -230,7 +245,7 @@ target_link_libraries(
   route_master::config
   route_master::platform
   route_master::engine
-  # route_master::gui
+  route_master::simulation
   route_master::utils
   TGUI::TGUI
   SFML::Graphics
@@ -249,6 +264,7 @@ target_link_libraries(
   nlohmann_json::nlohmann_json
   Designar::Designar
   tmxlite::tmxlite
+  route_master::simulation
   ${RM_PLATFORM_EXTRA_LIBRARIES}
 )
 

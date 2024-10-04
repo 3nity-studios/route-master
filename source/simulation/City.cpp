@@ -73,8 +73,10 @@ void City::initialize_bus_stops()
     }
 }
 
-void City::run_simulation(Bus &bus, Employee &driver, int time, StreetArcList path)
+std::list<std::pair<int, int>> City::run_simulation(Bus &bus, Employee &driver, int time, StreetArcList path)
 {
+    std::list<std::pair<int, int>> times;
+
     // BusStop current_stop = path.get_first()->get_src_node()->get_info();
     bus.reset();
     int spent_time = 0;
@@ -82,6 +84,7 @@ void City::run_simulation(Bus &bus, Employee &driver, int time, StreetArcList pa
     {
         bus.leave_passengers(path.get_first()->get_src_node()->get_info());
         bus.add_passengers(time, path.get_first()->get_src_node()->get_info());
+        times.push_back(std::make_pair<int, int>(0, bus.get_time_in_bus_stop()));
 
         driver.calc_fatigue(track->get_info().get_distance());
         bus.calc_wear(track->get_info().get_distance());
@@ -90,6 +93,12 @@ void City::run_simulation(Bus &bus, Employee &driver, int time, StreetArcList pa
         // TODO: Abort simulation if bus breaks or if driver is too tired
 
         // current_stop = track->get_tgt_node()->get_info();
-        spent_time += track->get_info().get_travel_time();
+
+        int travel_time = track->get_info().get_travel_time();
+
+        spent_time += travel_time;
+        times.push_back(std::make_pair<int, int>(1, std::move(travel_time)));
     }
+
+    return times;
 }
