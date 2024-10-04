@@ -3,33 +3,8 @@
 #include "config/global.hpp"
 #include <string>
 
-// WARNING: this really, REALLY shouldn't be here. But I didn't find any setters
-//  for these
-Bus bus_sim(0, "Bus1", 15, std::list<Passenger>{}, 0);
-Employee driver("John", "Doe", 30, 8, 0);
-
-SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers")
+SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_sim(Bus(1, "Bus 125", 32, std::list<Passenger>{}, 5)), driver_sim(Employee ("John", "Doe", 32, 12, 0))
 {
-    for (int i = 4; i < 23; i++)
-    {
-        times.push_back(std::make_pair<int, int>(i % 2, i * 1));
-    }
-
-    stops_number = 10;
-}
-
-SimulationState::SimulationState(GameDataRef data, std::list<std::pair<int, int>> _simulation_times,
-                                 int _simulation_stops_number)
-    : _data(data), times(_simulation_times), stops_number(_simulation_stops_number), first_time(true),
-      status("Picking up passengers")
-{
-}
-
-void SimulationState::init_state()
-{
-    init_bus_stops();
-    init_bus();
-
     BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
     BusStop stop2(2, "Stop2", 10.0, 10.0, 3.0, 3.0, 2.0);
     BusStop stop3(3, "Stop3", 15.0, 15.0, 3.0, 3.0, 2.0);
@@ -59,7 +34,24 @@ void SimulationState::init_state()
         }
     }
 
-    city.run_simulation(bus_sim, driver, 10, path);
+    auto time = city.run_simulation(bus_sim, driver_sim, 10, path);
+
+    this->times.clear();
+
+    set_simulation_parameters(time, 3);
+}
+
+SimulationState::SimulationState(GameDataRef data, std::list<std::pair<int, int>> _simulation_times,
+                                 int _simulation_stops_number, Bus _simulation_bus, Employee _simulation_driver)
+    : _data(data), times(_simulation_times), stops_number(_simulation_stops_number), first_time(true), bus_sim (_simulation_bus), driver_sim(_simulation_driver),
+      status("Picking up passengers")
+{
+}
+
+void SimulationState::init_state()
+{
+    init_bus_stops();
+    init_bus();
 }
 
 void SimulationState::update_inputs()
@@ -96,7 +88,6 @@ void SimulationState::update_state(float dt __attribute__((unused)))
 // marks dt to not warn compiler
 void SimulationState::draw_state(float dt __attribute__((unused)))
 {
-    // just for fun, heres hello world text
     // SAMPLE RENDER CODE:
 
     // background color
@@ -142,7 +133,7 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
 
     sf::Text text2(font);
     // set the string to display
-    text2.setString(driver.get_name());
+    text2.setString("\nDriver: " + driver_sim.get_name() + " " + driver_sim.get_last_name() + "\n" + "Bus: " + bus_sim.get_name());
 
     // set the character size
     text2.setCharacterSize(24); // in pixels, not points!
@@ -162,6 +153,16 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
 
     // Displays rendered objects
     this->_data->window->display();
+}
+
+void SimulationState::set_driver_sim(Employee _driver)
+{
+    driver_sim = _driver;
+}
+
+void SimulationState::set_bus_sim(Bus _bus)
+{
+    bus_sim = _bus;
 }
 
 void SimulationState::init_bus_stops()
@@ -195,6 +196,7 @@ void SimulationState::update_bus()
 {
     if (times.empty())
     {
+        status = "Route completed";
         return;
     }
 
@@ -216,11 +218,19 @@ void SimulationState::update_bus()
     }
     else if (time.first == 1 && simulation_clock.getElapsedTime().asSeconds() >= time.second)
     {
+        if (times.size() == 1)
+        {
+            status = "Dropping off passengers";
+        }
+        else
+        {
+            status = "Picking up and dropping off passengers";
+        }
+
         times.pop_front();
         time = times.front();
         simulation_clock.restart();
         bus_speed = sf::Vector2f(0.f, 0.f);
-        status = "Picking up and dropping off passengers";
     }
 
     bus.move(bus_speed);

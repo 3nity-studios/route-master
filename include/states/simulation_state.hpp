@@ -13,7 +13,7 @@ class SimulationState : public Engine::State
   public:
     SimulationState(GameDataRef data);
     //~SimulationState() = default;
-    SimulationState(GameDataRef data, std::list<std::pair<int, int>> _simulation_times, int _simulation_stops_number);
+    SimulationState(GameDataRef data, std::list<std::pair<int, int>> _simulation_times, int _simulation_stops_number, Bus _simulation_bus, Employee _simulation_driver);
 
     void init_state();
     void init_bus_stops();
@@ -23,6 +23,8 @@ class SimulationState : public Engine::State
     void update_bus();
     void draw_state(float dt __attribute__((unused)));
 
+    void set_driver_sim(Employee _driver);
+    void set_bus_sim(Bus _bus); 
     void set_simulation_parameters(std::list<std::pair<int, int>> _times, int _stops_number);
 
   private:
@@ -36,4 +38,6 @@ class SimulationState : public Engine::State
     sf::String status;
     int stops_number;
     City city;
+    Employee driver_sim; 
+    Bus bus_sim; 
 };
