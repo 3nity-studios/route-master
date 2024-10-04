@@ -2,6 +2,8 @@
 
 #include "config/game.hpp"
 #include "config/global.hpp"
+#include "simulation/Bus.hpp"
+#include "simulation/City.hpp"
 #include "states/state.hpp"
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -33,4 +35,5 @@ class SimulationState : public Engine::State
     bool first_time;
     sf::String status;
     int stops_number;
+    City city;
 };
