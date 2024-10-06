@@ -93,6 +93,7 @@ set(
   ${INCROOT}/engine/input_manager.hpp
   ${SRCROOT}/engine/state_machine.cpp
   ${INCROOT}/engine/state_machine.hpp
+  ${INCROOT}/engine/tmx_core.hpp
 )
 add_library(route_master_engine ${RM_ENGINE_SRC})
 add_library(route_master::engine ALIAS route_master_engine)
@@ -140,6 +141,8 @@ set(
   ${INCROOT}/states/state.hpp
   ${INCROOT}/states/main_menu_state.hpp
   ${SRCROOT}/states/main_menu_state.cpp
+  ${INCROOT}/states/map_viewer_state.hpp
+  ${SRCROOT}/states/map_viewer_state.cpp
   ${INCROOT}/states/simulation_state.hpp
   ${SRCROOT}/states/simulation_state.cpp
 )

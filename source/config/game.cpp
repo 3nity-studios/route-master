@@ -1,12 +1,13 @@
 #include "config/game.hpp"
 #include "engine/state_machine.hpp"
 #include "states/main_menu_state.hpp"
+#include "states/map_viewer_state.hpp"
 
 // private
 void Game::init_variables()
 {
     this->_data->window = nullptr;
-    this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), false);
+    this->_data->states.add_state(Engine::StateRef(new MapViewerState(this->_data)), false);
 }
 void Game::init_window()
 {
