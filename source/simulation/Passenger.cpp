@@ -11,6 +11,11 @@ Passenger::Passenger(int _arrival_time, int _waiting_time, int _bus_stop)
     //empty
 }
 
+bool Passenger::is_gone(int current_time) const noexcept
+{
+    return arrival_time + waiting_time < current_time;
+}
+
 int Passenger::get_arrival_time() const noexcept
 {
     return arrival_time;

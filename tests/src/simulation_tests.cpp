@@ -3,14 +3,14 @@
 #include "simulation/Bus.hpp"
 
 TEST_CASE("Passenger generation in BusStop", "[passenger_generation]") {
-    BusStop bus_stop = BusStop(0, "A", 5, 5, 3, 3, 2);
-    bus_stop.generate_passengers();
+    BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f);
+    bus_stop.generate_passengers(0);
     REQUIRE(bus_stop.get_passenger_list().size() >= 0);
 }
 
 TEST_CASE("Get passengers on bus", "[get_passengers_on_bus]") {
-    BusStop bus_stop = BusStop(0, "A", 5, 5, 3, 3, 2);
-    bus_stop.generate_passengers();
+    BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f);
+    bus_stop.generate_passengers(0);
 
     Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 0);
     bus.add_passengers(3, bus_stop);
@@ -29,8 +29,8 @@ TEST_CASE("Get passengers on bus", "[get_passengers_on_bus]") {
 }
 
 TEST_CASE("Passengers leave bus stop", "[passengers_leave_stop]") {
-    BusStop bus_stop = BusStop(0, "A", 5, 5, 3, 3, 2);
-    bus_stop.generate_passengers();
+    BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f);
+    bus_stop.generate_passengers(0);
 
     int initial_passenger_count = bus_stop.get_passenger_list().size();
 
@@ -43,8 +43,8 @@ TEST_CASE("Passengers leave bus stop", "[passengers_leave_stop]") {
 }
 
 TEST_CASE("Future passengers don't get on the bus", "[future_passengers]") {
-    BusStop bus_stop = BusStop(0, "A", 5, 5, 3, 3, 2);
-    bus_stop.generate_passengers();
+    BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f);
+    bus_stop.generate_passengers(0);
 
     Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 2);
     bus.add_passengers(3, bus_stop); // Current timestep is 3
@@ -80,8 +80,8 @@ TEST_CASE("Future passengers don't get on the bus", "[future_passengers]") {
 }
 
 TEST_CASE("Gone passengers don't get on the bus", "[gone_passengers]") {
-    BusStop bus_stop = BusStop(0, "A", 5, 5, 3, 3, 2);
-    bus_stop.generate_passengers();
+    BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f);
+    bus_stop.generate_passengers(0);
 
     Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 2);
     bus.add_passengers(3, bus_stop); // Current timestep is 3
@@ -120,7 +120,7 @@ TEST_CASE("Leave passengers", "[leave_passengers]") {
     };
 
     Bus bus = Bus(0, "A", 15, passengers, 0);
-    BusStop bus_stop(2, "Terminal", 5, 4, 3, 2, 1);
+    BusStop bus_stop(2, "Terminal", {5}, 4.0f, 3.0f, 2.0f, 1.0f, 1.0f);
 
     bus.leave_passengers(bus_stop); // Current stop
 
@@ -138,13 +138,13 @@ TEST_CASE("Leave passengers", "[leave_passengers]") {
 
 TEST_CASE("City constructor", "[city_constructor]") {
     Designar::Graph<BusStop, Street> city_map;
-    City city(1, "TestCity", city_map);
+    City city(1, "TestCity", city_map, 0);
     REQUIRE(city.get_name() == "TestCity");
 }
 
 TEST_CASE("Adding bus stop to city", "[add_bus_stop]") {
     City city;
-    BusStop bus_stop(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
+    BusStop bus_stop(1, "Stop1", {5}, 5.0f, 5.0f, 3.0f, 3.0f, 2.0f);
     city.add_bus_stop(bus_stop);
     auto bus_stops = city.get_bus_stops();
     REQUIRE(!bus_stops.is_empty());
@@ -153,8 +153,8 @@ TEST_CASE("Adding bus stop to city", "[add_bus_stop]") {
 
 TEST_CASE("Adding street to city", "[add_street]") {
     City city;
-    BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
-    BusStop stop2(2, "Stop2", 5.0, 5.0, 3.0, 3.0, 2.0);
+    BusStop stop1(1, "Stop1", {5}, 5.0, 5.0, 3.0, 3.0, 2.0);
+    BusStop stop2(2, "Stop2", {5}, 5.0, 5.0, 3.0, 3.0, 2.0);
     city.add_bus_stop(stop1);
     city.add_bus_stop(stop2);
     Street street_info(1, "Street1", 100, 10.0f, 2.0f, 0.1f, 0.05f);
@@ -167,9 +167,9 @@ TEST_CASE("Adding street to city", "[add_street]") {
 TEST_CASE("Run simulation", "[run_simulation]") {
     City city;
     
-    BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
-    BusStop stop2(2, "Stop2", 10.0, 10.0, 3.0, 3.0, 2.0);
-    BusStop stop3(3, "Stop3", 15.0, 15.0, 3.0, 3.0, 2.0);
+    BusStop stop1(1, "Stop1", {5}, 5.0, 3.0, 3.0, 2.0, 2.0);
+    BusStop stop2(2, "Stop2", {10}, 10.0, 3.0, 3.0, 2.0, 2.0);
+    BusStop stop3(3, "Stop3", {15}, 15.0, 3.0, 3.0, 2.0, 2.0);
     
     city.add_bus_stop(stop1);
     city.add_bus_stop(stop2);
@@ -202,9 +202,9 @@ TEST_CASE("Run simulation", "[run_simulation]") {
 TEST_CASE("Driver fatigue", "[driver_fatigue]") {
     City city;
     
-    BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
-    BusStop stop2(2, "Stop2", 10.0, 10.0, 3.0, 3.0, 2.0);
-    BusStop stop3(3, "Stop3", 15.0, 15.0, 3.0, 3.0, 2.0);
+    BusStop stop1(1, "Stop1", {5}, 5.0, 5.0, 3.0, 3.0, 2.0);
+    BusStop stop2(2, "Stop2", {10}, 10.0, 10.0, 3.0, 3.0, 2.0);
+    BusStop stop3(3, "Stop3", {15}, 15.0, 15.0, 3.0, 3.0, 2.0);
     
     city.add_bus_stop(stop1);
     city.add_bus_stop(stop2);
@@ -238,9 +238,9 @@ TEST_CASE("Driver fatigue", "[driver_fatigue]") {
 TEST_CASE("Bus wear", "[bus_wear]") {
     City city;
     
-    BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
-    BusStop stop2(2, "Stop2", 10.0, 10.0, 3.0, 3.0, 2.0);
-    BusStop stop3(3, "Stop3", 15.0, 15.0, 3.0, 3.0, 2.0);
+    BusStop stop1(1, "Stop1", {5}, 5.0, 5.0, 3.0, 3.0, 2.0);
+    BusStop stop2(2, "Stop2", {10}, 10.0, 10.0, 3.0, 3.0, 2.0);
+    BusStop stop3(3, "Stop3", {15}, 15.0, 15.0, 3.0, 3.0, 2.0);
     
     city.add_bus_stop(stop1);
     city.add_bus_stop(stop2);
@@ -277,9 +277,9 @@ TEST_CASE("Bus wear", "[bus_wear]") {
 TEST_CASE("Simulation consistency", "[simulation_consistency]") {
     City city;
     
-    BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
-    BusStop stop2(2, "Stop2", 10.0, 10.0, 3.0, 3.0, 2.0);
-    BusStop stop3(3, "Stop3", 15.0, 15.0, 3.0, 3.0, 2.0);
+    BusStop stop1(1, "Stop1", {5}, 5.0, 5.0, 3.0, 3.0, 2.0);
+    BusStop stop2(2, "Stop2", {10}, 10.0, 10.0, 3.0, 3.0, 2.0);
+    BusStop stop3(3, "Stop3", {15}, 15.0, 15.0, 3.0, 3.0, 2.0);
     
     city.add_bus_stop(stop1);
     city.add_bus_stop(stop2);

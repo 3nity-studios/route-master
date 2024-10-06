@@ -1,12 +1,12 @@
 #include "simulation/City.hpp"
 
-City::City() : id(0), name("")
+City::City() : id(0), name(""), current_time(0)
 {
     //empty
 }
 
-City::City(int _id, std::string _name, Designar::Graph<BusStop, Street> _city_map)
-    : id(_id), name(_name), city_map(_city_map)
+City::City(int _id, std::string _name, Designar::Graph<BusStop, Street> _city_map, int _current_time)
+    : id(_id), name(_name), city_map(_city_map), current_time(_current_time)
 {
     //empty
 }
@@ -68,12 +68,18 @@ void City::initialize_bus_stops()
 
     for(auto &stop : city_map.nodes())
     {
-        stop->get_info().generate_passengers();
+        stop->get_info().generate_passengers(current_time);
     }
 }
 
 void City::update()
 {
+    current_time++;
+    for(auto &stop : city_map.nodes())
+    {
+        stop->get_info().update(current_time);
+    }
+
     for(auto &street : city_map.arcs())
     {
         street->get_info().update();
@@ -84,7 +90,6 @@ std::list<std::pair<int, int>> City::run_simulation(Bus &bus, Employee &driver, 
 {
     std::list<std::pair<int, int>> times;
 
-    // BusStop current_stop = path.get_first()->get_src_node()->get_info();
     bus.reset();
     int spent_time = 0;
     for(auto track : path)
@@ -97,11 +102,8 @@ std::list<std::pair<int, int>> City::run_simulation(Bus &bus, Employee &driver, 
 
         driver.calc_fatigue(track->get_info().get_distance());
         bus.calc_wear(track->get_info().get_distance());
-        // bus.move(track->get_info());
 
         // TODO: Abort simulation if bus breaks or if driver is too tired
-
-        // current_stop = track->get_tgt_node()->get_info();
 
         int travel_time = track->get_info().get_travel_time();
 

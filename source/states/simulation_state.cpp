@@ -5,9 +5,9 @@
 
 SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_sim(Bus(1, "Bus 125", 32, std::list<Passenger>{}, 5)), driver_sim(Employee ("John", "Doe", 32, 12, 0))
 {
-    BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
-    BusStop stop2(2, "Stop2", 10.0, 10.0, 3.0, 3.0, 2.0);
-    BusStop stop3(3, "Stop3", 15.0, 15.0, 3.0, 3.0, 2.0);
+    BusStop stop1(1, "Stop1", {5, 10, 15}, 5.0, 5.0, 1.0, 2.0, 0.5);
+    BusStop stop2(2, "Stop2", {10, 20, 30}, 10.0, 10.0, 2.0, 4.0, 1.0);
+    BusStop stop3(3, "Stop3", {15, 30, 45}, 15.0, 15.0, 3.0, 6.0, 1.5);
 
     city.add_bus_stop(stop1);
     city.add_bus_stop(stop2);
