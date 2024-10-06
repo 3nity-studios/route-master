@@ -157,7 +157,7 @@ TEST_CASE("Adding street to city", "[add_street]") {
     BusStop stop2(2, "Stop2", 5.0, 5.0, 3.0, 3.0, 2.0);
     city.add_bus_stop(stop1);
     city.add_bus_stop(stop2);
-    Street street_info(1, "Street1", 100, 10.0f, 2.0f, 0.1f);
+    Street street_info(1, "Street1", 100, 10.0f, 2.0f, 0.1f, 0.05f);
     city.add_street(street_info, 1, 2);
     auto streets = city.get_streets();
     REQUIRE(!streets.is_empty());
@@ -177,8 +177,8 @@ TEST_CASE("Run simulation", "[run_simulation]") {
 
     city.initialize_bus_stops();
     
-    Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f);
-    Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f);
+    Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f, 0.05f);
+    Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f, 0.05f);
     
     city.add_street(street1, 1, 2);
     city.add_street(street2, 2, 3);
@@ -212,8 +212,8 @@ TEST_CASE("Driver fatigue", "[driver_fatigue]") {
 
     city.initialize_bus_stops();
     
-    Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f);
-    Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f);
+    Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f, 0.05f);
+    Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f, 0.05f);
     
     city.add_street(street1, 1, 2);
     city.add_street(street2, 2, 3);
@@ -248,8 +248,8 @@ TEST_CASE("Bus wear", "[bus_wear]") {
 
     city.initialize_bus_stops();
     
-    Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f);
-    Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f);
+    Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f, 0.05f);
+    Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f, 0.05f);
     
     city.add_street(street1, 1, 2);
     city.add_street(street2, 2, 3);
@@ -293,8 +293,8 @@ TEST_CASE("Simulation consistency", "[simulation_consistency]") {
         total_passengers += stop->get_info().get_passenger_list().size();
     }
     
-    Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f);
-    Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f);
+    Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f, 0.05f);
+    Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f, 0.05f);
     
     city.add_street(street1, 1, 2);
     city.add_street(street2, 2, 3);

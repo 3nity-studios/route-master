@@ -65,11 +65,18 @@ void City::add_street(const Street& street_info, const int& src_id, const int& t
 
 void City::initialize_bus_stops()
 {
-    auto streets = city_map.arcs();
 
     for(auto &stop : city_map.nodes())
     {
         stop->get_info().generate_passengers();
+    }
+}
+
+void City::update()
+{
+    for(auto &street : city_map.arcs())
+    {
+        street->get_info().update();
     }
 }
 
@@ -82,6 +89,8 @@ std::list<std::pair<int, int>> City::run_simulation(Bus &bus, Employee &driver, 
     int spent_time = 0;
     for(auto track : path)
     {
+        update();
+
         bus.leave_passengers(path.get_first()->get_src_node()->get_info());
         bus.add_passengers(time, path.get_first()->get_src_node()->get_info());
         times.push_back(std::make_pair<int, int>(0, bus.get_time_in_bus_stop()));

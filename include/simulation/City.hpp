@@ -27,5 +27,6 @@ class City
     void add_street(const Street& street_info, const int& src_id, const int& tgt_id); 
 
     void initialize_bus_stops();
+    void update();
     std::list<std::pair<int, int>> run_simulation(Bus &bus, Employee &driver, int time, StreetArcList path);
 };

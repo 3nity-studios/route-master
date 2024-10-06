@@ -15,8 +15,8 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
 
     city.initialize_bus_stops();
 
-    Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f);
-    Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f);
+    Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f, 0.05f);
+    Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f, 0.05f);
 
     city.add_street(street1, 1, 2);
     city.add_street(street2, 2, 3);
