@@ -109,12 +109,14 @@ target_link_libraries(route_master_engine
 
 set(
   RM_SIMULATION_SRC
+  ${INCROOT}/simulation/VisualElement.hpp
   ${INCROOT}/simulation/Bus.hpp
   ${INCROOT}/simulation/BusStop.hpp
   ${INCROOT}/simulation/City.hpp
   ${INCROOT}/simulation/Employee.hpp
   ${INCROOT}/simulation/Passenger.hpp
   ${INCROOT}/simulation/Street.hpp
+  ${SRCROOT}/simulation/VisualElement.cpp
   ${SRCROOT}/simulation/Bus.cpp
   ${SRCROOT}/simulation/BusStop.cpp
   ${SRCROOT}/simulation/City.cpp

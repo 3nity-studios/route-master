@@ -1,6 +1,7 @@
 #pragma once
 
 #include "simulation/Passenger.hpp"
+#include "simulation/VisualElement.hpp"
 #include <queue>
 #include <string>
 
@@ -14,7 +15,7 @@ struct Cmp
 
 using PassengerHeap = std::priority_queue<Passenger, std::vector<Passenger>, Cmp>;
 
-class BusStop
+class BusStop : public VisualElement
 {
     private:
 
@@ -31,7 +32,7 @@ class BusStop
     public: 
 
     BusStop();
-    BusStop(int _id, std::string _name, float _avg_arrival_time, float _avg_waiting_time, float _sd_waiting_time, float _avg_bus_stop, float _sd_bus_stop);
+    BusStop(int _id, std::string _name, float _avg_arrival_time, float _avg_waiting_time, float _sd_waiting_time, float _avg_bus_stop, float _sd_bus_stop, float _x, float _y);
 
     int get_id() const noexcept;
     std::string get_name() const noexcept;

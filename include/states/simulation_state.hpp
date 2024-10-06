@@ -12,8 +12,8 @@ class SimulationState : public Engine::State
 {
   public:
     SimulationState(GameDataRef data);
-    //~SimulationState() = default;
-    SimulationState(GameDataRef data, std::list<std::pair<int, int>> _simulation_times, int _simulation_stops_number, Bus _simulation_bus, Employee _simulation_driver);
+    ~SimulationState();
+    SimulationState(GameDataRef data, std::list<std::pair<int, int>> _simulation_times, Bus _simulation_bus, Employee _simulation_driver);
 
     void init_state();
     void init_bus_stops();
@@ -25,19 +25,21 @@ class SimulationState : public Engine::State
 
     void set_driver_sim(Employee _driver);
     void set_bus_sim(Bus _bus); 
-    void set_simulation_parameters(std::list<std::pair<int, int>> _times, int _stops_number);
+    void set_simulation_parameters(std::list<std::pair<int, int>> _times);
 
   private:
     GameDataRef _data;
-    std::list<sf::RectangleShape> bus_stops;
+    std::list<sf::Sprite> bus_stops;
     std::list<std::pair<int, int>> times;
-    sf::RectangleShape bus;
+    std::list<BusStop> path_bus_stops;
+    sf::Sprite bus;
     sf::Clock simulation_clock;
+    Employee driver_sim; 
+    Bus bus_sim; 
     sf::Vector2f bus_speed;
     bool first_time;
     sf::String status;
-    int stops_number;
     City city;
-    Employee driver_sim; 
-    Bus bus_sim; 
+    sf::Texture bus_texture;
+    sf::Texture bus_stops_texture;
 };

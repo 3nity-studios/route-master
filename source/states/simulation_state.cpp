@@ -2,28 +2,46 @@
 #include "config/game.hpp"
 #include "config/global.hpp"
 #include <string>
+#include <cmath>
 
-SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_sim(Bus(1, "Bus 125", 32, std::list<Passenger>{}, 5)), driver_sim(Employee ("John", "Doe", 32, 12, 0))
+float calc_distance(BusStop bus_stop_1, BusStop bus_stop_2)
 {
-    BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0);
-    BusStop stop2(2, "Stop2", 10.0, 10.0, 3.0, 3.0, 2.0);
-    BusStop stop3(3, "Stop3", 15.0, 15.0, 3.0, 3.0, 2.0);
+    return sqrt(pow(bus_stop_1.get_x() - bus_stop_2.get_x(), 2) + pow(bus_stop_1.get_y() - bus_stop_2.get_y(), 2));
+}
+
+SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_sim(Bus(1, "Bus 125", 32, std::list<Passenger>{}, 5)), driver_sim(Employee ("John", "Doe", 32, 12, 0)), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), bus(bus_texture)
+{
+    BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0, 5.f, 5.f);
+    BusStop stop2(2, "Stop2", 10.0, 10.0, 3.0, 3.0, 2.0, 150.f, 5.f);
+    BusStop stop3(3, "Stop3", 15.0, 15.0, 3.0, 3.0, 2.0, 400.f, 5.f);
+    BusStop stop4(4, "Stop4", 15.0, 15.0, 3.0, 3.0, 2.0, 5.f, 250.f);
+    BusStop stop5(5, "Stop5", 15.0, 15.0, 3.0, 3.0, 2.0, 200.f, 250.f);
+    BusStop stop6(6, "Stop6", 15.0, 15.0, 3.0, 3.0, 2.0, 200.f, 500.f);
 
     city.add_bus_stop(stop1);
     city.add_bus_stop(stop2);
     city.add_bus_stop(stop3);
+    city.add_bus_stop(stop4);
+    city.add_bus_stop(stop5);
+    city.add_bus_stop(stop6);
 
     city.initialize_bus_stops();
 
-    Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f);
-    Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f);
+    Street street1(1, "Street1", calc_distance(stop1, stop2), 10.0f, 2.0f, 0.1f);
+    Street street2(2, "Street2", calc_distance(stop2, stop3), 10.0f, 2.0f, 0.1f);
+    Street street3(3, "Street3", calc_distance(stop3, stop4), 10.0f, 2.0f, 0.1f);
+    Street street4(4, "Street4", calc_distance(stop4, stop5), 10.0f, 2.0f, 0.1f);
+    Street street5(5, "Street5", calc_distance(stop5, stop6), 10.0f, 2.0f, 0.1f);
 
     city.add_street(street1, 1, 2);
     city.add_street(street2, 2, 3);
+    city.add_street(street3, 3, 4);
+    city.add_street(street4, 4, 5);
+    city.add_street(street5, 5, 6);
 
     StreetArcList path;
 
-    for (int i = 1; i < 3; i++)
+    for (int i = 1; i < 6; i++)
     {
         for (auto street : city.get_streets())
         {
@@ -34,17 +52,34 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
         }
     }
 
+    for (auto track : path)
+    {
+        path_bus_stops.push_back(track->get_src_node()->get_info());
+    }
+
+    path_bus_stops.push_back(path.get_last()->get_tgt_node()->get_info());
+
     auto time = city.run_simulation(bus_sim, driver_sim, 10, path);
 
     this->times.clear();
 
-    set_simulation_parameters(time, 3);
+    set_simulation_parameters(time);
+
+    if (!bus_texture.loadFromFile("assets/img/bus_sprites.png"))
+    {
+        throw GameException("Couldn't find file: assets/img/bus_sprites.png");
+    }
+
+    if (!bus_stops_texture.loadFromFile("assets/img/bus_stop_sprites.png"))
+    {
+        throw GameException("Couldn't find file: assets/img/bus_stop_sprites.png");
+    }
 }
 
 SimulationState::SimulationState(GameDataRef data, std::list<std::pair<int, int>> _simulation_times,
-                                 int _simulation_stops_number, Bus _simulation_bus, Employee _simulation_driver)
-    : _data(data), times(_simulation_times), stops_number(_simulation_stops_number), first_time(true), bus_sim (_simulation_bus), driver_sim(_simulation_driver),
-      status("Picking up passengers")
+                                 Bus _simulation_bus, Employee _simulation_driver)
+    : _data(data), times(_simulation_times), first_time(true), bus_sim (_simulation_bus), driver_sim(_simulation_driver),
+      status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus(bus_texture)
 {
 }
 
@@ -108,7 +143,7 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     text.setString(status);
 
     // set the character size
-    text.setCharacterSize(24); // in pixels, not points!
+    text.setCharacterSize(12); // in pixels, not points!
 
     // set the color
     text.setFillColor(sf::Color::White);
@@ -116,8 +151,7 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     // set the text style
     text.setStyle(sf::Text::Bold | sf::Text::Underlined);
 
-    text.setPosition({(static_cast<float>(this->_data->window->getSize().x / 2)) - (text.getLocalBounds().size.x / 2),
-                      (static_cast<float>(this->_data->window->getSize().y / 2)) - (text.getLocalBounds().size.y / 2)});
+    text.setPosition(sf::Vector2f(400.f, 500.f));
 
     // inside the main loop, between window.clear() and window.display()
     this->_data->window->draw(text);
@@ -136,7 +170,7 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     text2.setString("\nDriver: " + driver_sim.get_name() + " " + driver_sim.get_last_name() + "\n" + "Bus: " + bus_sim.get_name());
 
     // set the character size
-    text2.setCharacterSize(24); // in pixels, not points!
+    text2.setCharacterSize(12); // in pixels, not points!
 
     // set the color
     text2.setFillColor(sf::Color::White);
@@ -144,9 +178,7 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     // set the text style
     text2.setStyle(sf::Text::Bold | sf::Text::Underlined);
 
-    text2.setPosition(
-        {(static_cast<float>(this->_data->window->getSize().x / 2)) - (text2.getLocalBounds().size.x / 2),
-         (static_cast<float>(this->_data->window->getSize().y / 2)) - (text2.getLocalBounds().size.y / 2) + 24});
+    text2.setPosition(sf::Vector2f(400.f, 500.f));
 
     // inside the main loop, between window.clear() and window.display()
     this->_data->window->draw(text2);
@@ -167,33 +199,36 @@ void SimulationState::set_bus_sim(Bus _bus)
 
 void SimulationState::init_bus_stops()
 {
-    float distance = 5.f;
-
-    for (int i = 0; i < stops_number; i++)
+    for (auto stop : city.get_bus_stops())
     {
-        sf::RectangleShape bus_stop;
+        sf::Sprite bus_stop(bus_stops_texture);
 
-        bus_stop.setSize(sf::Vector2f(25.f, 25.f));
+        bus_stop.setTextureRect(sf::IntRect(sf::Vector2i(617,200), sf::Vector2i(197,104)));
 
-        bus_stop.setPosition(sf::Vector2f(distance, 50.f));
+        bus_stop.setPosition(sf::Vector2f(stop->get_info().get_x(), stop->get_info().get_y()));
+
+        bus_stop.setScale(sf::Vector2<float>(0.5, 0.5));
 
         bus_stops.push_back(bus_stop);
-
-        distance += 75.f;
     }
 }
 
 void SimulationState::init_bus()
 {
-    bus.setSize(sf::Vector2f(25.f, 10.f));
+    sf::IntRect bus_texture(sf::Vector2i(0,0), sf::Vector2i(717,390));
+
+    bus.setTextureRect(bus_texture);
 
     bus.setPosition(sf::Vector2f(5.f, 20.f));
 
-    bus.setFillColor(sf::Color::Blue);
+    bus.setScale(sf::Vector2<float>(0.1, 0.1));
 }
 
 void SimulationState::update_bus()
 {
+    sf::IntRect right_view(sf::Vector2i(0,0), sf::Vector2i(717,390));
+    sf::IntRect left_view(sf::Vector2i(0,1172), sf::Vector2i(711,385));
+
     if (times.empty())
     {
         status = "Route completed";
@@ -213,7 +248,20 @@ void SimulationState::update_bus()
         times.pop_front();
         time = times.front();
         simulation_clock.restart();
-        bus_speed = sf::Vector2f(75.f / (time.second * 60.f), 0.f);
+        auto stop1 = path_bus_stops.front();
+        path_bus_stops.pop_front();
+        auto stop2 = path_bus_stops.front();
+
+        if (stop2.get_x() - stop1.get_x() <= 0)
+        {
+            bus.setTextureRect(left_view);
+        }
+        else
+        {
+            bus.setTextureRect(right_view);
+        }
+
+        bus_speed = sf::Vector2f((stop2.get_x() - stop1.get_x()) / (time.second * 60.f), (stop2.get_y() - stop1.get_y()) / (time.second * 60.f));
         status = "Travelling";
     }
     else if (time.first == 1 && simulation_clock.getElapsedTime().asSeconds() >= time.second)
@@ -236,8 +284,11 @@ void SimulationState::update_bus()
     bus.move(bus_speed);
 }
 
-void SimulationState::set_simulation_parameters(std::list<std::pair<int, int>> _times, int _stops_number)
+void SimulationState::set_simulation_parameters(std::list<std::pair<int, int>> _times)
 {
     times = _times;
-    stops_number = _stops_number;
+}
+
+SimulationState::~SimulationState()
+{
 }
