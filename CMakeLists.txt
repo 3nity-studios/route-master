@@ -80,7 +80,8 @@ target_link_libraries(route_master_config
   SFML::Graphics
   SFML::Window
   SFML::Audio
-  SFML::System)
+  SFML::System
+  Designar::Designar)
 
 # ---- engine
 
@@ -101,7 +102,8 @@ target_link_libraries(route_master_engine
   SFML::Graphics
   SFML::Window
   SFML::Audio
-  SFML::System)
+  SFML::System
+  Designar::Designar)
 
 # ---- simulation
 
@@ -150,7 +152,8 @@ target_link_libraries(route_master_states
   SFML::Window
   SFML::Audio
   SFML::System
-  route_master::simulation)
+  route_master::simulation
+  Designar::Designar)
 
 # ---- platform
 
@@ -196,7 +199,8 @@ target_link_libraries(route_master_platform
   SFML::Graphics
   SFML::Window
   SFML::Audio
-  SFML::System)
+  SFML::System
+  Designar::Designar)
 
 # ---- utils
 
@@ -212,7 +216,8 @@ target_link_libraries(route_master_utils
   SFML::Graphics
   SFML::Window
   SFML::Audio
-  SFML::System)
+  SFML::System
+  Designar::Designar)
 
 # ---- Group all modules
 
