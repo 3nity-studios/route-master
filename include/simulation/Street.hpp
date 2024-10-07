@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <vector>
 
@@ -9,7 +11,7 @@ struct SingularEvent
     float speed_reduction_factor; // percentage of usual speed
 };
 
-std::vector<SingularEvent> singular_event_parameters = 
+static std::vector<SingularEvent> singular_event_parameters = 
 {
     {"Road works", 2.0f, 300, 0.90f},
     {"Accident", 3.0f, 420, 0.80f},

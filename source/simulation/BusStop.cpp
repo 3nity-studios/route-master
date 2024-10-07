@@ -41,10 +41,13 @@ void BusStop::set_passenger_list(const PassengerHeap& _passenger_list)
 
 void BusStop::update(int current_time)
 {
-    while(passenger_list.top().is_gone(current_time))
+    if(!passenger_list.empty())
     {
-        passenger_list.pop();
-        gone_passengers++;
+        while(passenger_list.top().is_gone(current_time))
+        {
+            passenger_list.pop();
+            gone_passengers++;
+        }
     }
 }
 
@@ -62,17 +65,17 @@ void BusStop::generate_passengers(int current_time)
     // Initialize random number generator
     std::mt19937 gen(rd());
 
+    std::exponential_distribution<> arrival_time_dist(avg_arrival_time); // Exponential distribution
+    std::normal_distribution<> waiting_time_dist(avg_waiting_time, sd_waiting_time);
+    std::normal_distribution<> bus_stop_dist(avg_bus_stop, sd_bus_stop);
+
     for(int i = 0; i < avg_hourly_arrivals.size(); i++)
     {
         std::poisson_distribution<> passengers_per_hour(avg_hourly_arrivals[i]);
         int num_passengers = passengers_per_hour(gen);
 
-        for(int j = 0; i < num_passengers; j++)
+        for(int j = 0; j < num_passengers; j++)
         {
-            std::exponential_distribution<> arrival_time_dist(avg_arrival_time); // Exponential distribution
-            std::normal_distribution<> waiting_time_dist(avg_waiting_time, sd_waiting_time);
-            std::normal_distribution<> bus_stop_dist(avg_bus_stop, sd_bus_stop);
-
             // Generate random values for passenger attributes
             int arrival_time = current_time + std::round(arrival_time_dist(gen));
             int waiting_time = current_time + std::round(waiting_time_dist(gen));
