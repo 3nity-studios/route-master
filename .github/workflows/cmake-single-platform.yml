@@ -24,7 +24,7 @@ jobs:
         version: 1.0
 
     - name: Install CMake
-      uses: ssrobins/install-cmake@v1
+    - uses: ssrobins/install-cmake@v1
       with:
         version: 3.30.2
 
