@@ -1,6 +1,6 @@
 #include "simulation/Employee.hpp"
 
-Employee::Employee() : name(""), last_name(""), age(0), shift_len(0), fatigue(0)
+Employee::Employee() : id(0), name(""), last_name(""), age(0), shift_len(0), fatigue(0)
 {
     //empty
 }
@@ -9,6 +9,11 @@ Employee::Employee(std::string _name, std::string _last_name, ushort _age, ushor
     : name(_name), last_name(_last_name), age(_age), shift_len(_shift_len), fatigue(_fatigue)
 {
     //empty
+}
+
+int Employee::get_id() const noexcept
+{
+    return id;
 }
 
 std::string Employee::get_name() const noexcept

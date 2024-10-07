@@ -139,6 +139,24 @@ target_link_libraries(route_master_simulation
   Designar::Designar
   tmxlite::tmxlite)
 
+# ---- player
+
+set(
+  RM_PLAYER_SRC
+  ${INCROOT}/player/Player.hpp
+)
+add_library(route_master_player ${RM_PLAYER_SRC})
+add_library(route_master::player ALIAS route_master_player)
+target_link_libraries(route_master_player
+  PRIVATE
+  SFML::Graphics
+  SFML::Window
+  SFML::Audio
+  SFML::System
+  TGUI::TGUI
+  Designar::Designar
+  route_master::simulation)
+
 # ---- states
 
 set(
