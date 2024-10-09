@@ -11,12 +11,12 @@ float calc_distance(BusStop bus_stop_1, BusStop bus_stop_2)
 
 SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_sim(Bus(1, "Bus 125", 32, std::list<Passenger>{}, 5)), driver_sim(Employee ("John", "Doe", 32, 12, 0)), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), bus(bus_texture)
 {
-    BusStop stop1(1, "Stop1", 5.0, 5.0, 3.0, 3.0, 2.0, 5.f, 5.f);
-    BusStop stop2(2, "Stop2", 10.0, 10.0, 3.0, 3.0, 2.0, 150.f, 5.f);
-    BusStop stop3(3, "Stop3", 15.0, 15.0, 3.0, 3.0, 2.0, 400.f, 5.f);
-    BusStop stop4(4, "Stop4", 15.0, 15.0, 3.0, 3.0, 2.0, 5.f, 250.f);
-    BusStop stop5(5, "Stop5", 15.0, 15.0, 3.0, 3.0, 2.0, 200.f, 250.f);
-    BusStop stop6(6, "Stop6", 15.0, 15.0, 3.0, 3.0, 2.0, 200.f, 500.f);
+    BusStop stop1(1, "Stop1", {5}, 5.0, 5.0, 3.0, 3.0, 2.0, 5.f, 5.f);
+    BusStop stop2(2, "Stop2", {5}, 10.0, 10.0, 3.0, 3.0, 2.0, 150.f, 5.f);
+    BusStop stop3(3, "Stop3", {5}, 15.0, 15.0, 3.0, 3.0, 2.0, 400.f, 5.f);
+    BusStop stop4(4, "Stop4", {5}, 15.0, 15.0, 3.0, 3.0, 2.0, 5.f, 250.f);
+    BusStop stop5(5, "Stop5", {5}, 15.0, 15.0, 3.0, 3.0, 2.0, 200.f, 250.f);
+    BusStop stop6(6, "Stop6", {5}, 15.0, 15.0, 3.0, 3.0, 2.0, 200.f, 500.f);
 
     city.add_bus_stop(stop1);
     city.add_bus_stop(stop2);
