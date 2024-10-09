@@ -81,7 +81,8 @@ target_link_libraries(route_master_config
   SFML::Window
   SFML::Audio
   SFML::System
-  Designar::Designar)
+  Designar::Designar
+  tmxlite::tmxlite)
 
 # ---- engine
 
@@ -104,7 +105,8 @@ target_link_libraries(route_master_engine
   SFML::Window
   SFML::Audio
   SFML::System
-  Designar::Designar)
+  Designar::Designar
+  tmxlite::tmxlite)
 
 # ---- simulation
 
@@ -132,7 +134,8 @@ target_link_libraries(route_master_simulation
   SFML::Audio
   SFML::System
   TGUI::TGUI
-  Designar::Designar)
+  Designar::Designar
+  tmxlite::tmxlite)
 
 # ---- states
 
@@ -156,7 +159,8 @@ target_link_libraries(route_master_states
   SFML::Audio
   SFML::System
   route_master::simulation
-  Designar::Designar)
+  Designar::Designar
+  tmxlite::tmxlite)
 
 # ---- platform
 
@@ -203,7 +207,8 @@ target_link_libraries(route_master_platform
   SFML::Window
   SFML::Audio
   SFML::System
-  Designar::Designar)
+  Designar::Designar
+  tmxlite::tmxlite)
 
 # ---- utils
 
@@ -220,7 +225,8 @@ target_link_libraries(route_master_utils
   SFML::Window
   SFML::Audio
   SFML::System
-  Designar::Designar)
+  Designar::Designar
+  tmxlite::tmxlite)
 
 # ---- Group all modules
 
