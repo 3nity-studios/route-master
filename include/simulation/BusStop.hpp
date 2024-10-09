@@ -23,7 +23,6 @@ class BusStop : public VisualElement
     std::string name; 
     PassengerHeap passenger_list;
     int gone_passengers;
-    std::vector<int> avg_hourly_arrivals;
     float avg_arrival_time;
     float avg_waiting_time;
     float sd_waiting_time;
@@ -33,7 +32,7 @@ class BusStop : public VisualElement
     public: 
 
     BusStop();
-    BusStop(int _id, std::string _name, std::vector<int> _avg_hourly_arrivals, float _avg_arrival_time, float _avg_waiting_time, float _sd_waiting_time, float _avg_bus_stop, float _sd_bus_stop, float _x, float _y);
+    BusStop(int _id, std::string _name, float _avg_arrival_time, float _avg_waiting_time, float _sd_waiting_time, float _avg_bus_stop, float _sd_bus_stop, float _x, float _y);
 
     int get_id() const noexcept;
     std::string get_name() const noexcept;
