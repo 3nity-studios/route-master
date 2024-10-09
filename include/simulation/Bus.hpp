@@ -41,5 +41,5 @@ class Bus
     void repair_bus(bool repair_engine, bool repair_breaks, bool repair_tires);
 
     void calc_wear(int km);
-    int* calc_maintenance_price();
+    std::vector <int> calc_maintenance_price();
 };;

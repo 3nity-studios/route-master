@@ -1,5 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
-#include "player/Player.hpp"
+#include "player/Store.hpp"
 
 TEST_CASE("Player constructor", "[player_constructor]") {
     Player player(0, "John", 0);

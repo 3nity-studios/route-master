@@ -143,7 +143,7 @@ void Bus::calc_wear(int km)
     fuel -= (km/3);
 }
 
-int* Bus::calc_maintenance_price()
+std::vector<int> Bus::calc_maintenance_price()
 {
     int engine_price = 0;
     int breaks_price = 0; 
@@ -166,7 +166,5 @@ int* Bus::calc_maintenance_price()
         tires_price = 20000;
     }
 
-    int prices[3] = {engine_price, breaks_price, tires_price};
-
-    return prices;
+    return std::vector<int> {engine_price, breaks_price, tires_price};
 }

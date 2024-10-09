@@ -54,7 +54,9 @@ target_compile_features(simulation_tests PRIVATE cxx_std_17)
 
 set(PLAYER_TESTS_SOURCES
     ${CMAKE_SOURCE_DIR}/tests/src/player_tests.cpp
+    ${CMAKE_SOURCE_DIR}/source/player/Item.cpp
     ${CMAKE_SOURCE_DIR}/source/player/Player.cpp
+    ${CMAKE_SOURCE_DIR}/source/player/Store.cpp
 )
 
 add_executable(player_tests ${PLAYER_TESTS_SOURCES})

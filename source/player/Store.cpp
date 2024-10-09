@@ -1,6 +1,5 @@
 #include "player/Store.hpp"
 #include <iostream>
-#include "Store.hpp"
 
 Store::Store() : inventory(Designar::SLList<Item>{}), bus_list(Designar::SLList<Bus>{}), employee_list(Designar::SLList<Employee>{})
 {
@@ -115,15 +114,15 @@ void Store::buy_bus_maintenance(Bus &bus, Player &player, bool repair_engine, bo
 
     if (repair_engine)
     {
-        total_price += prices[0];
+        total_price += prices.at(0);
     }
     if (repair_breaks)
     {
-        total_price += prices[1];
+        total_price += prices.at(1);
     }
     if (repair_tires)
     {
-        total_price += prices[2];
+        total_price += prices.at(2);
     }
 
     if (player.get_balance() < total_price)
