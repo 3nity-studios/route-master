@@ -41,6 +41,11 @@ Employee Player::get_employee(const int& id) {
     return employees.select(id);
 }
 
+int Player::get_balance()
+{
+    return balance;
+}
+
 void Player::add_bus(Bus bus)
 {
     buses.insert(bus);
@@ -49,4 +54,14 @@ void Player::add_bus(Bus bus)
 void Player::add_employee(Employee employee)
 {
     employees.insert(employee);
+}
+
+void Player::increase_balance(int balance_to_increase)
+{
+    balance += balance_to_increase;
+}
+
+void Player::decrease_balance(int balance_to_decrease)
+{
+    balance -= balance_to_decrease;
 }

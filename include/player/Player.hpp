@@ -37,8 +37,11 @@ class Player
     Designar::SLList<Employee> get_employees(); 
     Bus get_bus(const int& id);
     Employee get_employee(const int& id);
+    int get_balance();
 
     void set_name(const std::string& name);
     void add_bus(Bus bus);
     void add_employee(Employee employee);
+    void increase_balance(int balance_to_increase);
+    void decrease_balance(int balance_to_decrease);
 };

@@ -4,7 +4,7 @@ enum class ItemType
 {
     Bus,
     Upgrade,
-    Maintenance, 
+    Employee,
     Other
 };
 
