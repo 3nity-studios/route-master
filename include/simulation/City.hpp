@@ -13,10 +13,11 @@ class City
     int id;
     std::string name;
     Designar::Graph<BusStop, Street> city_map;
+    int current_time;
 
     public:
     City();
-    City(int _id, std::string _name, Designar::Graph<BusStop, Street> _city_map);
+    City(int _id, std::string _name, Designar::Graph<BusStop, Street> _city_map, int _current_time);
 
     int get_id() const noexcept;
     std::string get_name() const noexcept;
@@ -27,5 +28,6 @@ class City
     void add_street(const Street& street_info, const int& src_id, const int& tgt_id); 
 
     void initialize_bus_stops();
+    void update();
     std::list<std::pair<int, int>> run_simulation(Bus &bus, Employee &driver, int time, StreetArcList path);
 };
