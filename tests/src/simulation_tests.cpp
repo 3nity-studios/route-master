@@ -47,9 +47,6 @@ TEST_CASE("Passengers leave bus stop", "[passengers_leave_stop]") {
 
 TEST_CASE("Future passengers don't get on the bus", "[future_passengers]") {
 
-    BusStop bus_stop = BusStop(0, "A", 5, 5, 3, 3, 2, 50, 50);
-    bus_stop.generate_passengers();
-
     BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f, 50, 50);
     bus_stop.generate_passengers(0);
 
