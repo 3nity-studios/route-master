@@ -4,6 +4,7 @@
 #include "simulation/VisualElement.hpp"
 #include <queue>
 #include <string>
+#include <vector>
 
 struct Cmp
 {
@@ -23,6 +24,7 @@ class BusStop : public VisualElement
     std::string name; 
     PassengerHeap passenger_list;
     int gone_passengers;
+    std::vector<int> avg_hourly_arrivals;
     float avg_arrival_time;
     float avg_waiting_time;
     float sd_waiting_time;
@@ -32,7 +34,7 @@ class BusStop : public VisualElement
     public: 
 
     BusStop();
-    BusStop(int _id, std::string _name, float _avg_arrival_time, float _avg_waiting_time, float _sd_waiting_time, float _avg_bus_stop, float _sd_bus_stop, float _x, float _y);
+    BusStop(int _id, std::string _name, std::vector<int> _avg_hourly_arrivals, float _avg_arrival_time, float _avg_waiting_time, float _sd_waiting_time, float _avg_bus_stop, float _sd_bus_stop, float _x, float_y);
 
     int get_id() const noexcept;
     std::string get_name() const noexcept;
@@ -41,7 +43,8 @@ class BusStop : public VisualElement
     PassengerHeap get_passenger_list() const noexcept;
     void set_passenger_list(const PassengerHeap& _passenger_list);
 
-    void generate_passengers();
+    void update(int current_time);
+    void generate_passengers(int current_time);
     void add_passenger(const Passenger& passenger);
     Passenger pop_first_passenger();
 
