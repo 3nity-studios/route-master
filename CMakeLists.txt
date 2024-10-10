@@ -81,7 +81,8 @@ target_link_libraries(route_master_config
   SFML::Window
   SFML::Audio
   SFML::System
-  Designar::Designar)
+  Designar::Designar
+  tmxlite::tmxlite)
 
 # ---- engine
 
@@ -93,6 +94,7 @@ set(
   ${INCROOT}/engine/input_manager.hpp
   ${SRCROOT}/engine/state_machine.cpp
   ${INCROOT}/engine/state_machine.hpp
+  ${INCROOT}/engine/tmx_core.hpp
 )
 add_library(route_master_engine ${RM_ENGINE_SRC})
 add_library(route_master::engine ALIAS route_master_engine)
@@ -103,18 +105,21 @@ target_link_libraries(route_master_engine
   SFML::Window
   SFML::Audio
   SFML::System
-  Designar::Designar)
+  Designar::Designar
+  tmxlite::tmxlite)
 
 # ---- simulation
 
 set(
   RM_SIMULATION_SRC
+  ${INCROOT}/simulation/VisualElement.hpp
   ${INCROOT}/simulation/Bus.hpp
   ${INCROOT}/simulation/BusStop.hpp
   ${INCROOT}/simulation/City.hpp
   ${INCROOT}/simulation/Employee.hpp
   ${INCROOT}/simulation/Passenger.hpp
   ${INCROOT}/simulation/Street.hpp
+  ${SRCROOT}/simulation/VisualElement.cpp
   ${SRCROOT}/simulation/Bus.cpp
   ${SRCROOT}/simulation/BusStop.cpp
   ${SRCROOT}/simulation/City.cpp
@@ -131,7 +136,8 @@ target_link_libraries(route_master_simulation
   SFML::Audio
   SFML::System
   TGUI::TGUI
-  Designar::Designar)
+  Designar::Designar
+  tmxlite::tmxlite)
 
 # ---- states
 
@@ -140,6 +146,8 @@ set(
   ${INCROOT}/states/state.hpp
   ${INCROOT}/states/main_menu_state.hpp
   ${SRCROOT}/states/main_menu_state.cpp
+  ${INCROOT}/states/map_viewer_state.hpp
+  ${SRCROOT}/states/map_viewer_state.cpp
   ${INCROOT}/states/simulation_state.hpp
   ${SRCROOT}/states/simulation_state.cpp
 )
@@ -153,7 +161,8 @@ target_link_libraries(route_master_states
   SFML::Audio
   SFML::System
   route_master::simulation
-  Designar::Designar)
+  Designar::Designar
+  tmxlite::tmxlite)
 
 # ---- platform
 
@@ -200,7 +209,8 @@ target_link_libraries(route_master_platform
   SFML::Window
   SFML::Audio
   SFML::System
-  Designar::Designar)
+  Designar::Designar
+  tmxlite::tmxlite)
 
 # ---- utils
 
@@ -217,7 +227,8 @@ target_link_libraries(route_master_utils
   SFML::Window
   SFML::Audio
   SFML::System
-  Designar::Designar)
+  Designar::Designar
+  tmxlite::tmxlite)
 
 # ---- Group all modules
 
