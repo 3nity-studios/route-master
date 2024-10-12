@@ -73,7 +73,7 @@ void Street::update()
     {
         if (singular_event_dist(gen))
         {
-            std::uniform_int_distribution<> event_selector(0, singular_event_parameters.size());
+            std::uniform_int_distribution<> event_selector(0, singular_event_parameters.size() - 1);
             SingularEvent current_singular_event = singular_event_parameters[event_selector(gen)];
             std::weibull_distribution<> singular_event_time(current_singular_event.shape, current_singular_event.avg_duration);
 
