@@ -85,12 +85,20 @@ SimulationState::SimulationState(GameDataRef data, std::list<std::pair<int, int>
 
 void SimulationState::init_state()
 {
+    sf::View view(sf::FloatRect({0.f, 0.f}, {1000.f, 600.f}));
+    this->_data->window->setView(view);
     init_bus_stops();
     init_bus();
 }
 
+/// the last known mouse position
+sf::Vector2i previous_mouse_position;
+/// whether we are dragging or not
+bool dragging = false;
+
 void SimulationState::update_inputs()
 {
+    sf::RenderTarget &target{*this->_data->window};
     // Event Polling
     while (const std::optional event = this->_data->window->pollEvent())
     {
@@ -100,6 +108,45 @@ void SimulationState::update_inputs()
         {
             this->_data->window->close();
             break;
+        }
+
+        if (const auto *keyPress = event->getIf<sf::Event::MouseButtonPressed>())
+        {
+            // if mouse button is pressed start dragging
+            if (keyPress->button == sf::Mouse::Button::Right)
+            {
+                dragging = true;
+                return;
+            }
+        }
+        if (const auto *keyPress = event->getIf<sf::Event::MouseButtonReleased>())
+        {
+            // if mouse button is released stop draggin
+            if (keyPress->button == sf::Mouse::Button::Right)
+            {
+                dragging = false;
+                return;
+            }
+        }
+        // if dragging mouse
+        if (const auto *keyPress = event->getIf<sf::Event::MouseMoved>())
+        {
+            // get mouse position
+            const sf::Vector2i mouse_position{keyPress->position.x, keyPress->position.y};
+            // if dragging, move view
+            if (dragging)
+            {
+                // calculate how far mouse has moved in view
+                const auto delta =
+                    target.mapPixelToCoords(mouse_position) - target.mapPixelToCoords(previous_mouse_position);
+                // apply negatively to view
+                auto view = target.getView();
+                view.move(-delta);
+                target.setView(view);
+            }
+            // update previous mouse position
+            previous_mouse_position = mouse_position;
+            return;
         }
 
         if (const auto *keyPress = event->getIf<sf::Event::KeyPressed>())
@@ -127,6 +174,20 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
 
     // background color
     this->_data->window->clear(sf::Color::Black);
+
+    tmx::Map map;
+    map.load("assets/maps/demo.tmx");
+
+    MapLayer layerZero(map, 0);
+    MapLayer layerOne(map, 1);
+    MapLayer layerTwo(map, 2);
+
+    sf::Clock globalClock;
+    sf::Time duration = globalClock.restart();
+    layerZero.update(duration);
+    this->_data->window->draw(layerZero);
+    this->_data->window->draw(layerOne);
+    this->_data->window->draw(layerTwo);
 
     // write text
     sf::Font font("assets/fonts/joystix.ttf");
