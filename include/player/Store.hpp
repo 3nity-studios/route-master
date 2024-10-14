@@ -22,8 +22,8 @@ class Store
     void set_bus_list(Designar::SLList<Bus> _bus_list);
     void set_employee_list(Designar::SLList<Employee> _employee_list);
 
-    void add_bus(Bus bus);
-    void add_employee(Employee employee);
+    void add_bus_to_inventory(Bus bus, int price, int amount);
+    void add_employee_to_inventory(Employee employee, int price, int amount);
 
     void buy_item(Player &player, int item_id, int amount);
     void buy_bus_maintenance(Bus &bus, Player &player, bool repair_engine, bool repair_breaks, bool repair_tires);

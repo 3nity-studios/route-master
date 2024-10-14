@@ -41,6 +41,11 @@ ushort Employee::get_fatigue() const noexcept
     return fatigue; 
 }
 
+void Employee::set_id(const int& _id)
+{
+    id = _id; 
+}
+
 void Employee::set_name(const std::string& _name)
 {
     name = _name; 

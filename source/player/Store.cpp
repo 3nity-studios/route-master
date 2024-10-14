@@ -10,13 +10,17 @@ Store::Store(Designar::SLList<Item> _inventory, Designar::SLList<Bus> _bus_list,
 {
 }
 
-void Store::add_bus(Bus bus)
+void Store::add_bus_to_inventory(Bus bus, int price, int amount)
 {
+    bus.set_id(inventory.size());
+    inventory.append(Item(bus.get_id(), bus.get_name(), price, amount, ItemType::Bus, false));
     bus_list.append(bus);
 }
 
-void Store::add_employee(Employee employee)
+void Store::add_employee_to_inventory(Employee employee, int price, int amount)
 {
+    employee.set_id(inventory.size());
+    inventory.append(Item(employee.get_id(), employee.get_name(), price, amount, ItemType::Employee, false));
     employee_list.append(employee);
 }
 

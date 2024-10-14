@@ -70,17 +70,19 @@ TEST_CASE("Store constructor", "[store_constructor]") {
 TEST_CASE("Store add_bus", "[store_add_bus]") {
     Store store;
     Bus bus(0, "Bus1", 50, {}, 0);
-    store.add_bus(bus);
+    store.add_bus_to_inventory(bus, 100, 5);
     REQUIRE(store.get_bus_list().size() == 1);
     REQUIRE(store.get_bus_list()[0].get_name() == "Bus1");
+    REQUIRE(store.get_inventory().size() == 1);
 }
 
 TEST_CASE("Store add_employee", "[store_add_employee]") {
     Store store;
     Employee emp(0, "Emp1", "LastName1", 30, 8, 0);
-    store.add_employee(emp);
+    store.add_employee_to_inventory(emp, 50, 1);
     REQUIRE(store.get_employee_list().size() == 1);
     REQUIRE(store.get_employee_list()[0].get_name() == "Emp1");
+    REQUIRE(store.get_inventory().size() == 1);
 }
 
 TEST_CASE("Store set_inventory", "[store_set_inventory]") {
@@ -99,7 +101,7 @@ TEST_CASE("Store buy_item", "[store_buy_item]") {
     Item item(0, "BusItem", 10, 100, ItemType::Bus, false);
     Bus bus(0, "Bus1", 50, {}, 0);
     store.set_inventory({item});
-    store.add_bus(bus);
+    store.add_bus_to_inventory(bus, 50, 1);
     store.buy_item(player, 0, 1);
     REQUIRE(player.get_balance() == 990);
     REQUIRE(player.get_buses().size() == 1);
@@ -110,7 +112,7 @@ TEST_CASE("Store buy_bus_maintenance", "[store_buy_bus_maintenance]") {
     Store store;
     Player player(1, "Alice", 10000);
     Bus bus(0, "Bus1", 50, {}, 0);
-    store.add_bus(bus);
+    store.add_bus_to_inventory(bus, 50, 1);
     store.buy_bus_maintenance(bus, player, true, true, true);
     REQUIRE(player.get_balance() < 10000);
 }

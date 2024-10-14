@@ -15,17 +15,17 @@ void Game::init_variables()
     this->_data->player = Player(0, "Player1", 50000);
 
     this->_data->store = Store();
-    this->_data->store.add_bus(Bus(1, "Bus1", 50, {}, 5));
-    this->_data->store.add_bus(Bus(2, "Bus2", 60, {}, 10));
-    this->_data->store.add_bus(Bus(3, "Bus3", 55, {}, 7));
-    this->_data->store.add_bus(Bus(4, "Bus4", 45, {}, 3));
-    this->_data->store.add_bus(Bus(5, "Bus5", 70, {}, 12));
+    this->_data->store.add_bus_to_inventory(Bus(1, "Bus1", 50, {}, 5), 100, 5);
+    this->_data->store.add_bus_to_inventory(Bus(2, "Bus2", 60, {}, 10), 150, 3);
+    this->_data->store.add_bus_to_inventory(Bus(3, "Bus3", 55, {}, 7), 120, 4);
+    this->_data->store.add_bus_to_inventory(Bus(4, "Bus4", 45, {}, 3), 90, 6);
+    this->_data->store.add_bus_to_inventory(Bus(5, "Bus5", 70, {}, 12), 200, 2);
 
-    this->_data->store.add_employee(Employee(1, "John", "Doe", 25, 5, 0));
-    this->_data->store.add_employee(Employee(2, "Jane", "Smith", 30, 7, 1));
-    this->_data->store.add_employee(Employee(3, "Alice", "Johnson", 28, 6, 2));
-    this->_data->store.add_employee(Employee(4, "Bob", "Brown", 35, 10, 3));
-    this->_data->store.add_employee(Employee(5, "Charlie", "Davis", 40, 15, 4));
+    this->_data->store.add_employee_to_inventory(Employee(1, "John", "Doe", 25, 5, 0), 50, 1);
+    this->_data->store.add_employee_to_inventory(Employee(2, "Jane", "Smith", 30, 7, 1), 60, 2);
+    this->_data->store.add_employee_to_inventory(Employee(3, "Alice", "Johnson", 28, 6, 2), 55, 3);
+    this->_data->store.add_employee_to_inventory(Employee(4, "Bob", "Brown", 35, 10, 3), 70, 1);
+    this->_data->store.add_employee_to_inventory(Employee(5, "Charlie", "Davis", 40, 15, 4), 80, 2);
 
 
 }

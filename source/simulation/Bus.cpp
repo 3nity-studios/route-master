@@ -16,6 +16,11 @@ int Bus::get_id() const noexcept
     return id;
 }
 
+void Bus::set_id(const int& _id)
+{
+    id = _id;
+}
+
 std::string Bus::get_name() const noexcept
 {
     return name; 

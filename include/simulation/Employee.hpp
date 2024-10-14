@@ -25,6 +25,7 @@ class Employee
     ushort get_shift_len() const noexcept;
     ushort get_fatigue() const noexcept;
 
+    void set_id(const int& _id);
     void set_name(const std::string& _name);
     void set_last_name(const std::string& _last_name);
     void set_age(const ushort& _age);
