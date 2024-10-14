@@ -144,6 +144,7 @@ target_link_libraries(route_master_simulation
 set(
   RM_PLAYER_SRC
   ${INCROOT}/player/Player.hpp
+  ${INCROOT}/player/Store.hpp
 )
 add_library(route_master_player ${RM_PLAYER_SRC})
 add_library(route_master::player ALIAS route_master_player)
@@ -164,6 +165,8 @@ set(
   ${INCROOT}/states/state.hpp
   ${INCROOT}/states/main_menu_state.hpp
   ${SRCROOT}/states/main_menu_state.cpp
+  ${INCROOT}/states/store_state.hpp
+  ${SRCROOT}/states/store_state.cpp
   ${INCROOT}/states/map_viewer_state.hpp
   ${SRCROOT}/states/map_viewer_state.cpp
   ${INCROOT}/states/simulation_state.hpp
