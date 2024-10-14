@@ -16,7 +16,7 @@ class Employee
     public:
 
     Employee();
-    Employee(std::string _name, std::string _last_name, ushort _age, ushort _shift_len, ushort _fatigue); 
+    Employee(int _id, std::string _name, std::string _last_name, ushort _age, ushort _shift_len, ushort _fatigue); 
 
     int get_id() const noexcept;
     std::string get_name() const noexcept;

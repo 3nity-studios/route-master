@@ -12,11 +12,11 @@ StoreState::StoreState(GameDataRef data) : _data(data)
     buses.append(Bus(4, "Bus4", 45, {}, 3));
     buses.append(Bus(5, "Bus5", 70, {}, 12));
 
-    employees.append(Employee("John", "Doe", 25, 5, 0));
-    employees.append(Employee("Jane", "Smith", 30, 7, 1));
-    employees.append(Employee("Alice", "Johnson", 28, 6, 2));
-    employees.append(Employee("Bob", "Brown", 35, 10, 3));
-    employees.append(Employee("Charlie", "Davis", 40, 15, 4));
+    employees.append(Employee(1, "John", "Doe", 25, 5, 0));
+    employees.append(Employee(2, "Jane", "Smith", 30, 7, 1));
+    employees.append(Employee(3, "Alice", "Johnson", 28, 6, 2));
+    employees.append(Employee(4, "Bob", "Brown", 35, 10, 3));
+    employees.append(Employee(5, "Charlie", "Davis", 40, 15, 4));
 }
 
 void StoreState::init_state()
@@ -98,7 +98,6 @@ void StoreState::draw_state(float dt __attribute__((unused)))
         this->_data->gui.add(buyButton);
     }
 
-    int i = 1;
     for (const auto& employee : employees)
     {
         // Create a text object for the employee name
@@ -109,22 +108,18 @@ void StoreState::draw_state(float dt __attribute__((unused)))
         employeeText.setStyle(sf::Text::Regular);
 
         // Set the position of the text
-        // employeeText.setPosition({10.0f, 90.0f + (employee.get_id() * 30.0f)});
-        employeeText.setPosition({280.0f, 90.0f + (i * 30.0f)});
+        employeeText.setPosition({280.0f, 90.0f + (employee.get_id() * 30.0f)});
         this->_data->window->draw(employeeText);
 
         // Create a button for hiring the employee
         auto hireButton = tgui::Button::create();
-        // hireButton->setPosition({200.0f, 90.0f + (employee.get_id() * 30.0f)});
-        hireButton->setPosition({420.0f, 90.0f + (i * 30.0f)});
+        hireButton->setPosition({420.0f, 90.0f + (employee.get_id() * 30.0f)});
         hireButton->setText("Hire " + employee.get_name());
         hireButton->onPress([this, employee] {
             // Handle the employee hiring logic here
             // this->_data->player.hire(employee);
         });
         this->_data->gui.add(hireButton);
-
-        ++i;
     }
 
     // Displays rendered objects

@@ -9,7 +9,7 @@ float calc_distance(BusStop bus_stop_1, BusStop bus_stop_2)
     return sqrt(pow(bus_stop_1.get_x() - bus_stop_2.get_x(), 2) + pow(bus_stop_1.get_y() - bus_stop_2.get_y(), 2));
 }
 
-SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_sim(Bus(1, "Bus 125", 32, std::list<Passenger>{}, 5)), driver_sim(Employee ("John", "Doe", 32, 12, 0)), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), bus(bus_texture)
+SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_sim(Bus(1, "Bus 125", 32, std::list<Passenger>{}, 5)), driver_sim(Employee(0, "John", "Doe", 32, 12, 0)), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), bus(bus_texture)
 {
     BusStop stop1(1, "Stop1", {5, 10, 15}, 5.0, 5.0, 3.0, 3.0, 2.0, 5.f, 5.f);
     BusStop stop2(2, "Stop2", {10, 20, 30}, 10.0, 10.0, 3.0, 3.0, 2.0, 150.f, 5.f);
