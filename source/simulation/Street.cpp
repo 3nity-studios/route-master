@@ -39,7 +39,7 @@ int Street::get_distance() const noexcept
 int Street::get_travel_time() const
 {
     float speed = avg_speed;
-    speed -= current_traffic_density * 0.1;
+    speed /= current_traffic_density;
     if (singular_event_active)
     {
         speed *= current_singular_event.speed_reduction_factor;
@@ -59,12 +59,15 @@ void Street::update()
     std::normal_distribution<float> traffic_density_dist(avg_traffic_density, sd_traffic_density);
     std::bernoulli_distribution singular_event_dist(singular_event_odds);
 
-    current_traffic_density = traffic_density_dist(gen);
+    do
+    {
+        current_traffic_density = traffic_density_dist(gen);
+    } while(current_traffic_density == 0);
 
     if (singular_event_active)
     {
         --current_singular_event_duration;
-        if (current_singular_event_duration == 0)
+        if (current_singular_event_duration == 0.0)
         {
             singular_event_active = false;
         }
