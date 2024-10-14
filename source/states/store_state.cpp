@@ -1,7 +1,7 @@
 #include "states/store_state.hpp"
-#include "states/main_menu_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
+#include "states/main_menu_state.hpp"
 #include <string>
 
 StoreState::StoreState(GameDataRef data) : _data(data)
@@ -13,6 +13,22 @@ void StoreState::init_state()
 {
     this->_data->gui.setWindow(*this->_data->window);
     this->_data->gui.loadWidgetsFromFile("assets/screens/store.txt");
+
+    this->_data->gui.get<tgui::Button>("exit_button")->onPress([this] {
+        this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), false);
+    });
+
+    for (const auto &item : this->_data->store.get_inventory())
+    {
+        // Create a button for buying the item
+        auto buyButton = tgui::Button::create();
+        buyButton->setPosition({450.0f, 90.0f + (item.get_id() * 30.0f)});
+        buyButton->setText("Buy " + item.get_name());
+        buyButton->onPress([this, item] {
+            this->_data->store.buy_item(this->_data->player, item.get_id(), 1);
+        });
+        this->_data->gui.add(buyButton);
+    }
 }
 
 void StoreState::update_inputs()
@@ -21,9 +37,6 @@ void StoreState::update_inputs()
     while (const std::optional event = this->_data->window->pollEvent())
     {
         this->_data->gui.handleEvent(*event);
-        this->_data->gui.get<tgui::Button>("exit_button")->onPress([this] {
-            this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), false);
-        });
 
         if (event->is<sf::Event::Closed>())
         {
@@ -51,7 +64,6 @@ void StoreState::update_state(float dt __attribute__((unused)))
 // marks dt to not warn compiler
 void StoreState::draw_state(float dt __attribute__((unused)))
 {
-    // END SAMPLE RENDER CODE
     this->_data->gui.draw();
 
     // write text
@@ -86,7 +98,7 @@ void StoreState::draw_state(float dt __attribute__((unused)))
     playerBalanceText.setPosition({this->_data->window->getSize().x - 200.0f, 40.0f});
     this->_data->window->draw(playerBalanceText);
 
-    for (const auto& item : this->_data->store.get_inventory())
+    for (const auto &item : this->_data->store.get_inventory())
     {
         // Create a text object for the item name
         sf::Text itemText(font);
@@ -121,15 +133,15 @@ void StoreState::draw_state(float dt __attribute__((unused)))
         amountText.setPosition({300.0f, 90.0f + (item.get_id() * 30.0f)});
         this->_data->window->draw(amountText);
 
-        // Create a button for buying the item
-        auto buyButton = tgui::Button::create();
-        buyButton->setPosition({450.0f, 90.0f + (item.get_id() * 30.0f)});
-        buyButton->setText("Buy " + item.get_name());
-        buyButton->onPress([this, item] {
-            // Handle the item purchase logic here
-            this->_data->store.buy_item(this->_data->player, item.get_id(), 1);
-        });
-        this->_data->gui.add(buyButton);
+        // // Create a button for buying the item
+        // auto buyButton = tgui::Button::create(item.get_id() + "BuyButton");
+        // buyButton->setPosition({450.0f, 90.0f + (item.get_id() * 30.0f)});
+        // buyButton->setText("Buy " + item.get_name());
+        // buyButton->onPress([this, item, dt] {
+        //     this->_data->store.buy_item(this->_data->player, item.get_id(), 1);
+        //     this->draw_state(dt);
+        // });
+        // this->_data->gui.add(buyButton);
     }
 
     // Displays rendered objects
