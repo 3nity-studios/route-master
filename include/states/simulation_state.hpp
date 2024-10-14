@@ -31,7 +31,7 @@ class SimulationState : public Engine::State
     GameDataRef _data;
     std::list<sf::Sprite> bus_stops;
     std::list<std::pair<int, int>> times;
-    std::list<BusStop> path_bus_stops;
+    std::list<std::shared_ptr<VisualElement>> path_bus_stops;
     sf::Sprite bus;
     sf::Clock simulation_clock;
     Employee driver_sim; 

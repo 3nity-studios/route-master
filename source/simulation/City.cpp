@@ -5,7 +5,7 @@ City::City() : id(0), name(""), current_time(0)
     //empty
 }
 
-City::City(int _id, std::string _name, Designar::Graph<BusStop, Street> _city_map, int _current_time)
+City::City(int _id, std::string _name, Designar::Graph<std::shared_ptr<VisualElement>, Street> _city_map, int _current_time)
     : id(_id), name(_name), city_map(_city_map), current_time(_current_time)
 {
     //empty
@@ -21,7 +21,7 @@ std::string City::get_name() const noexcept
     return name;
 }
 
-BusStopNodeList City::get_bus_stops() const noexcept
+VisualElementNodeList City::get_visual_elements() const noexcept
 {
     return city_map.nodes();
 }
@@ -33,28 +33,29 @@ StreetArcList City::get_streets() const noexcept
 
 void City::add_bus_stop(const BusStop& bus_stop)
 {
-    city_map.insert_node(bus_stop);
+    city_map.insert_node(std::make_shared<BusStop>(bus_stop));
 }
 
 void City::add_street(const Street& street_info, const int& src_id, const int& tgt_id)
 {   
 
-    Designar::GraphNode<BusStop, Street, Designar::EmptyClass> *src_stop = nullptr, *tgt_stop = nullptr;
-    for(auto stop : city_map.nodes())
+    Designar::GraphNode<std::shared_ptr<VisualElement>, Street, Designar::EmptyClass> *src_visual_element = nullptr, *tgt_visual_element = nullptr;
+    for(auto visual_element : city_map.nodes())
     {
-        if(stop->get_info().get_id() == src_id)
+
+        if(visual_element->get_info()->get_id() == src_id)
         {
-            src_stop = stop;
+            src_visual_element = visual_element;
         }
-        else if(stop->get_info().get_id() == tgt_id)
+        else if(visual_element->get_info()->get_id() == tgt_id)
         {
-            tgt_stop = stop;
+            tgt_visual_element = visual_element;
         }
     }
 
-    if (src_stop && tgt_stop)
+    if (src_visual_element && tgt_visual_element)
     {
-        city_map.insert_arc(src_stop, tgt_stop, street_info);
+        city_map.insert_arc(src_visual_element, tgt_visual_element, street_info);
     }
     else
     {
@@ -65,19 +66,36 @@ void City::add_street(const Street& street_info, const int& src_id, const int& t
 
 void City::initialize_bus_stops()
 {
-
     for(auto &stop : city_map.nodes())
     {
-        stop->get_info().generate_passengers(current_time);
+        auto bus_stop = std::dynamic_pointer_cast<BusStop>(stop->get_info());
+
+        if (bus_stop)
+        {
+            bus_stop->generate_passengers(current_time);
+        }
     }
 }
 
 void City::update()
 {
     current_time++;
+
     for(auto &stop : city_map.nodes())
     {
-        stop->get_info().update(current_time);
+        auto bus_stop = std::dynamic_pointer_cast<BusStop>(stop->get_info());
+
+        if (bus_stop)
+        {
+            bus_stop->update(current_time);
+        }
+
+        auto traffic_light = std::dynamic_pointer_cast<TrafficLight>(stop->get_info());
+
+        if (traffic_light)
+        {
+            traffic_light->update(current_time);
+        }
     }
 
     for(auto &street : city_map.arcs())
@@ -96,19 +114,33 @@ std::list<std::pair<int, int>> City::run_simulation(Bus &bus, Employee &driver, 
     {
         update();
 
-        bus.leave_passengers(path.get_first()->get_src_node()->get_info());
-        bus.add_passengers(time, path.get_first()->get_src_node()->get_info());
-        times.push_back(std::make_pair<int, int>(0, bus.get_time_in_bus_stop()));
+        auto bus_stop = std::dynamic_pointer_cast<BusStop>(path.get_first()->get_src_node()->get_info());
+        auto traffic_light = std::dynamic_pointer_cast<TrafficLight>(path.get_first()->get_src_node()->get_info());
 
-        driver.calc_fatigue(track->get_info().get_distance());
-        bus.calc_wear(track->get_info().get_distance());
+        if (bus_stop != nullptr)
+        {
+            bus.leave_passengers(*bus_stop);
+            bus.add_passengers(time, *bus_stop);
+            times.push_back(std::make_pair<int, int>(0, bus.get_time_in_bus_stop()));
 
-        // TODO: Abort simulation if bus breaks or if driver is too tired
+            driver.calc_fatigue(track->get_info().get_distance());
+            bus.calc_wear(track->get_info().get_distance());
 
-        int travel_time = track->get_info().get_travel_time();
+            // TODO: Abort simulation if bus breaks or if driver is too tired
 
-        spent_time += travel_time;
-        times.push_back(std::make_pair<int, int>(1, std::move(travel_time)));
+            int travel_time = track->get_info().get_travel_time();
+
+            spent_time += travel_time;
+            times.push_back(std::make_pair<int, int>(1, std::move(travel_time)));
+        }
+        else if (traffic_light != nullptr)
+        {
+            times.push_back(std::make_pair<int, int>(2, traffic_light->get_time_to_change()));
+        }
+        else
+        {
+            times.push_back(std::make_pair<int, int>(3, 0));
+        }
     }
 
     return times;

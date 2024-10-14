@@ -3,20 +3,15 @@
 #include <ctime>
 
 BusStop::BusStop()
-    : VisualElement(), id(0), name(""), avg_hourly_arrivals(24, 0), avg_arrival_time(0.0), avg_waiting_time(0.0), sd_waiting_time(0.0), avg_bus_stop(0.0), sd_bus_stop(0.0)
+    : VisualElement(), name(""), avg_hourly_arrivals(24, 0), avg_arrival_time(0.0), avg_waiting_time(0.0), sd_waiting_time(0.0), avg_bus_stop(0.0), sd_bus_stop(0.0)
 {
     // empty
 }
 
 BusStop::BusStop(int _id, std::string _name, std::vector<int> _avg_hourly_arrivals, float _avg_arrival_time, float _avg_waiting_time, float _sd_waiting_time, float _avg_bus_stop, float _sd_bus_stop, float _x, float _y)
-    :VisualElement(_x, _y), id(_id), name(_name), avg_hourly_arrivals(_avg_hourly_arrivals), avg_arrival_time(_avg_arrival_time), avg_waiting_time(_avg_waiting_time), sd_waiting_time(_sd_waiting_time), avg_bus_stop(_avg_bus_stop), sd_bus_stop(_sd_bus_stop)
+    :VisualElement(_id, _x, _y), name(_name), avg_hourly_arrivals(_avg_hourly_arrivals), avg_arrival_time(_avg_arrival_time), avg_waiting_time(_avg_waiting_time), sd_waiting_time(_sd_waiting_time), avg_bus_stop(_avg_bus_stop), sd_bus_stop(_sd_bus_stop)
 {
     // empty
-}
-
-int BusStop::get_id() const noexcept
-{
-    return id;
 }
 
 std::string BusStop::get_name() const noexcept

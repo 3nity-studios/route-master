@@ -7,7 +7,7 @@
 void Game::init_variables()
 {
     this->_data->window = nullptr;
-    this->_data->states.add_state(Engine::StateRef(new MapViewerState(this->_data)), false);
+    this->_data->states.add_state(Engine::StateRef(new SimulationState(this->_data)), false);
 }
 void Game::init_window()
 {
