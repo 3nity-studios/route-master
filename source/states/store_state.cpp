@@ -11,6 +11,10 @@ StoreState::StoreState(GameDataRef data) : _data(data)
 
 void StoreState::update_items_to_show(tgui::String filter)
 {
+    for (const auto &item : items_to_show)
+    {
+        this->_data->gui.remove(this->_data->gui.get<tgui::Button>(item.get_id() + "BuyButton"));
+    }
     items_to_show.clear();
 
     if (filter == "All")
@@ -46,9 +50,13 @@ void StoreState::update_items_to_show(tgui::String filter)
     {
         // Create a button for buying the item
         auto buyButton = tgui::Button::create();
+        buyButton->setWidgetName(item.get_id() + "BuyButton");
         buyButton->setPosition({450.0f, 90.0f + (i * 30.0f)});
         buyButton->setText("Buy " + item.get_name());
-        buyButton->onPress([this, item] { this->_data->store.buy_item(this->_data->player, item.get_id(), 1); });
+        buyButton->onPress([this, item] { 
+            this->_data->store.buy_item(this->_data->player, item.get_id(), 1);
+            this->update_items_to_show(this->_data->gui.get<tgui::ComboBox>("filter_combobox")->getSelectedItem());
+        });
         this->_data->gui.add(buyButton);
         ++i;
     }
