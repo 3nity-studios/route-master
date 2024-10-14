@@ -4,6 +4,7 @@ class Employee
 {
     private:
 
+    int id;
     std::string name; 
     std::string last_name;
     ushort age;
@@ -15,6 +16,7 @@ class Employee
     Employee();
     Employee(std::string _name, std::string _last_name, ushort _age, ushort _shift_len, ushort _fatigue); 
 
+    int get_id() const noexcept;
     std::string get_name() const noexcept;
     std::string get_last_name() const noexcept;
     ushort get_age() const noexcept;

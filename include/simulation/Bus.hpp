@@ -38,6 +38,8 @@ class Bus
     void add_passengers(const int& simulation_time, BusStop &bus_stop);
     int get_attended_passengers() const noexcept;
     void reset();
+    void repair_bus(bool repair_engine, bool repair_breaks, bool repair_tires);
 
     void calc_wear(int km);
+    std::vector <int> calc_maintenance_price();
 };;
