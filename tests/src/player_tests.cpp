@@ -28,7 +28,7 @@ TEST_CASE("Player get_buses", "[player_get_buses]") {
 TEST_CASE("Player get_employees", "[player_get_employees]") {
     Player player(5, "Frank", 500);
     Employee emp1(0, "Emp1", "LastName1", 30, 8, 0);
-    Employee emp2(0, "Emp2", "LastName2", 25, 8, 0);
+    Employee emp2(1, "Emp2", "LastName2", 25, 8, 0);
     player.add_employee(emp1);
     player.add_employee(emp2);
     auto employees = player.get_employees();
@@ -53,7 +53,7 @@ TEST_CASE("Player get_bus", "[player_get_bus]") {
 TEST_CASE("Player get_employee", "[player_get_employee]") {
     Player player(3, "Dave", 300);
     Employee emp1(0, "Emp1", "LastName1", 30, 8, 0);
-    Employee emp2(0, "Emp2", "LastName2", 25, 8, 0);
+    Employee emp2(1, "Emp2", "LastName2", 25, 8, 0);
     player.add_employee(emp1);
     player.add_employee(emp2);
     REQUIRE(player.get_employee(0).get_name() == "Emp1");
@@ -98,10 +98,8 @@ TEST_CASE("Store set_inventory", "[store_set_inventory]") {
 TEST_CASE("Store buy_item", "[store_buy_item]") {
     Store store;
     Player player(1, "Alice", 1000);
-    Item item(0, "BusItem", 10, 100, ItemType::Bus, false);
     Bus bus(0, "Bus1", 50, {}, 0);
-    store.set_inventory({item});
-    store.add_bus_to_inventory(bus, 50, 1);
+    store.add_bus_to_inventory(bus, 10, 1);
     store.buy_item(player, 0, 1);
     REQUIRE(player.get_balance() == 990);
     REQUIRE(player.get_buses().size() == 1);
