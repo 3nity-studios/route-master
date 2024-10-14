@@ -2,12 +2,32 @@
 #include "engine/state_machine.hpp"
 #include "states/main_menu_state.hpp"
 #include "states/map_viewer_state.hpp"
+#include "states/store_state.hpp"
+
+#include "simulation/Bus.hpp"
+#include "simulation/Employee.hpp"
 
 // private
 void Game::init_variables()
 {
     this->_data->window = nullptr;
     this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), false);
+    this->_data->player = Player(0, "Player1", 50000);
+
+    this->_data->store = Store();
+    this->_data->store.add_bus(Bus(1, "Bus1", 50, {}, 5));
+    this->_data->store.add_bus(Bus(2, "Bus2", 60, {}, 10));
+    this->_data->store.add_bus(Bus(3, "Bus3", 55, {}, 7));
+    this->_data->store.add_bus(Bus(4, "Bus4", 45, {}, 3));
+    this->_data->store.add_bus(Bus(5, "Bus5", 70, {}, 12));
+
+    this->_data->store.add_employee(Employee(1, "John", "Doe", 25, 5, 0));
+    this->_data->store.add_employee(Employee(2, "Jane", "Smith", 30, 7, 1));
+    this->_data->store.add_employee(Employee(3, "Alice", "Johnson", 28, 6, 2));
+    this->_data->store.add_employee(Employee(4, "Bob", "Brown", 35, 10, 3));
+    this->_data->store.add_employee(Employee(5, "Charlie", "Davis", 40, 15, 4));
+
+
 }
 void Game::init_window()
 {

@@ -6,8 +6,6 @@
 #include "states/state.hpp"
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
-#include "simulation/Bus.hpp"
-#include "simulation/Employee.hpp"
 
 class StoreState : public Engine::State
 {
@@ -22,6 +20,4 @@ class StoreState : public Engine::State
 
   private:
     GameDataRef _data;
-    Designar::SLList<Bus> buses;
-    Designar::SLList<Employee> employees;
 };

@@ -39,32 +39,32 @@ void Item::set_is_deleted(bool _is_deleted)
     is_deleted = _is_deleted;
 }
 
-int Item::get_id()
+int Item::get_id() const noexcept
 {
     return id;
 }
 
-std::string Item::get_name()
+std::string Item::get_name() const noexcept
 {
     return name;
 }
 
-int Item::get_price()
+int Item::get_price() const noexcept
 {
     return price;
 }
 
-int Item::get_amount()
+int Item::get_amount() const noexcept
 {
     return amount;
 }
 
-ItemType Item::get_category()
+ItemType Item::get_category() const noexcept
 {
     return category;
 }
 
-bool Item::get_is_deleted()
+bool Item::get_is_deleted() const noexcept
 {
     return is_deleted;
 }

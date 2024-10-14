@@ -145,6 +145,10 @@ set(
   RM_PLAYER_SRC
   ${INCROOT}/player/Player.hpp
   ${INCROOT}/player/Store.hpp
+  ${INCROOT}/player/Item.hpp
+  ${SRCROOT}/player/Player.cpp
+  ${SRCROOT}/player/Store.cpp
+  ${SRCROOT}/player/Item.cpp
 )
 add_library(route_master_player ${RM_PLAYER_SRC})
 add_library(route_master::player ALIAS route_master_player)
@@ -181,9 +185,10 @@ target_link_libraries(route_master_states
   SFML::Window
   SFML::Audio
   SFML::System
-  route_master::simulation
   Designar::Designar
-  tmxlite::tmxlite)
+  tmxlite::tmxlite
+  route_master::simulation
+  route_master::player)
 
 # ---- platform
 
@@ -283,6 +288,7 @@ target_link_libraries(
   route_master::platform
   route_master::engine
   route_master::simulation
+  route_master::player
   route_master::utils
   TGUI::TGUI
   SFML::Graphics

@@ -6,17 +6,7 @@
 
 StoreState::StoreState(GameDataRef data) : _data(data)
 {
-    buses.append(Bus(1, "Bus1", 50, {}, 5));
-    buses.append(Bus(2, "Bus2", 60, {}, 10));
-    buses.append(Bus(3, "Bus3", 55, {}, 7));
-    buses.append(Bus(4, "Bus4", 45, {}, 3));
-    buses.append(Bus(5, "Bus5", 70, {}, 12));
-
-    employees.append(Employee(1, "John", "Doe", 25, 5, 0));
-    employees.append(Employee(2, "Jane", "Smith", 30, 7, 1));
-    employees.append(Employee(3, "Alice", "Johnson", 28, 6, 2));
-    employees.append(Employee(4, "Bob", "Brown", 35, 10, 3));
-    employees.append(Employee(5, "Charlie", "Davis", 40, 15, 4));
+    // empty
 }
 
 void StoreState::init_state()
@@ -74,52 +64,72 @@ void StoreState::draw_state(float dt __attribute__((unused)))
         throw GameException("Couldn't find file: assets/fonts/joystix.ttf");
     }
 
-    for (const auto& bus : buses)
+    // Create a text object for the player name
+    sf::Text playerNameText(font);
+    playerNameText.setString("Player: " + this->_data->player.get_name());
+    playerNameText.setCharacterSize(20);
+    playerNameText.setFillColor(sf::Color::Black);
+    playerNameText.setStyle(sf::Text::Regular);
+
+    // Set the position of the player name text
+    playerNameText.setPosition({this->_data->window->getSize().x - 200.0f, 10.0f});
+    this->_data->window->draw(playerNameText);
+
+    // Create a text object for the player balance
+    sf::Text playerBalanceText(font);
+    playerBalanceText.setString("Balance: $" + std::to_string(this->_data->player.get_balance()));
+    playerBalanceText.setCharacterSize(20);
+    playerBalanceText.setFillColor(sf::Color::Black);
+    playerBalanceText.setStyle(sf::Text::Regular);
+
+    // Set the position of the player balance text
+    playerBalanceText.setPosition({this->_data->window->getSize().x - 200.0f, 40.0f});
+    this->_data->window->draw(playerBalanceText);
+
+    for (const auto& item : this->_data->store.get_inventory())
     {
-        // Create a text object for the bus name
-        sf::Text busText(font);
-        busText.setString(bus.get_name());
-        busText.setCharacterSize(20);
-        busText.setFillColor(sf::Color::Black);
-        busText.setStyle(sf::Text::Regular);
+        // Create a text object for the item name
+        sf::Text itemText(font);
+        itemText.setString(item.get_name());
+        itemText.setCharacterSize(20);
+        itemText.setFillColor(sf::Color::Black);
+        itemText.setStyle(sf::Text::Regular);
 
         // Set the position of the text
-        busText.setPosition({10.0f, 90.0f + (bus.get_id() * 30.0f)});
-        this->_data->window->draw(busText);
+        itemText.setPosition({10.0f, 90.0f + (item.get_id() * 30.0f)});
+        this->_data->window->draw(itemText);
 
-        // Create a button for buying the bus
+        // Create a text object for the item price
+        sf::Text priceText(font);
+        priceText.setString("Price: " + std::to_string(item.get_price()));
+        priceText.setCharacterSize(20);
+        priceText.setFillColor(sf::Color::Black);
+        priceText.setStyle(sf::Text::Regular);
+
+        // Set the position of the price text
+        priceText.setPosition({150.0f, 90.0f + (item.get_id() * 30.0f)});
+        this->_data->window->draw(priceText);
+
+        // Create a text object for the item amount
+        sf::Text amountText(font);
+        amountText.setString("Amount: " + std::to_string(item.get_amount()));
+        amountText.setCharacterSize(20);
+        amountText.setFillColor(sf::Color::Black);
+        amountText.setStyle(sf::Text::Regular);
+
+        // Set the position of the amount text
+        amountText.setPosition({300.0f, 90.0f + (item.get_id() * 30.0f)});
+        this->_data->window->draw(amountText);
+
+        // Create a button for buying the item
         auto buyButton = tgui::Button::create();
-        buyButton->setPosition({200.0f, 90.0f + (bus.get_id() * 30.0f)});
-        buyButton->setText("Buy " + bus.get_name());
-        buyButton->onPress([this, bus] {
-            // Handle the bus purchase logic here
-            // this->_data->player.buy(bus);
+        buyButton->setPosition({450.0f, 90.0f + (item.get_id() * 30.0f)});
+        buyButton->setText("Buy " + item.get_name());
+        buyButton->onPress([this, item] {
+            // Handle the item purchase logic here
+            this->_data->store.buy_item(this->_data->player, item.get_id(), 1);
         });
         this->_data->gui.add(buyButton);
-    }
-
-    for (const auto& employee : employees)
-    {
-        // Create a text object for the employee name
-        sf::Text employeeText(font);
-        employeeText.setString(employee.get_name() + " " + employee.get_last_name());
-        employeeText.setCharacterSize(20);
-        employeeText.setFillColor(sf::Color::Black);
-        employeeText.setStyle(sf::Text::Regular);
-
-        // Set the position of the text
-        employeeText.setPosition({280.0f, 90.0f + (employee.get_id() * 30.0f)});
-        this->_data->window->draw(employeeText);
-
-        // Create a button for hiring the employee
-        auto hireButton = tgui::Button::create();
-        hireButton->setPosition({420.0f, 90.0f + (employee.get_id() * 30.0f)});
-        hireButton->setText("Hire " + employee.get_name());
-        hireButton->onPress([this, employee] {
-            // Handle the employee hiring logic here
-            // this->_data->player.hire(employee);
-        });
-        this->_data->gui.add(hireButton);
     }
 
     // Displays rendered objects
