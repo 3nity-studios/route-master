@@ -9,6 +9,51 @@ StoreState::StoreState(GameDataRef data) : _data(data)
     // empty
 }
 
+void StoreState::update_items_to_show(tgui::String filter)
+{
+    items_to_show.clear();
+
+    if (filter == "All")
+    {
+        for (const auto &item : this->_data->store.get_inventory())
+        {
+            items_to_show.append(item);
+        }
+    }
+    else
+    {
+        ItemType type;
+        if (filter == "Buses")
+        {
+            type = ItemType::Bus;
+        }
+        else if (filter == "Employees")
+        {
+            type = ItemType::Employee;
+        }
+
+        for (const auto &item : this->_data->store.get_inventory())
+        {
+            if (item.get_category() == type)
+            {
+                items_to_show.append(item);
+            }
+        }
+    }
+
+    int i = 0;
+    for (const auto &item : items_to_show)
+    {
+        // Create a button for buying the item
+        auto buyButton = tgui::Button::create();
+        buyButton->setPosition({450.0f, 90.0f + (i * 30.0f)});
+        buyButton->setText("Buy " + item.get_name());
+        buyButton->onPress([this, item] { this->_data->store.buy_item(this->_data->player, item.get_id(), 1); });
+        this->_data->gui.add(buyButton);
+        ++i;
+    }
+}
+
 void StoreState::init_state()
 {
     this->_data->gui.setWindow(*this->_data->window);
@@ -18,17 +63,17 @@ void StoreState::init_state()
         this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), false);
     });
 
-    for (const auto &item : this->_data->store.get_inventory())
-    {
-        // Create a button for buying the item
-        auto buyButton = tgui::Button::create();
-        buyButton->setPosition({450.0f, 90.0f + (item.get_id() * 30.0f)});
-        buyButton->setText("Buy " + item.get_name());
-        buyButton->onPress([this, item] {
-            this->_data->store.buy_item(this->_data->player, item.get_id(), 1);
-        });
-        this->_data->gui.add(buyButton);
-    }
+    tgui::ComboBox::Ptr comboBox = tgui::ComboBox::create();
+    comboBox->setWidgetName("filter_combobox");
+    comboBox->setPosition(50, 50);
+    comboBox->addItem("All");
+    comboBox->addItem("Buses");
+    comboBox->addItem("Employees");
+    comboBox->onItemSelect([this, comboBox] {
+        this->update_items_to_show(comboBox->getSelectedItem());
+    });
+    comboBox->setSelectedItem("All");
+    this->_data->gui.add(comboBox);
 }
 
 void StoreState::update_inputs()
@@ -98,7 +143,8 @@ void StoreState::draw_state(float dt __attribute__((unused)))
     playerBalanceText.setPosition({this->_data->window->getSize().x - 200.0f, 40.0f});
     this->_data->window->draw(playerBalanceText);
 
-    for (const auto &item : this->_data->store.get_inventory())
+    int i = 0;
+    for (const auto &item : items_to_show)
     {
         // Create a text object for the item name
         sf::Text itemText(font);
@@ -108,7 +154,7 @@ void StoreState::draw_state(float dt __attribute__((unused)))
         itemText.setStyle(sf::Text::Regular);
 
         // Set the position of the text
-        itemText.setPosition({10.0f, 90.0f + (item.get_id() * 30.0f)});
+        itemText.setPosition({10.0f, 90.0f + (i * 30.0f)});
         this->_data->window->draw(itemText);
 
         // Create a text object for the item price
@@ -119,7 +165,7 @@ void StoreState::draw_state(float dt __attribute__((unused)))
         priceText.setStyle(sf::Text::Regular);
 
         // Set the position of the price text
-        priceText.setPosition({150.0f, 90.0f + (item.get_id() * 30.0f)});
+        priceText.setPosition({150.0f, 90.0f + (i * 30.0f)});
         this->_data->window->draw(priceText);
 
         // Create a text object for the item amount
@@ -130,18 +176,10 @@ void StoreState::draw_state(float dt __attribute__((unused)))
         amountText.setStyle(sf::Text::Regular);
 
         // Set the position of the amount text
-        amountText.setPosition({300.0f, 90.0f + (item.get_id() * 30.0f)});
+        amountText.setPosition({300.0f, 90.0f + (i * 30.0f)});
         this->_data->window->draw(amountText);
 
-        // // Create a button for buying the item
-        // auto buyButton = tgui::Button::create(item.get_id() + "BuyButton");
-        // buyButton->setPosition({450.0f, 90.0f + (item.get_id() * 30.0f)});
-        // buyButton->setText("Buy " + item.get_name());
-        // buyButton->onPress([this, item, dt] {
-        //     this->_data->store.buy_item(this->_data->player, item.get_id(), 1);
-        //     this->draw_state(dt);
-        // });
-        // this->_data->gui.add(buyButton);
+        ++i;
     }
 
     // Displays rendered objects

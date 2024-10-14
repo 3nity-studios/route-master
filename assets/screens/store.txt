@@ -10,7 +10,7 @@ Picture.Picture1 {
 Label.title {
     AutoSize = true;
     HorizontalAlignment = Center;
-    Position = (300, 40);
+    Position = (300, 20);
     Size = (413, 78);
     Text = "Store";
     TextSize = 60;
