@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 
 class Employee
@@ -14,7 +16,7 @@ class Employee
     public:
 
     Employee();
-    Employee(std::string _name, std::string _last_name, ushort _age, ushort _shift_len, ushort _fatigue); 
+    Employee(int _id, std::string _name, std::string _last_name, ushort _age, ushort _shift_len, ushort _fatigue); 
 
     int get_id() const noexcept;
     std::string get_name() const noexcept;
@@ -23,6 +25,7 @@ class Employee
     ushort get_shift_len() const noexcept;
     ushort get_fatigue() const noexcept;
 
+    void set_id(const int& _id);
     void set_name(const std::string& _name);
     void set_last_name(const std::string& _last_name);
     void set_age(const ushort& _age);

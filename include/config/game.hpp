@@ -1,3 +1,5 @@
+#pragma once
+
 #include "config/global.hpp"
 #include "engine/asset_manager.hpp"
 #include "engine/input_manager.hpp"
@@ -6,7 +8,8 @@
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 
-#pragma once
+#include "player/Player.hpp"
+#include "player/Store.hpp"
 
 struct GameData
 {
@@ -15,6 +18,9 @@ struct GameData
     Engine::InputManager inputs;
     Engine::AssetManager assets;
     tgui::Gui gui;
+
+    Player player;
+    Store store;
 };
 
 typedef std::shared_ptr<GameData> GameDataRef;

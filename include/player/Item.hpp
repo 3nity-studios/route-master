@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 
 enum class ItemType
@@ -31,12 +33,12 @@ class Item
     void set_category(ItemType _category);
     void set_is_deleted(bool _is_deleted);
 
-    int get_id();
-    std::string get_name();
-    int get_price();
-    int get_amount();
-    ItemType get_category();
-    bool get_is_deleted();
+    int get_id() const noexcept;
+    std::string get_name()const noexcept;
+    int get_price() const noexcept;
+    int get_amount() const noexcept;
+    ItemType get_category() const noexcept;
+    bool get_is_deleted() const noexcept;
 
     void increase_amount(int amount_to_increase);
     void decrease_amount(int amount_to_decrease);
