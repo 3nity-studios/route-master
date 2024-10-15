@@ -1,14 +1,19 @@
 #include "simulation/Employee.hpp"
 
-Employee::Employee() : name(""), last_name(""), age(0), shift_len(0), fatigue(0)
+Employee::Employee() : id(0), name(""), last_name(""), age(0), shift_len(0), fatigue(0)
 {
     //empty
 }
 
-Employee::Employee(std::string _name, std::string _last_name, ushort _age, ushort _shift_len, ushort _fatigue) 
-    : name(_name), last_name(_last_name), age(_age), shift_len(_shift_len), fatigue(_fatigue)
+Employee::Employee(int _id, std::string _name, std::string _last_name, ushort _age, ushort _shift_len, ushort _fatigue) 
+    : id(_id), name(_name), last_name(_last_name), age(_age), shift_len(_shift_len), fatigue(_fatigue)
 {
     //empty
+}
+
+int Employee::get_id() const noexcept
+{
+    return id;
 }
 
 std::string Employee::get_name() const noexcept
@@ -34,6 +39,11 @@ ushort Employee::get_shift_len() const noexcept
 ushort Employee::get_fatigue() const noexcept
 {
     return fatigue; 
+}
+
+void Employee::set_id(const int& _id)
+{
+    id = _id; 
 }
 
 void Employee::set_name(const std::string& _name)

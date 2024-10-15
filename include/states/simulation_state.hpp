@@ -6,7 +6,13 @@
 #include "simulation/City.hpp"
 #include "states/state.hpp"
 #include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Text.hpp>
+
+#include <tmxlite/Map.hpp>
+
+#include "engine/tmx_core.hpp"
 
 class SimulationState : public Engine::State
 {

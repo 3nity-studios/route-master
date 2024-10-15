@@ -16,6 +16,11 @@ int Bus::get_id() const noexcept
     return id;
 }
 
+void Bus::set_id(const int& _id)
+{
+    id = _id;
+}
+
 std::string Bus::get_name() const noexcept
 {
     return name; 
@@ -119,10 +124,52 @@ void Bus::reset()
     attended_passengers = 0;
 }
 
+void Bus::repair_bus(bool repair_engine, bool repair_breaks, bool repair_tires)
+{
+    if (repair_engine)
+    {
+        engine_state = 100;
+    }
+    if (repair_breaks)
+    {
+        breaks_state = 100;
+    }
+    if (repair_tires)
+    {
+        tires_state = 100;
+    }
+}
+
 void Bus::calc_wear(int km)
 {
     engine_state -= (km/20);
     breaks_state -= (km/10);
     tires_state -= (km/10);
     fuel -= (km/3);
+}
+
+std::vector<int> Bus::calc_maintenance_price()
+{
+    int engine_price = 0;
+    int breaks_price = 0; 
+    int tires_price = 0; 
+
+    engine_price = (200 - engine_state)*(200 - engine_state);
+    breaks_price = (100 - breaks_state)*(100 - breaks_state);
+    tires_price = (100 - tires_state)*(100 - tires_price);
+
+    if (engine_state <= 0)
+    {
+        engine_price = 40000;
+    }
+    if (breaks_state <= 0)
+    {
+        breaks_price = 20000;
+    }
+    if (tires_state <= 0)
+    {
+        tires_price = 20000;
+    }
+
+    return std::vector<int> {engine_price, breaks_price, tires_price};
 }

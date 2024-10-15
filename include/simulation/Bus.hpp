@@ -25,6 +25,7 @@ class Bus
     Bus(int _id, std::string _name, int _max_capacity, std::list<Passenger> _current_passengers, int _time_in_bus_stop);
 
     int get_id() const noexcept;
+    void set_id(const int& _id);
     std::string get_name() const noexcept;
     int get_max_capacity() const noexcept;
     std::list<Passenger> get_passenger_list() const noexcept;
@@ -38,6 +39,8 @@ class Bus
     void add_passengers(const int& simulation_time, BusStop &bus_stop);
     int get_attended_passengers() const noexcept;
     void reset();
+    void repair_bus(bool repair_engine, bool repair_breaks, bool repair_tires);
 
     void calc_wear(int km);
+    std::vector <int> calc_maintenance_price();
 };;
