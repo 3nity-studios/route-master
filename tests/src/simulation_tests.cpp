@@ -142,7 +142,7 @@ TEST_CASE("Leave passengers", "[leave_passengers]") {
 }
 
 TEST_CASE("City constructor", "[city_constructor]") {
-    Designar::Graph<BusStop, Street> city_map;
+    Designar::Graph<std::shared_ptr<VisualElement>, Street> city_map;
     City city(1, "TestCity", city_map, 0);
     REQUIRE(city.get_name() == "TestCity");
 }
@@ -151,9 +151,9 @@ TEST_CASE("Adding bus stop to city", "[add_bus_stop]") {
     City city;
     BusStop bus_stop(1, "Stop1", {5}, 5.0f, 5.0f, 3.0f, 3.0f, 2.0f, 50, 50);
     city.add_bus_stop(bus_stop);
-    auto bus_stops = city.get_bus_stops();
+    auto bus_stops = city.get_visual_elements();
     REQUIRE(!bus_stops.is_empty());
-    REQUIRE(bus_stops.get_first()->get_info() == bus_stop);
+    REQUIRE(bus_stops.get_first()->get_info()->get_id() == 1);
 }
 
 TEST_CASE("Adding street to city", "[add_street]") {
@@ -293,8 +293,9 @@ TEST_CASE("Simulation consistency", "[simulation_consistency]") {
 
     int total_passengers = 0;
 
-    for (auto stop : city.get_bus_stops()) {
-        total_passengers += stop->get_info().get_passenger_list().size();
+    for (auto visual_element : city.get_visual_elements()) {
+        auto stop = std::dynamic_pointer_cast<BusStop>(visual_element->get_info());
+        total_passengers += stop->get_passenger_list().size();
     }
     
     Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f, 0.05f);
@@ -319,8 +320,9 @@ TEST_CASE("Simulation consistency", "[simulation_consistency]") {
 
     int total_passengers_after_simulation = 0;
 
-    for (auto bus_stop : city.get_bus_stops()) {
-        total_passengers_after_simulation += bus_stop->get_info().get_passenger_list().size() + bus_stop->get_info().get_gone_passengers();
+    for (auto visual_element : city.get_visual_elements()) {
+        auto bus_stop = std::dynamic_pointer_cast<BusStop>(visual_element->get_info());
+        total_passengers_after_simulation += bus_stop->get_passenger_list().size() + bus_stop->get_gone_passengers();
     }
 
     total_passengers_after_simulation += bus.get_attended_passengers();

@@ -260,13 +260,13 @@ void SimulationState::set_bus_sim(Bus _bus)
 
 void SimulationState::init_bus_stops()
 {
-    for (auto stop : city.get_bus_stops())
+    for (auto stop : city.get_visual_elements())
     {
         sf::Sprite bus_stop(bus_stops_texture);
 
         bus_stop.setTextureRect(sf::IntRect(sf::Vector2i(617,200), sf::Vector2i(197,104)));
 
-        bus_stop.setPosition(sf::Vector2f(stop->get_info().get_x(), stop->get_info().get_y()));
+        bus_stop.setPosition(sf::Vector2f(stop->get_info()->get_x(), stop->get_info()->get_y()));
 
         bus_stop.setScale(sf::Vector2<float>(0.5, 0.5));
 
@@ -313,7 +313,7 @@ void SimulationState::update_bus()
         path_bus_stops.pop_front();
         auto stop2 = path_bus_stops.front();
 
-        if (stop2.get_x() - stop1.get_x() <= 0)
+        if (stop2->get_x() - stop1->get_x() <= 0)
         {
             bus.setTextureRect(left_view);
         }
@@ -322,7 +322,7 @@ void SimulationState::update_bus()
             bus.setTextureRect(right_view);
         }
 
-        bus_speed = sf::Vector2f((stop2.get_x() - stop1.get_x()) / (time.second * 60.f), (stop2.get_y() - stop1.get_y()) / (time.second * 60.f));
+        bus_speed = sf::Vector2f((stop2->get_x() - stop1->get_x()) / (time.second * 60.f), (stop2->get_y() - stop1->get_y()) / (time.second * 60.f));
         status = "Travelling";
     }
     else if (time.first == 1 && simulation_clock.getElapsedTime().asSeconds() >= time.second)

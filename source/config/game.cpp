@@ -26,8 +26,6 @@ void Game::init_variables()
     this->_data->store.add_employee_to_inventory(Employee(3, "Alice", "Johnson", 28, 6, 2), 55, 3);
     this->_data->store.add_employee_to_inventory(Employee(4, "Bob", "Brown", 35, 10, 3), 70, 1);
     this->_data->store.add_employee_to_inventory(Employee(5, "Charlie", "Davis", 40, 15, 4), 80, 2);
-
-
 }
 void Game::init_window()
 {
