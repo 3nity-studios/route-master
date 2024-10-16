@@ -1,6 +1,4 @@
 #include "simulation/street.hpp"
-#include <ctime>
-#include <random>
 
 Street::Street()
     : id(0), name(""), distance(0), avg_speed(0), avg_traffic_density(1), sd_traffic_density(),

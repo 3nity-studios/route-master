@@ -1,5 +1,4 @@
 #include "player/store.hpp"
-#include <iostream>
 
 Store::Store() : inventory(Designar::SLList<Item>{}), bus_list(Designar::SLList<Bus>{}), employee_list(Designar::SLList<Employee>{})
 {

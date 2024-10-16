@@ -6,6 +6,8 @@
 #include "states/state.hpp"
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include "states/main_menu_state.hpp"
+#include <string>
 
 class StoreState : public Engine::State
 {

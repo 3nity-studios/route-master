@@ -1,3 +1,4 @@
+#include <iostream>
 #include <Designar/list.hpp>
 #include "player/item.hpp"
 #include "player/player.hpp"

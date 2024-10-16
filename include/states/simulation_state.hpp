@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+#include <cmath>
 #include "config/game.hpp"
 #include "config/global.hpp"
 #include "simulation/bus.hpp"

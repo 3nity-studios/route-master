@@ -1,8 +1,4 @@
 #include "states/store_state.hpp"
-#include "config/game.hpp"
-#include "config/global.hpp"
-#include "states/main_menu_state.hpp"
-#include <string>
 
 StoreState::StoreState(GameDataRef data) : _data(data)
 {

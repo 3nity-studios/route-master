@@ -2,6 +2,8 @@
 
 #include <string>
 #include <vector>
+#include <ctime>
+#include <random>
 
 struct SingularEvent
 {

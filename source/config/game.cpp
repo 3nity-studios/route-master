@@ -1,11 +1,5 @@
 #include "config/game.hpp"
-#include "engine/state_machine.hpp"
 #include "states/main_menu_state.hpp"
-#include "states/map_viewer_state.hpp"
-#include "states/store_state.hpp"
-
-#include "simulation/bus.hpp"
-#include "simulation/employee.hpp"
 
 // private
 void Game::init_variables()

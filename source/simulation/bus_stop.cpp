@@ -1,6 +1,4 @@
 #include "simulation/bus_stop.hpp"
-#include <random>
-#include <ctime>
 
 BusStop::BusStop()
     : VisualElement(), name(""), avg_hourly_arrivals(24, 0), avg_arrival_time(0.0), avg_waiting_time(0.0), sd_waiting_time(0.0), avg_bus_stop(0.0), sd_bus_stop(0.0)

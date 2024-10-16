@@ -1,8 +1,4 @@
 #include "states/simulation_state.hpp"
-#include "config/game.hpp"
-#include "config/global.hpp"
-#include <string>
-#include <cmath>
 
 float calc_distance(BusStop bus_stop_1, BusStop bus_stop_2)
 {
