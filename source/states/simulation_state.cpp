@@ -18,7 +18,10 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
     BusStop stop5(5, "Stop5", {25, 50, 75}, 15.0, 15.0, 3.0, 3.0, 2.0, 200.f, 250.f);
     BusStop stop6(6, "Stop6", {30, 60, 90}, 15.0, 15.0, 3.0, 3.0, 2.0, 200.f, 500.f);
 
-    TrafficLight light1(10, std::vector<std::pair<StreetConnectionIDs, bool>>{std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(4,5), true)}, 20, 100.f, 250.f);
+    TrafficLight light1(7, std::vector<std::pair<StreetConnectionIDs, bool>>{std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(4,5), true)}, 20, 100.f, 250.f);
+
+    VisualElement curve1(8, 500.f, 5.f);
+    VisualElement curve2(9, 300.f, 350.f);
 
     city.add_bus_stop(stop1);
     city.add_bus_stop(stop2);
@@ -27,26 +30,32 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
     city.add_traffic_light(light1);
     city.add_bus_stop(stop5);
     city.add_bus_stop(stop6);
-   
+    city.add_curve(curve1);
+    city.add_curve(curve2);
+
     city.initialize_bus_stops();
 
     Street street1(1, "Street1", calc_distance(stop1, stop2), 50.0f, 2.0f, 0.1f, 0.05f);
     Street street2(2, "Street2", calc_distance(stop2, stop3), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street3(3, "Street3", calc_distance(stop3, stop4), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street4(4, "Street4", calc_distance(stop4, light1), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street5(5, "Street5", calc_distance(light1, stop5), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street6(6, "Street6", calc_distance(stop5, stop6), 50.0f, 2.0f, 0.1f, 0.05f);
+    Street street3(3, "Street3", calc_distance(stop3, curve1), 50.0f, 2.0f, 0.1f, 0.05f);
+    Street street4(4, "Street4", calc_distance(curve1, stop4), 50.0f, 2.0f, 0.1f, 0.05f);
+    Street street5(5, "Street5", calc_distance(stop4, light1), 50.0f, 2.0f, 0.1f, 0.05f);
+    Street street6(6, "Street6", calc_distance(light1, stop5), 50.0f, 2.0f, 0.1f, 0.05f);
+    Street street7(7, "Street7", calc_distance(stop5, curve2), 50.0f, 2.0f, 0.1f, 0.05f);
+    Street street8(8, "Street8", calc_distance(curve2, stop6), 50.0f, 2.0f, 0.1f, 0.05f);
 
     city.add_street(street1, 1, 2);
     city.add_street(street2, 2, 3);
-    city.add_street(street3, 3, 4);
-    city.add_street(street4, 4, 10);
-    city.add_street(street5, 10, 5);
-    city.add_street(street6, 5, 6);
+    city.add_street(street3, 3, 8);
+    city.add_street(street4, 8, 4);
+    city.add_street(street5, 4, 7);
+    city.add_street(street6, 7, 5);
+    city.add_street(street7, 5, 9);
+    city.add_street(street8, 9, 6);
 
     StreetArcList path;
 
-    for (int i = 1; i < 7; i++)
+    for (int i = 1; i < 9; i++)
     {
         for (auto street : city.get_streets())
         {
@@ -59,10 +68,10 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
 
     for (auto track : path)
     {
-        path_bus_stops.push_back(track->get_src_node()->get_info());
+        elements_path.push_back(track->get_src_node()->get_info());
     }
 
-    path_bus_stops.push_back(path.get_last()->get_tgt_node()->get_info());
+    elements_path.push_back(path.get_last()->get_tgt_node()->get_info());
 
     auto time = city.run_simulation(bus_sim, driver_sim, 10, path);
 
@@ -314,14 +323,14 @@ void SimulationState::update_bus()
 
     auto time = times.front();
 
-    if ((time.first == 0 || time.first == 2) && simulation_clock.getElapsedTime().asSeconds() >= time.second)
+    if ((time.first == 0 || time.first == 2 || time.first == 3) && simulation_clock.getElapsedTime().asSeconds() >= time.second)
     {
         times.pop_front();
         time = times.front();
         simulation_clock.restart();
-        auto stop1 = path_bus_stops.front();
-        path_bus_stops.pop_front();
-        auto stop2 = path_bus_stops.front();
+        auto stop1 = elements_path.front();
+        elements_path.pop_front();
+        auto stop2 = elements_path.front();
 
         if (stop2->get_x() - stop1->get_x() <= 0)
         {
