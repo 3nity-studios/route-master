@@ -2,10 +2,10 @@
 
 #include <string>
 #include <Designar/graph.hpp>
-#include "simulation/Bus.hpp"
-#include "simulation/Employee.hpp"
-#include "simulation/Street.hpp"
-#include "simulation/TrafficLight.hpp"
+#include "simulation/bus.hpp"
+#include "simulation/employee.hpp"
+#include "simulation/street.hpp"
+#include "simulation/traffic_light.hpp"
 
 using VisualElementNodeList = Designar::SLList<Designar::GraphNode<std::shared_ptr<VisualElement>, Street, Designar::EmptyClass> *>;
 using StreetArcList = Designar::SLList<Designar::GraphArc<Designar::GraphNode<std::shared_ptr<VisualElement>, Street, Designar::EmptyClass>, std::shared_ptr<VisualElement>, Street, Designar::EmptyClass> *>;

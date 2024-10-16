@@ -2,8 +2,8 @@
 
 #include <string>
 #include <Designar/tree.hpp>
-#include "simulation/Bus.hpp"
-#include "simulation/Employee.hpp"
+#include "simulation/bus.hpp"
+#include "simulation/employee.hpp"
 
 struct Cmp2
 {

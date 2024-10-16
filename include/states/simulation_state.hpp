@@ -2,8 +2,8 @@
 
 #include "config/game.hpp"
 #include "config/global.hpp"
-#include "simulation/Bus.hpp"
-#include "simulation/City.hpp"
+#include "simulation/bus.hpp"
+#include "simulation/city.hpp"
 #include "states/state.hpp"
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>

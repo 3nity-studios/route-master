@@ -2,7 +2,7 @@
 
 #include <utility>
 #include <vector>
-#include "simulation/VisualElement.hpp"
+#include "simulation/visual_element.hpp"
 
 using StreetConnectionIDs = std::pair<int, int>;
 

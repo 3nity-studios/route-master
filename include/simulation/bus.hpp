@@ -3,7 +3,7 @@
 #include <queue>
 #include <list>
 #include <string>
-#include "simulation/BusStop.hpp"
+#include "simulation/bus_stop.hpp"
 
 class Bus
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "simulation/Passenger.hpp"
-#include "simulation/VisualElement.hpp"
+#include "simulation/passenger.hpp"
+#include "simulation/visual_element.hpp"
 #include <queue>
 #include <string>
 #include <vector>

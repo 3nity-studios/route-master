@@ -1,6 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
-#include "simulation/City.hpp"
-#include "simulation/Bus.hpp"
+#include "simulation/city.hpp"
+#include "simulation/bus.hpp"
 
 TEST_CASE("Passenger generation in BusStop", "[passenger_generation]") {
 

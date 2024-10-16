@@ -1,4 +1,4 @@
-#include "simulation/Employee.hpp"
+#include "simulation/employee.hpp"
 
 Employee::Employee() : id(0), name(""), last_name(""), age(0), shift_len(0), fatigue(0)
 {

@@ -1,4 +1,4 @@
-#include "simulation/TrafficLight.hpp"
+#include "simulation/traffic_light.hpp"
 
 TrafficLight::TrafficLight() : VisualElement(), connections(std::vector<std::pair<StreetConnectionIDs, bool>>{}), time_to_change(5) 
 {

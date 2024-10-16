@@ -26,12 +26,12 @@ target_compile_features(route_master_test PRIVATE cxx_std_17)
 
 set(SIMULATION_TESTS_SOURCES
     ${CMAKE_SOURCE_DIR}/tests/src/simulation_tests.cpp
-    ${CMAKE_SOURCE_DIR}/source/simulation/Bus.cpp
-    ${CMAKE_SOURCE_DIR}/source/simulation/BusStop.cpp
-    ${CMAKE_SOURCE_DIR}/source/simulation/City.cpp
-    ${CMAKE_SOURCE_DIR}/source/simulation/Street.cpp
-    ${CMAKE_SOURCE_DIR}/source/simulation/Employee.cpp
-    ${CMAKE_SOURCE_DIR}/source/simulation/Passenger.cpp
+    ${CMAKE_SOURCE_DIR}/source/simulation/bus.cpp
+    ${CMAKE_SOURCE_DIR}/source/simulation/bus_stop.cpp
+    ${CMAKE_SOURCE_DIR}/source/simulation/city.cpp
+    ${CMAKE_SOURCE_DIR}/source/simulation/street.cpp
+    ${CMAKE_SOURCE_DIR}/source/simulation/employee.cpp
+    ${CMAKE_SOURCE_DIR}/source/simulation/passenger.cpp
 )
 
 add_executable(simulation_tests ${SIMULATION_TESTS_SOURCES})
@@ -54,9 +54,9 @@ target_compile_features(simulation_tests PRIVATE cxx_std_17)
 
 set(PLAYER_TESTS_SOURCES
     ${CMAKE_SOURCE_DIR}/tests/src/player_tests.cpp
-    ${CMAKE_SOURCE_DIR}/source/player/Item.cpp
-    ${CMAKE_SOURCE_DIR}/source/player/Player.cpp
-    ${CMAKE_SOURCE_DIR}/source/player/Store.cpp
+    ${CMAKE_SOURCE_DIR}/source/player/item.cpp
+    ${CMAKE_SOURCE_DIR}/source/player/player.cpp
+    ${CMAKE_SOURCE_DIR}/source/player/store.cpp
 )
 
 add_executable(player_tests ${PLAYER_TESTS_SOURCES})

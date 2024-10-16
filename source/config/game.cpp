@@ -4,8 +4,8 @@
 #include "states/map_viewer_state.hpp"
 #include "states/store_state.hpp"
 
-#include "simulation/Bus.hpp"
-#include "simulation/Employee.hpp"
+#include "simulation/bus.hpp"
+#include "simulation/employee.hpp"
 
 // private
 void Game::init_variables()

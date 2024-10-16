@@ -1,4 +1,4 @@
-#include "simulation/VisualElement.hpp"
+#include "simulation/visual_element.hpp"
 
 VisualElement::VisualElement() : id(0), x(0.f), y (0.f)
 {

@@ -1,4 +1,4 @@
-#include "simulation/City.hpp"
+#include "simulation/city.hpp"
 
 City::City() : id(0), name(""), current_time(0)
 {

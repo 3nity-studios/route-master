@@ -8,8 +8,8 @@
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 
-#include "player/Player.hpp"
-#include "player/Store.hpp"
+#include "player/player.hpp"
+#include "player/store.hpp"
 
 struct GameData
 {

@@ -1,4 +1,4 @@
-#include "simulation/BusStop.hpp"
+#include "simulation/bus_stop.hpp"
 #include <random>
 #include <ctime>
 

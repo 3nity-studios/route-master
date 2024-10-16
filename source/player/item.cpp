@@ -1,4 +1,4 @@
-#include "player/Item.hpp"
+#include "player/item.hpp"
 
 Item::Item() : id(0), name(""), price(0), amount(0), category(ItemType::Other), is_deleted(false)
 {

@@ -112,22 +112,22 @@ target_link_libraries(route_master_engine
 
 set(
   RM_SIMULATION_SRC
-  ${INCROOT}/simulation/VisualElement.hpp
-  ${INCROOT}/simulation/Bus.hpp
-  ${INCROOT}/simulation/BusStop.hpp
-  ${INCROOT}/simulation/TrafficLight.hpp
-  ${INCROOT}/simulation/City.hpp
-  ${INCROOT}/simulation/Employee.hpp
-  ${INCROOT}/simulation/Passenger.hpp
-  ${INCROOT}/simulation/Street.hpp
-  ${SRCROOT}/simulation/VisualElement.cpp
-  ${SRCROOT}/simulation/Bus.cpp
-  ${SRCROOT}/simulation/BusStop.cpp
-  ${SRCROOT}/simulation/TrafficLight.cpp
-  ${SRCROOT}/simulation/City.cpp
-  ${SRCROOT}/simulation/Employee.cpp
-  ${SRCROOT}/simulation/Passenger.cpp
-  ${SRCROOT}/simulation/Street.cpp
+  ${INCROOT}/simulation/visual_element.hpp
+  ${SRCROOT}/simulation/visual_element.cpp
+  ${INCROOT}/simulation/bus.hpp
+  ${SRCROOT}/simulation/bus.cpp
+  ${INCROOT}/simulation/bus_stop.hpp
+  ${SRCROOT}/simulation/bus_stop.cpp
+  ${INCROOT}/simulation/traffic_light.hpp
+  ${SRCROOT}/simulation/traffic_light.cpp
+  ${INCROOT}/simulation/city.hpp
+  ${SRCROOT}/simulation/city.cpp
+  ${INCROOT}/simulation/employee.hpp
+  ${SRCROOT}/simulation/employee.cpp
+  ${INCROOT}/simulation/passenger.hpp
+  ${SRCROOT}/simulation/passenger.cpp
+  ${INCROOT}/simulation/street.hpp
+  ${SRCROOT}/simulation/street.cpp
 )
 add_library(route_master_simulation ${RM_SIMULATION_SRC})
 add_library(route_master::simulation ALIAS route_master_simulation)
@@ -145,12 +145,12 @@ target_link_libraries(route_master_simulation
 
 set(
   RM_PLAYER_SRC
-  ${INCROOT}/player/Player.hpp
-  ${INCROOT}/player/Store.hpp
-  ${INCROOT}/player/Item.hpp
-  ${SRCROOT}/player/Player.cpp
-  ${SRCROOT}/player/Store.cpp
-  ${SRCROOT}/player/Item.cpp
+  ${INCROOT}/player/player.hpp
+  ${SRCROOT}/player/player.cpp
+  ${INCROOT}/player/store.hpp
+  ${SRCROOT}/player/store.cpp
+  ${INCROOT}/player/item.hpp
+  ${SRCROOT}/player/item.cpp
 )
 add_library(route_master_player ${RM_PLAYER_SRC})
 add_library(route_master::player ALIAS route_master_player)

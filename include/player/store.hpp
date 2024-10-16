@@ -1,6 +1,6 @@
 #include <Designar/list.hpp>
-#include "player/Item.hpp"
-#include "player/Player.hpp"
+#include "player/item.hpp"
+#include "player/player.hpp"
 
 class Store
 {

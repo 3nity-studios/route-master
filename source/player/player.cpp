@@ -1,4 +1,4 @@
-#include "player/Player.hpp"
+#include "player/player.hpp"
 
 Player::Player() : id(0), name(""), balance(0)
 {
