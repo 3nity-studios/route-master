@@ -4,8 +4,8 @@ Item::Item() : id(0), name(""), price(0), amount(0), category(ItemType::Other), 
 {
 }
 
-Item::Item(int _id, std::string _name, int _price, int _amount, ItemType _category, bool _is_deleted) 
-                    : id(_id), name(_name), price(_price), amount(_amount), category(_category), is_deleted(_is_deleted)
+Item::Item(int _id, std::string _name, int _price, int _amount, ItemType _category, bool _is_deleted)
+    : id(_id), name(_name), price(_price), amount(_amount), category(_category), is_deleted(_is_deleted)
 {
 }
 
@@ -21,7 +21,7 @@ void Item::set_name(std::string _name)
 
 void Item::set_price(int _price)
 {
-    price =_price;
+    price = _price;
 }
 
 void Item::set_amount(int _amount)

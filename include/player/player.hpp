@@ -1,18 +1,18 @@
 #pragma once
 
-#include <string>
-#include <Designar/tree.hpp>
 #include "simulation/bus.hpp"
 #include "simulation/employee.hpp"
+#include <Designar/tree.hpp>
+#include <string>
 
 struct Cmp2
 {
-    bool operator () (Employee a, Employee b)
+    bool operator()(Employee a, Employee b)
     {
         return a.get_id() < b.get_id();
     }
 
-    bool operator () (Bus a, Bus b)
+    bool operator()(Bus a, Bus b)
     {
         return a.get_id() < b.get_id();
     }
@@ -20,26 +20,26 @@ struct Cmp2
 
 class Player
 {
-    private:
+  private:
     int id;
     std::string name;
     int balance;
     Designar::RankedTreap<Bus, Cmp2> buses;
     Designar::RankedTreap<Employee, Cmp2> employees;
 
-    public:
+  public:
     Player();
-    Player(int _id, const std::string& _name, int _balance);
+    Player(int _id, const std::string &_name, int _balance);
 
     int get_id() const noexcept;
     std::string get_name() const noexcept;
     Designar::SLList<Bus> get_buses();
-    Designar::SLList<Employee> get_employees(); 
-    Bus get_bus(const int& id);
-    Employee get_employee(const int& id);
+    Designar::SLList<Employee> get_employees();
+    Bus get_bus(const int &id);
+    Employee get_employee(const int &id);
     int get_balance();
 
-    void set_name(const std::string& name);
+    void set_name(const std::string &name);
     void add_bus(Bus bus);
     void add_employee(Employee employee);
     void increase_balance(int balance_to_increase);

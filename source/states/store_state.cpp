@@ -49,7 +49,7 @@ void StoreState::update_items_to_show(tgui::String filter)
         buyButton->setWidgetName(item.get_id() + "BuyButton");
         buyButton->setPosition({450.0f, 90.0f + (i * 30.0f)});
         buyButton->setText("Buy " + item.get_name());
-        buyButton->onPress([this, item] { 
+        buyButton->onPress([this, item] {
             this->_data->store.buy_item(this->_data->player, item.get_id(), 1);
             this->update_items_to_show(this->_data->gui.get<tgui::ComboBox>("filter_combobox")->getSelectedItem());
         });
@@ -73,9 +73,7 @@ void StoreState::init_state()
     comboBox->addItem("All");
     comboBox->addItem("Buses");
     comboBox->addItem("Employees");
-    comboBox->onItemSelect([this, comboBox] {
-        this->update_items_to_show(comboBox->getSelectedItem());
-    });
+    comboBox->onItemSelect([this, comboBox] { this->update_items_to_show(comboBox->getSelectedItem()); });
     comboBox->setSelectedItem("All");
     this->_data->gui.add(comboBox);
 }

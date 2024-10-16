@@ -2,13 +2,13 @@
 
 Employee::Employee() : id(0), name(""), last_name(""), age(0), shift_len(0), fatigue(0)
 {
-    //empty
+    // empty
 }
 
-Employee::Employee(int _id, std::string _name, std::string _last_name, ushort _age, ushort _shift_len, ushort _fatigue) 
+Employee::Employee(int _id, std::string _name, std::string _last_name, ushort _age, ushort _shift_len, ushort _fatigue)
     : id(_id), name(_name), last_name(_last_name), age(_age), shift_len(_shift_len), fatigue(_fatigue)
 {
-    //empty
+    // empty
 }
 
 int Employee::get_id() const noexcept
@@ -18,60 +18,60 @@ int Employee::get_id() const noexcept
 
 std::string Employee::get_name() const noexcept
 {
-    return name; 
+    return name;
 }
 
 std::string Employee::get_last_name() const noexcept
 {
-    return last_name; 
+    return last_name;
 }
 
 ushort Employee::get_age() const noexcept
 {
-    return age; 
+    return age;
 }
 
 ushort Employee::get_shift_len() const noexcept
 {
-    return shift_len; 
+    return shift_len;
 }
 
 ushort Employee::get_fatigue() const noexcept
 {
-    return fatigue; 
+    return fatigue;
 }
 
-void Employee::set_id(const int& _id)
+void Employee::set_id(const int &_id)
 {
-    id = _id; 
+    id = _id;
 }
 
-void Employee::set_name(const std::string& _name)
+void Employee::set_name(const std::string &_name)
 {
-    name = _name; 
+    name = _name;
 }
 
-void Employee::set_last_name(const std::string& _last_name)
+void Employee::set_last_name(const std::string &_last_name)
 {
-    last_name = _last_name; 
+    last_name = _last_name;
 }
 
-void Employee::set_age(const ushort& _age)
+void Employee::set_age(const ushort &_age)
 {
-    age = _age; 
+    age = _age;
 }
 
-void Employee::set_shift_len(const ushort& _shift_len)
+void Employee::set_shift_len(const ushort &_shift_len)
 {
-    shift_len = _shift_len; 
+    shift_len = _shift_len;
 }
 
-void Employee::set_fatigue(const ushort& _fatigue)
+void Employee::set_fatigue(const ushort &_fatigue)
 {
-    fatigue = _fatigue; 
+    fatigue = _fatigue;
 }
 
 void Employee::calc_fatigue(int km)
 {
-    fatigue = fatigue + (km/2);
+    fatigue = fatigue + (km / 2);
 }

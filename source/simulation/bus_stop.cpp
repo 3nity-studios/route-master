@@ -1,13 +1,18 @@
 #include "simulation/bus_stop.hpp"
 
 BusStop::BusStop()
-    : VisualElement(), name(""), avg_hourly_arrivals(24, 0), avg_arrival_time(0.0), avg_waiting_time(0.0), sd_waiting_time(0.0), avg_bus_stop(0.0), sd_bus_stop(0.0)
+    : VisualElement(), name(""), avg_hourly_arrivals(24, 0), avg_arrival_time(0.0), avg_waiting_time(0.0),
+      sd_waiting_time(0.0), avg_bus_stop(0.0), sd_bus_stop(0.0)
 {
     // empty
 }
 
-BusStop::BusStop(int _id, std::string _name, std::vector<int> _avg_hourly_arrivals, float _avg_arrival_time, float _avg_waiting_time, float _sd_waiting_time, float _avg_bus_stop, float _sd_bus_stop, float _x, float _y)
-    :VisualElement(_id, _x, _y), name(_name), avg_hourly_arrivals(_avg_hourly_arrivals), avg_arrival_time(_avg_arrival_time), avg_waiting_time(_avg_waiting_time), sd_waiting_time(_sd_waiting_time), avg_bus_stop(_avg_bus_stop), sd_bus_stop(_sd_bus_stop)
+BusStop::BusStop(int _id, std::string _name, std::vector<int> _avg_hourly_arrivals, float _avg_arrival_time,
+                 float _avg_waiting_time, float _sd_waiting_time, float _avg_bus_stop, float _sd_bus_stop, float _x,
+                 float _y)
+    : VisualElement(_id, _x, _y), name(_name), avg_hourly_arrivals(_avg_hourly_arrivals),
+      avg_arrival_time(_avg_arrival_time), avg_waiting_time(_avg_waiting_time), sd_waiting_time(_sd_waiting_time),
+      avg_bus_stop(_avg_bus_stop), sd_bus_stop(_sd_bus_stop)
 {
     // empty
 }
@@ -17,7 +22,7 @@ std::string BusStop::get_name() const noexcept
     return name;
 }
 
-void BusStop::set_name(const std::string& _name)
+void BusStop::set_name(const std::string &_name)
 {
     name = _name;
 }
@@ -27,16 +32,16 @@ PassengerHeap BusStop::get_passenger_list() const noexcept
     return passenger_list;
 }
 
-void BusStop::set_passenger_list(const PassengerHeap& _passenger_list)
+void BusStop::set_passenger_list(const PassengerHeap &_passenger_list)
 {
     passenger_list = _passenger_list;
 }
 
 void BusStop::update(int current_time)
 {
-    if(!passenger_list.empty())
+    if (!passenger_list.empty())
     {
-        while(passenger_list.top().is_gone(current_time))
+        while (passenger_list.top().is_gone(current_time))
         {
             passenger_list.pop();
             gone_passengers++;
@@ -47,7 +52,7 @@ void BusStop::update(int current_time)
 void BusStop::generate_passengers(int current_time)
 {
     gone_passengers = 0;
-    while(!passenger_list.empty())
+    while (!passenger_list.empty())
     {
         passenger_list.pop();
     }
@@ -62,12 +67,12 @@ void BusStop::generate_passengers(int current_time)
     std::normal_distribution<> waiting_time_dist(avg_waiting_time, sd_waiting_time);
     std::normal_distribution<> bus_stop_dist(avg_bus_stop, sd_bus_stop);
 
-    for(int i = 0; i < avg_hourly_arrivals.size(); i++)
+    for (int i = 0; i < avg_hourly_arrivals.size(); i++)
     {
         std::poisson_distribution<> passengers_per_hour(avg_hourly_arrivals[i]);
         int num_passengers = passengers_per_hour(gen);
 
-        for(int j = 0; j < num_passengers; j++)
+        for (int j = 0; j < num_passengers; j++)
         {
             // Generate random values for passenger attributes
             int arrival_time = current_time + std::round(arrival_time_dist(gen));
@@ -83,7 +88,7 @@ void BusStop::generate_passengers(int current_time)
     }
 }
 
-void BusStop::add_passenger(const Passenger& passenger)
+void BusStop::add_passenger(const Passenger &passenger)
 {
     passenger_list.push(passenger);
 }
@@ -101,7 +106,7 @@ int BusStop::get_gone_passengers() const noexcept
     return gone_passengers;
 }
 
-void BusStop::add_gone_passengers(const int& num)
+void BusStop::add_gone_passengers(const int &num)
 {
     gone_passengers += num;
 }

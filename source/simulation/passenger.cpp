@@ -2,13 +2,13 @@
 
 Passenger::Passenger() : arrival_time(0), waiting_time(0), bus_stop(0)
 {
-    //empty
+    // empty
 }
 
-Passenger::Passenger(int _arrival_time, int _waiting_time, int _bus_stop) 
+Passenger::Passenger(int _arrival_time, int _waiting_time, int _bus_stop)
     : arrival_time(_arrival_time), waiting_time(_waiting_time), bus_stop(_bus_stop)
 {
-    //empty
+    // empty
 }
 
 bool Passenger::is_gone(int current_time) const noexcept
@@ -31,17 +31,17 @@ int Passenger::get_bus_stop() const noexcept
     return bus_stop;
 }
 
-void Passenger::set_arrival_time(const int& _arrival_time)
+void Passenger::set_arrival_time(const int &_arrival_time)
 {
-    arrival_time = _arrival_time; 
+    arrival_time = _arrival_time;
 }
 
-void Passenger::set_waiting_time(const int& _waiting_time)
+void Passenger::set_waiting_time(const int &_waiting_time)
 {
     waiting_time = _waiting_time;
 }
 
-void Passenger::set_bus_stop(const int& _bus_stop)
+void Passenger::set_bus_stop(const int &_bus_stop)
 {
     bus_stop = _bus_stop;
 }

@@ -1,11 +1,14 @@
 #include "player/store.hpp"
 
-Store::Store() : inventory(Designar::SLList<Item>{}), bus_list(Designar::SLList<Bus>{}), employee_list(Designar::SLList<Employee>{})
+Store::Store()
+    : inventory(Designar::SLList<Item>{}), bus_list(Designar::SLList<Bus>{}),
+      employee_list(Designar::SLList<Employee>{})
 {
 }
 
 Store::Store(Designar::SLList<Item> _inventory, Designar::SLList<Bus> _bus_list,
-             Designar::SLList<Employee> _employee_list) : inventory(_inventory), bus_list(_bus_list), employee_list(_employee_list)
+             Designar::SLList<Employee> _employee_list)
+    : inventory(_inventory), bus_list(_bus_list), employee_list(_employee_list)
 {
 }
 
@@ -61,13 +64,13 @@ void Store::buy_item(Player &player, int item_id, int amount)
         {
             if (amount > item.get_amount())
             {
-                std::cout<<"The requested amount is not available in inventory"<<std::endl;
+                std::cout << "The requested amount is not available in inventory" << std::endl;
                 break;
             }
 
             if (player.get_balance() < (item.get_price() * amount))
             {
-                std::cout<<"The player's balance is not sufficient to make the purchase"<<std::endl;
+                std::cout << "The player's balance is not sufficient to make the purchase" << std::endl;
                 break;
             }
 
@@ -130,7 +133,7 @@ void Store::buy_bus_maintenance(Bus &bus, Player &player, bool repair_engine, bo
 
     if (player.get_balance() < total_price)
     {
-        std::cout<<"The player's balance is not sufficient to make the purchase"<<std::endl;
+        std::cout << "The player's balance is not sufficient to make the purchase" << std::endl;
     }
     else
     {

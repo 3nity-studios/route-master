@@ -8,10 +8,10 @@
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 
-#include "simulation/bus.hpp"
-#include "simulation/employee.hpp"
 #include "player/player.hpp"
 #include "player/store.hpp"
+#include "simulation/bus.hpp"
+#include "simulation/employee.hpp"
 
 struct GameData
 {

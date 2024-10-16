@@ -2,15 +2,15 @@
 
 #include "simulation/passenger.hpp"
 #include "simulation/visual_element.hpp"
+#include <ctime>
 #include <queue>
+#include <random>
 #include <string>
 #include <vector>
-#include <random>
-#include <ctime>
 
 struct Cmp
 {
-    bool operator () (Passenger a, Passenger b)
+    bool operator()(Passenger a, Passenger b)
     {
         return a.get_arrival_time() > b.get_arrival_time();
     }
@@ -20,9 +20,8 @@ using PassengerHeap = std::priority_queue<Passenger, std::vector<Passenger>, Cmp
 
 class BusStop : public VisualElement
 {
-    private:
-
-    std::string name; 
+  private:
+    std::string name;
     PassengerHeap passenger_list;
     int gone_passengers;
     std::vector<int> avg_hourly_arrivals;
@@ -32,26 +31,28 @@ class BusStop : public VisualElement
     float avg_bus_stop;
     float sd_bus_stop;
 
-    public: 
-
+  public:
     BusStop();
-    BusStop(int _id, std::string _name, std::vector<int> _avg_hourly_arrivals, float _avg_arrival_time, float _avg_waiting_time, float _sd_waiting_time, float _avg_bus_stop, float _sd_bus_stop, float _x, float _y);
+    BusStop(int _id, std::string _name, std::vector<int> _avg_hourly_arrivals, float _avg_arrival_time,
+            float _avg_waiting_time, float _sd_waiting_time, float _avg_bus_stop, float _sd_bus_stop, float _x,
+            float _y);
 
     std::string get_name() const noexcept;
-    void set_name(const std::string& _name);
+    void set_name(const std::string &_name);
 
     PassengerHeap get_passenger_list() const noexcept;
-    void set_passenger_list(const PassengerHeap& _passenger_list);
+    void set_passenger_list(const PassengerHeap &_passenger_list);
 
     void update(int current_time);
     void generate_passengers(int current_time);
-    void add_passenger(const Passenger& passenger);
+    void add_passenger(const Passenger &passenger);
     Passenger pop_first_passenger();
 
     int get_gone_passengers() const noexcept;
-    void add_gone_passengers(const int& num);
+    void add_gone_passengers(const int &num);
 
-    bool operator==(const BusStop& other) const {
+    bool operator==(const BusStop &other) const
+    {
         return this->get_id() == other.get_id();
     }
 };

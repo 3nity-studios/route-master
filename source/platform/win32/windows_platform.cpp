@@ -1,7 +1,7 @@
 #ifdef _WIN32
 #include "platform/win32/windows_platform.hpp"
-#include <winuser.h>
 #include "platform/win32/resource.h"
+#include <winuser.h>
 
 namespace util
 {

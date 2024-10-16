@@ -1,10 +1,13 @@
 #include "simulation/traffic_light.hpp"
 
-TrafficLight::TrafficLight() : VisualElement(), connections(std::vector<std::pair<StreetConnectionIDs, bool>>{}), time_to_change(5) 
+TrafficLight::TrafficLight()
+    : VisualElement(), connections(std::vector<std::pair<StreetConnectionIDs, bool>>{}), time_to_change(5)
 {
 }
 
-TrafficLight::TrafficLight(int _id, std::vector<std::pair<StreetConnectionIDs, bool>> _connections, int _time_to_change, float _x, float _y) : VisualElement(_id, _x, _y), connections(_connections), time_to_change(_time_to_change)
+TrafficLight::TrafficLight(int _id, std::vector<std::pair<StreetConnectionIDs, bool>> _connections, int _time_to_change,
+                           float _x, float _y)
+    : VisualElement(_id, _x, _y), connections(_connections), time_to_change(_time_to_change)
 {
 }
 
@@ -42,14 +45,14 @@ void TrafficLight::update(int current_time)
     }
     else
     {
-        int i = 0; 
+        int i = 0;
         for (auto &connection : connections)
         {
             if (connection.second)
             {
                 connection.second = false;
                 i++;
-                break; 
+                break;
             }
 
             i++;

@@ -1,6 +1,6 @@
 #include "simulation/visual_element.hpp"
 
-VisualElement::VisualElement() : id(0), x(0.f), y (0.f)
+VisualElement::VisualElement() : id(0), x(0.f), y(0.f)
 {
 }
 
@@ -13,7 +13,7 @@ void VisualElement::set_id(int _id)
     id = _id;
 }
 
-void VisualElement::set_x(float _x) 
+void VisualElement::set_x(float _x)
 {
     x = _x;
 }
@@ -35,5 +35,5 @@ float VisualElement::get_x()
 
 float VisualElement::get_y()
 {
-    return y; 
+    return y;
 }

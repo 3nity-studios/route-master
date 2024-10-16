@@ -4,12 +4,12 @@
 
 class VisualElement
 {
-    private:
+  private:
     int id;
     float x;
     float y;
 
-    public:
+  public:
     VisualElement();
     VisualElement(int _id, float _x, float _y);
     virtual ~VisualElement() = default;

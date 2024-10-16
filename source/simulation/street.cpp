@@ -7,9 +7,12 @@ Street::Street()
     // empty
 }
 
-Street::Street(int _id, std::string _name, float _distance, float _avg_speed, float _avg_traffic_density, float _sd_traffic_density, float _singular_event_odds)
-    : id(_id), name(std::move(_name)), distance(_distance), avg_speed(_avg_speed), avg_traffic_density(_avg_traffic_density), sd_traffic_density(_sd_traffic_density), singular_event_odds(_singular_event_odds),
-      current_traffic_density(0.0f), singular_event_active(false), current_singular_event_duration(0)
+Street::Street(int _id, std::string _name, float _distance, float _avg_speed, float _avg_traffic_density,
+               float _sd_traffic_density, float _singular_event_odds)
+    : id(_id), name(std::move(_name)), distance(_distance), avg_speed(_avg_speed),
+      avg_traffic_density(_avg_traffic_density), sd_traffic_density(_sd_traffic_density),
+      singular_event_odds(_singular_event_odds), current_traffic_density(0.0f), singular_event_active(false),
+      current_singular_event_duration(0)
 {
     // empty
 }
@@ -60,7 +63,7 @@ void Street::update()
     do
     {
         current_traffic_density = traffic_density_dist(gen);
-    } while(current_traffic_density == 0);
+    } while (current_traffic_density == 0);
 
     if (singular_event_active)
     {
@@ -76,7 +79,8 @@ void Street::update()
         {
             std::uniform_int_distribution<> event_selector(0, singular_event_parameters.size() - 1);
             SingularEvent current_singular_event = singular_event_parameters[event_selector(gen)];
-            std::weibull_distribution<> singular_event_time(current_singular_event.shape, current_singular_event.avg_duration);
+            std::weibull_distribution<> singular_event_time(current_singular_event.shape,
+                                                            current_singular_event.avg_duration);
 
             singular_event_active = true;
             current_singular_event_duration = singular_event_time(gen);

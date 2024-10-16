@@ -1,15 +1,15 @@
 #ifndef UTIL_WINDOWS_PLATFORM_HPP
 #define UTIL_WINDOWS_PLATFORM_HPP
 
-#include <Windows.h>
-#include <array>
 #include "platform/iplatform.hpp"
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/WindowHandle.hpp>
 #include <SFML/Window/WindowStyle.hpp>
-#include <winuser.h>
+#include <Windows.h>
+#include <array>
 #include <cmath>
 #include <cstdint>
+#include <winuser.h>
 
 // TODO: WM_DISPLAYCHANGE event handling (multi-monitor support)
 

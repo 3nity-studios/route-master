@@ -1,19 +1,19 @@
-#include <iostream>
-#include <Designar/list.hpp>
 #include "player/item.hpp"
 #include "player/player.hpp"
+#include <Designar/list.hpp>
+#include <iostream>
 
 class Store
 {
-    private:
-    Designar::SLList<Item> inventory; 
+  private:
+    Designar::SLList<Item> inventory;
     Designar::SLList<Bus> bus_list;
-    Designar::SLList<Employee> employee_list; 
+    Designar::SLList<Employee> employee_list;
 
-    public: 
-
+  public:
     Store();
-    Store(Designar::SLList<Item> _inventory, Designar::SLList<Bus> _bus_list, Designar::SLList<Employee> _employee_list);
+    Store(Designar::SLList<Item> _inventory, Designar::SLList<Bus> _bus_list,
+          Designar::SLList<Employee> _employee_list);
 
     Designar::SLList<Item> get_inventory();
     Designar::SLList<Bus> get_bus_list();

@@ -1,14 +1,17 @@
 #include "simulation/bus.hpp"
 
-Bus::Bus() : id(0), name(""), max_capacity(0), current_passengers(std::list<Passenger>{}), time_in_bus_stop(0), engine_state(100), breaks_state(100), tires_state(100), fuel(100)
+Bus::Bus()
+    : id(0), name(""), max_capacity(0), current_passengers(std::list<Passenger>{}), time_in_bus_stop(0),
+      engine_state(100), breaks_state(100), tires_state(100), fuel(100)
 {
-    //empty
+    // empty
 }
 
-Bus::Bus(int _id, std::string _name, int _max_capacity, std::list<Passenger> _current_passengers, int _time_in_bus_stop) 
-    : id(_id), name(_name), max_capacity(_max_capacity), current_passengers(_current_passengers), time_in_bus_stop(_time_in_bus_stop), engine_state(100), breaks_state(100), tires_state(100), fuel(100)
+Bus::Bus(int _id, std::string _name, int _max_capacity, std::list<Passenger> _current_passengers, int _time_in_bus_stop)
+    : id(_id), name(_name), max_capacity(_max_capacity), current_passengers(_current_passengers),
+      time_in_bus_stop(_time_in_bus_stop), engine_state(100), breaks_state(100), tires_state(100), fuel(100)
 {
-    //empty
+    // empty
 }
 
 int Bus::get_id() const noexcept
@@ -16,14 +19,14 @@ int Bus::get_id() const noexcept
     return id;
 }
 
-void Bus::set_id(const int& _id)
+void Bus::set_id(const int &_id)
 {
     id = _id;
 }
 
 std::string Bus::get_name() const noexcept
 {
-    return name; 
+    return name;
 }
 
 int Bus::get_max_capacity() const noexcept
@@ -76,7 +79,7 @@ void Bus::leave_passengers(BusStop &current_stop)
     current_passengers = aux;
 }
 
-void Bus::add_passengers(const int& simulation_time, BusStop &bus_stop)
+void Bus::add_passengers(const int &simulation_time, BusStop &bus_stop)
 {
     std::list<Passenger> aux;
 
@@ -84,19 +87,22 @@ void Bus::add_passengers(const int& simulation_time, BusStop &bus_stop)
     {
         Passenger first_passenger = bus_stop.pop_first_passenger();
 
-        if (((simulation_time + time_in_bus_stop) < first_passenger.get_arrival_time()) || (current_passengers.size() >= max_capacity))
+        if (((simulation_time + time_in_bus_stop) < first_passenger.get_arrival_time()) ||
+            (current_passengers.size() >= max_capacity))
         {
             aux.push_back(first_passenger);
             break;
         }
 
-        if ((first_passenger.get_arrival_time() + first_passenger.get_waiting_time()) < simulation_time) // Gone passengers
+        if ((first_passenger.get_arrival_time() + first_passenger.get_waiting_time()) <
+            simulation_time) // Gone passengers
         {
             bus_stop.add_gone_passengers(1);
             continue;
         }
 
-        if (true) //Aquí va la condición que determina si el pasajero va a una parada de la ruta del bus actual (Por ahora todos se suben)
+        if (true) // Aquí va la condición que determina si el pasajero va a una parada de la ruta del bus actual (Por
+                  // ahora todos se suben)
         {
             current_passengers.push_back(first_passenger);
             attended_passengers += 1;
@@ -142,21 +148,21 @@ void Bus::repair_bus(bool repair_engine, bool repair_breaks, bool repair_tires)
 
 void Bus::calc_wear(int km)
 {
-    engine_state -= (km/20);
-    breaks_state -= (km/10);
-    tires_state -= (km/10);
-    fuel -= (km/3);
+    engine_state -= (km / 20);
+    breaks_state -= (km / 10);
+    tires_state -= (km / 10);
+    fuel -= (km / 3);
 }
 
 std::vector<int> Bus::calc_maintenance_price()
 {
     int engine_price = 0;
-    int breaks_price = 0; 
-    int tires_price = 0; 
+    int breaks_price = 0;
+    int tires_price = 0;
 
-    engine_price = (200 - engine_state)*(200 - engine_state);
-    breaks_price = (100 - breaks_state)*(100 - breaks_state);
-    tires_price = (100 - tires_state)*(100 - tires_price);
+    engine_price = (200 - engine_state) * (200 - engine_state);
+    breaks_price = (100 - breaks_state) * (100 - breaks_state);
+    tires_price = (100 - tires_state) * (100 - tires_price);
 
     if (engine_state <= 0)
     {
@@ -171,5 +177,5 @@ std::vector<int> Bus::calc_maintenance_price()
         tires_price = 20000;
     }
 
-    return std::vector<int> {engine_price, breaks_price, tires_price};
+    return std::vector<int>{engine_price, breaks_price, tires_price};
 }

@@ -12,17 +12,15 @@ enum class ItemType
 
 class Item
 {
-    private: 
-
-    int id; 
-    std::string name; 
-    int price; 
+  private:
+    int id;
+    std::string name;
+    int price;
     int amount;
     ItemType category;
-    bool is_deleted; 
+    bool is_deleted;
 
-    public: 
-
+  public:
     Item();
     Item(int _id, std::string _name, int _price, int _amount, ItemType _category, bool _is_deleted);
 
@@ -34,7 +32,7 @@ class Item
     void set_is_deleted(bool _is_deleted);
 
     int get_id() const noexcept;
-    std::string get_name()const noexcept;
+    std::string get_name() const noexcept;
     int get_price() const noexcept;
     int get_amount() const noexcept;
     ItemType get_category() const noexcept;

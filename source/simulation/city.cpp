@@ -2,13 +2,14 @@
 
 City::City() : id(0), name(""), current_time(0)
 {
-    //empty
+    // empty
 }
 
-City::City(int _id, std::string _name, Designar::Graph<std::shared_ptr<VisualElement>, Street> _city_map, int _current_time)
+City::City(int _id, std::string _name, Designar::Graph<std::shared_ptr<VisualElement>, Street> _city_map,
+           int _current_time)
     : id(_id), name(_name), city_map(_city_map), current_time(_current_time)
 {
-    //empty
+    // empty
 }
 
 int City::get_id() const noexcept
@@ -31,23 +32,24 @@ StreetArcList City::get_streets() const noexcept
     return city_map.arcs();
 }
 
-void City::add_bus_stop(const BusStop& bus_stop)
+void City::add_bus_stop(const BusStop &bus_stop)
 {
     city_map.insert_node(std::make_shared<BusStop>(bus_stop));
 }
 
-void City::add_street(const Street& street_info, const int& src_id, const int& tgt_id)
-{   
+void City::add_street(const Street &street_info, const int &src_id, const int &tgt_id)
+{
 
-    Designar::GraphNode<std::shared_ptr<VisualElement>, Street, Designar::EmptyClass> *src_visual_element = nullptr, *tgt_visual_element = nullptr;
-    for(auto visual_element : city_map.nodes())
+    Designar::GraphNode<std::shared_ptr<VisualElement>, Street, Designar::EmptyClass> *src_visual_element = nullptr,
+                                                                                      *tgt_visual_element = nullptr;
+    for (auto visual_element : city_map.nodes())
     {
 
-        if(visual_element->get_info()->get_id() == src_id)
+        if (visual_element->get_info()->get_id() == src_id)
         {
             src_visual_element = visual_element;
         }
-        else if(visual_element->get_info()->get_id() == tgt_id)
+        else if (visual_element->get_info()->get_id() == tgt_id)
         {
             tgt_visual_element = visual_element;
         }
@@ -63,10 +65,9 @@ void City::add_street(const Street& street_info, const int& src_id, const int& t
     }
 }
 
-
 void City::initialize_bus_stops()
 {
-    for(auto &stop : city_map.nodes())
+    for (auto &stop : city_map.nodes())
     {
         auto bus_stop = std::dynamic_pointer_cast<BusStop>(stop->get_info());
 
@@ -81,7 +82,7 @@ void City::update()
 {
     current_time++;
 
-    for(auto &stop : city_map.nodes())
+    for (auto &stop : city_map.nodes())
     {
         auto bus_stop = std::dynamic_pointer_cast<BusStop>(stop->get_info());
 
@@ -98,7 +99,7 @@ void City::update()
         }
     }
 
-    for(auto &street : city_map.arcs())
+    for (auto &street : city_map.arcs())
     {
         street->get_info().update();
     }
@@ -110,7 +111,7 @@ std::list<std::pair<int, int>> City::run_simulation(Bus &bus, Employee &driver, 
 
     bus.reset();
     int spent_time = 0;
-    for(auto track : path)
+    for (auto track : path)
     {
         update();
 
