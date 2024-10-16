@@ -63,6 +63,15 @@ void City::add_street(const Street& street_info, const int& src_id, const int& t
     }
 }
 
+void City::add_traffic_light(TrafficLight traffic_light)
+{
+    city_map.insert_node(std::make_shared<TrafficLight>(traffic_light));
+}
+
+void City::add_curve(const VisualElement &curve)
+{
+    city_map.insert_node(std::make_shared<VisualElement>(curve));
+}
 
 void City::initialize_bus_stops()
 {
@@ -114,9 +123,9 @@ std::list<std::pair<int, int>> City::run_simulation(Bus &bus, Employee &driver, 
     {
         update();
 
-        auto bus_stop = std::dynamic_pointer_cast<BusStop>(path.get_first()->get_src_node()->get_info());
-        auto traffic_light = std::dynamic_pointer_cast<TrafficLight>(path.get_first()->get_src_node()->get_info());
-
+        auto bus_stop = std::dynamic_pointer_cast<BusStop>(track->get_src_node()->get_info());
+        auto traffic_light = std::dynamic_pointer_cast<TrafficLight>(track->get_src_node()->get_info());
+    
         if (bus_stop != nullptr)
         {
             bus.leave_passengers(*bus_stop);
@@ -132,14 +141,18 @@ std::list<std::pair<int, int>> City::run_simulation(Bus &bus, Employee &driver, 
 
             spent_time += travel_time;
             times.push_back(std::make_pair<int, int>(1, std::move(travel_time)));
-        }
+        } 
         else if (traffic_light != nullptr)
         {
             times.push_back(std::make_pair<int, int>(2, traffic_light->get_time_to_change()));
+            int travel_time = track->get_info().get_travel_time();
+            times.push_back(std::make_pair<int, int>(1, std::move(travel_time)));
         }
         else
         {
             times.push_back(std::make_pair<int, int>(3, 0));
+            int travel_time = track->get_info().get_travel_time();
+            times.push_back(std::make_pair<int, int>(1, std::move(travel_time)));
         }
     }
 

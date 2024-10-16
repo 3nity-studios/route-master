@@ -11,7 +11,7 @@
 void Game::init_variables()
 {
     this->_data->window = nullptr;
-    this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), false);
+    this->_data->states.add_state(Engine::StateRef(new SimulationState(this->_data)), false);
     this->_data->player = Player(0, "Player1", 50000);
 
     this->_data->store = Store();
