@@ -29,6 +29,8 @@ class City
     
     void add_bus_stop(const BusStop& bus_stop);
     void add_street(const Street& street_info, const int& src_id, const int& tgt_id); 
+    void add_traffic_light(TrafficLight traffic_light);
+    void add_curve(const VisualElement &visual_element);
 
     void initialize_bus_stops();
     void update();
