@@ -11,17 +11,17 @@ float calc_distance(VisualElement element1, VisualElement element2)
 
 SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_sim(Bus(1, "Bus 125", 32, std::list<Passenger>{}, 5)), driver_sim(Employee(0, "John", "Doe", 32, 12, 0)), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), bus(bus_texture)
 {
-    BusStop stop1(1, "Stop1", {5, 10, 15}, 5.0, 5.0, 3.0, 3.0, 2.0, 5.f, 5.f);
-    BusStop stop2(2, "Stop2", {10, 20, 30}, 10.0, 10.0, 3.0, 3.0, 2.0, 150.f, 5.f);
-    BusStop stop3(3, "Stop3", {15, 30, 45}, 15.0, 15.0, 3.0, 3.0, 2.0, 400.f, 5.f);
-    BusStop stop4(4, "Stop4", {20, 40, 60}, 15.0, 15.0, 3.0, 3.0, 2.0, 5.f, 250.f);
-    BusStop stop5(5, "Stop5", {25, 50, 75}, 15.0, 15.0, 3.0, 3.0, 2.0, 200.f, 250.f);
-    BusStop stop6(6, "Stop6", {30, 60, 90}, 15.0, 15.0, 3.0, 3.0, 2.0, 200.f, 500.f);
+    BusStop stop1(1, "Stop1", {5, 10, 15}, 5.0, 5.0, 3.0, 3.0, 2.0, 350.f, 5.f);
+    BusStop stop2(2, "Stop2", {10, 20, 30}, 10.0, 10.0, 3.0, 3.0, 2.0, 500.f, 5.f);
+    BusStop stop3(3, "Stop3", {15, 30, 45}, 15.0, 15.0, 3.0, 3.0, 2.0, 750.f, 5.f);
+    BusStop stop4(4, "Stop4", {20, 40, 60}, 15.0, 15.0, 3.0, 3.0, 2.0, 350.f, 250.f);
+    BusStop stop5(5, "Stop5", {25, 50, 75}, 15.0, 15.0, 3.0, 3.0, 2.0, 600.f, 250.f);
+    BusStop stop6(6, "Stop6", {30, 60, 90}, 15.0, 15.0, 3.0, 3.0, 2.0, 600.f, 500.f);
 
-    TrafficLight light1(7, std::vector<std::pair<StreetConnectionIDs, bool>>{std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(4,5), true)}, 20, 100.f, 250.f);
+    TrafficLight light1(7, std::vector<std::pair<StreetConnectionIDs, bool>>{std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(4,5), true)}, 20, 450.f, 250.f);
 
-    VisualElement curve1(8, 500.f, 5.f);
-    VisualElement curve2(9, 300.f, 350.f);
+    VisualElement curve1(8, 775.f, 40.f);
+    VisualElement curve2(9, 700.f, 350.f);
 
     city.add_bus_stop(stop1);
     city.add_bus_stop(stop2);
@@ -225,7 +225,7 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     // set the text style
     text.setStyle(sf::Text::Bold | sf::Text::Underlined);
 
-    text.setPosition(sf::Vector2f(400.f, 500.f));
+    text.setPosition(sf::Vector2f(300.f, 500.f));
 
     // inside the main loop, between window.clear() and window.display()
     this->_data->window->draw(text);
@@ -252,7 +252,7 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     // set the text style
     text2.setStyle(sf::Text::Bold | sf::Text::Underlined);
 
-    text2.setPosition(sf::Vector2f(400.f, 500.f));
+    text2.setPosition(sf::Vector2f(300.f, 500.f));
 
     // inside the main loop, between window.clear() and window.display()
     this->_data->window->draw(text2);
@@ -298,7 +298,7 @@ void SimulationState::init_bus()
 
     bus.setTextureRect(bus_texture);
 
-    bus.setPosition(sf::Vector2f(5.f, 20.f));
+    bus.setPosition(sf::Vector2f(350.f, 20.f));
 
     bus.setScale(sf::Vector2<float>(0.1, 0.1));
 }
