@@ -78,16 +78,6 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
     this->times.clear();
 
     set_simulation_parameters(time);
-
-    if (!bus_texture.loadFromFile("assets/img/bus_sprites.png"))
-    {
-        throw GameException("Couldn't find file: assets/img/bus_sprites.png");
-    }
-
-    if (!bus_stops_texture.loadFromFile("assets/img/bus_stop_sprites.png"))
-    {
-        throw GameException("Couldn't find file: assets/img/bus_stop_sprites.png");
-    }
 }
 
 SimulationState::SimulationState(GameDataRef data, std::list<std::pair<int, int>> _simulation_times,
@@ -99,6 +89,15 @@ SimulationState::SimulationState(GameDataRef data, std::list<std::pair<int, int>
 
 void SimulationState::init_state()
 {
+    if (!bus_texture.loadFromFile("assets/img/bus_sprites.png"))
+    {
+        throw GameException("Couldn't find file: assets/img/bus_sprites.png");
+    }
+
+    if (!bus_stops_texture.loadFromFile("assets/img/bus_stop_sprites.png"))
+    {
+        throw GameException("Couldn't find file: assets/img/bus_stop_sprites.png");
+    }
     sf::View view(sf::FloatRect({0.f, 0.f}, {1000.f, 600.f}));
     this->_data->window->setView(view);
     init_bus_stops();
