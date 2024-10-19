@@ -13,6 +13,12 @@ void MainMenuState::init_state()
 {
     this->_data->gui.setWindow(*this->_data->window);
     this->_data->gui.loadWidgetsFromFile("assets/screens/main_menu.txt");
+    this->_data->gui.get<tgui::Button>("play_button")->onPress([this] {
+            this->_data->states.add_state(Engine::StateRef(new SimulationState(this->_data)), false);
+        });
+    this->_data->gui.get<tgui::Button>("store_button")->onPress([this] {
+            this->_data->states.add_state(Engine::StateRef(new StoreState(this->_data)), false);
+        });
 }
 
 void MainMenuState::update_inputs()
@@ -21,13 +27,6 @@ void MainMenuState::update_inputs()
     while (const std::optional event = this->_data->window->pollEvent())
     {
         this->_data->gui.handleEvent(*event);
-        this->_data->gui.get<tgui::Button>("play_button")->onPress([this] {
-            this->_data->states.add_state(Engine::StateRef(new SimulationState(this->_data)), false);
-        });
-
-        this->_data->gui.get<tgui::Button>("store_button")->onPress([this] {
-            this->_data->states.add_state(Engine::StateRef(new StoreState(this->_data)), false);
-        });
 
         if (event->is<sf::Event::Closed>())
         {
