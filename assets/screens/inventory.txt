@@ -10,9 +10,9 @@ Picture.Picture1 {
 Label.title {
     AutoSize = true;
     HorizontalAlignment = Center;
-    Position = (160, 40);
+    Position = (300, 20);
     Size = (413, 78);
-    Text = "Route Master";
+    Text = "Inventory";
     TextSize = 60;
 
     Renderer {
@@ -42,72 +42,10 @@ Label.title {
     }
 }
 
-Button.play_button {
-    Position = (270, 260);
-    Size = (180, 63);
-    Text = Play;
-    TextSize = 30;
-
-    Renderer {
-        BackgroundColor = #F5F5F5;
-        BackgroundColorDisabled = #E6E6E6;
-        BackgroundColorDown = #EBEBEB;
-        BackgroundColorHover = white;
-        BorderColor = #3C3C3C;
-        BorderColorDisabled = #7D7D7D;
-        BorderColorDown = black;
-        BorderColorFocused = #1E1EB4;
-        BorderColorHover = black;
-        Borders = (1, 1, 1, 1);
-        TextColor = #3C3C3C;
-        TextColorDisabled = #7D7D7D;
-        TextColorDown = black;
-        TextColorHover = black;
-        Texture = None;
-        TextureDisabled = None;
-        TextureDown = None;
-        TextureDownFocused = None;
-        TextureDownHover = None;
-        TextureFocused = None;
-        TextureHover = None;
-    }
-}
-
-Button.store_button {
-    Position = (270, 350);
-    Size = (180, 63);
-    Text = Store;
-    TextSize = 30;
-
-    Renderer {
-        BackgroundColor = #F5F5F5;
-        BackgroundColorDisabled = #E6E6E6;
-        BackgroundColorDown = #EBEBEB;
-        BackgroundColorHover = white;
-        BorderColor = #3C3C3C;
-        BorderColorDisabled = #7D7D7D;
-        BorderColorDown = black;
-        BorderColorFocused = #1E1EB4;
-        BorderColorHover = black;
-        Borders = (1, 1, 1, 1);
-        TextColor = #3C3C3C;
-        TextColorDisabled = #7D7D7D;
-        TextColorDown = black;
-        TextColorHover = black;
-        Texture = None;
-        TextureDisabled = None;
-        TextureDown = None;
-        TextureDownFocused = None;
-        TextureDownHover = None;
-        TextureFocused = None;
-        TextureHover = None;
-    }
-}
-
-Button.inventory_button {
+Button.exit_button {
     Position = (270, 440);
     Size = (180, 63);
-    Text = Inventory;
+    Text = Exit;
     TextSize = 30;
 
     Renderer {

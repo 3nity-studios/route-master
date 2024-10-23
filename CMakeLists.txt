@@ -177,6 +177,8 @@ set(
   ${SRCROOT}/states/map_viewer_state.cpp
   ${INCROOT}/states/simulation_state.hpp
   ${SRCROOT}/states/simulation_state.cpp
+  ${INCROOT}/states/inventory_state.hpp
+  ${SRCROOT}/states/inventory_state.cpp
 )
 add_library(route_master_states ${RM_STATES_SRC})
 add_library(route_master::states ALIAS route_master_states)

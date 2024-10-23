@@ -1,6 +1,7 @@
 #include "states/main_menu_state.hpp"
 #include "states/simulation_state.hpp"
 #include "states/store_state.hpp"
+#include "states/inventory_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
 #include <string>
@@ -18,6 +19,9 @@ void MainMenuState::init_state()
         });
     this->_data->gui.get<tgui::Button>("store_button")->onPress([this] {
             this->_data->states.add_state(Engine::StateRef(new StoreState(this->_data)), false);
+        });
+    this->_data->gui.get<tgui::Button>("inventory_button")->onPress([this] {
+            this->_data->states.add_state(Engine::StateRef(new InventoryState(this->_data)), false);
         });
 }
 
