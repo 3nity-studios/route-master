@@ -203,7 +203,6 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     layerZero.update(duration);
     this->_data->window->draw(layerZero);
     this->_data->window->draw(layerOne);
-    this->_data->window->draw(layerTwo);
 
     // write text
     sf::Font font("assets/fonts/joystix.ttf");
@@ -268,6 +267,7 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     // inside the main loop, between window.clear() and window.display()
     this->_data->window->draw(text2);
 
+    this->_data->window->draw(layerTwo);
     // Displays rendered objects
     this->_data->window->display();
 }
