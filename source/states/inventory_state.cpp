@@ -6,10 +6,13 @@
 
 InventoryState::InventoryState(GameDataRef data) : _data(data)
 {
-    for (int i = 0; i < this->_data->player.get_buses().size(); ++i)
+    auto buses = this->_data->player.get_buses();
+    for (int i = 0; i < buses.size(); ++i)
     {
-        auto &item = this->_data->player.get_buses()[i];
+        auto &item = buses[i];
 
+        std::cout << item.get_name();
+        
         // Create a button for doing maintenance to the bus
         auto buyButton = tgui::Button::create();
         buyButton->setWidgetName(item.get_id() + "RepairButton");
@@ -99,9 +102,32 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
     playerBalanceText.setPosition({this->_data->window->getSize().x - 200.0f, 40.0f});
     this->_data->window->draw(playerBalanceText);
 
-    for (int i = 0; i < this->_data->player.get_buses().size(); ++i)
+    // Create a header for the table
+    sf::Text headerText(font);
+    headerText.setString("ID\tName\tEngine State\tBreaks State\tTires State\tFuel");
+    headerText.setCharacterSize(20);
+    headerText.setFillColor(sf::Color::Black);
+    headerText.setStyle(sf::Text::Bold);
+
+    // Set the position of the header text
+    headerText.setPosition({10.0f, 90.0f});
+    this->_data->window->draw(headerText);
+
+    auto buses = this->_data->player.get_buses();
+    for (int i = 0; i < buses.size(); ++i)
     {
-        const auto &item = this->_data->player.get_buses()[i];
+        const auto &item = buses[i];
+
+        // Create a text object for the item ID
+        sf::Text idText(font);
+        idText.setString(std::to_string(item.get_id()));
+        idText.setCharacterSize(20);
+        idText.setFillColor(sf::Color::Black);
+        idText.setStyle(sf::Text::Regular);
+
+        // Set the position of the ID text
+        idText.setPosition({10.0f, 120.0f + (i * 30.0f)});
+        this->_data->window->draw(idText);
 
         // Create a text object for the item name
         sf::Text itemText(font);
@@ -111,51 +137,51 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
         itemText.setStyle(sf::Text::Regular);
 
         // Set the position of the text
-        itemText.setPosition({10.0f, 90.0f + (i * 30.0f)});
+        itemText.setPosition({60.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(itemText);
 
         // Create a text object for the bus engine state
         sf::Text engineStateText(font);
-        engineStateText.setString("Engine State: " + std::to_string(item.get_engine_state()));
+        engineStateText.setString(std::to_string(item.get_engine_state()));
         engineStateText.setCharacterSize(20);
         engineStateText.setFillColor(sf::Color::Black);
         engineStateText.setStyle(sf::Text::Regular);
 
         // Set the position of the engine state text
-        engineStateText.setPosition({150.0f, 90.0f + (i * 30.0f)});
+        engineStateText.setPosition({210.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(engineStateText);
 
         // Create a text object for the bus breaks state
         sf::Text breaksStateText(font);
-        breaksStateText.setString("Breaks State: " + std::to_string(item.get_breaks_state()));
+        breaksStateText.setString(std::to_string(item.get_breaks_state()));
         breaksStateText.setCharacterSize(20);
         breaksStateText.setFillColor(sf::Color::Black);
         breaksStateText.setStyle(sf::Text::Regular);
 
         // Set the position of the breaks state text
-        breaksStateText.setPosition({300.0f, 90.0f + (i * 30.0f)});
+        breaksStateText.setPosition({360.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(breaksStateText);
 
         // Create a text object for the bus tires state
         sf::Text tiresStateText(font);
-        tiresStateText.setString("Tires State: " + std::to_string(item.get_tires_state()));
+        tiresStateText.setString(std::to_string(item.get_tires_state()));
         tiresStateText.setCharacterSize(20);
         tiresStateText.setFillColor(sf::Color::Black);
         tiresStateText.setStyle(sf::Text::Regular);
 
         // Set the position of the tires state text
-        tiresStateText.setPosition({450.0f, 90.0f + (i * 30.0f)});
+        tiresStateText.setPosition({510.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(tiresStateText);
 
         // Create a text object for the bus fuel level
         sf::Text fuelText(font);
-        fuelText.setString("Fuel: " + std::to_string(item.get_fuel()));
+        fuelText.setString(std::to_string(item.get_fuel()));
         fuelText.setCharacterSize(20);
         fuelText.setFillColor(sf::Color::Black);
         fuelText.setStyle(sf::Text::Regular);
 
         // Set the position of the fuel text
-        fuelText.setPosition({600.0f, 90.0f + (i * 30.0f)});
+        fuelText.setPosition({660.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(fuelText);
     }
 
