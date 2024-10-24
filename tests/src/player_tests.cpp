@@ -111,6 +111,6 @@ TEST_CASE("Store buy_bus_maintenance", "[store_buy_bus_maintenance]") {
     Player player(1, "Alice", 10000);
     Bus bus(0, "Bus1", 50, {}, 0);
     store.add_bus_to_inventory(bus, 50, 1);
-    store.buy_bus_maintenance(bus, player, true, true, true);
+    store.buy_bus_maintenance(bus.get_id(), player, true, true, true);
     REQUIRE(player.get_balance() < 10000);
 }

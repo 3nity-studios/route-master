@@ -111,9 +111,9 @@ void Store::buy_item(Player &player, int item_id, int amount)
     }
 }
 
-void Store::buy_bus_maintenance(Bus &bus, Player &player, bool repair_engine, bool repair_breaks, bool repair_tires)
+void Store::buy_bus_maintenance(int id, Player &player, bool repair_engine, bool repair_breaks, bool repair_tires)
 {
-    auto prices = bus.calc_maintenance_price();
+    auto prices = player.get_bus(id).calc_maintenance_price();
     int total_price = 0;
 
     if (repair_engine)
@@ -136,6 +136,6 @@ void Store::buy_bus_maintenance(Bus &bus, Player &player, bool repair_engine, bo
     else
     {
         player.decrease_balance(total_price);
-        bus.repair_bus(repair_engine, repair_breaks, repair_tires);
+        player.get_bus(id).repair_bus(repair_engine, repair_breaks, repair_tires);
     }
 }

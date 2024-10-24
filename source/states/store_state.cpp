@@ -51,7 +51,7 @@ void StoreState::update_items_to_show(tgui::String filter)
         // Create a button for buying the item
         auto buyButton = tgui::Button::create();
         buyButton->setWidgetName(item.get_id() + "BuyButton");
-        buyButton->setPosition({450.0f, 90.0f + (i * 30.0f)});
+        buyButton->setPosition({450.0f, 120.0f + (i * 30.0f)});
         buyButton->setText("Buy " + item.get_name());
         buyButton->onPress([this, item] { 
             this->_data->store.buy_item(this->_data->player, item.get_id(), 1);
@@ -73,7 +73,7 @@ void StoreState::init_state()
 
     tgui::ComboBox::Ptr comboBox = tgui::ComboBox::create();
     comboBox->setWidgetName("filter_combobox");
-    comboBox->setPosition(50, 50);
+    comboBox->setPosition(600.0f, 90.0f);
     comboBox->addItem("All");
     comboBox->addItem("Buses");
     comboBox->addItem("Employees");
@@ -118,6 +118,12 @@ void StoreState::update_state(float dt __attribute__((unused)))
 void StoreState::draw_state(float dt __attribute__((unused)))
 {
     this->_data->gui.draw();
+    
+    sf::RectangleShape rectangle(sf::Vector2f(5, 80));
+    rectangle.setPosition({5, 85});
+    rectangle.setFillColor(sf::Color(255, 255, 255, 128));
+    rectangle.setSize(sf::Vector2f(440, 400));
+    this->_data->window->draw(rectangle);
 
     // write text
     sf::Font font("assets/fonts/joystix.ttf");
@@ -151,6 +157,31 @@ void StoreState::draw_state(float dt __attribute__((unused)))
     playerBalanceText.setPosition({this->_data->window->getSize().x - 200.0f, 40.0f});
     this->_data->window->draw(playerBalanceText);
 
+    // Draw table headers
+    sf::Text headerName(font);
+    headerName.setString("Item Name");
+    headerName.setCharacterSize(20);
+    headerName.setFillColor(sf::Color::Black);
+    headerName.setStyle(sf::Text::Bold);
+    headerName.setPosition({10.0f, 90.0f});
+    this->_data->window->draw(headerName);
+
+    sf::Text headerPrice(font);
+    headerPrice.setString("Price");
+    headerPrice.setCharacterSize(20);
+    headerPrice.setFillColor(sf::Color::Black);
+    headerPrice.setStyle(sf::Text::Bold);
+    headerPrice.setPosition({150.0f, 90.0f});
+    this->_data->window->draw(headerPrice);
+
+    sf::Text headerAmount(font);
+    headerAmount.setString("Amount");
+    headerAmount.setCharacterSize(20);
+    headerAmount.setFillColor(sf::Color::Black);
+    headerAmount.setStyle(sf::Text::Bold);
+    headerAmount.setPosition({300.0f, 90.0f});
+    this->_data->window->draw(headerAmount);
+
     int i = 0;
     for (const auto &item : items_to_show)
     {
@@ -162,29 +193,29 @@ void StoreState::draw_state(float dt __attribute__((unused)))
         itemText.setStyle(sf::Text::Regular);
 
         // Set the position of the text
-        itemText.setPosition({10.0f, 90.0f + (i * 30.0f)});
+        itemText.setPosition({10.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(itemText);
 
         // Create a text object for the item price
         sf::Text priceText(font);
-        priceText.setString("Price: " + std::to_string(item.get_price()));
+        priceText.setString(std::to_string(item.get_price()));
         priceText.setCharacterSize(20);
         priceText.setFillColor(sf::Color::Black);
         priceText.setStyle(sf::Text::Regular);
 
         // Set the position of the price text
-        priceText.setPosition({150.0f, 90.0f + (i * 30.0f)});
+        priceText.setPosition({150.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(priceText);
 
         // Create a text object for the item amount
         sf::Text amountText(font);
-        amountText.setString("Amount: " + std::to_string(item.get_amount()));
+        amountText.setString(std::to_string(item.get_amount()));
         amountText.setCharacterSize(20);
         amountText.setFillColor(sf::Color::Black);
         amountText.setStyle(sf::Text::Regular);
 
         // Set the position of the amount text
-        amountText.setPosition({300.0f, 90.0f + (i * 30.0f)});
+        amountText.setPosition({300.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(amountText);
 
         ++i;
