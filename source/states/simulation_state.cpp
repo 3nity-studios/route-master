@@ -20,8 +20,8 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
 
     TrafficLight light1(7, std::vector<std::pair<StreetConnectionIDs, bool>>{std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(4,5), true)}, 10, 450.f, 250.f);
 
-    VisualElement curve1(8, 775.f, 40.f);
-    VisualElement curve2(9, 700.f, 350.f);
+    VisualElement curve1(8, 180.f, 200.f);
+    VisualElement curve2(9, 800.f, 500.f);
 
     city.add_bus_stop(stop1);
     city.add_bus_stop(stop2);
