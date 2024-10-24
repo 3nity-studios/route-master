@@ -12,6 +12,7 @@ MainMenuState::MainMenuState(GameDataRef data) : _data(data)
 
 void MainMenuState::init_state()
 {
+    tgui::Theme::setDefault("assets/tgui/Kenney.txt");
     this->_data->gui.setWindow(*this->_data->window);
     this->_data->gui.loadWidgetsFromFile("assets/screens/main_menu.txt");
     this->_data->gui.get<tgui::Button>("play_button")->onPress([this] {

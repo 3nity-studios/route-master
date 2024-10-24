@@ -1,0 +1,333 @@
+// Theme Template by Derwins Ochoa
+Button {
+    BackgroundColor              = None;
+    BackgroundColorDisabled      = None;
+    BackgroundColorDown          = None;
+    BackgroundColorDownFocused   = None;
+    BackgroundColorDownHover     = None;
+    BackgroundColorFocused       = None;
+    BackgroundColorHover         = None;
+    BorderColor                  = None;
+    BorderColorDisabled          = None;
+    BorderColorDown              = None;
+    BorderColorDownFocused       = None;
+    BorderColorDownHover         = None;
+    BorderColorFocused           = None;
+    BorderColorHover             = None;
+    Borders                      = (0, 0, 0, 0);
+    Font                         = "kenney/Font/Kenney Future.ttf";
+    Opacity                      =  1;
+    OpacityDisabled              = -1;
+    RoundedBorderRadius          =  5;
+    TextColor                    = #EEEEEE;
+    TextColorDisabled            = #7D7D7D;
+    TextColorDown                = #3C3C3C;
+    TextColorDownFocused         = #FFFFFF;
+    TextColorDownHover           = #DDDDDD;
+    TextColorFocused             = #FFFFFF;
+    TextColorHover               = #FFFFFF;
+    TextOutlineColor             = None;
+    TextOutlineThickness         = 0;
+    TextStyle                    = Regular;
+    TextStyleDisabled            = Regular;
+    TextStyleDown                = Regular;
+    TextStyleDownFocused         = Regular;
+    TextStyleDownHover           = Regular;
+    TextStyleFocused             = Regular;
+    TextStyleHover               = Regular;
+    Texture                      = "kenney/PNG/Blue/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
+    TextureDisabled              = None;
+    TextureDown                  = None;
+    TextureDownFocused           = None;
+    TextureDownHover             = "kenney/PNG/Blue/Default/button_rectangle_flat.png" Middle(4, 4, 96, 32) Smooth;
+    TextureFocused               = None;
+    TextureHover                 = "kenney/PNG/Blue/Default/button_rectangle_depth_gradient.png" Middle(4, 4, 96, 32) Smooth;
+    TransparentTexture           = False;
+}
+
+Scrollbar {
+    ArrowBackgroundColor         = None;
+    ArrowBackgroundColorHover    = None;
+    ArrowColor                   = None;
+    ArrowColorHover              = None;
+    TextureArrowDown             = "kenney/PNG/Blue/Default/arrow_basic_s_small.png" Smooth;
+    TextureArrowDownHover        = "kenney/PNG/Extra/Default/icon_arrow_down_outline.png" Smooth;
+    TextureArrowUp               = "kenney/PNG/Blue/Default/arrow_basic_n_small.png" Smooth;
+    TextureArrowUpHover          = "kenney/PNG/Extra/Default/icon_arrow_up_outline.png" Smooth;
+    TextureThumb                 = None;
+    TextureThumbHover            = None;
+    TextureTrack                 = None;
+    TextureTrackHover            = None;
+    ThumbColor                   = #35BAF3;
+    ThumbColorHover              = #55FFFF;
+    TrackColor                   = #C3C3C3;
+    TrackColorHover              = #DDDDDD;
+}
+
+ChatBox {
+    BackgroundColor              = None;
+    BorderColor                  = None;
+    Borders                      = (0, 0, 0, 0);
+    Font                         = "kenney/Font/Kenney Future.ttf";
+    Padding                      = (10, 10, 10, 10);
+    ScrollbarWidth               =  10;
+    TextureBackground            = "kenney/PNG/Extra/Default/button_rectangle_line.png" Middle(7, 7, 96, 32) Smooth;
+}
+
+TextColor         = rgb(190, 190, 190);
+TextColorHover    = rgb(250, 250, 250);
+SelectedTextColor = White;
+BorderColor       = Black;
+BackgroundColor   = rgb(80,  80,  80);
+BackgroundColorHover = rgb(100, 100, 100);
+SelectedBackgroundColor = rgb(10, 110, 255);
+SelectedBackgroundColorHover = rgb(30, 150, 255);
+
+CheckBox {
+    BackgroundColor              = None;
+    BackgroundColorDisabled      = None;
+    BackgroundColorHover         = None;
+    BorderColor                  = None;
+    BorderColorDisabled          = None;
+    BorderColorFocused           = #35BAF3;
+    BorderColorCheckedFocused    = #35BAF3;
+    BorderColorHover             = None;
+    Borders                      = (2, 2, 2, 2);
+    CheckColor                   = None;
+    CheckColorDisabled           = None;
+    CheckColorHover              = None;
+    Font                         = "kenney/Font/Kenney Future.ttf";
+    TextColor                    = black;
+    TextColorDisabled            = None;
+    TextColorHover               = None;
+    TextDistanceRatio            =  0.2;
+    TextureChecked               = "kenney/PNG/Blue/Default/check_square_grey_checkmark.png" Middle(5, 6, 22, 20) Smooth;
+    TextureCheckedDisabled       = None;
+    TextureCheckedFocused        = None;
+    TextureCheckedHover          = None;
+    TextureUnchecked             = "kenney/PNG/Blue/Default/check_square_grey.png" Middle(7, 7, 16, 16) Smooth;
+    TextureUncheckedDisabled     = None;
+    TextureUncheckedFocused      = None;
+    TextureUncheckedHover        = None;
+}
+
+ChildWindow {
+    BackgroundColor              = #E6E6E6;
+    BorderBelowTitleBar          =  0;
+    BorderColor                  = None;
+    Borders                      = (0, 0, 0, 0);
+    DistanceToSide               =  3;
+    PaddingBetweenButtons        =  5;
+    ShowTextOnTitleButtons       = False;
+    TextureBackground            = "kenney/PNG/Blue/Default/button_rectangle_depth_border.png" Part(0, 6, 192, 54) Middle(9, 9, 96, 29) Smooth;
+    TextureTitleBar              = "kenney/PNG/Blue/Default/button_rectangle_gradient.png" Part(0, 0, 192, 54) Middle(9, 9, 96, 29) Smooth;
+    TitleBarColor                = None;
+    TitleColor                   = #FFFFFF;
+    TitleBarHeight               =  25;
+    Font                         = "kenney/Font/Kenney Future.ttf";
+
+    CloseButton {
+        BackgroundColor          = None;
+        BackgroundColorDisabled  = None;
+        BackgroundColorDown      = None;
+        BackgroundColorHover     = None;
+        BorderColor              = None;
+        BorderColorDisabled      = None;
+        BorderColorDown          = None;
+        BorderColorFocused       = None;
+        BorderColorHover         = None;
+        Borders                  = (0, 0, 0, 0);
+        TextColor                = None;
+        TextColorDisabled        = None;
+        TextColorDown            = None;
+        TextColorHover           = None;
+        Texture                  = "kenney/PNG/Red/Default/icon_cross.png" Smooth;
+        TextureDisabled          = None;
+        TextureDown              = None;
+        TextureDownFocused       = None;
+        TextureDownHover         = None;
+        TextureFocused           = None;
+        TextureHover             = "kenney/PNG/Red/Default/icon_outline_cross.png" Smooth;
+    }
+
+    MaximizeButton {
+        BackgroundColor          = None;
+        BackgroundColorDown      = None;
+        BackgroundColorHover     = None;
+        BorderColor              = None;
+        BorderColorDown          = None;
+        BorderColorHover         = None;
+        Borders                  = (0, 0, 0, 0);
+        TextColor                = None;
+        TextColorDown            = None;
+        TextColorHover           = None;
+        Texture                  = "kenney/PNG/Green/Default/icon_circle.png" Smooth;
+        TextureDisabled          = None;
+        TextureDown              = None;
+        TextureDownFocused       = None;
+        TextureDownHover         = None;
+        TextureFocused           = None;
+        TextureHover             = "kenney/PNG/Green/Default/icon_outline_circle.png" Smooth;
+    }
+
+    MinimizeButton {
+        BackgroundColor          = #F5F5F5;
+        BackgroundColorDown      = #EBEBEB;
+        BackgroundColorHover     = white;
+        BorderColor              = #3C3C3C;
+        BorderColorDown          = black;
+        BorderColorHover         = black;
+        Borders                  = (0, 0, 0, 0);
+        TextColor                = #3C3C3C;
+        TextColorDown            = black;
+        TextColorHover           = black;
+        Texture                  = "kenney/PNG/Yellow/Default/icon_circle.png" Smooth;
+        TextureDisabled          = None;
+        TextureDown              = None;
+        TextureDownFocused       = None;
+        TextureDownHover         = None;
+        TextureFocused           = None;
+        TextureHover             = "kenney/PNG/Yellow/Default/icon_outline_circle.png" Smooth;
+    }
+}
+
+ComboBox {
+    ArrowBackgroundColor         = rgb(80, 80, 80);
+    ArrowColor                   = rgb(190, 190, 190);
+    BackgroundColor              = rgb(80, 80, 80);
+    BorderColor                  = Black;
+    Font                         = "kenney/Font/Kenney Future.ttf";
+    Padding                      = (3, 3, 3, 3);
+    TextColor                    = white;
+    TextureArrow                 = "kenney/PNG/Extra/Default/icon_arrow_down_light.png" Smooth;
+    TextureArrowDisabled         = None;
+    TextureArrowHover            = "kenney/PNG/Extra/Default/icon_arrow_down_outline.png" Smooth;
+    TextureBackground            = "kenney/PNG/Blue/Default/button_square_depth_gradient.png" Middle(16, 16, 32, 32) Smooth;
+    TextureBackgroundDisabled    = None;
+}
+
+ListBox {
+    BackgroundColor              = rgb(80, 80, 80);
+    BackgroundColorHover         = rgb(100, 100, 100);
+    Borders                      = (0, 0, 0, 0);
+    BorderColor                  = None;
+    Padding                      = (10, 10, 10, 10);
+    SelectedBackgroundColor      = #35BAF3;
+    SelectedBackgroundColorHover = #0E7EA9;
+    SelectedTextColor            = #FFFFFF;
+    TextColor                    = #3C3C3C;
+    TextColorHover               = #EEEEEE;
+    TextureBackground            = "kenney/PNG/Extra/Default/button_rectangle_line.png" Part(0, 9, 192, 54) Middle(9, 9, 96, 26) Smooth;
+}
+
+EditBox {
+    BackgroundColor              = None;
+    BackgroundColorHover         = None;
+    BorderColor                  = None;
+    CaretColor                   = #35BAF3;
+    CaretWidth                   = 2;
+    DefaultTextColor             = #3C3C3C;
+    DefaultTextStyle             = Regular;
+    Font                         = "kenney/Font/Kenney Future.ttf";
+    Padding                      = (10, 10, 10, 10);
+    SelectedTextBackgroundColor  = #35BAF3;
+    SelectedTextColor            = White;
+    TextColor                    = #3C3C3C;
+    Texture                      = "kenney/PNG/Extra/Default/input_rectangle.png" Middle(9, 9, 96, 32) Smooth;
+    TextureDisabled              = None;
+    TextureFocused               = "kenney/PNG/Blue/Default/button_rectangle_line.png" Middle(9, 9, 96, 32) Smooth;
+    TextureHover                 = "kenney/PNG/Blue/Default/button_rectangle_border.png" Middle(9, 9, 96, 32) Smooth;
+}
+
+Knob {
+    BackgroundColor              = #35BAF3;
+    BorderColor                  = #10394A;
+    Borders                      = (2, 2, 2, 2);
+    ImageRotation                = 0;
+    TextureBackground            = "kenney/PNG/Blue/Default/button_round_gradient.png" Smooth;
+    TextureForeground            = None;
+    ThumbColor                   = #10394A;
+}
+
+Label {
+    BorderColor                  = None;
+    Font                         = "kenney/Font/Kenney Future.ttf";
+    TextColor                    = white;
+    TextureBackground            = None;
+}
+
+ListView {
+    HeaderBackgroundColor = rgb( 95,  95,  95);
+    HeaderTextColor       = rgb(210, 210, 210);
+    Borders               = (1, 1, 1, 1);
+}
+
+MenuBar {
+    TextureBackground             = "Black.png" Part(45, 247, 8, 6) Middle(2, 2) NoSmooth;
+    TextureItemBackground         = "Black.png" Part(78, 105, 8, 4) Middle(2, 0, 4, 2) NoSmooth;
+    TextureSelectedItemBackground = "Black.png" Part(113, 238, 8, 6) Middle(2, 2) NoSmooth;
+    DistanceToSide                = 5;
+}
+
+ProgressBar {
+    TextureBackground = "Black.png" Part(1, 1, 90, 40) Middle(20, 0) Smooth;
+    TextureFill       = "Black.png" Part(1, 43, 90, 40) Middle(16, 0) Smooth;
+    TextColorFilled   = rgb(250, 250, 250);
+}
+
+RadioButton {
+    TextureUnchecked        = "Black.png" Part(219, 137, 32, 32) Smooth;
+    TextureChecked          = "Black.png" Part(187, 35, 32, 32) Smooth;
+    TextureUncheckedHover   = "Black.png" Part(187, 69, 32, 32) Smooth;
+    TextureCheckedHover     = "Black.png" Part(253, 137, 32, 32) Smooth;
+    TextureUncheckedFocused = "Black.png" Part(253, 103, 32, 32) Smooth;
+    TextureCheckedFocused   = "Black.png" Part(187, 1, 32, 32) Smooth;
+}
+
+Scrollbar {
+    TextureTrack          = "Black.png" Part(255, 1, 20, 20) Smooth;
+    TextureTrackHover     = "Black.png" Part(284, 203, 20, 20) Smooth;
+    TextureThumb          = "Black.png" Part(23, 230, 20, 20) Smooth;
+    TextureThumbHover     = "Black.png" Part(306, 193, 20, 20) Smooth;
+    TextureArrowUp        = "Black.png" Part(284, 225, 20, 20) Middle(0, 0, 20, 19) Smooth;
+    TextureArrowUpHover   = "Black.png" Part(285, 171, 20, 20) Middle(0, 0, 20, 19) Smooth;
+    TextureArrowDown      = "Black.png" Part(1, 230, 20, 20) Middle(0, 1, 20, 19) Smooth;
+    TextureArrowDownHover = "Black.png" Part(306, 225, 20, 20) Middle(0, 1, 20, 19) Smooth;
+}
+
+Slider {
+    TextureTrack      = "Black.png" Part(172, 209, 20, 45) Middle(0, 15) Smooth;
+    TextureTrackHover = "Black.png" Part(194, 209, 20, 45) Middle(0, 15) Smooth;
+    TextureThumb      = "Black.png" Part(253, 171, 30, 30) Smooth;
+}
+
+SpinButton {
+    TextureArrowUp        = "Black.png" Part(284, 225, 20, 20) Middle(0, 0, 20, 19) Smooth;
+    TextureArrowUpHover   = "Black.png" Part(285, 171, 20, 20) Middle(0, 0, 20, 19) Smooth;
+    TextureArrowDown      = "Black.png" Part(1, 230, 20, 20) Middle(0, 1, 20, 19) Smooth;
+    TextureArrowDownHover = "Black.png" Part(306, 225, 20, 20) Middle(0, 1, 20, 19) Smooth;
+    BorderBetweenArrows    = 0;
+}
+
+Tabs {
+    TextureTab         = "Black.png" Part(1, 196, 60, 32) Middle(16, 0) Smooth;
+    TextureSelectedTab = "Black.png" Part(63, 112, 60, 32) Middle(16, 0) Smooth;
+    DistanceToSide     = 8;
+}
+
+TextArea {
+    TextureBackground = "Black.png" Part(63, 146, 48, 48) Middle(16) Smooth;
+    CaretColor        = rgb(110, 110, 255);
+    Padding           = (3, 3, 3, 3);
+}
+
+ToolTip {
+    BackgroundColor = rgb(80, 80, 80);
+    Borders         = (1, 1, 1, 1);
+    Padding         = (2, 2, 2, 2);
+}
+
+ToggleButton {
+    Texture     = "Black.png" Part(140, 53, 45, 50) Middle(10, 0) Smooth;
+    TextureDown = "Black.png" Part(125, 105, 45, 50) Middle(10, 0) Smooth;
+}

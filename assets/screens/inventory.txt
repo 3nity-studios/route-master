@@ -11,33 +11,35 @@ Label.title {
     AutoSize = true;
     HorizontalAlignment = Center;
     Position = (220, 20);
-    Size = (413, 78);
-    Text = "Inventory";
+    Size = (270, 73);
+    Text = Inventory;
     TextSize = 60;
 
     Renderer {
-        BackgroundColor = transparent;
-        BorderColor = #3C3C3C;
-        Borders = (0, 0, 0, 0);
-        TextColor = #3C3C3C;
+        BorderColor = None;
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        TextColor = white;
+        TextOutlineColor = black;
+        TextOutlineThickness = 2;
         TextureBackground = None;
 
         Scrollbar {
-            ArrowBackgroundColor = #F5F5F5;
-            ArrowBackgroundColorHover = white;
-            ArrowColor = #3C3C3C;
-            ArrowColorHover = black;
-            TextureArrowDown = None;
-            TextureArrowDownHover = None;
-            TextureArrowUp = None;
-            TextureArrowUpHover = None;
+            ArrowBackgroundColor = None;
+            ArrowBackgroundColorHover = None;
+            ArrowColor = None;
+            ArrowColorHover = None;
+            TextureArrowDown = "../tgui/kenney/PNG/Blue/Default/arrow_basic_s_small.png" Smooth;
+            TextureArrowDownHover = "../tgui/kenney/PNG/Extra/Default/icon_arrow_down_outline.png" Smooth;
+            TextureArrowUp = "../tgui/kenney/PNG/Blue/Default/arrow_basic_n_small.png" Smooth;
+            TextureArrowUpHover = "../tgui/kenney/PNG/Extra/Default/icon_arrow_up_outline.png" Smooth;
             TextureThumb = None;
             TextureThumbHover = None;
             TextureTrack = None;
             TextureTrackHover = None;
-            ThumbColor = #DCDCDC;
-            ThumbColorHover = #E6E6E6;
-            TrackColor = #F5F5F5;
+            ThumbColor = #35BAF3;
+            ThumbColorHover = #55FFFF;
+            TrackColor = #C3C3C3;
+            TrackColorHover = #DDDDDD;
         }
     }
 }
@@ -45,30 +47,52 @@ Label.title {
 Button.exit_button {
     Position = (270, 500);
     Size = (180, 63);
-    Text = Exit;
-    TextSize = 30;
+    Text = "Back To Menu";
+    TextSize = 26;
 
     Renderer {
-        BackgroundColor = #F5F5F5;
-        BackgroundColorDisabled = #E6E6E6;
-        BackgroundColorDown = #EBEBEB;
-        BackgroundColorHover = white;
-        BorderColor = #3C3C3C;
-        BorderColorDisabled = #7D7D7D;
-        BorderColorDown = black;
-        BorderColorFocused = #1E1EB4;
-        BorderColorHover = black;
-        Borders = (1, 1, 1, 1);
-        TextColor = #3C3C3C;
+        BackgroundColor = None;
+        BackgroundColorDisabled = None;
+        BackgroundColorDown = None;
+        BackgroundColorDownFocused = None;
+        BackgroundColorDownHover = None;
+        BackgroundColorFocused = None;
+        BackgroundColorHover = None;
+        BorderColor = None;
+        BorderColorDisabled = None;
+        BorderColorDown = None;
+        BorderColorDownFocused = None;
+        BorderColorDownHover = None;
+        BorderColorFocused = None;
+        BorderColorHover = None;
+        Borders = (0, 0, 0, 0);
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        Opacity = 1;
+        OpacityDisabled = -1;
+        RoundedBorderRadius = 5;
+        TextColor = #EEEEEE;
         TextColorDisabled = #7D7D7D;
-        TextColorDown = black;
-        TextColorHover = black;
-        Texture = None;
+        TextColorDown = #3C3C3C;
+        TextColorDownFocused = #FFFFFF;
+        TextColorDownHover = #DDDDDD;
+        TextColorFocused = #FFFFFF;
+        TextColorHover = #FFFFFF;
+        TextOutlineColor = black;
+        TextOutlineThickness = 2;
+        TextStyle = Regular;
+        TextStyleDisabled = Regular;
+        TextStyleDown = Regular;
+        TextStyleDownFocused = Regular;
+        TextStyleDownHover = Regular;
+        TextStyleFocused = Regular;
+        TextStyleHover = Regular;
+        Texture = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
         TextureDisabled = None;
         TextureDown = None;
         TextureDownFocused = None;
-        TextureDownHover = None;
+        TextureDownHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_flat.png" Middle(4, 4, 96, 32) Smooth;
         TextureFocused = None;
-        TextureHover = None;
+        TextureHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gradient.png" Middle(4, 4, 96, 32) Smooth;
+        TransparentTexture = False;
     }
 }
