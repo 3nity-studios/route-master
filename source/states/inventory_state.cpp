@@ -6,23 +6,7 @@
 
 InventoryState::InventoryState(GameDataRef data) : _data(data)
 {
-    auto buses = this->_data->player.get_buses();
-    for (int i = 0; i < buses.size(); ++i)
-    {
-        auto &item = buses[i];
-
-        std::cout << item.get_name();
-        
-        // Create a button for doing maintenance to the bus
-        auto buyButton = tgui::Button::create();
-        buyButton->setWidgetName(item.get_id() + "RepairButton");
-        buyButton->setPosition({450.0f, 90.0f + (i * 30.0f)});
-        buyButton->setText("Repair " + item.get_name());
-        buyButton->onPress([this, item] {
-            this->_data->store.buy_bus_maintenance(item.get_id(), this->_data->player, true, true, true);
-        });
-        this->_data->gui.add(buyButton);
-    }
+    
 }
 
 void InventoryState::init_state()
@@ -33,6 +17,24 @@ void InventoryState::init_state()
     this->_data->gui.get<tgui::Button>("exit_button")->onPress([this] {
         this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), false);
     });
+
+    auto buses = this->_data->player.get_buses();
+    for (int i = 0; i < buses.size(); ++i)
+    {
+        auto &item = buses[i];
+
+        std::cout << item.get_name();
+        
+        // Create a button for doing maintenance to the bus
+        auto buyButton = tgui::Button::create();
+        buyButton->setWidgetName(item.get_id() + "RepairButton");
+        buyButton->setPosition({700.0f, 120.0f + (i * 30.0f)});
+        buyButton->setText("Repair " + item.get_name());
+        buyButton->onPress([this, item] {
+            this->_data->store.buy_bus_maintenance(item.get_id(), this->_data->player, true, true, true);
+        });
+        this->_data->gui.add(buyButton);
+    }
 }
 
 void InventoryState::update_inputs()
@@ -69,6 +71,12 @@ void InventoryState::update_state(float dt __attribute__((unused)))
 void InventoryState::draw_state(float dt __attribute__((unused)))
 {
     this->_data->gui.draw();
+
+    sf::RectangleShape rectangle(sf::Vector2f(5, 80));
+    rectangle.setPosition({5, 85});
+    rectangle.setFillColor(sf::Color(255, 255, 255, 128));
+    rectangle.setSize(sf::Vector2f(690, 400));
+    this->_data->window->draw(rectangle);
 
     // write text
     sf::Font font("assets/fonts/joystix.ttf");
@@ -116,7 +124,7 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
     headerEngineState.setCharacterSize(20);
     headerEngineState.setFillColor(sf::Color::Black);
     headerEngineState.setStyle(sf::Text::Bold);
-    headerEngineState.setPosition({150.0f, 90.0f});
+    headerEngineState.setPosition({130.0f, 90.0f});
     this->_data->window->draw(headerEngineState);
 
     sf::Text headerBreaksState(font);
@@ -124,7 +132,7 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
     headerBreaksState.setCharacterSize(20);
     headerBreaksState.setFillColor(sf::Color::Black);
     headerBreaksState.setStyle(sf::Text::Bold);
-    headerBreaksState.setPosition({300.0f, 90.0f});
+    headerBreaksState.setPosition({280.0f, 90.0f});
     this->_data->window->draw(headerBreaksState);
 
     sf::Text headerTiresState(font);
@@ -132,7 +140,7 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
     headerTiresState.setCharacterSize(20);
     headerTiresState.setFillColor(sf::Color::Black);
     headerTiresState.setStyle(sf::Text::Bold);
-    headerTiresState.setPosition({450.0f, 90.0f});
+    headerTiresState.setPosition({430.0f, 90.0f});
     this->_data->window->draw(headerTiresState);
 
     sf::Text headerFuel(font);
@@ -140,7 +148,7 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
     headerFuel.setCharacterSize(20);
     headerFuel.setFillColor(sf::Color::Black);
     headerFuel.setStyle(sf::Text::Bold);
-    headerFuel.setPosition({600.0f, 90.0f});
+    headerFuel.setPosition({580.0f, 90.0f});
     this->_data->window->draw(headerFuel);
 
     auto buses = this->_data->player.get_buses();
@@ -163,7 +171,7 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
         engineStateText.setCharacterSize(20);
         engineStateText.setFillColor(sf::Color::Black);
         engineStateText.setStyle(sf::Text::Regular);
-        engineStateText.setPosition({150.0f, 120.0f + (i * 30.0f)});
+        engineStateText.setPosition({130.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(engineStateText);
 
         // Create a text object for the bus breaks state
@@ -172,7 +180,7 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
         breaksStateText.setCharacterSize(20);
         breaksStateText.setFillColor(sf::Color::Black);
         breaksStateText.setStyle(sf::Text::Regular);
-        breaksStateText.setPosition({300.0f, 120.0f + (i * 30.0f)});
+        breaksStateText.setPosition({280.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(breaksStateText);
 
         // Create a text object for the bus tires state
@@ -181,7 +189,7 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
         tiresStateText.setCharacterSize(20);
         tiresStateText.setFillColor(sf::Color::Black);
         tiresStateText.setStyle(sf::Text::Regular);
-        tiresStateText.setPosition({450.0f, 120.0f + (i * 30.0f)});
+        tiresStateText.setPosition({430.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(tiresStateText);
 
         // Create a text object for the bus fuel level
@@ -190,7 +198,7 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
         fuelText.setCharacterSize(20);
         fuelText.setFillColor(sf::Color::Black);
         fuelText.setStyle(sf::Text::Regular);
-        fuelText.setPosition({600.0f, 120.0f + (i * 30.0f)});
+        fuelText.setPosition({580.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(fuelText);
     }
 

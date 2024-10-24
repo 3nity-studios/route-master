@@ -73,7 +73,7 @@ void StoreState::init_state()
 
     tgui::ComboBox::Ptr comboBox = tgui::ComboBox::create();
     comboBox->setWidgetName("filter_combobox");
-    comboBox->setPosition(50, 50);
+    comboBox->setPosition(600.0f, 90.0f);
     comboBox->addItem("All");
     comboBox->addItem("Buses");
     comboBox->addItem("Employees");
@@ -118,6 +118,12 @@ void StoreState::update_state(float dt __attribute__((unused)))
 void StoreState::draw_state(float dt __attribute__((unused)))
 {
     this->_data->gui.draw();
+    
+    sf::RectangleShape rectangle(sf::Vector2f(5, 80));
+    rectangle.setPosition({5, 85});
+    rectangle.setFillColor(sf::Color(255, 255, 255, 128));
+    rectangle.setSize(sf::Vector2f(440, 400));
+    this->_data->window->draw(rectangle);
 
     // write text
     sf::Font font("assets/fonts/joystix.ttf");

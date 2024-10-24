@@ -10,7 +10,7 @@ Picture.Picture1 {
 Label.title {
     AutoSize = true;
     HorizontalAlignment = Center;
-    Position = (300, 20);
+    Position = (220, 20);
     Size = (413, 78);
     Text = "Inventory";
     TextSize = 60;
@@ -43,7 +43,7 @@ Label.title {
 }
 
 Button.exit_button {
-    Position = (270, 440);
+    Position = (270, 500);
     Size = (180, 63);
     Text = Exit;
     TextSize = 30;
