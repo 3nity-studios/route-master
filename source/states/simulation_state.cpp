@@ -91,6 +91,7 @@ SimulationState::SimulationState(GameDataRef data, std::list<std::pair<int, int>
 
 void SimulationState::init_state()
 {
+    tgui::Theme::setDefault("assets/tgui/Kenney.txt");
     if (!bus_texture.loadFromFile("assets/img/bus_top_view.png"))
     {
         throw GameException("Couldn't find file: assets/img/bus_top_view.png");

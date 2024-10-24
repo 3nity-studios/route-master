@@ -64,6 +64,7 @@ void StoreState::update_items_to_show(tgui::String filter)
 
 void StoreState::init_state()
 {
+    tgui::Theme::setDefault("assets/tgui/Kenney.txt");
     this->_data->gui.setWindow(*this->_data->window);
     this->_data->gui.loadWidgetsFromFile("assets/screens/store.txt");
 

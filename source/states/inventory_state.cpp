@@ -11,6 +11,7 @@ InventoryState::InventoryState(GameDataRef data) : _data(data)
 
 void InventoryState::init_state()
 {
+    tgui::Theme::setDefault("assets/tgui/Kenney.txt");
     this->_data->gui.setWindow(*this->_data->window);
     this->_data->gui.loadWidgetsFromFile("assets/screens/inventory.txt");
 
