@@ -27,6 +27,7 @@ class SimulationState : public Engine::State
     void update_inputs();
     void update_state(float dt __attribute__((unused)));
     void update_bus();
+    void update_bus_stops();
     void draw_state(float dt __attribute__((unused)));
 
     void set_driver_sim(Employee _driver);
@@ -38,6 +39,9 @@ class SimulationState : public Engine::State
     std::list<sf::Sprite> bus_stops;
     std::list<std::pair<int, int>> times;
     std::list<std::shared_ptr<VisualElement>> elements_path;
+    std::list<int> bus_stops_passengers_amount;
+    std::vector<std::list<sf::CircleShape>> passengers;
+    SimulationInfo simulation_info; 
     sf::Sprite bus;
     sf::Clock simulation_clock;
     Employee driver_sim; 
@@ -48,4 +52,5 @@ class SimulationState : public Engine::State
     City city;
     sf::Texture bus_texture;
     sf::Texture bus_stops_texture;
+    int actual_stop;
 };
