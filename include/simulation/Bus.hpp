@@ -35,8 +35,8 @@ class Bus
     int get_tires_state() const noexcept;
     int get_fuel() const noexcept; 
 
-    void leave_passengers(BusStop &current_stop);
-    void add_passengers(const int& simulation_time, BusStop &bus_stop);
+    int leave_passengers(BusStop &current_stop);
+    int add_passengers(const int& simulation_time, BusStop &bus_stop);
     int get_attended_passengers() const noexcept;
     void reset();
     void repair_bus(bool repair_engine, bool repair_breaks, bool repair_tires);

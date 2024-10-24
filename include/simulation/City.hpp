@@ -10,6 +10,14 @@
 using VisualElementNodeList = Designar::SLList<Designar::GraphNode<std::shared_ptr<VisualElement>, Street, Designar::EmptyClass> *>;
 using StreetArcList = Designar::SLList<Designar::GraphArc<Designar::GraphNode<std::shared_ptr<VisualElement>, Street, Designar::EmptyClass>, std::shared_ptr<VisualElement>, Street, Designar::EmptyClass> *>;
 
+struct SimulationInfo
+{
+    Bus bus;
+    Employee employee;
+    std::list<std::pair<int, int>> times;
+    std::vector<std::pair<int, int>> passengers; 
+};
+
 class City
 {
     private:
@@ -34,5 +42,5 @@ class City
 
     void initialize_bus_stops();
     void update();
-    std::list<std::pair<int, int>> run_simulation(Bus &bus, Employee &driver, int time, StreetArcList path);
+    SimulationInfo run_simulation(Bus &bus, Employee &driver, int time, StreetArcList path);
 };

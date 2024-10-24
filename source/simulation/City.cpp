@@ -113,9 +113,15 @@ void City::update()
     }
 }
 
-std::list<std::pair<int, int>> City::run_simulation(Bus &bus, Employee &driver, int time, StreetArcList path)
+SimulationInfo City::run_simulation(Bus &bus, Employee &driver, int time, StreetArcList path)
 {
     std::list<std::pair<int, int>> times;
+    std::vector<std::pair<int, int>> passengers;
+
+    SimulationInfo info;
+
+    info.bus = bus;
+    info.employee = driver;
 
     bus.reset();
     int spent_time = 0;
@@ -128,8 +134,7 @@ std::list<std::pair<int, int>> City::run_simulation(Bus &bus, Employee &driver, 
     
         if (bus_stop != nullptr)
         {
-            bus.leave_passengers(*bus_stop);
-            bus.add_passengers(time, *bus_stop);
+            passengers.push_back(std::make_pair<int, int>(bus.leave_passengers(*bus_stop), bus.add_passengers (time, *bus_stop)));
             times.push_back(std::make_pair<int, int>(0, bus.get_time_in_bus_stop()));
 
             driver.calc_fatigue(track->get_info().get_distance());
@@ -156,5 +161,8 @@ std::list<std::pair<int, int>> City::run_simulation(Bus &bus, Employee &driver, 
         }
     }
 
-    return times;
+    info.times = times;
+    info.passengers = passengers;
+
+    return info;
 }

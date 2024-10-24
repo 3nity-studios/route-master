@@ -61,9 +61,10 @@ int Bus::get_fuel() const noexcept
     return fuel;
 }
 
-void Bus::leave_passengers(BusStop &current_stop)
+int Bus::leave_passengers(BusStop &current_stop)
 {
     std::list<Passenger> aux;
+    int passengers = 0; 
 
     for (Passenger passenger : current_passengers)
     {
@@ -71,14 +72,21 @@ void Bus::leave_passengers(BusStop &current_stop)
         {
             aux.push_back(passenger);
         }
+        else
+        {
+            passengers++;
+        }
     }
 
     current_passengers = aux;
+
+    return passengers;
 }
 
-void Bus::add_passengers(const int& simulation_time, BusStop &bus_stop)
+int Bus::add_passengers(const int& simulation_time, BusStop &bus_stop)
 {
     std::list<Passenger> aux;
+    int passengers; 
 
     while (!bus_stop.get_passenger_list().empty())
     {
@@ -98,6 +106,7 @@ void Bus::add_passengers(const int& simulation_time, BusStop &bus_stop)
 
         if (true) //Aquí va la condición que determina si el pasajero va a una parada de la ruta del bus actual (Por ahora todos se suben)
         {
+            passengers++;
             current_passengers.push_back(first_passenger);
             attended_passengers += 1;
         }
@@ -111,6 +120,8 @@ void Bus::add_passengers(const int& simulation_time, BusStop &bus_stop)
     {
         bus_stop.add_passenger(passenger);
     }
+
+    return passengers;
 }
 
 int Bus::get_attended_passengers() const noexcept
