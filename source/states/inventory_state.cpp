@@ -102,32 +102,51 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
     playerBalanceText.setPosition({this->_data->window->getSize().x - 200.0f, 40.0f});
     this->_data->window->draw(playerBalanceText);
 
-    // Create a header for the table
-    sf::Text headerText(font);
-    headerText.setString("ID\tName\tEngine State\tBreaks State\tTires State\tFuel");
-    headerText.setCharacterSize(20);
-    headerText.setFillColor(sf::Color::Black);
-    headerText.setStyle(sf::Text::Bold);
+    // Draw table headers
+    sf::Text headerName(font);
+    headerName.setString("Item Name");
+    headerName.setCharacterSize(20);
+    headerName.setFillColor(sf::Color::Black);
+    headerName.setStyle(sf::Text::Bold);
+    headerName.setPosition({10.0f, 90.0f});
+    this->_data->window->draw(headerName);
 
-    // Set the position of the header text
-    headerText.setPosition({10.0f, 90.0f});
-    this->_data->window->draw(headerText);
+    sf::Text headerEngineState(font);
+    headerEngineState.setString("Engine State");
+    headerEngineState.setCharacterSize(20);
+    headerEngineState.setFillColor(sf::Color::Black);
+    headerEngineState.setStyle(sf::Text::Bold);
+    headerEngineState.setPosition({150.0f, 90.0f});
+    this->_data->window->draw(headerEngineState);
+
+    sf::Text headerBreaksState(font);
+    headerBreaksState.setString("Breaks State");
+    headerBreaksState.setCharacterSize(20);
+    headerBreaksState.setFillColor(sf::Color::Black);
+    headerBreaksState.setStyle(sf::Text::Bold);
+    headerBreaksState.setPosition({300.0f, 90.0f});
+    this->_data->window->draw(headerBreaksState);
+
+    sf::Text headerTiresState(font);
+    headerTiresState.setString("Tires State");
+    headerTiresState.setCharacterSize(20);
+    headerTiresState.setFillColor(sf::Color::Black);
+    headerTiresState.setStyle(sf::Text::Bold);
+    headerTiresState.setPosition({450.0f, 90.0f});
+    this->_data->window->draw(headerTiresState);
+
+    sf::Text headerFuel(font);
+    headerFuel.setString("Fuel Level");
+    headerFuel.setCharacterSize(20);
+    headerFuel.setFillColor(sf::Color::Black);
+    headerFuel.setStyle(sf::Text::Bold);
+    headerFuel.setPosition({600.0f, 90.0f});
+    this->_data->window->draw(headerFuel);
 
     auto buses = this->_data->player.get_buses();
     for (int i = 0; i < buses.size(); ++i)
     {
         const auto &item = buses[i];
-
-        // Create a text object for the item ID
-        sf::Text idText(font);
-        idText.setString(std::to_string(item.get_id()));
-        idText.setCharacterSize(20);
-        idText.setFillColor(sf::Color::Black);
-        idText.setStyle(sf::Text::Regular);
-
-        // Set the position of the ID text
-        idText.setPosition({10.0f, 120.0f + (i * 30.0f)});
-        this->_data->window->draw(idText);
 
         // Create a text object for the item name
         sf::Text itemText(font);
@@ -135,9 +154,7 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
         itemText.setCharacterSize(20);
         itemText.setFillColor(sf::Color::Black);
         itemText.setStyle(sf::Text::Regular);
-
-        // Set the position of the text
-        itemText.setPosition({60.0f, 120.0f + (i * 30.0f)});
+        itemText.setPosition({10.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(itemText);
 
         // Create a text object for the bus engine state
@@ -146,9 +163,7 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
         engineStateText.setCharacterSize(20);
         engineStateText.setFillColor(sf::Color::Black);
         engineStateText.setStyle(sf::Text::Regular);
-
-        // Set the position of the engine state text
-        engineStateText.setPosition({210.0f, 120.0f + (i * 30.0f)});
+        engineStateText.setPosition({150.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(engineStateText);
 
         // Create a text object for the bus breaks state
@@ -157,9 +172,7 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
         breaksStateText.setCharacterSize(20);
         breaksStateText.setFillColor(sf::Color::Black);
         breaksStateText.setStyle(sf::Text::Regular);
-
-        // Set the position of the breaks state text
-        breaksStateText.setPosition({360.0f, 120.0f + (i * 30.0f)});
+        breaksStateText.setPosition({300.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(breaksStateText);
 
         // Create a text object for the bus tires state
@@ -168,9 +181,7 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
         tiresStateText.setCharacterSize(20);
         tiresStateText.setFillColor(sf::Color::Black);
         tiresStateText.setStyle(sf::Text::Regular);
-
-        // Set the position of the tires state text
-        tiresStateText.setPosition({510.0f, 120.0f + (i * 30.0f)});
+        tiresStateText.setPosition({450.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(tiresStateText);
 
         // Create a text object for the bus fuel level
@@ -179,9 +190,7 @@ void InventoryState::draw_state(float dt __attribute__((unused)))
         fuelText.setCharacterSize(20);
         fuelText.setFillColor(sf::Color::Black);
         fuelText.setStyle(sf::Text::Regular);
-
-        // Set the position of the fuel text
-        fuelText.setPosition({660.0f, 120.0f + (i * 30.0f)});
+        fuelText.setPosition({600.0f, 120.0f + (i * 30.0f)});
         this->_data->window->draw(fuelText);
     }
 
