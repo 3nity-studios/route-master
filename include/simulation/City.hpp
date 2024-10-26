@@ -14,6 +14,7 @@ struct SimulationInfo
 {
     Bus bus;
     Employee employee;
+    StreetArcList path;
     std::list<std::pair<int, int>> times;
     std::vector<std::pair<int, int>> passengers; 
 };

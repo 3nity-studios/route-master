@@ -122,6 +122,7 @@ SimulationInfo City::run_simulation(Bus &bus, Employee &driver, int time, Street
 
     info.bus = bus;
     info.employee = driver;
+    info.path = path;
 
     bus.reset();
     int spent_time = 0;

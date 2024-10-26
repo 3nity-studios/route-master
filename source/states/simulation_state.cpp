@@ -9,7 +9,7 @@ float calc_distance(VisualElement element1, VisualElement element2)
     return sqrt(pow(element1.get_x() - element2.get_x(), 2) + pow(element1.get_y() - element2.get_y(), 2));
 }
 
-SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_sim(Bus(1, "Bus 125", 32, std::list<Passenger>{}, 5)), driver_sim(Employee(0, "John", "Doe", 32, 12, 0)), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), bus(bus_texture)
+SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), bus(bus_texture)
 {
     BusStop stop1(1, "Stop1", {10, 11, 10}, 2.0, 5.0, 3.0, 3.0, 2.0, 350.f, 5.f);
     BusStop stop2(2, "Stop2", {10, 11, 10}, 3.0, 10.0, 3.0, 3.0, 2.0, 500.f, 5.f);
@@ -22,6 +22,8 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
 
     VisualElement curve1(8, 180.f, 200.f);
     VisualElement curve2(9, 800.f, 500.f);
+
+    City city;
 
     city.add_bus_stop(stop1);
     city.add_bus_stop(stop2);
@@ -73,20 +75,23 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
 
     elements_path.push_back(path.get_last()->get_tgt_node()->get_info());
 
+    Bus bus_sim(1, "Bus 1", 32, {}, 5);
+    Employee driver_sim(1, "John", "Doe", 33, 12, 0);
+
     simulation_info = city.run_simulation(bus_sim, driver_sim, 10, path);
-
-    this->times.clear();
-
-    set_simulation_parameters(simulation_info.times);
 
     actual_stop = 0; 
 }
 
-SimulationState::SimulationState(GameDataRef data, std::list<std::pair<int, int>> _simulation_times,
-                                 Bus _simulation_bus, Employee _simulation_driver)
-    : _data(data), times(_simulation_times), first_time(true), bus_sim (_simulation_bus), driver_sim(_simulation_driver),
-      status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus(bus_texture)
+SimulationState::SimulationState(GameDataRef data, SimulationInfo _simulation_info)
+                : _data(data), simulation_info(_simulation_info), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus(bus_texture)
 {
+    for (const auto track : simulation_info.path)
+    {
+        elements_path.push_back(track->get_src_node()->get_info());
+    }
+
+    elements_path.push_back(simulation_info.path.get_last()->get_tgt_node()->get_info());
 }
 
 void SimulationState::init_state()
@@ -252,7 +257,7 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
 
     sf::Text text2(font);
     // set the string to display
-    text2.setString("\nDriver: " + driver_sim.get_name() + " " + driver_sim.get_last_name() + "\n" + "Bus: " + bus_sim.get_name());
+    text2.setString("\nDriver: " + simulation_info.employee.get_name() + " " + simulation_info.employee.get_last_name() + "\n" + "Bus: " + simulation_info.bus.get_name());
 
     // set the character size
     text2.setCharacterSize(12); // in pixels, not points!
@@ -273,16 +278,6 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     this->_data->window->display();
 }
 
-void SimulationState::set_driver_sim(Employee _driver)
-{
-    driver_sim = _driver;
-}
-
-void SimulationState::set_bus_sim(Bus _bus)
-{
-    bus_sim = _bus;
-}
-
 float generateRandom(float lower, float upper)
 {
     std::random_device rd;
@@ -294,15 +289,15 @@ float generateRandom(float lower, float upper)
 
 void SimulationState::init_bus_stops()
 {
-    for (auto visual_element : city.get_visual_elements())
+    for (auto visual_element : elements_path)
     {
-        auto stop = std::dynamic_pointer_cast<BusStop>(visual_element->get_info());
+        auto stop = std::dynamic_pointer_cast<BusStop>(visual_element);
 
         if (stop)
         {
             sf::Sprite bus_stop(bus_stops_texture);
             bus_stop.setTextureRect(sf::IntRect(sf::Vector2i(617,200), sf::Vector2i(197,104)));
-            bus_stop.setPosition(sf::Vector2f(visual_element->get_info()->get_x(), visual_element->get_info()->get_y()));
+            bus_stop.setPosition(sf::Vector2f(visual_element->get_x(), visual_element->get_y()));
             bus_stop.setScale(sf::Vector2<float>(0.5, 0.5));
             bus_stops.push_back(bus_stop);
 
@@ -352,7 +347,7 @@ void SimulationState::update_bus()
     // sf::IntRect right_view(sf::Vector2i(0,0), sf::Vector2i(717,390));
     // sf::IntRect left_view(sf::Vector2i(0,1172), sf::Vector2i(711,385));
 
-    if (times.empty())
+    if (simulation_info.times.empty())
     {
         status = "Route completed";
         return;
@@ -364,7 +359,7 @@ void SimulationState::update_bus()
         first_time = false;
     }
 
-    auto time = times.front();
+    auto time = simulation_info.times.front();
 
     if ((time.first == 0 || time.first == 2 || time.first == 3) && simulation_clock.getElapsedTime().asSeconds() >= time.second)
     {
@@ -385,8 +380,8 @@ void SimulationState::update_bus()
             }
         }
 
-        times.pop_front();
-        time = times.front();
+        simulation_info.times.pop_front();
+        time = simulation_info.times.front();
         simulation_clock.restart();
         auto stop1 = elements_path.front();
         elements_path.pop_front();
@@ -401,10 +396,10 @@ void SimulationState::update_bus()
     }
     else if (time.first == 1 && simulation_clock.getElapsedTime().asSeconds() >= time.second)
     {
-        times.pop_front();
-        time = times.front();
+        simulation_info.times.pop_front();
+        time = simulation_info.times.front();
 
-        if (times.empty())
+        if (simulation_info.times.empty())
         {
             status = "Dropping off passengers";
             actual_stop++;
@@ -426,9 +421,14 @@ void SimulationState::update_bus()
     bus.move(bus_speed);
 }
 
-void SimulationState::set_simulation_parameters(std::list<std::pair<int, int>> _times)
+void SimulationState::set_simulation_info(SimulationInfo _simulation_info)
 {
-    times = _times;
+    simulation_info = _simulation_info;
+}
+
+SimulationInfo SimulationState::get_simulation_info()
+{
+    return simulation_info;
 }
 
 SimulationState::~SimulationState()
