@@ -88,7 +88,7 @@ void City::initialize_bus_stops()
 
 void City::update()
 {
-    current_time++;
+    //current_time++;
 
     for(auto &stop : city_map.nodes())
     {
@@ -113,57 +113,97 @@ void City::update()
     }
 }
 
-SimulationInfo City::run_simulation(Bus &bus, Employee &driver, int time, StreetArcList path)
+void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
 {
-    std::list<std::pair<int, int>> times;
-    std::vector<std::pair<int, int>> passengers;
+    current_time++;
 
-    SimulationInfo info;
-
-    info.bus = bus;
-    info.employee = driver;
-    info.path = path;
-
-    bus.reset();
-    int spent_time = 0;
-    for(auto track : path)
+    for (auto &simulation_info : simulation_infos)
     {
-        update();
+        if (simulation_info.elements_path.size() == simulation_info.path_index)
+        {   
+            simulation_info.time_state == std::make_pair<int, int>(9, 0);
+            continue;
+        }
 
-        auto bus_stop = std::dynamic_pointer_cast<BusStop>(track->get_src_node()->get_info());
-        auto traffic_light = std::dynamic_pointer_cast<TrafficLight>(track->get_src_node()->get_info());
-    
-        if (bus_stop != nullptr)
+        auto bus_stop = std::dynamic_pointer_cast<BusStop>(simulation_info.elements_path.at(simulation_info.path_index));
+        auto traffic_light = std::dynamic_pointer_cast<TrafficLight>(simulation_info.elements_path.at(simulation_info.path_index));
+
+        if (simulation_info.time_state.first == -1)
         {
-            passengers.push_back(std::make_pair<int, int>(bus.leave_passengers(*bus_stop), bus.add_passengers (time, *bus_stop)));
-            times.push_back(std::make_pair<int, int>(0, bus.get_time_in_bus_stop()));
-
-            driver.calc_fatigue(track->get_info().get_distance());
-            bus.calc_wear(track->get_info().get_distance());
-
-            // TODO: Abort simulation if bus breaks or if driver is too tired
-
-            int travel_time = track->get_info().get_travel_time();
-
-            spent_time += travel_time;
-            times.push_back(std::make_pair<int, int>(1, std::move(travel_time)));
-        } 
-        else if (traffic_light != nullptr)
+            simulation_info.time_state = std::make_pair<int, int>(0, simulation_info.bus.get_time_in_bus_stop());
+            simulation_info.previous_time = current_time;
+            simulation_info.next_is_street = true;
+            simulation_info.path_index++;
+        }
+        else if (current_time <= simulation_info.previous_time + simulation_info.time_state.second)
         {
-            times.push_back(std::make_pair<int, int>(2, traffic_light->get_time_to_change()));
-            int travel_time = track->get_info().get_travel_time();
-            times.push_back(std::make_pair<int, int>(1, std::move(travel_time)));
+            continue;
+        }
+        else if (simulation_info.next_is_street)
+        {
+            for (auto track : get_streets())
+            {
+                if ((track->get_src_node()->get_info()->get_id() == simulation_info.elements_path.at(simulation_info.path_index - 1)->get_id()) && (track->get_tgt_node()->get_info()->get_id() == simulation_info.elements_path.at(simulation_info.path_index)->get_id()));
+                {
+                    simulation_info.time_state = std::make_pair<int, int>(1, track->get_info().get_travel_time());
+                    simulation_info.employee.calc_fatigue(track->get_info().get_distance());
+                    simulation_info.bus.calc_wear(track->get_info().get_distance());
+                    break;
+                }
+            }
+
+            simulation_info.next_is_street = false;
+            simulation_info.previous_time = current_time;
+        }
+        else if (bus_stop)
+        {
+            simulation_info.time_state = std::make_pair<int, int>(0, simulation_info.bus.get_time_in_bus_stop());
+            simulation_info.previous_time = current_time;
+            simulation_info.next_is_street = true;
+            simulation_info.path_index++;
+            simulation_info.bus.leave_passengers(*bus_stop);
+            simulation_info.bus.add_passengers(current_time, *bus_stop);
+        }
+        else if (traffic_light)
+        {
+            simulation_info.time_state = std::make_pair<int, int>(2, traffic_light->get_time_to_change());
+            simulation_info.next_is_street = true;
+            simulation_info.previous_time = current_time;
+            simulation_info.path_index++;
         }
         else
         {
-            times.push_back(std::make_pair<int, int>(3, 0));
-            int travel_time = track->get_info().get_travel_time();
-            times.push_back(std::make_pair<int, int>(1, std::move(travel_time)));
+            simulation_info.time_state = std::make_pair<int, int>(3, 0);
+            simulation_info.next_is_street = true;
+            simulation_info.previous_time = current_time;
+            simulation_info.path_index++;
         }
     }
 
-    info.times = times;
-    info.passengers = passengers;
+    update_passengers();
+}
 
-    return info;
+std::vector<int> City::get_current_passengers()
+{
+    return current_passengers;
+}
+
+void City::set_current_passengers(std::vector<int> _current_passengers)
+{
+    current_passengers = _current_passengers;
+}
+
+void City::update_passengers()
+{
+    for (auto visual_element : get_visual_elements())
+    {
+        auto bus_stop = std::dynamic_pointer_cast<BusStop>(visual_element->get_info());
+
+        current_passengers.clear();
+
+        if (bus_stop)
+        {
+            current_passengers.push_back(bus_stop->get_actual_passengers(current_time));
+        }
+    }
 }
