@@ -69,14 +69,7 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
     Bus bus_sim(1, "Bus 1", 32, {}, 5);
     Employee driver_sim(1, "John", "Doe", 33, 12, 0);
 
-    SimulationInfo simulation;
-
-    simulation.bus = bus_sim;
-    simulation.employee = driver_sim;
-    simulation.path_index = 0; 
-    simulation.set_path(path);
-    
-    simulation.time_state = std::make_pair<int, int>(-1, 0);
+    SimulationInfo simulation(bus_sim, driver_sim, path);
 
     this->simulation_info.push_back(simulation);
 
@@ -356,7 +349,7 @@ void SimulationState::update_bus()
         city.run_simulation(simulation_info);
         current_time++;
 
-        if (simulation_info.front().time_state.first == 9)
+        if (simulation_info.front().route_completed)
         {
             status = "Route completed";
             return; 
