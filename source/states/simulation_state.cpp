@@ -35,10 +35,10 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
 
     city.initialize_bus_stops();
 
-    Street street1(1, "Street1", calc_distance(stop1, stop2), 50.0f, 2.0f, 0.1f, 0.05f);
+    Street street1(1, "Street1", calc_distance(stop1, stop2), 200.0f, 2.0f, 0.1f, 0.05f);
     Street street2(2, "Street2", calc_distance(stop2, stop3), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street3(3, "Street3", calc_distance(stop3, curve1), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street4(4, "Street4", calc_distance(curve1, stop4), 50.0f, 2.0f, 0.1f, 0.05f);
+    Street street3(3, "Street3", calc_distance(stop3, curve1), 100.0f, 2.0f, 0.1f, 0.05f);
+    Street street4(4, "Street4", calc_distance(curve1, stop4), 25.0f, 2.0f, 0.1f, 0.05f);
     Street street5(5, "Street5", calc_distance(stop4, light1), 50.0f, 2.0f, 0.1f, 0.05f);
     Street street6(6, "Street6", calc_distance(light1, stop5), 50.0f, 2.0f, 0.1f, 0.05f);
     Street street7(7, "Street7", calc_distance(stop5, curve2), 50.0f, 2.0f, 0.1f, 0.05f);
@@ -343,7 +343,7 @@ void SimulationState::update_bus()
         first_time = false;
     }
 
-    if (simulation_clock.getElapsedTime().asSeconds() >= 0.865)
+    if (simulation_clock.getElapsedTime().asSeconds() >= 1)
     {
         simulation_clock.restart();
         city.run_simulation(simulation_info);

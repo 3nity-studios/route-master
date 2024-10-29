@@ -21,6 +21,7 @@ struct SimulationInfo
     int previous_time; 
     bool next_is_street;
     bool route_completed;
+    sf::Clock projection_clock;
 
     SimulationInfo(Bus _bus, Employee _employee, StreetArcList _path) : bus(_bus), employee(_employee), time_state(std::make_pair<int,int>(-1, 0)), path_index(0), previous_time(0), next_is_street(false), route_completed(false) {set_path(_path);}
    
