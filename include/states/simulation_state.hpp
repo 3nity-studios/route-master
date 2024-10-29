@@ -28,6 +28,7 @@ class SimulationState : public Engine::State
     void update_state(float dt __attribute__((unused)));
     void update_bus();
     void update_bus_stops();
+    void draw_passengers();
     void draw_state(float dt __attribute__((unused)));
 
     void set_simulation_info(std::vector<SimulationInfo> _simulation_info);
@@ -47,6 +48,7 @@ class SimulationState : public Engine::State
     sf::String status;
     sf::Texture bus_texture;
     sf::Texture bus_stops_texture;
+    sf::Texture person_texture; 
     int actual_stop;
     int current_time;
 };

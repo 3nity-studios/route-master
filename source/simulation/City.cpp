@@ -88,7 +88,7 @@ void City::initialize_bus_stops()
 
 void City::update()
 {
-    //current_time++;
+    current_time++;
 
     for(auto &stop : city_map.nodes())
     {
@@ -115,8 +115,6 @@ void City::update()
 
 void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
 {
-    current_time++;
-
     for (auto &simulation_info : simulation_infos)
     {
         if (simulation_info.route_completed)
@@ -132,6 +130,8 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             simulation_info.time_state = std::make_pair<int, int>(0, simulation_info.bus.get_time_in_bus_stop());
             simulation_info.previous_time = current_time;
             simulation_info.next_is_street = true;
+            simulation_info.bus.leave_passengers(*bus_stop);
+            simulation_info.bus.add_passengers(current_time, *bus_stop);
             simulation_info.projection_clock.restart();
         }
         else if (simulation_info.projection_clock.getElapsedTime().asSeconds() <= simulation_info.time_state.second)
@@ -203,15 +203,15 @@ void City::set_current_passengers(std::vector<int> _current_passengers)
 
 void City::update_passengers()
 {
+    current_passengers.clear();
+
     for (auto visual_element : get_visual_elements())
     {
         auto bus_stop = std::dynamic_pointer_cast<BusStop>(visual_element->get_info());
 
-        current_passengers.clear();
-
         if (bus_stop)
         {
-            current_passengers.push_back(bus_stop->get_actual_passengers(current_time));
+            current_passengers.push_back(bus_stop->get_passenger_list().size());
         }
     }
 }

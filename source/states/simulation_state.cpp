@@ -9,14 +9,14 @@ float calc_distance(VisualElement element1, VisualElement element2)
     return sqrt(pow(element1.get_x() - element2.get_x(), 2) + pow(element1.get_y() - element2.get_y(), 2));
 }
 
-SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), bus(bus_texture)
+SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), person_texture (sf::Image(sf::Vector2u(100, 50), sf::Color::White)), bus(bus_texture)
 {
-    BusStop stop1(1, "Stop1", {10, 11, 10}, 2.0, 5.0, 3.0, 3.0, 2.0, 350.f, 5.f);
-    BusStop stop2(2, "Stop2", {10, 11, 10}, 3.0, 10.0, 3.0, 3.0, 2.0, 500.f, 5.f);
-    BusStop stop3(3, "Stop3", {10, 8, 9}, 15.0, 15.0, 3.0, 3.0, 2.0, 750.f, 5.f);
-    BusStop stop4(4, "Stop4", {10, 11, 10}, 15.0, 15.0, 3.0, 3.0, 2.0, 350.f, 250.f);
-    BusStop stop5(5, "Stop5", {11, 10, 11}, 15.0, 15.0, 3.0, 3.0, 2.0, 600.f, 250.f);
-    BusStop stop6(6, "Stop6", {10, 11, 10}, 15.0, 15.0, 3.0, 3.0, 2.0, 600.f, 500.f);
+    BusStop stop1(1, "Stop1", {2, 3, 3}, 3.0, 5.0, 3.0, 3.0, 2.0, 350.f, 5.f);
+    BusStop stop2(2, "Stop2", {2, 3, 4}, 3.0, 10.0, 3.0, 3.0, 2.0, 500.f, 5.f);
+    BusStop stop3(3, "Stop3", {2, 3, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 750.f, 5.f);
+    BusStop stop4(4, "Stop4", {2, 4, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 350.f, 250.f);
+    BusStop stop5(5, "Stop5", {2, 5, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 600.f, 250.f);
+    BusStop stop6(6, "Stop6", {2, 6, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 600.f, 500.f);
 
     TrafficLight light1(7, std::vector<std::pair<StreetConnectionIDs, bool>>{std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(4,5), true)}, 10, 450.f, 250.f);
 
@@ -66,7 +66,7 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
         }
     }
 
-    Bus bus_sim(1, "Bus 1", 32, {}, 5);
+    Bus bus_sim(1, "Bus 1", 10, {}, 5);
     Employee driver_sim(1, "John", "Doe", 33, 12, 0);
 
     SimulationInfo simulation(bus_sim, driver_sim, path);
@@ -74,6 +74,7 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
     this->simulation_info.push_back(simulation);
 
     city.update();
+    city.update_passengers();
 }
 
 SimulationState::SimulationState(GameDataRef data, std::vector<SimulationInfo> _simulation_info)
@@ -92,6 +93,11 @@ void SimulationState::init_state()
     if (!bus_stops_texture.loadFromFile("assets/img/bus_stop_sprites.png"))
     {
         throw GameException("Couldn't find file: assets/img/bus_stop_sprites.png");
+    }
+
+    if (!person_texture.loadFromFile("assets/img/person.png"))
+    {
+        throw GameException("Couldn't find file: assets/img/person.png");
     }
 
     sf::View view(sf::FloatRect({0.f, 0.f}, {1000.f, 600.f}));
@@ -174,6 +180,7 @@ void SimulationState::update_inputs()
 void SimulationState::update_state(float dt __attribute__((unused)))
 {
     update_bus();
+    update_bus_stops();
 }
 
 // marks dt to not warn compiler
@@ -232,13 +239,7 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
         this->_data->window->draw(bus_stop);
     }
 
-    for (auto bus_stop : passengers)
-    {
-        for (auto passenger : bus_stop)
-        {
-            this->_data->window->draw(passenger);
-        }
-    }
+    draw_passengers();
 
     this->_data->window->draw(bus);
 
@@ -265,15 +266,6 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     this->_data->window->display();
 }
 
-float generateRandom(float lower, float upper)
-{
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dis (lower, upper);
-
-    return std::round(dis(gen));
-}
-
 void SimulationState::init_bus_stops()
 {
     for (auto visual_element : simulation_info.front().elements_path)
@@ -287,33 +279,45 @@ void SimulationState::init_bus_stops()
             bus_stop.setPosition(sf::Vector2f(visual_element->get_x(), visual_element->get_y()));
             bus_stop.setScale(sf::Vector2<float>(0.5, 0.5));
             bus_stops.push_back(bus_stop);
-
-            std::list<sf::CircleShape> passenger_list;
-
-            // city.update_passengers();
-
-            // for (int j = 0; j < city.get_current_passengers().at(i); j++)
-            // {
-            //     std::uniform_real_distribution<float> dis(bus_stop.getPosition().x, bus_stop.getLocalBounds().size.x);
-
-            //     sf::CircleShape passenger; 
-
-            //     passenger.setPosition(sf::Vector2f(generateRandom(bus_stop.getPosition().x, bus_stop.getPosition().x + (0.5*bus_stop.getLocalBounds().size.x)), bus_stop.getPosition().y + 60));
-
-            //     passenger.setRadius(2.f);
-
-            //     passenger_list.push_back(passenger);
-            // }
-
-            // passengers.push_back(passenger_list);
-
-            // i++;
         }
     }
 }
 
 void SimulationState::update_bus_stops()
 {   
+}
+
+void SimulationState::draw_passengers()
+{
+    int j = 0; 
+
+    for (auto visual_element : city.get_visual_elements())
+    {
+        auto bus_stop = std::dynamic_pointer_cast<BusStop>(visual_element->get_info());
+
+        if (bus_stop)
+        {
+            float passenger_distance = 0; 
+            float vertical_distance = 35; 
+
+            for (int i = 0; i < city.get_current_passengers().at(j); i++)
+            {
+                sf::Sprite person(person_texture);
+                person.setPosition(sf::Vector2f(bus_stop->get_x() + passenger_distance, bus_stop->get_y() + vertical_distance));
+                this->_data->window->draw(person);
+
+                passenger_distance = passenger_distance + 15.f;
+
+                if (passenger_distance > 90.f)
+                {
+                    passenger_distance = 0.f; 
+                    vertical_distance += 10.f;
+                }
+            }
+
+            j++;
+        }
+    }
 }
 
 void SimulationState::init_bus()
