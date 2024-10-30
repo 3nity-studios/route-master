@@ -37,11 +37,8 @@ class SimulationState : public Engine::State
   private:
     GameDataRef _data;
     std::list<sf::Sprite> bus_stops;
-    std::list<int> bus_stops_passengers_amount;
-    std::vector<std::list<sf::CircleShape>> passengers;
     std::vector<SimulationInfo> simulation_info; 
     City city;
-    sf::Sprite bus;
     sf::Clock simulation_clock;
     sf::Vector2f bus_speed;
     bool first_time;

@@ -9,7 +9,7 @@ float calc_distance(VisualElement element1, VisualElement element2)
     return sqrt(pow(element1.get_x() - element2.get_x(), 2) + pow(element1.get_y() - element2.get_y(), 2));
 }
 
-SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), person_texture (sf::Image(sf::Vector2u(100, 50), sf::Color::White)), bus(bus_texture)
+SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), person_texture (sf::Image(sf::Vector2u(100, 50), sf::Color::White))
 {
     BusStop stop1(1, "Stop1", {2, 3, 3}, 3.0, 5.0, 3.0, 3.0, 2.0, 350.f, 5.f);
     BusStop stop2(2, "Stop2", {2, 3, 4}, 3.0, 10.0, 3.0, 3.0, 2.0, 500.f, 5.f);
@@ -55,7 +55,7 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
 
     StreetArcList path;
 
-    for (int i = 1; i < 9; i++)
+    for (int i = 1; i < 5; i++)
     {
         for (auto street : city.get_streets())
         {
@@ -66,19 +66,37 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
         }
     }
 
+    StreetArcList path2;
+
+    for (int i = 5; i < 9; i++)
+    {
+        for (auto street : city.get_streets())
+        {
+            if (street->get_info().get_id() == i)
+            {
+                path2.append(street);
+            }
+        }
+    }
+
     Bus bus_sim(1, "Bus 1", 10, {}, 5);
     Employee driver_sim(1, "John", "Doe", 33, 12, 0);
 
+    Bus bus_sim2(2, "Bus 2", 15, {}, 5);
+    Employee driver_sim2(2, "Rodrigo", "Hernandez", 23, 12, 0);
+
     SimulationInfo simulation(bus_sim, driver_sim, path);
+    SimulationInfo simulation2(bus_sim2, driver_sim2, path2);
 
     this->simulation_info.push_back(simulation);
+    this->simulation_info.push_back(simulation2);
 
     city.update();
     city.update_passengers();
 }
 
 SimulationState::SimulationState(GameDataRef data, std::vector<SimulationInfo> _simulation_info)
-                : _data(data), simulation_info(_simulation_info), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus(bus_texture)
+                : _data(data), simulation_info(_simulation_info), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue))
 {
 }
 
@@ -186,8 +204,6 @@ void SimulationState::update_state(float dt __attribute__((unused)))
 // marks dt to not warn compiler
 void SimulationState::draw_state(float dt __attribute__((unused)))
 {
-    // SAMPLE RENDER CODE:
-
     // background color
     this->_data->window->clear(sf::Color::Black);
 
@@ -232,8 +248,6 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     // inside the main loop, between window.clear() and window.display()
     this->_data->window->draw(text);
 
-    // END SAMPLE RENDER CODE
-
     for (auto bus_stop : bus_stops)
     {
         this->_data->window->draw(bus_stop);
@@ -241,7 +255,10 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
 
     draw_passengers();
 
-    this->_data->window->draw(bus);
+    for (auto info : simulation_info)
+    {
+        this->_data->window->draw(info.projection_bus);
+    }
 
     sf::Text text2(font);
     // set the string to display
@@ -268,15 +285,15 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
 
 void SimulationState::init_bus_stops()
 {
-    for (auto visual_element : simulation_info.front().elements_path)
+    for (auto visual_element : city.get_visual_elements())
     {
-        auto stop = std::dynamic_pointer_cast<BusStop>(visual_element);
+        auto stop = std::dynamic_pointer_cast<BusStop>(visual_element->get_info());
 
         if (stop)
         {
             sf::Sprite bus_stop(bus_stops_texture);
             bus_stop.setTextureRect(sf::IntRect(sf::Vector2i(617,200), sf::Vector2i(197,104)));
-            bus_stop.setPosition(sf::Vector2f(visual_element->get_x(), visual_element->get_y()));
+            bus_stop.setPosition(sf::Vector2f(stop->get_x(), stop->get_y()));
             bus_stop.setScale(sf::Vector2<float>(0.5, 0.5));
             bus_stops.push_back(bus_stop);
         }
@@ -322,19 +339,18 @@ void SimulationState::draw_passengers()
 
 void SimulationState::init_bus()
 {
-    sf::IntRect bus_texture(sf::Vector2i(8,5), sf::Vector2i(358,657));
+    sf::IntRect bus_rect(sf::Vector2i(8,5), sf::Vector2i(358,657));
 
-    bus.setTextureRect(bus_texture);
-
-    sf::FloatRect bounds = bus.getLocalBounds();
-
-    bus.setOrigin(bounds.getCenter());
-
-    bus.rotate(sf::degrees(90));
-
-    bus.setPosition(sf::Vector2f(385.f, 90.f));
-
-    bus.setScale(sf::Vector2<float>(0.1, 0.1));
+    for (auto &info : simulation_info)
+    {
+        info.projection_bus.setTexture(bus_texture);
+        info.projection_bus.setTextureRect(bus_rect);
+        sf::FloatRect bounds = info.projection_bus.getLocalBounds();
+        info.projection_bus.setOrigin(bounds.getCenter());
+        info.projection_bus.rotate(sf::degrees(90));
+        info.projection_bus.setPosition(sf::Vector2f(info.elements_path.front()->get_x() + 35.f, info.elements_path.front()->get_y() + 85.f));
+        info.projection_bus.setScale(sf::Vector2<float>(0.1, 0.1));
+    }
 }
 
 void SimulationState::update_bus()
@@ -361,38 +377,45 @@ void SimulationState::update_bus()
     }
     else
     {
-        bus.move(bus_speed);
+        for (auto &info : simulation_info)
+        {
+            info.projection_bus.move(info.projection_bus_speed);
+        }
+
         return;
     }
-    
-    auto time = simulation_info.front().time_state;
 
-    if (time.first == 0 || time.first == 2 || time.first == 3)
+    for (auto &info : simulation_info)
     {
-        if (time.first == 0)
+        auto time = info.time_state;
+
+        if (time.first == 0 || time.first == 2 || time.first == 3)
         {
-            status = "Picking up and dropping off passengers";
+            if (time.first == 0)
+            {
+                status = "Picking up and dropping off passengers";
+            }
+            else if (time.first == 2)
+            {
+                status = "Waiting in Traffic Light";
+            }
+
+            info.projection_bus_speed = sf::Vector2f(0.f, 0.f);
         }
-        else if (time.first == 2)
+        else if (time.first == 1)
         {
-            status = "Waiting in Traffic Light";
+            auto stop1 = info.elements_path.at(info.path_index - 1);
+            auto stop2 = info.elements_path.at(info.path_index);
+
+            sf::Angle rotation = sf::radians(M_PI - (atan((stop2->get_x() - stop1->get_x()) / (stop2->get_y() - stop1->get_y()))));
+            info.projection_bus.setRotation(rotation);
+
+            info.projection_bus_speed = sf::Vector2f((stop2->get_x() - stop1->get_x()) / (time.second * 60.f), (stop2->get_y() - stop1->get_y()) / (time.second * 60.f));
+            status = "Travelling";
         }
 
-        bus_speed = sf::Vector2f(0.f, 0.f);
+        info.projection_bus.move(info.projection_bus_speed);
     }
-    else if (time.first == 1)
-    {
-        auto stop1 = simulation_info.front().elements_path.at(simulation_info.front().path_index - 1);
-        auto stop2 = simulation_info.front().elements_path.at(simulation_info.front().path_index);
-
-        sf::Angle rotation = sf::radians(M_PI - (atan((stop2->get_x() - stop1->get_x()) / (stop2->get_y() - stop1->get_y()))));
-        bus.setRotation(rotation);
-
-        bus_speed = sf::Vector2f((stop2->get_x() - stop1->get_x()) / (time.second * 60.f), (stop2->get_y() - stop1->get_y()) / (time.second * 60.f));
-        status = "Travelling";
-    }
-
-    bus.move(bus_speed);
 }
 
 void SimulationState::set_simulation_info(std::vector<SimulationInfo> _simulation_info)
