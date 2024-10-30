@@ -94,6 +94,7 @@ set(
   ${INCROOT}/engine/input_manager.hpp
   ${SRCROOT}/engine/state_machine.cpp
   ${INCROOT}/engine/state_machine.hpp
+  ${SRCROOT}/engine/tmx_core.cpp
   ${INCROOT}/engine/tmx_core.hpp
 )
 add_library(route_master_engine ${RM_ENGINE_SRC})
@@ -192,7 +193,8 @@ target_link_libraries(route_master_states
   Designar::Designar
   tmxlite::tmxlite
   route_master::simulation
-  route_master::player)
+  route_master::player
+  route_master::engine)
 
 # ---- platform
 
@@ -290,10 +292,10 @@ target_link_libraries(
   route_master::states
   route_master::config
   route_master::platform
-  route_master::engine
   route_master::simulation
   route_master::player
   route_master::utils
+  route_master::engine
   TGUI::TGUI
   SFML::Graphics
   SFML::Window
