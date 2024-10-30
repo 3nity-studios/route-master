@@ -37,48 +37,48 @@ class MapLayer final : public sf::Drawable
     MapLayer(const MapLayer &) = delete;
     MapLayer &operator=(const MapLayer &) = delete;
 
-    const sf::FloatRect &getGlobalBounds() const;
+    const sf::FloatRect &get_global_bounds() const;
 
-    void setTile(std::int32_t tileX, std::int32_t tileY, tmx::TileLayer::Tile tile, bool refresh);
-    tmx::TileLayer::Tile getTile(std::int32_t tileX, std::int32_t tileY);
+    void set_tile(std::int32_t tile_x, std::int32_t tile_y, tmx::TileLayer::Tile tile, bool refresh);
+    tmx::TileLayer::Tile get_tile(std::int32_t tile_x, std::int32_t tile_y);
 
-    void setColor(std::int32_t tileX, std::int32_t tileY, sf::Color color, bool refresh);
-    sf::Color getColor(std::int32_t tileX, std::int32_t tileY);
+    void set_color(std::int32_t tile_x, std::int32_t tile_y, sf::Color color, bool refresh);
+    sf::Color get_color(std::int32_t tile_x, std::int32_t tile_y);
 
-    void setOffset(sf::Vector2f offset);
-    sf::Vector2f getOffset() const;
+    void set_offset(sf::Vector2f offset);
+    sf::Vector2f get_offset() const;
 
     void update(sf::Time elapsed);
 
   private:
     // increasing m_chunkSize by 4; fixes render problems when mapsize != chunksize
-    sf::Vector2f m_chunkSize = sf::Vector2f(1024.f, 1024.f);
+    sf::Vector2f _chunk_size = sf::Vector2f(1024.f, 1024.f);
     // sf::Vector2f m_chunkSize = sf::Vector2f(512.f, 512.f);
-    sf::Vector2u m_chunkCount;
-    sf::Vector2u m_mapTileSize; // general Tilesize of Map
-    sf::FloatRect m_globalBounds;
-    sf::Vector2f m_offset;
+    sf::Vector2u _chunk_count;
+    sf::Vector2u _map_tile_size; // general Tilesize of Map
+    sf::FloatRect _global_bounds;
+    sf::Vector2f _offset;
 
     using TextureResource = std::map<std::string, std::unique_ptr<sf::Texture>>;
-    TextureResource m_textureResource;
+    TextureResource _texture_resource;
 
     struct AnimationState
     {
-        sf::Vector2u tileCords;
-        sf::Time startTime;
-        sf::Time currentTime;
-        tmx::Tileset::Tile animTile;
-        std::uint8_t flipFlags;
+        sf::Vector2u tile_cords;
+        sf::Time start_time;
+        sf::Time current_time;
+        tmx::Tileset::Tile anim_tile;
+        std::uint8_t flip_flags;
     };
 
     class Chunk;
 
-    std::vector<std::unique_ptr<Chunk>> m_chunks;
-    mutable std::vector<Chunk *> m_visibleChunks;
+    std::vector<std::unique_ptr<Chunk>> _chunks;
+    mutable std::vector<Chunk *> _visible_chunks;
 
-    std::unique_ptr<Chunk> &getChunkAndTransform(std::int32_t x, std::int32_t y, sf::Vector2u &chunkRelative);
-    void createChunks(const tmx::Map &map, const tmx::TileLayer &layer);
-    void updateVisibility(const sf::View &view) const;
+    std::unique_ptr<Chunk> &get_chunk_and_transform(std::int32_t x, std::int32_t y, sf::Vector2u &chunk_relative);
+    void create_chunks(const tmx::Map &map, const tmx::TileLayer &layer);
+    void update_visibility(const sf::View &view) const;
     void draw(sf::RenderTarget &rt, sf::RenderStates states) const override;
 };
 
@@ -88,53 +88,53 @@ class MapLayer::Chunk final : public sf::Transformable, public sf::Drawable
     using Tile = std::array<sf::Vertex, 6u>;
 
     Chunk(const tmx::TileLayer &layer, std::vector<const tmx::Tileset *> tilesets, const sf::Vector2f &position,
-          const sf::Vector2f &tileCount, const sf::Vector2u &tileSize, std::size_t rowSize, TextureResource &tr,
-          const std::map<std::uint32_t, tmx::Tileset::Tile> &animTiles);
+          const sf::Vector2f &tile_count, const sf::Vector2u &tile_size, std::size_t row_size, TextureResource &tr,
+          const std::map<std::uint32_t, tmx::Tileset::Tile> &anim_tiles);
 
     ~Chunk() = default;
     Chunk(const Chunk &) = delete;
     Chunk &operator=(const Chunk &) = delete;
 
-    void generateTiles(bool registerAnimation);
+    void generate_tiles(bool register_animation);
 
-    std::vector<AnimationState> &getActiveAnimations();
+    std::vector<AnimationState> &get_active_animations();
 
-    tmx::TileLayer::Tile getTile(std::int32_t x, std::int32_t y) const;
-    void setTile(std::int32_t x, std::int32_t y, tmx::TileLayer::Tile tile, bool refresh);
+    tmx::TileLayer::Tile get_tile(std::int32_t x, std::int32_t y) const;
+    void set_tile(std::int32_t x, std::int32_t y, tmx::TileLayer::Tile tile, bool refresh);
 
-    sf::Color getColor(std::int32_t x, std::int32_t y) const;
-    void setColor(std::int32_t x, std::int32_t y, sf::Color color, bool refresh);
+    sf::Color get_color(std::int32_t x, std::int32_t y) const;
+    void set_color(std::int32_t x, std::int32_t y, sf::Color color, bool refresh);
 
-    void maybeRegenerate(bool refresh);
+    void maybe_regenerate(bool refresh);
 
-    std::int32_t calcIndexFrom(std::int32_t x, std::int32_t y) const;
+    std::int32_t calc_index_from(std::int32_t x, std::int32_t y) const;
 
     bool empty() const;
 
-    void flipY(sf::Vector2f *v0, sf::Vector2f *v1, sf::Vector2f *v2, sf::Vector2f *v3, sf::Vector2f *v4,
+    void flip_y(sf::Vector2f *v0, sf::Vector2f *v1, sf::Vector2f *v2, sf::Vector2f *v3, sf::Vector2f *v4,
                sf::Vector2f *v5);
 
-    void flipX(sf::Vector2f *v0, sf::Vector2f *v1, sf::Vector2f *v2, sf::Vector2f *v3, sf::Vector2f *v4,
+    void flip_x(sf::Vector2f *v0, sf::Vector2f *v1, sf::Vector2f *v2, sf::Vector2f *v3, sf::Vector2f *v4,
                sf::Vector2f *v5);
 
-    void flipD(sf::Vector2f *v0, sf::Vector2f *v1, sf::Vector2f *v2, sf::Vector2f *v3, sf::Vector2f *v4,
+    void flip_d(sf::Vector2f *v0, sf::Vector2f *v1, sf::Vector2f *v2, sf::Vector2f *v3, sf::Vector2f *v4,
                sf::Vector2f *v5);
 
-    void doFlips(std::uint8_t bits, sf::Vector2f *v0, sf::Vector2f *v1, sf::Vector2f *v2, sf::Vector2f *v3,
+    void do_flips(std::uint8_t bits, sf::Vector2f *v0, sf::Vector2f *v1, sf::Vector2f *v2, sf::Vector2f *v3,
                  sf::Vector2f *v4, sf::Vector2f *v5);
 
   private:
     class ChunkArray;
 
-    std::uint8_t layerOpacity;
-    sf::Vector2f layerOffset;
-    sf::Vector2u mapTileSize;
-    sf::Vector2f chunkTileCount;
-    std::vector<tmx::TileLayer::Tile> m_chunkTileIDs;        // stores all tiles in this chunk for later manipulation
-    std::vector<sf::Color> m_chunkColors;                    // stores colors for extended color effects
-    std::map<std::uint32_t, tmx::Tileset::Tile> m_animTiles; // animation catalogue
-    std::vector<AnimationState> m_activeAnimations;          // animations to be done in this chunk
-    std::vector<std::unique_ptr<ChunkArray>> m_chunkArrays;
+    std::uint8_t _layer_opacity;
+    sf::Vector2f _layer_offset;
+    sf::Vector2u _map_tile_size;
+    sf::Vector2f _chunk_tile_count;
+    std::vector<tmx::TileLayer::Tile> _chunk_tile_ids;        // stores all tiles in this chunk for later manipulation
+    std::vector<sf::Color> _chunk_colors;                     // stores colors for extended color effects
+    std::map<std::uint32_t, tmx::Tileset::Tile> _anim_tiles;  // animation catalogue
+    std::vector<AnimationState> _active_animations;           // animations to be done in this chunk
+    std::vector<std::unique_ptr<ChunkArray>> _chunk_arrays;
 
     void draw(sf::RenderTarget &rt, sf::RenderStates states) const override;
 };
@@ -143,9 +143,9 @@ class MapLayer::Chunk::ChunkArray final : public sf::Drawable
 {
   public:
 
-    tmx::Vector2u tileSetSize;
-    sf::Vector2u tsTileCount;
-    std::uint32_t m_firstGID, m_lastGID;
+    tmx::Vector2u tile_set_size;
+    sf::Vector2u ts_tile_count;
+    std::uint32_t first_gid, last_gid;
 
     explicit ChunkArray(const sf::Texture &t, const tmx::Tileset &ts);
 
@@ -155,12 +155,12 @@ class MapLayer::Chunk::ChunkArray final : public sf::Drawable
 
     void reset();
 
-    void addTile(const Chunk::Tile &tile);
+    void add_tile(const Chunk::Tile &tile);
 
-    sf::Vector2u getTextureSize() const;
+    sf::Vector2u get_texture_size() const;
 
   private:
-    const sf::Texture &m_texture;
-    std::vector<sf::Vertex> m_vertices;
+    const sf::Texture &_texture;
+    std::vector<sf::Vertex> _vertices;
     void draw(sf::RenderTarget &rt, sf::RenderStates states) const override;
 };
