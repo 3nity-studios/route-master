@@ -25,7 +25,7 @@ struct SimulationInfo
     sf::Vector2f projection_bus_speed;
     sf::Texture projection_bus_texture;
 
-    SimulationInfo(Bus _bus, Employee _employee, StreetArcList _path) : bus(_bus), employee(_employee), time_state(std::make_pair<int,int>(-1, 0)), path_index(0), next_is_street(false), route_completed(false), projection_bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), projection_bus(projection_bus_texture) {set_path(_path);}
+    SimulationInfo(Bus _bus, Employee _employee, StreetArcList _path) : bus(_bus), employee(_employee), time_state(std::make_pair<int,int>(-1, 0)), path_index(0), next_is_street(false), route_completed(false), projection_bus_texture(sf::Texture()), projection_bus(projection_bus_texture) {set_path(_path);}
    
     void set_path(StreetArcList path)
     {
