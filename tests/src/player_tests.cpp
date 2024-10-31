@@ -27,8 +27,8 @@ TEST_CASE("Player get_buses", "[player_get_buses]") {
 
 TEST_CASE("Player get_employees", "[player_get_employees]") {
     Player player(5, "Frank", 500);
-    Employee emp1(0, "Emp1", "LastName1", 30, 8, 0);
-    Employee emp2(1, "Emp2", "LastName2", 25, 8, 0);
+    Employee emp1(0, "Emp1", "LastName1", 30, 10, 8, 0);
+    Employee emp2(1, "Emp2", "LastName2", 25, 10, 8, 0);
     player.add_employee(emp1);
     player.add_employee(emp2);
     auto employees = player.get_employees();
@@ -52,8 +52,8 @@ TEST_CASE("Player get_bus", "[player_get_bus]") {
 
 TEST_CASE("Player get_employee", "[player_get_employee]") {
     Player player(3, "Dave", 300);
-    Employee emp1(0, "Emp1", "LastName1", 30, 8, 0);
-    Employee emp2(1, "Emp2", "LastName2", 25, 8, 0);
+    Employee emp1(0, "Emp1", "LastName1", 30, 10, 8, 0);
+    Employee emp2(1, "Emp2", "LastName2", 25, 10, 8, 0);
     player.add_employee(emp1);
     player.add_employee(emp2);
     REQUIRE(player.get_employee(0).get_name() == "Emp1");
@@ -78,7 +78,7 @@ TEST_CASE("Store add_bus", "[store_add_bus]") {
 
 TEST_CASE("Store add_employee", "[store_add_employee]") {
     Store store;
-    Employee emp(0, "Emp1", "LastName1", 30, 8, 0);
+    Employee emp(0, "Emp1", "LastName1", 10, 30, 8, 0);
     store.add_employee_to_inventory(emp, 50, 1);
     REQUIRE(store.get_employee_list().size() == 1);
     REQUIRE(store.get_employee_list()[0].get_name() == "Emp1");

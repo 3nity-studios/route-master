@@ -64,22 +64,6 @@ TEST_CASE("Future passengers don't get on the bus", "[future_passengers]") {
         }
     }
 
-    /*
-    while(!bus_stop.get_passenger_list().empty())
-    {
-        Passenger passenger = bus_stop.pop_first_passenger();
-        if (passenger.get_arrival_time() <= 5 || passenger.get_arrival_time() + passenger.get_waiting_time() >= 3)
-        {
-            test_passed = false;
-            std::cout<<passenger.get_arrival_time()<<std::endl;
-            std::cout<<passenger.get_waiting_time();
-
-            break;
-
-        }
-    }
-    */
-
     REQUIRE(test_passed);
 }
 
@@ -101,18 +85,6 @@ TEST_CASE("Gone passengers don't get on the bus", "[gone_passengers]") {
             break;
         }
     }
-
-    /*
-    while(!bus_stop.get_passenger_list().empty())
-    {
-        Passenger passenger = bus_stop.pop_first_passenger();
-        if (passenger.get_arrival_time() + passenger.get_waiting_time() < 3)
-        {
-            test_passed = false;
-            break;
-        }
-    }
-    */
 
     REQUIRE(test_passed);
 }
@@ -198,7 +170,7 @@ TEST_CASE("Run simulation", "[run_simulation]") {
     }
     
     Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
-    Employee driver(0, "John", "Doe", 30, 8, 0);
+    Employee driver(0, "John", "Doe", 30, 20, 8, 0); 
     city.run_simulation(bus, driver, 10, path);
     REQUIRE(true); // Assuming run_simulation does not return a value to check
 }
@@ -233,7 +205,7 @@ TEST_CASE("Driver fatigue", "[driver_fatigue]") {
     }
     
     Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
-    Employee driver(0, "John", "Doe", 30, 8, 0);
+    Employee driver(0, "John", "Doe", 30, 20, 8, 0); 
     city.run_simulation(bus, driver, 10, path);
     
     REQUIRE(driver.get_fatigue() == 100);
@@ -269,7 +241,7 @@ TEST_CASE("Bus wear", "[bus_wear]") {
     }
     
     Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
-    Employee driver(0, "John", "Doe", 30, 8, 0);
+    Employee driver(0, "John", "Doe", 30, 20, 8, 0); 
     city.run_simulation(bus, driver, 10, path);
     
     REQUIRE(bus.get_engine_state() == 90);
@@ -315,7 +287,7 @@ TEST_CASE("Simulation consistency", "[simulation_consistency]") {
     }
     
     Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
-    Employee driver(0, "John", "Doe", 30, 8, 0);
+    Employee driver(0, "John", "Doe", 30, 20, 8, 0); 
     city.run_simulation(bus, driver, 10, path);
 
     int total_passengers_after_simulation = 0;
