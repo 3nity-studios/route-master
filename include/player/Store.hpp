@@ -27,4 +27,5 @@ class Store
 
     void buy_item(Player &player, int item_id, int amount);
     void buy_bus_maintenance(int id, Player &player, bool repair_engine, bool repair_breaks, bool repair_tires);
+    void pay_employee(int id, Player &player);
 };

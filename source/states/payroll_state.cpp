@@ -32,7 +32,7 @@ void PayrollState::init_state()
         buyButton->setPosition({700.0f, 135.0f + (i * 30.0f)});
         buyButton->setText("Pay " + employee.get_name());
         buyButton->onPress([this, employee] {
-            // this->_data->states.add_state(Engine::StateRef(new BusMaintenance(this->_data, employee.get_id())), false);
+            this->_data->store.pay_employee(employee.get_id(), this->_data->player);
         });
         this->_data->gui.add(buyButton);
     }

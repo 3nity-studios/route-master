@@ -139,3 +139,24 @@ void Store::buy_bus_maintenance(int id, Player &player, bool repair_engine, bool
         player.get_bus(id).repair_bus(repair_engine, repair_breaks, repair_tires);
     }
 }
+
+void Store::pay_employee(int id, Player &player)
+{
+    for (auto &employee : player.get_employees())
+    {
+        if (employee.get_id() == id)
+        {
+            int paycheck = employee.get_accumulated_work_time() * employee.get_hourly_rate();
+            if (player.get_balance() < paycheck)
+            {
+                std::cout << "The player's balance is not sufficient to pay the employee" << std::endl;
+            }
+            else
+            {
+                player.decrease_balance(paycheck);
+                employee.set_accumulated_work_time(0);
+            }
+            break;
+        }
+    }
+}
