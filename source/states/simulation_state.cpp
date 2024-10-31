@@ -11,17 +11,19 @@ float calc_distance(VisualElement element1, VisualElement element2)
 
 SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), person_texture (sf::Image(sf::Vector2u(100, 50), sf::Color::White))
 {
-    BusStop stop1(1, "Stop1", {2, 3, 3}, 3.0, 5.0, 3.0, 3.0, 2.0, 350.f, 5.f);
+    BusStop stop1(1, "Stop1", {2, 3, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 750.f, 5.f);
     BusStop stop2(2, "Stop2", {2, 3, 4}, 3.0, 10.0, 3.0, 3.0, 2.0, 500.f, 5.f);
-    BusStop stop3(3, "Stop3", {2, 3, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 750.f, 5.f);
+    BusStop stop3(3, "Stop3", {2, 3, 3}, 3.0, 5.0, 3.0, 3.0, 2.0, 350.f, 5.f);
     BusStop stop4(4, "Stop4", {2, 4, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 350.f, 250.f);
     BusStop stop5(5, "Stop5", {2, 5, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 600.f, 250.f);
     BusStop stop6(6, "Stop6", {2, 6, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 600.f, 500.f);
 
-    TrafficLight light1(7, std::vector<std::pair<StreetConnectionIDs, bool>>{std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(4,5), true)}, 10, 450.f, 250.f);
+    TrafficLight light1(7, std::vector<std::pair<StreetConnectionIDs, bool>>{std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(6,7), true)}, 10, 450.f, 250.f);
 
-    VisualElement curve1(8, 180.f, 200.f);
-    VisualElement curve2(9, 800.f, 500.f);
+    VisualElement curve1(8, 220.f, 50.f);
+    VisualElement curve2(9, 220.f, 250.f);
+    VisualElement curve3(10, 745.f, 275.f);
+    VisualElement curve4(11, 745.f, 500.f);
 
     city.add_bus_stop(stop1);
     city.add_bus_stop(stop2);
@@ -32,30 +34,36 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
     city.add_bus_stop(stop6);
     city.add_curve(curve1);
     city.add_curve(curve2);
+    city.add_curve(curve3);
+    city.add_curve(curve4);
 
     city.initialize_bus_stops();
 
     Street street1(1, "Street1", calc_distance(stop1, stop2), 200.0f, 2.0f, 0.1f, 0.05f);
     Street street2(2, "Street2", calc_distance(stop2, stop3), 50.0f, 2.0f, 0.1f, 0.05f);
     Street street3(3, "Street3", calc_distance(stop3, curve1), 100.0f, 2.0f, 0.1f, 0.05f);
-    Street street4(4, "Street4", calc_distance(curve1, stop4), 25.0f, 2.0f, 0.1f, 0.05f);
-    Street street5(5, "Street5", calc_distance(stop4, light1), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street6(6, "Street6", calc_distance(light1, stop5), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street7(7, "Street7", calc_distance(stop5, curve2), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street8(8, "Street8", calc_distance(curve2, stop6), 50.0f, 2.0f, 0.1f, 0.05f);
+    Street street4(4, "Street4", calc_distance(curve1, curve2), 25.0f, 2.0f, 0.1f, 0.05f);
+    Street street5(5, "Street5", calc_distance(curve2, stop4), 50.0f, 2.0f, 0.1f, 0.05f);
+    Street street6(6, "Street6", calc_distance(stop4, light1), 50.0f, 2.0f, 0.1f, 0.05f);
+    Street street7(7, "Street7", calc_distance(light1, stop5), 50.0f, 2.0f, 0.1f, 0.05f);
+    Street street8(8, "Street8", calc_distance(stop5, curve3), 100.0f, 2.0f, 0.1f, 0.05f);
+    Street street9(9, "Street9", calc_distance(curve3, curve4), 50.0f, 2.0f, 0.1f, 0.05f);
+    Street street10(10, "Street10", calc_distance(curve4, stop6), 50.0f, 2.0f, 0.1f, 0.05f);
 
     city.add_street(street1, 1, 2);
     city.add_street(street2, 2, 3);
     city.add_street(street3, 3, 8);
-    city.add_street(street4, 8, 4);
-    city.add_street(street5, 4, 7);
-    city.add_street(street6, 7, 5);
-    city.add_street(street7, 5, 9);
-    city.add_street(street8, 9, 6);
+    city.add_street(street4, 8, 9);
+    city.add_street(street5, 9, 4);
+    city.add_street(street6, 4, 7);
+    city.add_street(street7, 7, 5);
+    city.add_street(street8, 5, 10);
+    city.add_street(street9, 10, 11);
+    city.add_street(street10, 11, 6);
 
     StreetArcList path;
 
-    for (int i = 1; i < 5; i++)
+    for (int i = 1; i < 6; i++)
     {
         for (auto street : city.get_streets())
         {
@@ -68,7 +76,7 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
 
     StreetArcList path2;
 
-    for (int i = 5; i < 9; i++)
+    for (int i = 6; i < 11; i++)
     {
         for (auto street : city.get_streets())
         {
@@ -307,6 +315,8 @@ void SimulationState::update_bus_stops()
 void SimulationState::draw_passengers()
 {
     int j = 0; 
+    int k = 0; 
+    sf::IntRect person_select(sf::Vector2i(0, 0), sf::Vector2i(15, 20));
 
     for (auto visual_element : city.get_visual_elements())
     {
@@ -316,11 +326,29 @@ void SimulationState::draw_passengers()
         {
             float passenger_distance = 0; 
             float vertical_distance = 35; 
+            k = 0; 
 
             for (int i = 0; i < city.get_current_passengers().at(j); i++)
             {
+                switch (k)
+                {
+                    case 0: 
+                        person_select.position = sf::Vector2i(0, 0);
+                        break;
+                    case 1: 
+                        person_select.position = sf::Vector2i(15, 0);
+                        break;
+                    case 2: 
+                        person_select.position = sf::Vector2i(30, 0);
+                        break;
+                    default:
+                        person_select.position = sf::Vector2i(45,0);
+                    break;
+                }
+
                 sf::Sprite person(person_texture);
                 person.setPosition(sf::Vector2f(bus_stop->get_x() + passenger_distance, bus_stop->get_y() + vertical_distance));
+                person.setTextureRect(person_select);
                 this->_data->window->draw(person);
 
                 passenger_distance = passenger_distance + 15.f;
@@ -329,6 +357,15 @@ void SimulationState::draw_passengers()
                 {
                     passenger_distance = 0.f; 
                     vertical_distance += 10.f;
+                }
+
+                if (k == 3)
+                {
+                    k = 0; 
+                }
+                else
+                {
+                    k++;
                 }
             }
 
@@ -347,7 +384,7 @@ void SimulationState::init_bus()
         info.projection_bus.setTextureRect(bus_rect);
         sf::FloatRect bounds = info.projection_bus.getLocalBounds();
         info.projection_bus.setOrigin(bounds.getCenter());
-        info.projection_bus.rotate(sf::degrees(90));
+        info.projection_bus.rotate(sf::degrees(270));
         info.projection_bus.setPosition(sf::Vector2f(info.elements_path.front()->get_x() + 35.f, info.elements_path.front()->get_y() + 85.f));
         info.projection_bus.setScale(sf::Vector2<float>(0.1, 0.1));
     }
@@ -368,12 +405,6 @@ void SimulationState::update_bus()
         simulation_clock.restart();
         city.run_simulation(simulation_info);
         current_time++;
-
-        if (simulation_info.front().route_completed)
-        {
-            status = "Route completed";
-            return; 
-        }
     }
     else
     {
@@ -387,6 +418,12 @@ void SimulationState::update_bus()
 
     for (auto &info : simulation_info)
     {
+        if (info.route_completed)
+        {
+            status = "Route completed";
+            continue;
+        }
+
         auto time = info.time_state;
 
         if (time.first == 0 || time.first == 2 || time.first == 3)
