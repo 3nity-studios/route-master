@@ -1,4 +1,5 @@
 #include "states/inventory_state.hpp"
+#include "states/bus_maintenance_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
 #include "states/main_menu_state.hpp"
@@ -31,8 +32,11 @@ void InventoryState::init_state()
         buyButton->setWidgetName(item.get_id() + "RepairButton");
         buyButton->setPosition({700.0f, 120.0f + (i * 30.0f)});
         buyButton->setText("Repair " + item.get_name());
+        // buyButton->onPress([this, item] {
+        //     this->_data->store.buy_bus_maintenance(item.get_id(), this->_data->player, true, true, true);
+        // });
         buyButton->onPress([this, item] {
-            this->_data->store.buy_bus_maintenance(item.get_id(), this->_data->player, true, true, true);
+            this->_data->states.add_state(Engine::StateRef(new BusMaintenance(this->_data, item.get_id())), false);
         });
         this->_data->gui.add(buyButton);
     }
