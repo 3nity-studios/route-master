@@ -179,6 +179,8 @@ set(
   ${SRCROOT}/states/simulation_state.cpp
   ${INCROOT}/states/inventory_state.hpp
   ${SRCROOT}/states/inventory_state.cpp
+  ${INCROOT}/states/bus_maintenance_state.hpp
+  ${SRCROOT}/states/bus_maintenance_state.cpp
 )
 add_library(route_master_states ${RM_STATES_SRC})
 add_library(route_master::states ALIAS route_master_states)

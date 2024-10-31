@@ -1,0 +1,152 @@
+Picture.Picture1 {
+    Size = (929, 608.944);
+
+    Renderer {
+        Texture = "../img/bg/title_screen.png" Smooth;
+        TransparentTexture = false;
+    }
+}
+
+Label.title {
+    AutoSize = true;
+    HorizontalAlignment = Center;
+    Position = (180, 20);
+    Size = (270, 73);
+    Text = Bus Maintenance;
+    TextSize = 60;
+
+    Renderer {
+        BorderColor = None;
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        TextColor = white;
+        TextOutlineColor = black;
+        TextOutlineThickness = 2;
+        TextureBackground = None;
+
+        Scrollbar {
+            ArrowBackgroundColor = None;
+            ArrowBackgroundColorHover = None;
+            ArrowColor = None;
+            ArrowColorHover = None;
+            TextureArrowDown = "../tgui/kenney/PNG/Blue/Default/arrow_basic_s_small.png" Smooth;
+            TextureArrowDownHover = "../tgui/kenney/PNG/Extra/Default/icon_arrow_down_outline.png" Smooth;
+            TextureArrowUp = "../tgui/kenney/PNG/Blue/Default/arrow_basic_n_small.png" Smooth;
+            TextureArrowUpHover = "../tgui/kenney/PNG/Extra/Default/icon_arrow_up_outline.png" Smooth;
+            TextureThumb = None;
+            TextureThumbHover = None;
+            TextureTrack = None;
+            TextureTrackHover = None;
+            ThumbColor = #35BAF3;
+            ThumbColorHover = #55FFFF;
+            TrackColor = #C3C3C3;
+            TrackColorHover = #DDDDDD;
+        }
+    }
+}
+
+Button.repair_button {
+    Position = (200, 500);
+    Size = (180, 63);
+    Text = "Repair";
+    TextSize = 26;
+
+    Renderer {
+        BackgroundColor = None;
+        BackgroundColorDisabled = None;
+        BackgroundColorDown = None;
+        BackgroundColorDownFocused = None;
+        BackgroundColorDownHover = None;
+        BackgroundColorFocused = None;
+        BackgroundColorHover = None;
+        BorderColor = None;
+        BorderColorDisabled = None;
+        BorderColorDown = None;
+        BorderColorDownFocused = None;
+        BorderColorDownHover = None;
+        BorderColorFocused = None;
+        BorderColorHover = None;
+        Borders = (0, 0, 0, 0);
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        Opacity = 1;
+        OpacityDisabled = -1;
+        RoundedBorderRadius = 5;
+        TextColor = #EEEEEE;
+        TextColorDisabled = #7D7D7D;
+        TextColorDown = #3C3C3C;
+        TextColorDownFocused = #FFFFFF;
+        TextColorDownHover = #DDDDDD;
+        TextColorFocused = #FFFFFF;
+        TextColorHover = #FFFFFF;
+        TextOutlineColor = black;
+        TextOutlineThickness = 2;
+        TextStyle = Regular;
+        TextStyleDisabled = Regular;
+        TextStyleDown = Regular;
+        TextStyleDownFocused = Regular;
+        TextStyleDownHover = Regular;
+        TextStyleFocused = Regular;
+        TextStyleHover = Regular;
+        Texture = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
+        TextureDisabled = None;
+        TextureDown = None;
+        TextureDownFocused = None;
+        TextureDownHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_flat.png" Middle(4, 4, 96, 32) Smooth;
+        TextureFocused = None;
+        TextureHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gradient.png" Middle(4, 4, 96, 32) Smooth;
+        TransparentTexture = False;
+    }
+}
+
+
+Button.cancel_button {
+    Position = (450, 500);
+    Size = (180, 63);
+    Text = "Cancel";
+    TextSize = 26;
+
+    Renderer {
+        BackgroundColor = None;
+        BackgroundColorDisabled = None;
+        BackgroundColorDown = None;
+        BackgroundColorDownFocused = None;
+        BackgroundColorDownHover = None;
+        BackgroundColorFocused = None;
+        BackgroundColorHover = None;
+        BorderColor = None;
+        BorderColorDisabled = None;
+        BorderColorDown = None;
+        BorderColorDownFocused = None;
+        BorderColorDownHover = None;
+        BorderColorFocused = None;
+        BorderColorHover = None;
+        Borders = (0, 0, 0, 0);
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        Opacity = 1;
+        OpacityDisabled = -1;
+        RoundedBorderRadius = 5;
+        TextColor = #EEEEEE;
+        TextColorDisabled = #7D7D7D;
+        TextColorDown = #3C3C3C;
+        TextColorDownFocused = #FFFFFF;
+        TextColorDownHover = #DDDDDD;
+        TextColorFocused = #FFFFFF;
+        TextColorHover = #FFFFFF;
+        TextOutlineColor = black;
+        TextOutlineThickness = 2;
+        TextStyle = Regular;
+        TextStyleDisabled = Regular;
+        TextStyleDown = Regular;
+        TextStyleDownFocused = Regular;
+        TextStyleDownHover = Regular;
+        TextStyleFocused = Regular;
+        TextStyleHover = Regular;
+        Texture = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
+        TextureDisabled = None;
+        TextureDown = None;
+        TextureDownFocused = None;
+        TextureDownHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_flat.png" Middle(4, 4, 96, 32) Smooth;
+        TextureFocused = None;
+        TextureHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gradient.png" Middle(4, 4, 96, 32) Smooth;
+        TransparentTexture = False;
+    }
+}
