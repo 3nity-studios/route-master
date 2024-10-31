@@ -53,4 +53,6 @@ class SimulationState : public Engine::State
     sf::Texture bus_texture;
     sf::Texture bus_stops_texture;
     int actual_stop;
+    sf::View game_view;
+    sf::View gui_view;
 };

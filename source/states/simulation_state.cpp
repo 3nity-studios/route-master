@@ -1,15 +1,20 @@
 #include "states/simulation_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
-#include <string>
+#include <SFML/Window/Mouse.hpp>
 #include <cmath>
+#include <string>
 
 float calc_distance(VisualElement element1, VisualElement element2)
 {
     return sqrt(pow(element1.get_x() - element2.get_x(), 2) + pow(element1.get_y() - element2.get_y(), 2));
 }
 
-SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_sim(Bus(1, "Bus 125", 32, std::list<Passenger>{}, 5)), driver_sim(Employee(0, "John", "Doe", 32, 12, 0)), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), bus(bus_texture)
+SimulationState::SimulationState(GameDataRef data)
+    : _data(data), first_time(true), status("Picking up passengers"),
+      bus_sim(Bus(1, "Bus 125", 32, std::list<Passenger>{}, 5)), driver_sim(Employee(0, "John", "Doe", 32, 12, 0)),
+      bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)),
+      bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), bus(bus_texture)
 {
     BusStop stop1(1, "Stop1", {10, 11, 10}, 2.0, 5.0, 3.0, 3.0, 2.0, 350.f, 5.f);
     BusStop stop2(2, "Stop2", {10, 11, 10}, 3.0, 10.0, 3.0, 3.0, 2.0, 500.f, 5.f);
@@ -18,7 +23,10 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
     BusStop stop5(5, "Stop5", {11, 10, 11}, 15.0, 15.0, 3.0, 3.0, 2.0, 600.f, 250.f);
     BusStop stop6(6, "Stop6", {10, 11, 10}, 15.0, 15.0, 3.0, 3.0, 2.0, 600.f, 500.f);
 
-    TrafficLight light1(7, std::vector<std::pair<StreetConnectionIDs, bool>>{std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(4,5), true)}, 10, 450.f, 250.f);
+    TrafficLight light1(7,
+                        std::vector<std::pair<StreetConnectionIDs, bool>>{
+                            std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(4, 5), true)},
+                        10, 450.f, 250.f);
 
     VisualElement curve1(8, 180.f, 200.f);
     VisualElement curve2(9, 800.f, 500.f);
@@ -79,15 +87,95 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
 
     set_simulation_parameters(simulation_info.times);
 
-    actual_stop = 0; 
+    actual_stop = 0;
 }
 
 SimulationState::SimulationState(GameDataRef data, std::list<std::pair<int, int>> _simulation_times,
                                  Bus _simulation_bus, Employee _simulation_driver)
-    : _data(data), times(_simulation_times), first_time(true), bus_sim (_simulation_bus), driver_sim(_simulation_driver),
+    : _data(data), times(_simulation_times), first_time(true), bus_sim(_simulation_bus), driver_sim(_simulation_driver),
       status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus(bus_texture)
 {
 }
+
+void calcMapView(sf::RenderWindow &game_window, sf::View &map_view)
+{
+    uint x_size = game_window.getSize().x;
+    uint y_size = game_window.getSize().y;
+
+    float x_float = (float)x_size / static_cast<float>(game_window.getSize().x);
+    float y_float = (float)y_size / static_cast<float>(game_window.getSize().y);
+    auto window_size = sf::FloatRect({0.f, 0.f}, {static_cast<float>(x_size), static_cast<float>(y_size)});
+    auto viewport_size = sf::FloatRect({0.f, 0.f}, {x_float, y_float});
+    map_view.setSize({static_cast<float>(x_size), static_cast<float>(y_size)});
+    map_view.setViewport(viewport_size);
+}
+
+enum screenScrollDirection
+{
+    NO_SCROLL = -1,
+    SCROLL_LEFT,
+    SCROLL_RIGHT,
+    SCROLL_UP,
+    SCROLL_DOWN
+};
+
+int scrollSpeed = 30000;
+
+void scrollMapView(screenScrollDirection passed_ScrollDirection, sf::View &mapView, sf::Clock gameClock)
+{
+    switch (passed_ScrollDirection)
+    {
+    case SCROLL_LEFT:
+        mapView.move({static_cast<float>(-scrollSpeed) * gameClock.getElapsedTime().asSeconds(), 0});
+        break;
+    case SCROLL_RIGHT:
+        mapView.move({static_cast<float>(scrollSpeed) * gameClock.getElapsedTime().asSeconds(), 0});
+        break;
+    case SCROLL_UP:
+        mapView.move({0, static_cast<float>(-scrollSpeed) * gameClock.getElapsedTime().asSeconds()});
+        break;
+    case SCROLL_DOWN:
+        mapView.move({0, static_cast<float>(scrollSpeed) * gameClock.getElapsedTime().asSeconds()});
+        break;
+    case NO_SCROLL:
+    default:
+        break;
+    }
+}
+
+void zoomView(float zoomDelta, sf::View &mapView)
+{
+    mapView.zoom(zoomDelta);
+}
+
+sf::Vector2i mousePos;
+
+screenScrollDirection isScreenScrollRequired(sf::RenderWindow &gameWindow)
+{
+        mousePos = sf::Mouse::getPosition(gameWindow);
+
+        if (mousePos.x < 10)
+        {
+                return SCROLL_LEFT;
+        }
+        else if (mousePos.x > gameWindow.getSize().x - 10)
+        {
+                return SCROLL_RIGHT;
+        }
+        else if (mousePos.y < 10)
+        {
+                return SCROLL_UP;
+        }
+        else if (mousePos.y > gameWindow.getSize().y - 10)
+        {
+                return SCROLL_DOWN;
+        }
+        
+        return NO_SCROLL;
+}
+
+sf::View view;
+float gameZoom;
 
 void SimulationState::init_state()
 {
@@ -102,68 +190,30 @@ void SimulationState::init_state()
         throw GameException("Couldn't find file: assets/img/bus_stop_sprites.png");
     }
 
-    sf::View view(sf::FloatRect({0.f, 0.f}, {1000.f, 600.f}));
-    this->_data->window->setView(view);
+    calcMapView(*this->_data->window, game_view);
+    this->_data->window->setView(game_view);
     init_bus_stops();
     init_bus();
 }
 
-/// the last known mouse position
-sf::Vector2i previous_mouse_position;
-/// whether we are dragging or not
-bool dragging = false;
-
 void SimulationState::update_inputs()
 {
-    sf::RenderTarget &target{*this->_data->window};
     // Event Polling
     while (const std::optional event = this->_data->window->pollEvent())
     {
         this->_data->gui.handleEvent(*event);
+    
+        if (const auto *mouseWheel = event->getIf<sf::Event::MouseWheelScrolled>())
+        {
+            gameZoom -= 0.05f * mouseWheel->delta;
+            zoomView(gameZoom, this->game_view);
+            this->_data->window->setView(game_view);
+        }
 
         if (event->is<sf::Event::Closed>())
         {
             this->_data->window->close();
             break;
-        }
-
-        if (const auto *keyPress = event->getIf<sf::Event::MouseButtonPressed>())
-        {
-            // if mouse button is pressed start dragging
-            if (keyPress->button == sf::Mouse::Button::Right)
-            {
-                dragging = true;
-                return;
-            }
-        }
-        if (const auto *keyPress = event->getIf<sf::Event::MouseButtonReleased>())
-        {
-            // if mouse button is released stop draggin
-            if (keyPress->button == sf::Mouse::Button::Right)
-            {
-                dragging = false;
-                return;
-            }
-        }
-        // if dragging mouse
-        if (const auto *keyPress = event->getIf<sf::Event::MouseMoved>())
-        {
-            // get mouse position
-            const sf::Vector2i mouse_position{keyPress->position.x, keyPress->position.y};
-            // if dragging, move view
-            if (dragging)
-            {
-                // calculate how far mouse has moved in view
-                const auto delta =
-                    target.mapPixelToCoords(mouse_position) - target.mapPixelToCoords(previous_mouse_position);
-                // apply negatively to view
-                auto view = target.getView();
-                view.move(-delta);
-                target.setView(view);
-            }
-            // update previous mouse position
-            previous_mouse_position = mouse_position;
-            return;
         }
 
         if (const auto *keyPress = event->getIf<sf::Event::KeyPressed>())
@@ -177,6 +227,7 @@ void SimulationState::update_inputs()
         }
     }
 }
+
 
 // marks dt to not warn compiler
 void SimulationState::update_state(float dt __attribute__((unused)))
@@ -201,7 +252,9 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
 
     sf::Clock globalClock;
     sf::Time duration = globalClock.restart();
-    layerZero.update(duration);
+    scrollMapView(isScreenScrollRequired(*this->_data->window), game_view, globalClock);
+    this->_data->window->setView(game_view);
+    // layerZero.update(duration);
     this->_data->window->draw(layerZero);
     this->_data->window->draw(layerOne);
 
@@ -224,7 +277,6 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
 
     // set the color
     text.setFillColor(sf::Color::White);
-
     // set the text style
     text.setStyle(sf::Text::Bold | sf::Text::Underlined);
 
@@ -252,7 +304,8 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
 
     sf::Text text2(font);
     // set the string to display
-    text2.setString("\nDriver: " + driver_sim.get_name() + " " + driver_sim.get_last_name() + "\n" + "Bus: " + bus_sim.get_name());
+    text2.setString("\nDriver: " + driver_sim.get_name() + " " + driver_sim.get_last_name() + "\n" +
+                    "Bus: " + bus_sim.get_name());
 
     // set the character size
     text2.setCharacterSize(12); // in pixels, not points!
@@ -287,7 +340,7 @@ float generateRandom(float lower, float upper)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dis (lower, upper);
+    std::uniform_real_distribution<float> dis(lower, upper);
 
     return std::round(dis(gen));
 }
@@ -301,8 +354,9 @@ void SimulationState::init_bus_stops()
         if (stop)
         {
             sf::Sprite bus_stop(bus_stops_texture);
-            bus_stop.setTextureRect(sf::IntRect(sf::Vector2i(617,200), sf::Vector2i(197,104)));
-            bus_stop.setPosition(sf::Vector2f(visual_element->get_info()->get_x(), visual_element->get_info()->get_y()));
+            bus_stop.setTextureRect(sf::IntRect(sf::Vector2i(617, 200), sf::Vector2i(197, 104)));
+            bus_stop.setPosition(
+                sf::Vector2f(visual_element->get_info()->get_x(), visual_element->get_info()->get_y()));
             bus_stop.setScale(sf::Vector2<float>(0.5, 0.5));
             bus_stops.push_back(bus_stop);
 
@@ -312,9 +366,12 @@ void SimulationState::init_bus_stops()
             {
                 std::uniform_real_distribution<float> dis(bus_stop.getPosition().x, bus_stop.getLocalBounds().size.x);
 
-                sf::CircleShape passenger; 
+                sf::CircleShape passenger;
 
-                passenger.setPosition(sf::Vector2f(generateRandom(bus_stop.getPosition().x, bus_stop.getPosition().x + (0.5*bus_stop.getLocalBounds().size.x)), bus_stop.getPosition().y + 60));
+                passenger.setPosition(
+                    sf::Vector2f(generateRandom(bus_stop.getPosition().x,
+                                                bus_stop.getPosition().x + (0.5 * bus_stop.getLocalBounds().size.x)),
+                                 bus_stop.getPosition().y + 60));
 
                 passenger.setRadius(2.f);
 
@@ -327,12 +384,12 @@ void SimulationState::init_bus_stops()
 }
 
 void SimulationState::update_bus_stops()
-{   
+{
 }
 
 void SimulationState::init_bus()
 {
-    sf::IntRect bus_texture(sf::Vector2i(8,5), sf::Vector2i(358,657));
+    sf::IntRect bus_texture(sf::Vector2i(8, 5), sf::Vector2i(358, 657));
 
     bus.setTextureRect(bus_texture);
 
@@ -366,9 +423,10 @@ void SimulationState::update_bus()
 
     auto time = times.front();
 
-    if ((time.first == 0 || time.first == 2 || time.first == 3) && simulation_clock.getElapsedTime().asSeconds() >= time.second)
+    if ((time.first == 0 || time.first == 2 || time.first == 3) &&
+        simulation_clock.getElapsedTime().asSeconds() >= time.second)
     {
-        if(time.first == 0)
+        if (time.first == 0)
         {
             auto passengers_leave = simulation_info.passengers.at(actual_stop).first;
             auto passengers_add = simulation_info.passengers.at(actual_stop).second;
@@ -379,7 +437,7 @@ void SimulationState::update_bus()
                 {
                     if (passengers.at(actual_stop).size() > 0)
                     {
-                        passengers.at(actual_stop).pop_front(); 
+                        passengers.at(actual_stop).pop_front();
                     }
                 }
             }
@@ -392,11 +450,13 @@ void SimulationState::update_bus()
         elements_path.pop_front();
         auto stop2 = elements_path.front();
 
-        sf::Angle rotation = sf::radians(M_PI - (atan((stop2->get_x() - stop1->get_x()) / (stop2->get_y() - stop1->get_y()))));
+        sf::Angle rotation =
+            sf::radians(M_PI - (atan((stop2->get_x() - stop1->get_x()) / (stop2->get_y() - stop1->get_y()))));
 
         bus.setRotation(rotation);
 
-        bus_speed = sf::Vector2f((stop2->get_x() - stop1->get_x()) / (time.second * 60.f), (stop2->get_y() - stop1->get_y()) / (time.second * 60.f));
+        bus_speed = sf::Vector2f((stop2->get_x() - stop1->get_x()) / (time.second * 60.f),
+                                 (stop2->get_y() - stop1->get_y()) / (time.second * 60.f));
         status = "Travelling";
     }
     else if (time.first == 1 && simulation_clock.getElapsedTime().asSeconds() >= time.second)
