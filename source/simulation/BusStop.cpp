@@ -107,3 +107,23 @@ void BusStop::add_gone_passengers(const int& num)
 {
     gone_passengers += num;
 }
+
+int BusStop::get_actual_passengers(int current_time)
+{
+    int passengers = 0; 
+    auto aux = passenger_list;
+
+    while (!aux.empty())
+    {
+        auto passenger = aux.top();
+
+        if ((passenger.get_arrival_time() >= current_time) && (passenger.get_arrival_time() + passenger.get_waiting_time() <= current_time))
+        {
+            passengers++;
+        }
+
+        aux.pop();
+    }
+
+    return passengers;
+}

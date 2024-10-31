@@ -12,6 +12,11 @@ include_directories(${CMAKE_BINARY_DIR}/include)
 add_executable(route_master_test src/route_master_test.cpp)
 target_link_libraries(
     route_master_test PRIVATE
+    SFML::Graphics
+    SFML::Window
+    SFML::Audio
+    SFML::System
+    TGUI::TGUI
     route_master::states
     route_master::config
     route_master::platform
@@ -40,6 +45,11 @@ target_include_directories(simulation_tests PRIVATE ${CMAKE_SOURCE_DIR}/include/
 
 target_link_libraries(
     simulation_tests PRIVATE
+    SFML::Graphics
+    SFML::Window
+    SFML::Audio
+    SFML::System
+    TGUI::TGUI
     route_master::states
     route_master::config
     route_master::platform
@@ -65,6 +75,11 @@ target_include_directories(player_tests PRIVATE ${CMAKE_SOURCE_DIR}/include/play
 
 target_link_libraries(
     player_tests PRIVATE
+    SFML::Graphics
+    SFML::Window
+    SFML::Audio
+    SFML::System
+    TGUI::TGUI
     route_master::states
     route_master::config
     route_master::platform

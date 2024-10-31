@@ -45,6 +45,7 @@ class BusStop : public VisualElement
     void generate_passengers(int current_time);
     void add_passenger(const Passenger& passenger);
     Passenger pop_first_passenger();
+    int get_actual_passengers(int current_time);
 
     int get_gone_passengers() const noexcept;
     void add_gone_passengers(const int& num);

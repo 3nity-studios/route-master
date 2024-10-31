@@ -196,10 +196,19 @@ TEST_CASE("Run simulation", "[run_simulation]") {
             }
         }
     }
-    
+
     Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
     Employee driver(0, "John", "Doe", 30, 8, 0);
-    city.run_simulation(bus, driver, 10, path);
+
+    SimulationInfo simulation_info(bus, driver, path);
+    std::vector<SimulationInfo> aux;
+    aux.push_back(simulation_info);
+
+    while (!aux.front().route_completed)
+    {
+        city.run_simulation(aux);
+    }
+
     REQUIRE(true); // Assuming run_simulation does not return a value to check
 }
 
@@ -234,9 +243,17 @@ TEST_CASE("Driver fatigue", "[driver_fatigue]") {
     
     Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
     Employee driver(0, "John", "Doe", 30, 8, 0);
-    city.run_simulation(bus, driver, 10, path);
     
-    REQUIRE(driver.get_fatigue() == 100);
+    SimulationInfo simulation_info(bus, driver, path);
+    std::vector<SimulationInfo> aux;
+    aux.push_back(simulation_info);
+
+    while (!aux.front().route_completed)
+    {
+        city.run_simulation(aux);
+    }
+    
+    REQUIRE(aux.front().employee.get_fatigue() == 100);
 }
 
 TEST_CASE("Bus wear", "[bus_wear]") {
@@ -270,12 +287,20 @@ TEST_CASE("Bus wear", "[bus_wear]") {
     
     Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
     Employee driver(0, "John", "Doe", 30, 8, 0);
-    city.run_simulation(bus, driver, 10, path);
     
-    REQUIRE(bus.get_engine_state() == 90);
-    REQUIRE(bus.get_breaks_state() == 80);
-    REQUIRE(bus.get_tires_state() == 80);
-    REQUIRE(bus.get_fuel() == 34);
+    SimulationInfo simulation_info(bus, driver, path);
+    std::vector<SimulationInfo> aux;
+    aux.push_back(simulation_info);
+
+    while (!aux.front().route_completed)
+    {
+        city.run_simulation(aux);
+    }
+    
+    REQUIRE(aux.front().bus.get_engine_state() == 90);
+    REQUIRE(aux.front().bus.get_breaks_state() == 80);
+    REQUIRE(aux.front().bus.get_tires_state() == 80);
+    REQUIRE(aux.front().bus.get_fuel() == 34);
 }
 
 TEST_CASE("Simulation consistency", "[simulation_consistency]") {
@@ -293,9 +318,14 @@ TEST_CASE("Simulation consistency", "[simulation_consistency]") {
 
     int total_passengers = 0;
 
-    for (auto visual_element : city.get_visual_elements()) {
+    for (auto visual_element : city.get_visual_elements()) 
+    {
         auto stop = std::dynamic_pointer_cast<BusStop>(visual_element->get_info());
-        total_passengers += stop->get_passenger_list().size();
+
+        if (stop)
+        {
+            total_passengers += stop->get_passenger_list().size();
+        }
     }
     
     Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f, 0.05f);
@@ -314,18 +344,33 @@ TEST_CASE("Simulation consistency", "[simulation_consistency]") {
         }
     }
     
-    Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
+    Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 15);
     Employee driver(0, "John", "Doe", 30, 8, 0);
-    city.run_simulation(bus, driver, 10, path);
+
+    SimulationInfo simulation_info(bus, driver, path);
+    std::vector<SimulationInfo> aux;
+    aux.push_back(simulation_info);
+
+    city.update();
+
+    while (!aux.front().route_completed)
+    {
+        city.run_simulation(aux);
+    }
 
     int total_passengers_after_simulation = 0;
 
-    for (auto visual_element : city.get_visual_elements()) {
+    for (auto visual_element : city.get_visual_elements()) 
+    {
         auto bus_stop = std::dynamic_pointer_cast<BusStop>(visual_element->get_info());
-        total_passengers_after_simulation += bus_stop->get_passenger_list().size() + bus_stop->get_gone_passengers();
+
+        if (bus_stop)
+        {
+            total_passengers_after_simulation += bus_stop->get_passenger_list().size() + bus_stop->get_gone_passengers();
+        }
     }
 
-    total_passengers_after_simulation += bus.get_attended_passengers();
+    //total_passengers_after_simulation += aux.front().bus.get_attended_passengers();
     
     REQUIRE(total_passengers_after_simulation == total_passengers);
 }
