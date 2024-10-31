@@ -405,12 +405,6 @@ void SimulationState::update_bus()
         simulation_clock.restart();
         city.run_simulation(simulation_info);
         current_time++;
-
-        if (simulation_info.front().route_completed)
-        {
-            status = "Route completed";
-            return; 
-        }
     }
     else
     {
@@ -424,6 +418,12 @@ void SimulationState::update_bus()
 
     for (auto &info : simulation_info)
     {
+        if (info.route_completed)
+        {
+            status = "Route completed";
+            continue;
+        }
+
         auto time = info.time_state;
 
         if (time.first == 0 || time.first == 2 || time.first == 3)
