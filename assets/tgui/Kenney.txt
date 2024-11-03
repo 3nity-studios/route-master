@@ -257,9 +257,21 @@ Label {
 }
 
 ListView {
-    HeaderBackgroundColor = rgb( 95,  95,  95);
-    HeaderTextColor       = rgb(210, 210, 210);
-    Borders               = (1, 1, 1, 1);
+    HeaderBackgroundColor        = #35BAF3;
+    HeaderTextColor              = #FFFFFF;
+    Font                         = "kenney/Font/Kenney Future.ttf";
+    Borders                      = (1, 1, 1, 1);
+    BackgroundColor              = rgb(80, 80, 80);
+    BackgroundColorHover         = rgb(100, 100, 100);
+    Borders                      = (0, 0, 0, 0);
+    BorderColor                  = None;
+    Padding                      = (10, 10, 10, 10);
+    SelectedBackgroundColor      = #35BAF3;
+    SelectedBackgroundColorHover = #0E7EA9;
+    SelectedTextColor            = #FFFFFF;
+    TextColor                    = #3C3C3C;
+    TextColorHover               = #EEEEEE;
+    TextureBackground            = "kenney/PNG/Extra/Default/button_rectangle_line.png" Part(0, 9, 192, 54) Middle(9, 9, 96, 26) Smooth;
 }
 
 MenuBar {

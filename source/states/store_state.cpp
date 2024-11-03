@@ -119,12 +119,6 @@ void StoreState::update_state(float dt __attribute__((unused)))
 void StoreState::draw_state(float dt __attribute__((unused)))
 {
     this->_data->gui.draw();
-    
-    sf::RectangleShape rectangle(sf::Vector2f(5, 80));
-    rectangle.setPosition({5, 85});
-    rectangle.setFillColor(sf::Color(255, 255, 255, 128));
-    rectangle.setSize(sf::Vector2f(440, 400));
-    this->_data->window->draw(rectangle);
 
     // write text
     sf::Font font("assets/fonts/joystix.ttf");
@@ -136,91 +130,35 @@ void StoreState::draw_state(float dt __attribute__((unused)))
         throw GameException("Couldn't find file: assets/fonts/joystix.ttf");
     }
 
-    // Create a text object for the player name
-    sf::Text playerNameText(font);
-    playerNameText.setString("Player: " + this->_data->player.get_name());
-    playerNameText.setCharacterSize(20);
-    playerNameText.setFillColor(sf::Color::Black);
-    playerNameText.setStyle(sf::Text::Regular);
+    // Create a label for the player name
+    auto playerInfoLabel = tgui::Label::create();
+    playerInfoLabel->setText("Player: " + this->_data->player.get_name() + 
+                            "\nBalance: $" + std::to_string(this->_data->player.get_balance()));
+    playerInfoLabel->getRenderer()->setTextColor(sf::Color::White);
+    playerInfoLabel->getRenderer()->setTextOutlineColor(sf::Color::Black);
+    playerInfoLabel->getRenderer()->setTextOutlineThickness(2);
+    playerInfoLabel->setTextSize(16);
+    playerInfoLabel->setPosition({this->_data->window->getSize().x - 200.0f, 20.0f});
+    this->_data->gui.add(playerInfoLabel);
 
-    // Set the position of the player name text
-    playerNameText.setPosition({this->_data->window->getSize().x - 200.0f, 10.0f});
-    this->_data->window->draw(playerNameText);
+    // Create a ListView for displaying items
+    auto listView = tgui::ListView::create();
+    listView->setSize({440.0f, 400.0f});
+    listView->setPosition({10, 90});
+    listView->setHeaderHeight(30);
+    listView->addColumn("Item Name", 175, tgui::HorizontalAlignment::Center);
+    listView->addColumn("Price", 100, tgui::HorizontalAlignment::Center);
+    listView->addColumn("Amount", 100, tgui::HorizontalAlignment::Center);
+    listView->setHorizontalScrollbarPolicy(tgui::Scrollbar::Policy::Never);
 
-    // Create a text object for the player balance
-    sf::Text playerBalanceText(font);
-    playerBalanceText.setString("Balance: $" + std::to_string(this->_data->player.get_balance()));
-    playerBalanceText.setCharacterSize(20);
-    playerBalanceText.setFillColor(sf::Color::Black);
-    playerBalanceText.setStyle(sf::Text::Regular);
-
-    // Set the position of the player balance text
-    playerBalanceText.setPosition({this->_data->window->getSize().x - 200.0f, 40.0f});
-    this->_data->window->draw(playerBalanceText);
-
-    // Draw table headers
-    sf::Text headerName(font);
-    headerName.setString("Item Name");
-    headerName.setCharacterSize(20);
-    headerName.setFillColor(sf::Color::Black);
-    headerName.setStyle(sf::Text::Bold);
-    headerName.setPosition({10.0f, 90.0f});
-    this->_data->window->draw(headerName);
-
-    sf::Text headerPrice(font);
-    headerPrice.setString("Price");
-    headerPrice.setCharacterSize(20);
-    headerPrice.setFillColor(sf::Color::Black);
-    headerPrice.setStyle(sf::Text::Bold);
-    headerPrice.setPosition({150.0f, 90.0f});
-    this->_data->window->draw(headerPrice);
-
-    sf::Text headerAmount(font);
-    headerAmount.setString("Amount");
-    headerAmount.setCharacterSize(20);
-    headerAmount.setFillColor(sf::Color::Black);
-    headerAmount.setStyle(sf::Text::Bold);
-    headerAmount.setPosition({300.0f, 90.0f});
-    this->_data->window->draw(headerAmount);
-
-    int i = 0;
+    // Add items to the ListView
     for (const auto &item : items_to_show)
     {
-        // Create a text object for the item name
-        sf::Text itemText(font);
-        itemText.setString(item.get_name());
-        itemText.setCharacterSize(20);
-        itemText.setFillColor(sf::Color::Black);
-        itemText.setStyle(sf::Text::Regular);
-
-        // Set the position of the text
-        itemText.setPosition({10.0f, 120.0f + (i * 30.0f)});
-        this->_data->window->draw(itemText);
-
-        // Create a text object for the item price
-        sf::Text priceText(font);
-        priceText.setString(std::to_string(item.get_price()));
-        priceText.setCharacterSize(20);
-        priceText.setFillColor(sf::Color::Black);
-        priceText.setStyle(sf::Text::Regular);
-
-        // Set the position of the price text
-        priceText.setPosition({150.0f, 120.0f + (i * 30.0f)});
-        this->_data->window->draw(priceText);
-
-        // Create a text object for the item amount
-        sf::Text amountText(font);
-        amountText.setString(std::to_string(item.get_amount()));
-        amountText.setCharacterSize(20);
-        amountText.setFillColor(sf::Color::Black);
-        amountText.setStyle(sf::Text::Regular);
-
-        // Set the position of the amount text
-        amountText.setPosition({300.0f, 120.0f + (i * 30.0f)});
-        this->_data->window->draw(amountText);
-
-        ++i;
+        listView->addItem({item.get_name(), std::to_string(item.get_price()), std::to_string(item.get_amount())});
     }
+
+    // Add the ListView to the GUI
+    this->_data->gui.add(listView);
 
     // Displays rendered objects
     this->_data->window->display();

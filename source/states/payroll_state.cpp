@@ -73,12 +73,6 @@ void PayrollState::draw_state(float dt __attribute__((unused)))
 {
     this->_data->gui.draw();
 
-    sf::RectangleShape rectangle(sf::Vector2f(5, 80));
-    rectangle.setPosition({5, 85});
-    rectangle.setFillColor(sf::Color(255, 255, 255, 128));
-    rectangle.setSize(sf::Vector2f(690, 400));
-    this->_data->window->draw(rectangle);
-
     // write text
     sf::Font font("assets/fonts/joystix.ttf");
 
@@ -89,119 +83,43 @@ void PayrollState::draw_state(float dt __attribute__((unused)))
         throw GameException("Couldn't find file: assets/fonts/joystix.ttf");
     }
 
-    // Create a text object for the player name
-    sf::Text playerNameText(font);
-    playerNameText.setString("Player: " + this->_data->player.get_name());
-    playerNameText.setCharacterSize(20);
-    playerNameText.setFillColor(sf::Color::Black);
-    playerNameText.setStyle(sf::Text::Regular);
+    // Create a label for the player name
+    auto playerInfoLabel = tgui::Label::create();
+    playerInfoLabel->setText("Player: " + this->_data->player.get_name() + 
+                            "\nBalance: $" + std::to_string(this->_data->player.get_balance()));
+    playerInfoLabel->getRenderer()->setTextColor(sf::Color::White);
+    playerInfoLabel->getRenderer()->setTextOutlineColor(sf::Color::Black);
+    playerInfoLabel->getRenderer()->setTextOutlineThickness(2);
+    playerInfoLabel->setTextSize(16);
+    playerInfoLabel->setPosition({this->_data->window->getSize().x - 200.0f, 20.0f});
+    this->_data->gui.add(playerInfoLabel);
 
-    // Set the position of the player name text
-    playerNameText.setPosition({this->_data->window->getSize().x - 200.0f, 10.0f});
-    this->_data->window->draw(playerNameText);
-
-    // Create a text object for the player balance
-    sf::Text playerBalanceText(font);
-    playerBalanceText.setString("Balance: $" + std::to_string(this->_data->player.get_balance()));
-    playerBalanceText.setCharacterSize(20);
-    playerBalanceText.setFillColor(sf::Color::Black);
-    playerBalanceText.setStyle(sf::Text::Regular);
-
-    // Set the position of the player balance text
-    playerBalanceText.setPosition({this->_data->window->getSize().x - 200.0f, 40.0f});
-    this->_data->window->draw(playerBalanceText);
-
-    // Draw table headers
-    sf::Text headerName(font);
-    headerName.setString("Name");
-    headerName.setCharacterSize(20);
-    headerName.setFillColor(sf::Color::Black);
-    headerName.setStyle(sf::Text::Bold);
-    headerName.setPosition({10.0f, 90.0f});
-    this->_data->window->draw(headerName);
-
-    sf::Text headerLastName(font);
-    headerLastName.setString("Last Name");
-    headerLastName.setCharacterSize(20);
-    headerLastName.setFillColor(sf::Color::Black);
-    headerLastName.setStyle(sf::Text::Bold);
-    headerLastName.setPosition({130.0f, 90.0f});
-    this->_data->window->draw(headerLastName);
-
-    sf::Text headerWorkTime(font);
-    headerWorkTime.setString("Accumulated \n work time");
-    headerWorkTime.setCharacterSize(20);
-    headerWorkTime.setFillColor(sf::Color::Black);
-    headerWorkTime.setStyle(sf::Text::Bold);
-    headerWorkTime.setPosition({280.0f, 90.0f});
-    this->_data->window->draw(headerWorkTime);
-
-    sf::Text headerHourlyRate(font);
-    headerHourlyRate.setString("Hourly Rate");
-    headerHourlyRate.setCharacterSize(20);
-    headerHourlyRate.setFillColor(sf::Color::Black);
-    headerHourlyRate.setStyle(sf::Text::Bold);
-    headerHourlyRate.setPosition({430.0f, 90.0f});
-    this->_data->window->draw(headerHourlyRate);
-
-    sf::Text headerPaycheck(font);
-    headerPaycheck.setString("Paycheck");
-    headerPaycheck.setCharacterSize(20);
-    headerPaycheck.setFillColor(sf::Color::Black);
-    headerPaycheck.setStyle(sf::Text::Bold);
-    headerPaycheck.setPosition({580.0f, 90.0f});
-    this->_data->window->draw(headerPaycheck);
+    int columnWidth = 120;
+    auto listView = tgui::ListView::create();
+    listView->addColumn("Name", columnWidth, tgui::HorizontalAlignment::Center);
+    listView->addColumn("Last Name", columnWidth, tgui::HorizontalAlignment::Center);
+    listView->addColumn("Accumulated\nWork Time", columnWidth, tgui::HorizontalAlignment::Center);
+    listView->addColumn("Hourly Rate", columnWidth, tgui::HorizontalAlignment::Center);
+    listView->addColumn("Paycheck", columnWidth, tgui::HorizontalAlignment::Center);
+    listView->setSize({690.0f, 400.0f});
+    listView->setPosition({10.0f, 90.0f});
+    listView->setResizableColumns(true);
+    listView->setHorizontalScrollbarPolicy(tgui::Scrollbar::Policy::Never);
+    listView->getRenderer()->setTextSize(12);
 
     auto employees = this->_data->player.get_employees();
-    for (int i = 0; i < employees.size(); ++i)
+    for (const auto& employee : employees)
     {
-        const auto &employee = employees[i];
-
-        // Create a text object for the employee name
-        sf::Text employeeNameText(font);
-        employeeNameText.setString(employee.get_name());
-        employeeNameText.setCharacterSize(20);
-        employeeNameText.setFillColor(sf::Color::Black);
-        employeeNameText.setStyle(sf::Text::Regular);
-        employeeNameText.setPosition({10.0f, 135.0f + (i * 30.0f)});
-        this->_data->window->draw(employeeNameText);
-
-        // Create a text object for the employee last name
-        sf::Text employeeLastNameText(font);
-        employeeLastNameText.setString(employee.get_last_name());
-        employeeLastNameText.setCharacterSize(20);
-        employeeLastNameText.setFillColor(sf::Color::Black);
-        employeeLastNameText.setStyle(sf::Text::Regular);
-        employeeLastNameText.setPosition({130.0f, 135.0f + (i * 30.0f)});
-        this->_data->window->draw(employeeLastNameText);
-
-        // Create a text object for the accumulated work time
-        sf::Text workTimeText(font);
-        workTimeText.setString(std::to_string(employee.get_accumulated_work_time()));
-        workTimeText.setCharacterSize(20);
-        workTimeText.setFillColor(sf::Color::Black);
-        workTimeText.setStyle(sf::Text::Regular);
-        workTimeText.setPosition({280.0f, 135.0f + (i * 30.0f)});
-        this->_data->window->draw(workTimeText);
-
-        // Create a text object for the hourly rate
-        sf::Text hourlyRateText(font);
-        hourlyRateText.setString(std::to_string(employee.get_hourly_rate()));
-        hourlyRateText.setCharacterSize(20);
-        hourlyRateText.setFillColor(sf::Color::Black);
-        hourlyRateText.setStyle(sf::Text::Regular);
-        hourlyRateText.setPosition({430.0f, 135.0f + (i * 30.0f)});
-        this->_data->window->draw(hourlyRateText);
-
-        // Create a text object for the paycheck
-        sf::Text paycheckText(font);
-        paycheckText.setString(std::to_string(employee.get_hourly_rate() * employee.get_accumulated_work_time()));
-        paycheckText.setCharacterSize(20);
-        paycheckText.setFillColor(sf::Color::Black);
-        paycheckText.setStyle(sf::Text::Regular);
-        paycheckText.setPosition({580.0f, 135.0f + (i * 30.0f)});
-        this->_data->window->draw(paycheckText);
+        listView->addItem({
+            employee.get_name(),
+            employee.get_last_name(),
+            std::to_string(employee.get_accumulated_work_time()),
+            std::to_string(employee.get_hourly_rate()),
+            std::to_string(employee.get_hourly_rate() * employee.get_accumulated_work_time())
+        });
     }
+
+    this->_data->gui.add(listView);
 
     // Displays rendered objects
     this->_data->window->display();
