@@ -31,12 +31,15 @@ struct SimulationInfo
     {
         elements_path.clear();
 
-        for (auto track : path)
+        if (!path.is_empty())
         {
-            elements_path.push_back(track->get_src_node()->get_info());
-        }
+            for (auto track : path)
+            {
+                elements_path.push_back(track->get_src_node()->get_info());
+            }
 
-        elements_path.push_back(path.get_last()->get_tgt_node()->get_info());
+            elements_path.push_back(path.get_last()->get_tgt_node()->get_info());
+        }
     }
 };
 

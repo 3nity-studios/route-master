@@ -30,6 +30,9 @@ class SimulationState : public Engine::State
     void update_bus_stops();
     void draw_passengers();
     void draw_state(float dt __attribute__((unused)));
+    void resume_state() override;
+    void pause_state() override;
+    void add_simulation_info(SimulationInfo _simulation_info);
 
     void set_simulation_info(std::vector<SimulationInfo> _simulation_info);
     std::vector<SimulationInfo> get_simulation_info();
@@ -37,8 +40,6 @@ class SimulationState : public Engine::State
   private:
     GameDataRef _data;
     std::list<sf::Sprite> bus_stops;
-    std::vector<SimulationInfo> simulation_info; 
-    City city;
     sf::Clock simulation_clock;
     sf::Vector2f bus_speed;
     bool first_time;
@@ -48,4 +49,5 @@ class SimulationState : public Engine::State
     sf::Texture person_texture; 
     int actual_stop;
     int current_time;
+    tgui::Gui gui; 
 };

@@ -173,6 +173,7 @@ set(
   ${SRCROOT}/states/main_menu_state.cpp
   ${INCROOT}/states/store_state.hpp
   ${SRCROOT}/states/store_state.cpp
+  ${SRCROOT}/states/bus_select_state.cpp
   ${INCROOT}/states/map_viewer_state.hpp
   ${SRCROOT}/states/map_viewer_state.cpp
   ${INCROOT}/states/simulation_state.hpp
@@ -182,6 +183,7 @@ set(
   ${INCROOT}/states/bus_maintenance_state.hpp
   ${SRCROOT}/states/bus_maintenance_state.cpp
   ${INCROOT}/states/payroll_state.hpp
+  ${INCROOT}/states/bus_select_state.hpp
   ${SRCROOT}/states/payroll_state.cpp
 )
 add_library(route_master_states ${RM_STATES_SRC})
