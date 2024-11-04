@@ -47,7 +47,7 @@ Label.title {
 Button.exit_button {
     Position = (270, 500);
     Size = (180, 63);
-    Text = "Back To Menu";
+    Text = "Exit";
     TextSize = 26;
 
     Renderer {

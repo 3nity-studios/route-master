@@ -2,7 +2,6 @@
 #include "states/bus_maintenance_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
-#include "states/main_menu_state.hpp"
 #include <string>
 
 ManagementState::ManagementState(GameDataRef data) : _data(data)
@@ -18,7 +17,7 @@ void ManagementState::init_state()
     this->_data->gui.get<tgui::Label>("title")->setText("Management");
 
     this->_data->gui.get<tgui::Button>("exit_button")->onPress([this] {
-        this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), false);
+        this->_data->states.remove_state();
     });
 
     // Create a label for the player name

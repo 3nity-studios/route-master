@@ -1,7 +1,6 @@
 #include "states/store_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
-#include "states/main_menu_state.hpp"
 #include <string>
 
 StoreState::StoreState(GameDataRef data) : _data(data)
@@ -54,7 +53,7 @@ void StoreState::init_state()
     this->_data->gui.get<tgui::Label>("title")->setText("Store");
     
     this->_data->gui.get<tgui::Button>("exit_button")->onPress([this] {
-        this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), false);
+        this->_data->states.remove_state();
     });
 
     // Create a label for the player name

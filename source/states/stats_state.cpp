@@ -1,7 +1,6 @@
 #include "states/stats_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
-#include "states/main_menu_state.hpp"
 #include <string>
 
 StatsState::StatsState(GameDataRef data) : _data(data)
@@ -105,7 +104,7 @@ void StatsState::init_state()
     this->_data->gui.get<tgui::Label>("title")->setText("Statistics");
 
     this->_data->gui.get<tgui::Button>("exit_button")->onPress([this] {
-        this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), false);
+        this->_data->states.remove_state();
     });
 
     tgui::ComboBox::Ptr comboBox = tgui::ComboBox::create();

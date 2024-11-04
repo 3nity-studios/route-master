@@ -4,6 +4,11 @@
 #include <string>
 #include <cmath>
 #include "states/bus_select_state.hpp"
+#include "states/main_menu_state.hpp"
+#include "states/simulation_state.hpp"
+#include "states/store_state.hpp"
+#include "states/route_select.hpp"
+#include "states/management_state.hpp"
 
 SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), person_texture (sf::Image(sf::Vector2u(100, 50), sf::Color::White))
 {
@@ -37,15 +42,49 @@ void SimulationState::init_state()
     sf::View view(sf::FloatRect({0.f, 0.f}, {1000.f, 600.f}));
     this->_data->window->setView(view);
 
-    auto button = tgui::Button::create("Bus Select");
-    button->setPosition(50, 500);
-    button->setSize(100, 100);
+    int buttonHeight = 35;
+    int buttonWidth = 150;
 
-    button->onPress([this] {
+    auto exitButton = tgui::Button::create("Back to Menu");
+    exitButton->setPosition(10, this->_data->window->getSize().y - (buttonHeight + 5));
+    exitButton->setSize(buttonWidth, buttonHeight);
+    exitButton->onPress([this] {
+            this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), false);
+    });
+    this->gui.add(exitButton);
+
+    auto storeButton = tgui::Button::create("Store");
+    storeButton->setPosition(10, this->_data->window->getSize().y - 2*(buttonHeight + 5));
+    storeButton->setSize(buttonWidth, buttonHeight);
+    storeButton->onPress([this] {
+        this->_data->states.add_state(Engine::StateRef(new StoreState(this->_data)), false);
+    });
+    this->gui.add(storeButton);
+
+    auto managementButton = tgui::Button::create("Management");
+    managementButton->setPosition(10, this->_data->window->getSize().y - 3*(buttonHeight + 5));
+    managementButton->setSize(buttonWidth, buttonHeight);
+    managementButton->onPress([this] {
+        this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), false);
+    });
+    this->gui.add(managementButton);
+
+    auto designRouteButton = tgui::Button::create("Design Route");
+    designRouteButton->setPosition(10, this->_data->window->getSize().y - 4*(buttonHeight + 5));
+    designRouteButton->setSize(buttonWidth, buttonHeight);
+    designRouteButton->onPress([this] {
+        this->_data->states.add_state(Engine::StateRef(new RouteSelect(this->_data)), false);
+    });
+    this->gui.add(designRouteButton);
+
+    auto sendBusButton = tgui::Button::create("Send Bus");
+    sendBusButton->setPosition(10, this->_data->window->getSize().y - 5*(buttonHeight + 5));
+    sendBusButton->setSize(buttonWidth, buttonHeight);
+    sendBusButton->onPress([this] {
             this->_data->states.add_state(Engine::StateRef(new BusSelectState(this->_data)), false);
-        });
+    });
+    this->gui.add(sendBusButton);
 
-    this->gui.add(button);
 
     init_bus_stops();
     init_bus();

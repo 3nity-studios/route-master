@@ -1,8 +1,5 @@
 #include "states/main_menu_state.hpp"
 #include "states/simulation_state.hpp"
-#include "states/store_state.hpp"
-#include "states/route_select.hpp"
-#include "states/management_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
 #include <string>
@@ -19,14 +16,8 @@ void MainMenuState::init_state()
     this->_data->gui.get<tgui::Button>("play_button")->onPress([this] {
             this->_data->states.add_state(Engine::StateRef(new SimulationState(this->_data)), false);
         });
-    this->_data->gui.get<tgui::Button>("store_button")->onPress([this] {
-            this->_data->states.add_state(Engine::StateRef(new StoreState(this->_data)), false);
-        });
-    this->_data->gui.get<tgui::Button>("management_button")->onPress([this] {
-            this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), false);
-        });
-    this->_data->gui.get<tgui::Button>("route_select")->onPress([this] {
-            this->_data->states.add_state(Engine::StateRef(new RouteSelect(this->_data)), false);
+    this->_data->gui.get<tgui::Button>("exit_button")->onPress([this] {
+            this->_data->window->close();
         });
 }
 
