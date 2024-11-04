@@ -12,7 +12,7 @@ class Employee
     ushort age;
     ushort shift_len;
     ushort fatigue; 
-    int accumulated_work_time;
+    int total_work_hours;
     int hourly_rate;
 
     public:
@@ -26,7 +26,7 @@ class Employee
     ushort get_age() const noexcept;
     ushort get_shift_len() const noexcept;
     ushort get_fatigue() const noexcept;
-    int get_accumulated_work_time()const noexcept;
+    int get_total_work_hours()const noexcept;
     int get_hourly_rate() const noexcept;
 
     void set_id(const int& _id);
@@ -35,7 +35,7 @@ class Employee
     void set_age(const ushort& _age);
     void set_shift_len(const ushort& _shift_len);
     void set_fatigue(const ushort& _fatigue);
-    void set_accumulated_work_time(const int& time);
+    void set_total_work_hours(const int& time);
     void set_hourly_rate(const int& rate);
 
     void calc_fatigue(int km);

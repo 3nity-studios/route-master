@@ -146,7 +146,7 @@ void Store::pay_employee(int id, Player &player)
     {
         if (employee.get_id() == id)
         {
-            int paycheck = employee.get_accumulated_work_time() * employee.get_hourly_rate();
+            int paycheck = employee.get_total_work_hours() * employee.get_hourly_rate();
             if (player.get_balance() < paycheck)
             {
                 std::cout << "The player's balance is not sufficient to pay the employee" << std::endl;
@@ -154,7 +154,7 @@ void Store::pay_employee(int id, Player &player)
             else
             {
                 player.decrease_balance(paycheck);
-                employee.set_accumulated_work_time(0);
+                employee.set_total_work_hours(0);
             }
             break;
         }

@@ -1,7 +1,6 @@
 #include "states/main_menu_state.hpp"
 #include "states/simulation_state.hpp"
 #include "states/store_state.hpp"
-#include "states/inventory_state.hpp"
 #include "states/management_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
