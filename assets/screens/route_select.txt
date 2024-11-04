@@ -1,5 +1,5 @@
 Button.select_button {
-    Position = (200, 500);
+    Position = (100, 500);
     Size = (180, 63);
     Text = "Select";
     TextSize = 26;
@@ -53,7 +53,7 @@ Button.select_button {
 
 
 Button.cancel_button {
-    Position = (400, 500);
+    Position = (300, 500);
     Size = (180, 63);
     Text = "Cancel";
     TextSize = 26;

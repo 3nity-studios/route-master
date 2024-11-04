@@ -28,9 +28,7 @@ class RouteSelect : public Engine::State
   private:
     GameDataRef _data;
     std::list<std::pair<sf::Sprite, int>> visual_elements;
-    sf::Texture bus_stop_texture;
-    sf::Texture curve_texture; 
-    sf::Texture traffic_light_texture;
+    sf::Texture map_icons_texture;
     std::vector<std::shared_ptr<VisualElement>> new_path;
     tgui::Gui gui; 
     bool sprite_pressed;

@@ -5,7 +5,7 @@
 #include <cmath>
 #include "states/bus_select_state.hpp"
 
-RouteSelect::RouteSelect(GameDataRef data) : _data(data), bus_stop_texture(sf::Image(sf::Vector2u(25, 25), sf::Color::Green)), curve_texture (sf::Image(sf::Vector2u(25, 25), sf::Color::Red)), traffic_light_texture(sf::Image(sf::Vector2u(25, 25), sf::Color::Blue)), sprite_pressed(false)
+RouteSelect::RouteSelect(GameDataRef data) : _data(data), map_icons_texture(sf::Image(sf::Vector2u(25, 25), sf::Color::Green))
 {
 }
 
@@ -31,20 +31,10 @@ void RouteSelect::init_state()
         }
     });
 
-    // if (!bus_stop_texture.loadFromFile("assets/img/bus_stop_texture.png"))
-    // {
-    //     throw GameException("Couldn't find file: assets/img/bus_stop_texture.png");
-    // }
-
-    // if (!curve_texture.loadFromFile("assets/img/bus_stop_sprites.png"))
-    // {
-    //     throw GameException("Couldn't find file: assets/img/bus_stop_sprites.png");
-    // }
-
-    // if (!traffic_light_texture.loadFromFile("assets/img/traffic_light_texture.png"))
-    // {
-    //     throw GameException("Couldn't find file: assets/img/person.png");
-    // }
+    if (!map_icons_texture.loadFromFile("assets/img/map_icons.png"))
+    {
+        throw GameException("Couldn't find file: assets/img/map_icons.png");
+    }
 
     // sf::View view(sf::FloatRect({0.f, 0.f}, {1000.f, 600.f}));
     // this->_data->window->setView(view);
@@ -73,10 +63,11 @@ void RouteSelect::update_inputs()
                 sf::Vector2i mousePos = sf::Mouse::getPosition(*this->_data->window);
 
                 int i = 0; 
-                for (auto element : visual_elements)
+                for (auto &element : visual_elements)
                 {
                     if (element.first.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)))
                     {
+                        element.first.setColor(sf::Color(255,255,255));
                         i = element.second;
                         break;
                     }
@@ -140,12 +131,12 @@ void RouteSelect::draw_state(float dt __attribute__((unused)))
         throw GameException("Couldn't find file: assets/fonts/joystix.ttf");
     }
 
+    draw_lines();
+
     for (auto visual_element : visual_elements)
     {
         this->_data->window->draw(visual_element.first);
     }
-
-    draw_lines();
 
     sf::Text advertisement_text(font);
     advertisement_text.setString(advertisement);
@@ -161,6 +152,10 @@ void RouteSelect::draw_state(float dt __attribute__((unused)))
 
 void RouteSelect::init_visual_elements()
 {
+    sf::IntRect traffic_light_rect(sf::Vector2i(0,0), sf::Vector2i(27,53));
+    sf::IntRect bus_stop_rect(sf::Vector2i(44,10), sf::Vector2i(52,52));
+    sf::IntRect curve_rect(sf::Vector2i(98,11), sf::Vector2i(53,52));
+
     for (auto visual_element : this->_data->city.get_visual_elements())
     {
         auto bus_stop = std::dynamic_pointer_cast<BusStop>(visual_element->get_info());
@@ -168,22 +163,31 @@ void RouteSelect::init_visual_elements()
 
         if (bus_stop)
         {
-            sf::Sprite sprite(bus_stop_texture);
+            sf::Sprite sprite(map_icons_texture);
             sprite.setPosition(sf::Vector2f(bus_stop->get_x(), bus_stop->get_y()));
+            sprite.setTextureRect(bus_stop_rect);
+            sprite.setOrigin(sprite.getLocalBounds().getCenter());
+            sprite.setColor(sf::Color(75, 73, 71));
 
             visual_elements.push_back(std::make_pair<sf::Sprite, int>(std::move(sprite), bus_stop->get_id())); 
         }
         else if (traffic_light)
         {
-            sf::Sprite sprite(traffic_light_texture);
+            sf::Sprite sprite(map_icons_texture);
             sprite.setPosition(sf::Vector2f(traffic_light->get_x(), traffic_light->get_y()));
+            sprite.setTextureRect(traffic_light_rect);
+            sprite.setOrigin(sprite.getLocalBounds().getCenter());
+            sprite.setColor(sf::Color(75, 73, 71));
 
             visual_elements.push_back(std::make_pair<sf::Sprite, int>(std::move(sprite), traffic_light->get_id())); 
         }
         else
         {
-            sf::Sprite sprite(curve_texture);
+            sf::Sprite sprite(map_icons_texture);
             sprite.setPosition(sf::Vector2f(visual_element->get_info()->get_x(), visual_element->get_info()->get_y()));
+            sprite.setTextureRect(curve_rect);
+            sprite.setOrigin(sprite.getLocalBounds().getCenter());
+            sprite.setColor(sf::Color(75, 73, 71));
 
             visual_elements.push_back(std::make_pair<sf::Sprite, int>(std::move(sprite), visual_element->get_info()->get_id())); 
         }
@@ -197,6 +201,20 @@ float calc_distance1(VisualElement element1, VisualElement element2)
 
 void RouteSelect::draw_lines()
 {
+    for (auto element : this->_data->city.get_streets())
+    {
+        sf::Vertex ver1;
+        ver1.position = sf::Vector2f(element->get_src_node()->get_info()->get_x(), element->get_src_node()->get_info()->get_y());
+        ver1.color = sf::Color::Black;
+        sf::Vertex ver2; 
+        ver2.position = sf::Vector2f(element->get_tgt_node()->get_info()->get_x(), element->get_tgt_node()->get_info()->get_y());
+        ver2.color = sf::Color::Black;
+
+        sf::Vertex line[] = {ver1, ver2};
+
+        this->_data->window->draw(line, 2, sf::PrimitiveType::Lines);
+    }
+
     for (int i = 1; i < new_path.size(); i++)
     {
         auto element = new_path.at(i);
@@ -204,10 +222,10 @@ void RouteSelect::draw_lines()
 
         sf::Vertex ver1;
         ver1.position = sf::Vector2f(element->get_x(), element->get_y());
-        ver1.color = sf::Color::Black;
+        ver1.color = sf::Color::Yellow;
         sf::Vertex ver2; 
         ver2.position = sf::Vector2f(element2->get_x(), element2->get_y());
-        ver2.color = sf::Color::Black;
+        ver2.color = sf::Color::Yellow;
 
         sf::Vertex line[] = {ver1, ver2};
 
