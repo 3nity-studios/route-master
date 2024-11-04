@@ -1,8 +1,14 @@
 #include "states/simulation_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
+#include "engine/stops_manager.hpp"
+#include "simulation/BusStop.hpp"
+#include "utils/json_helper.hpp"
 #include <SFML/Window/Mouse.hpp>
 #include <cmath>
+#include <fstream>
+#include <iostream>
+#include <nlohmann/json_fwd.hpp>
 #include <string>
 
 float calc_distance(VisualElement element1, VisualElement element2)
@@ -22,6 +28,46 @@ SimulationState::SimulationState(GameDataRef data)
     BusStop stop4(4, "Stop4", {10, 11, 10}, 15.0, 15.0, 3.0, 3.0, 2.0, 350.f, 250.f);
     BusStop stop5(5, "Stop5", {11, 10, 11}, 15.0, 15.0, 3.0, 3.0, 2.0, 600.f, 250.f);
     BusStop stop6(6, "Stop6", {10, 11, 10}, 15.0, 15.0, 3.0, 3.0, 2.0, 600.f, 500.f);
+
+    // conversion: bus_stop -> json
+    // nlohmann::json j = stop1;
+    // convert to JSON: copy each value into the JSON object
+    nlohmann::json j;
+    // std::string n = "assets/maps/stops1.json";
+    std::ifstream f("assets/maps/stops1.json");
+    j = nlohmann::json::parse(f);
+    const auto stops_json_data = j["stops"];
+    std::vector<BusStop> bus_stops_v;
+    for (const auto &element : stops_json_data)
+    {
+        try
+        {
+            const int id_field{element.at("id")};
+            const std::string name_field{element.at("name")};
+            std::vector<int> aha_field;
+            for (auto& num : element["avg_hourly_arrivals"])
+                aha_field.push_back(num);
+            const float aat_field{element.at("avg_arrival_time")};
+            const float awt_field{element.at("avg_waiting_time")};
+            const float sdw_field{element.at("sd_waiting_time")};
+            const float abs_field{element.at("avg_bus_stop")};
+            const float sdb_field{element.at("sd_bus_stop")};
+            const float x_field{element.at("x")};
+            const float y_field{element.at("y")};
+            BusStop new_stop(id_field,name_field,aha_field,aat_field,awt_field,sdw_field,abs_field,sdb_field,x_field,y_field);
+            bus_stops_v.push_back(new_stop);
+        }
+        catch (const std::out_of_range & exception)
+        {
+            // std::cerr("Error in JSON data from `{}`: unknown stop: '{}'.", json_path, std::string(element));
+            throw exception;
+        }
+    }
+    // j = JsonHelper::ReadJson(R"({        "id": 1,        "name": "Stop1",        "avg_hourly_arrivals": [10, 11, 10],
+    // "avg_arrival_time": 2.0,        "avg_waiting_time": 5.0,        "sd_waiting_time": 3.0, "avg_bus_stop": 3.0,
+    // "sd_bus_stop": 2.0,        "x": 350.0,        "y": 5.0})"); j["id"] = stop1.id; j["name"] = stop1.name;
+    // j["avg_hourly_arrivals"] = stop1.avg_hourly_arrivals;
+    std::cout << j << std::endl;
 
     TrafficLight light1(7,
                         std::vector<std::pair<StreetConnectionIDs, bool>>{
@@ -152,26 +198,26 @@ sf::Vector2i mousePos;
 
 screenScrollDirection isScreenScrollRequired(sf::RenderWindow &gameWindow)
 {
-        mousePos = sf::Mouse::getPosition(gameWindow);
+    mousePos = sf::Mouse::getPosition(gameWindow);
 
-        if (mousePos.x < 10)
-        {
-                return SCROLL_LEFT;
-        }
-        else if (mousePos.x > gameWindow.getSize().x - 10)
-        {
-                return SCROLL_RIGHT;
-        }
-        else if (mousePos.y < 10)
-        {
-                return SCROLL_UP;
-        }
-        else if (mousePos.y > gameWindow.getSize().y - 10)
-        {
-                return SCROLL_DOWN;
-        }
-        
-        return NO_SCROLL;
+    if (mousePos.x < 10)
+    {
+        return SCROLL_LEFT;
+    }
+    else if (mousePos.x > gameWindow.getSize().x - 10)
+    {
+        return SCROLL_RIGHT;
+    }
+    else if (mousePos.y < 10)
+    {
+        return SCROLL_UP;
+    }
+    else if (mousePos.y > gameWindow.getSize().y - 10)
+    {
+        return SCROLL_DOWN;
+    }
+
+    return NO_SCROLL;
 }
 
 sf::View view;
@@ -190,8 +236,8 @@ void SimulationState::init_state()
         throw GameException("Couldn't find file: assets/img/bus_stop_sprites.png");
     }
 
-    calcMapView(*this->_data->window, game_view);
-    this->_data->window->setView(game_view);
+    calcMapView(*this->_data->window, _game_view);
+    this->_data->window->setView(_game_view);
     init_bus_stops();
     init_bus();
 }
@@ -202,12 +248,12 @@ void SimulationState::update_inputs()
     while (const std::optional event = this->_data->window->pollEvent())
     {
         this->_data->gui.handleEvent(*event);
-    
+
         if (const auto *mouseWheel = event->getIf<sf::Event::MouseWheelScrolled>())
         {
             gameZoom -= 0.05f * mouseWheel->delta;
-            zoomView(gameZoom, this->game_view);
-            this->_data->window->setView(game_view);
+            zoomView(gameZoom, _game_view);
+            this->_data->window->setView(_game_view);
         }
 
         if (event->is<sf::Event::Closed>())
@@ -227,7 +273,6 @@ void SimulationState::update_inputs()
         }
     }
 }
-
 
 // marks dt to not warn compiler
 void SimulationState::update_state(float dt __attribute__((unused)))
@@ -252,8 +297,8 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
 
     sf::Clock globalClock;
     sf::Time duration = globalClock.restart();
-    scrollMapView(isScreenScrollRequired(*this->_data->window), game_view, globalClock);
-    this->_data->window->setView(game_view);
+    scrollMapView(isScreenScrollRequired(*this->_data->window), _game_view, globalClock);
+    this->_data->window->setView(_game_view);
     // layerZero.update(duration);
     this->_data->window->draw(layerZero);
     this->_data->window->draw(layerOne);
