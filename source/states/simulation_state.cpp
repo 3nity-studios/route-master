@@ -94,10 +94,25 @@ SimulationState::SimulationState(GameDataRef data)
             throw exception;
         }
     }
-    // j = JsonHelper::ReadJson(R"({        "id": 1,        "name": "Stop1",        "avg_hourly_arrivals": [10, 11, 10],
-    // "avg_arrival_time": 2.0,        "avg_waiting_time": 5.0,        "sd_waiting_time": 3.0, "avg_bus_stop": 3.0,
-    // "sd_bus_stop": 2.0,        "x": 350.0,        "y": 5.0})"); j["id"] = stop1.id; j["name"] = stop1.name;
-    // j["avg_hourly_arrivals"] = stop1.avg_hourly_arrivals;
+    const auto curves_json_data = j["curves"];
+    std::vector<VisualElement> curves_v;
+    for (const auto &element : curves_json_data)
+    {
+        try
+        {
+            const int id_field{element.at("id")};
+            const float x_field{element.at("x")};
+            const float y_field{element.at("y")};
+            VisualElement new_curve(id_field, x_field, y_field);
+            curves_v.push_back(new_curve);
+        }
+        catch (const std::out_of_range & exception)
+        {
+            // std::cerr("Error in JSON data from `{}`: unknown stop: '{}'.", json_path, std::string(element));
+            throw exception;
+        }
+    }
+    
     std::cout << j << std::endl;
 
     TrafficLight light1(7,
@@ -113,15 +128,16 @@ SimulationState::SimulationState(GameDataRef data)
         std::cout << "adding bus_stop: " << element.name << std::endl;
         city.add_bus_stop(element);
     }
-
-    // for (const auto &element : bus_stops_v)
-    // {
-    //     std::cout << "adding traffic_light: " << element.name << std::endl;
-    //     city.add_traffic_light(element);
-    // }
-    city.add_traffic_light(light1);
-    city.add_curve(curve1);
-    city.add_curve(curve2);
+    for (const auto &element : traffic_lights_v)
+    {
+        std::cout << "adding traffic_light: " << element.id << std::endl;
+        city.add_traffic_light(element);
+    }
+    for (const auto &element : curves_v)
+    {
+        std::cout << "adding curve: " << element.id << std::endl;
+        city.add_curve(element);
+    }
 
     city.initialize_bus_stops();
 
