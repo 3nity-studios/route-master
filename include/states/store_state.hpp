@@ -22,4 +22,5 @@ class StoreState : public Engine::State
   private:
     GameDataRef _data;
     Designar::SLList<Item> items_to_show;
+    tgui::ScrollablePanel::Ptr create_store_panel();
 };
