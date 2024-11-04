@@ -36,11 +36,16 @@ void RouteSelect::init_state()
         throw GameException("Couldn't find file: assets/img/map_icons.png");
     }
 
-    // sf::View view(sf::FloatRect({0.f, 0.f}, {1000.f, 600.f}));
-    // this->_data->window->setView(view);
+    sf::View view(sf::FloatRect({0.f, 0.f}, {800.f, 600.f}));
+    this->_data->window->setView(view);
 
     init_visual_elements();
 }
+
+/// the last known mouse position
+sf::Vector2i previous_mouse_pos;
+/// whether we are dragging or not
+bool is_dragging = false;
 
 void RouteSelect::update_inputs()
 {
@@ -61,10 +66,11 @@ void RouteSelect::update_inputs()
             if ((keyPress->button == sf::Mouse::Button::Left) && !sprite_pressed)
             {
                 sf::Vector2i mousePos = sf::Mouse::getPosition(*this->_data->window);
+                sf::Vector2f viewPos = this->_data->window->mapPixelToCoords(mousePos, this->_data->window->getView());
 
                 for (auto &element : visual_elements)
                 {
-                    if (element.first.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)))
+                    if (element.first.getGlobalBounds().contains(static_cast<sf::Vector2f>(viewPos)))
                     {
                         if (add_to_path(element.second))
                         {
@@ -79,6 +85,12 @@ void RouteSelect::update_inputs()
 
                 return;
             }
+            // if mouse button is pressed start dragging
+            if (keyPress->button == sf::Mouse::Button::Right)
+            {
+                is_dragging = true;
+                return;
+            }
         }
 
         if (const auto *keyPress = event->getIf<sf::Event::MouseButtonReleased>())
@@ -86,6 +98,12 @@ void RouteSelect::update_inputs()
             if (sprite_pressed)
             {
                 sprite_pressed = false; 
+            }
+            // if mouse button is released stop draggin
+            if (keyPress->button == sf::Mouse::Button::Right)
+            {
+                is_dragging = false;
+                return;
             }
         }
 
@@ -97,6 +115,27 @@ void RouteSelect::update_inputs()
                 this->_data->states.remove_state();
                 break;
             }
+        }
+
+        // if dragging mouse
+        if (const auto *keyPress = event->getIf<sf::Event::MouseMoved>())
+        {
+            // get mouse position
+            const sf::Vector2i mouse_position{keyPress->position.x, keyPress->position.y};
+            // if dragging, move view
+            if (is_dragging)
+            {
+                // calculate how far mouse has moved in view
+                const auto delta =
+                    target.mapPixelToCoords(mouse_position) - target.mapPixelToCoords(previous_mouse_pos);
+                // apply negatively to view
+                auto view = target.getView();
+                view.move(-delta);
+                target.setView(view);
+            }
+            // update previous mouse position
+            previous_mouse_pos = mouse_position;
+            return;
         }
     }
 }
@@ -115,8 +154,6 @@ void RouteSelect::draw_state(float dt __attribute__((unused)))
     // write text
     sf::Font font("assets/fonts/joystix.ttf");
     sf::Text text(font);
-
-    gui.draw();
 
     // throws error if can't load font
     if (!font.openFromFile("assets/fonts/joystix.ttf"))
@@ -137,6 +174,8 @@ void RouteSelect::draw_state(float dt __attribute__((unused)))
     advertisement_text.setCharacterSize(12);
     advertisement_text.setPosition(sf::Vector2f(50.f, 500.f));
     advertisement_text.setFillColor(sf::Color::Black);
+
+    gui.draw();
 
     this->_data->window->draw(advertisement_text);
 
