@@ -14,7 +14,9 @@ void InventoryState::init_state()
 {
     tgui::Theme::setDefault("assets/tgui/Kenney.txt");
     this->_data->gui.setWindow(*this->_data->window);
-    this->_data->gui.loadWidgetsFromFile("assets/screens/inventory.txt");
+    this->_data->gui.loadWidgetsFromFile("assets/screens/basic_screen.txt");
+
+    this->_data->gui.get<tgui::Label>("title")->setText("Inventory");
 
     this->_data->gui.get<tgui::Button>("exit_button")->onPress([this] {
         this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), false);
