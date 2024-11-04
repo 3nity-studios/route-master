@@ -10,6 +10,7 @@
 #include <iostream>
 #include <nlohmann/json_fwd.hpp>
 #include <string>
+#include <chrono>
 
 float calc_distance(VisualElement element1, VisualElement element2)
 {
@@ -195,7 +196,7 @@ SimulationState::SimulationState(GameDataRef data, std::list<std::pair<int, int>
 {
 }
 
-void calcMapView(sf::RenderWindow &game_window, sf::View &map_view)
+void calc_map_view(sf::RenderWindow &game_window, sf::View &map_view)
 {
     uint x_size = game_window.getSize().x;
     uint y_size = game_window.getSize().y;
@@ -208,32 +209,22 @@ void calcMapView(sf::RenderWindow &game_window, sf::View &map_view)
     map_view.setViewport(viewport_size);
 }
 
-enum screenScrollDirection
+void SimulationState::scroll_map_view(ScreenScrollDirection passed_scroll_direction, sf::View &map_view, sf::Clock game_clock, int scroll_speed)
 {
-    NO_SCROLL = -1,
-    SCROLL_LEFT,
-    SCROLL_RIGHT,
-    SCROLL_UP,
-    SCROLL_DOWN
-};
-
-int scrollSpeed = 30000;
-
-void scrollMapView(screenScrollDirection passed_ScrollDirection, sf::View &mapView, sf::Clock gameClock)
-{
-    switch (passed_ScrollDirection)
+    // std::cout << "game_clock.getElapsedTime().asSeconds()" << game_clock.getElapsedTime().asSeconds() << std::endl;
+    switch (passed_scroll_direction)
     {
     case SCROLL_LEFT:
-        mapView.move({static_cast<float>(-scrollSpeed) * gameClock.getElapsedTime().asSeconds(), 0});
+        map_view.move({static_cast<float>(-scroll_speed) * 0.0004f, 0});
         break;
     case SCROLL_RIGHT:
-        mapView.move({static_cast<float>(scrollSpeed) * gameClock.getElapsedTime().asSeconds(), 0});
+        map_view.move({static_cast<float>(scroll_speed) * 0.0004f, 0});
         break;
     case SCROLL_UP:
-        mapView.move({0, static_cast<float>(-scrollSpeed) * gameClock.getElapsedTime().asSeconds()});
+        map_view.move({0, static_cast<float>(-scroll_speed) * 0.0004f});
         break;
     case SCROLL_DOWN:
-        mapView.move({0, static_cast<float>(scrollSpeed) * gameClock.getElapsedTime().asSeconds()});
+        map_view.move({0, static_cast<float>(scroll_speed) * 0.0004f});
         break;
     case NO_SCROLL:
     default:
@@ -241,30 +232,33 @@ void scrollMapView(screenScrollDirection passed_ScrollDirection, sf::View &mapVi
     }
 }
 
-void zoomView(float zoomDelta, sf::View &mapView)
+void zoom_view(float zoom_delta, sf::View &map_view)
 {
-    mapView.zoom(zoomDelta);
+    map_view.zoom(zoom_delta);
 }
 
-sf::Vector2i mousePos;
+sf::Vector2i mouse_pos;
 
-screenScrollDirection isScreenScrollRequired(sf::RenderWindow &gameWindow)
+ScreenScrollDirection SimulationState::isScreenScrollRequired(sf::RenderWindow &game_window)
 {
-    mousePos = sf::Mouse::getPosition(gameWindow);
-
-    if (mousePos.x < 10)
+    mouse_pos = sf::Mouse::getPosition(game_window);
+    // std::cout << "View center position x: " << this->_game_view.getCenter().x << std::endl;
+    // std::cout << "View center position y: " << this->_game_view.getCenter().y << std::endl;
+    // std::cout << "Map position 2x: " << this->_map.getBounds().width << std::endl;
+    // std::cout << "Map position 2y: " << this->_map.getBounds().height << std::endl;
+    if (this->_game_view.getCenter().x > game_window.getSize().x/2 && mouse_pos.x < 30 && mouse_pos.x >= 0)
     {
         return SCROLL_LEFT;
     }
-    else if (mousePos.x > gameWindow.getSize().x - 10)
+    else if (this->_game_view.getCenter().x < this->_map.getBounds().width - game_window.getSize().x/2 && mouse_pos.x > game_window.getSize().x - 30 && mouse_pos.x <= game_window.getSize().x)
     {
         return SCROLL_RIGHT;
     }
-    else if (mousePos.y < 10)
+    else if (this->_game_view.getCenter().y > game_window.getSize().y/2 && mouse_pos.y < 30 && mouse_pos.y >= 0)
     {
         return SCROLL_UP;
     }
-    else if (mousePos.y > gameWindow.getSize().y - 10)
+    else if (this->_game_view.getCenter().y < this->_map.getBounds().height - game_window.getSize().y/2 && mouse_pos.y > game_window.getSize().y - 30 && mouse_pos.y <= game_window.getSize().y)
     {
         return SCROLL_DOWN;
     }
@@ -288,10 +282,11 @@ void SimulationState::init_state()
         throw GameException("Couldn't find file: assets/img/bus_stop_sprites.png");
     }
 
-    calcMapView(*this->_data->window, _game_view);
+    calc_map_view(*this->_data->window, _game_view);
     this->_data->window->setView(_game_view);
     init_bus_stops();
     init_bus();
+    _map.load("assets/maps/demo.tmx");
 }
 
 void SimulationState::update_inputs()
@@ -303,8 +298,8 @@ void SimulationState::update_inputs()
 
         if (const auto *mouseWheel = event->getIf<sf::Event::MouseWheelScrolled>())
         {
-            gameZoom -= 0.05f * mouseWheel->delta;
-            zoomView(gameZoom, _game_view);
+            gameZoom += mouseWheel->delta;
+            zoom_view(gameZoom, _game_view);
             this->_data->window->setView(_game_view);
         }
 
@@ -332,57 +327,77 @@ void SimulationState::update_state(float dt __attribute__((unused)))
     update_bus();
 }
 
-// marks dt to not warn compiler
+int calcScrollSpeed(sf::RenderWindow &gameWindow)
+{
+    mouse_pos = sf::Mouse::getPosition(gameWindow);
+
+    if (mouse_pos.x < 30)
+    {
+        if (mouse_pos.x < 10)
+        {
+            return 60000;
+        }
+        return 30000;
+    }
+    else if (mouse_pos.x > gameWindow.getSize().x - 30)
+    {
+        if (mouse_pos.x > gameWindow.getSize().x - 10)
+        {
+            return 60000;
+        }
+        return 30000;
+    }
+    else if (mouse_pos.y < 30)
+    {
+        if (mouse_pos.y < 10)
+        {
+            return 60000;
+        }
+        return 30000;
+    }
+    else if (mouse_pos.y > gameWindow.getSize().y - 30)
+    {
+        if (mouse_pos.y > gameWindow.getSize().y - 10)
+        {
+            return 60000;
+        }
+        return 30000;
+    }
+    return 0;
+}
+
 void SimulationState::draw_state(float dt __attribute__((unused)))
 {
-    // SAMPLE RENDER CODE:
-
-    // background color
     this->_data->window->clear(sf::Color::Black);
 
-    tmx::Map map;
-    map.load("assets/maps/demo.tmx");
-
-    MapLayer layerZero(map, 0);
-    MapLayer layerOne(map, 1);
-    MapLayer layerTwo(map, 2);
+    MapLayer layerZero(_map, 0);
+    MapLayer layerOne(_map, 1);
+    MapLayer layerTwo(_map, 2);
 
     sf::Clock globalClock;
-    sf::Time duration = globalClock.restart();
-    scrollMapView(isScreenScrollRequired(*this->_data->window), _game_view, globalClock);
+    scroll_map_view(isScreenScrollRequired(*this->_data->window), _game_view, globalClock, calcScrollSpeed(*this->_data->window));
     this->_data->window->setView(_game_view);
-    // layerZero.update(duration);
     this->_data->window->draw(layerZero);
     this->_data->window->draw(layerOne);
 
-    // write text
     sf::Font font("assets/fonts/joystix.ttf");
     sf::Text text(font);
 
-    // throws error if can't load font
     if (!font.openFromFile("assets/fonts/joystix.ttf"))
     {
-        // error...
         throw GameException("Couldn't find file: assets/fonts/joystix.ttf");
     }
 
-    // set the string to display
     text.setString(status);
 
-    // set the character size
-    text.setCharacterSize(12); // in pixels, not points!
+    text.setCharacterSize(12);
 
-    // set the color
     text.setFillColor(sf::Color::White);
-    // set the text style
     text.setStyle(sf::Text::Bold | sf::Text::Underlined);
 
     text.setPosition(sf::Vector2f(300.f, 500.f));
 
-    // inside the main loop, between window.clear() and window.display()
     this->_data->window->draw(text);
-
-    // END SAMPLE RENDER CODE
 
     for (auto bus_stop : bus_stops)
     {
@@ -400,11 +415,9 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     this->_data->window->draw(bus);
 
     sf::Text text2(font);
-    // set the string to display
     text2.setString("\nDriver: " + driver_sim.get_name() + " " + driver_sim.get_last_name() + "\n" +
                     "Bus: " + bus_sim.get_name());
 
-    // set the character size
     text2.setCharacterSize(12); // in pixels, not points!
 
     // set the color

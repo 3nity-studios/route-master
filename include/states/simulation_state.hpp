@@ -14,6 +14,17 @@
 
 #include "engine/tmx_core.hpp"
 
+enum class ActionState { NONE, PANNING };
+
+enum ScreenScrollDirection
+{
+    NO_SCROLL = -1,
+    SCROLL_LEFT,
+    SCROLL_RIGHT,
+    SCROLL_UP,
+    SCROLL_DOWN
+};
+
 class SimulationState : public Engine::State
 {
   public:
@@ -33,9 +44,11 @@ class SimulationState : public Engine::State
     void set_driver_sim(Employee _driver);
     void set_bus_sim(Bus _bus); 
     void set_simulation_parameters(std::list<std::pair<int, int>> _times);
-
+    ScreenScrollDirection isScreenScrollRequired(sf::RenderWindow &gameWindow);
+    void scroll_map_view(ScreenScrollDirection passed_ScrollDirection, sf::View &mapView, sf::Clock gameClock, int scrollSpeed);
   private:
     GameDataRef _data;
+    
     std::list<sf::Sprite> bus_stops;
     std::list<std::pair<int, int>> times;
     std::list<std::shared_ptr<VisualElement>> elements_path;
@@ -53,6 +66,9 @@ class SimulationState : public Engine::State
     sf::Texture bus_texture;
     sf::Texture bus_stops_texture;
     int actual_stop;
-    sf::View game_view;
-    sf::View gui_view;
+
+    sf::View _game_view;
+    sf::View _gui_view;
+    tmx::Map _map;
+    sf::Vector2i _panning_anchor;
 };
