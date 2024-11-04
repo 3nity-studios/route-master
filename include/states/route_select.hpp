@@ -23,11 +23,11 @@ class RouteSelect : public Engine::State
     void draw_state(float dt __attribute__((unused)));
     void init_visual_elements(); 
     void draw_lines();
-    void add_to_path(std::shared_ptr<VisualElement> visual_element);
+    bool add_to_path(std::shared_ptr<VisualElement> visual_element);
 
   private:
     GameDataRef _data;
-    std::list<std::pair<sf::Sprite, int>> visual_elements;
+    std::list<std::pair<sf::Sprite, std::shared_ptr<VisualElement>>> visual_elements;
     sf::Texture map_icons_texture;
     std::vector<std::shared_ptr<VisualElement>> new_path;
     tgui::Gui gui; 

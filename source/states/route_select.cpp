@@ -5,7 +5,7 @@
 #include <cmath>
 #include "states/bus_select_state.hpp"
 
-RouteSelect::RouteSelect(GameDataRef data) : _data(data), map_icons_texture(sf::Image(sf::Vector2u(25, 25), sf::Color::Green))
+RouteSelect::RouteSelect(GameDataRef data) : _data(data), map_icons_texture(sf::Image(sf::Vector2u(25, 25), sf::Color::Green)), sprite_pressed(false)
 {
 }
 
@@ -62,22 +62,16 @@ void RouteSelect::update_inputs()
             {
                 sf::Vector2i mousePos = sf::Mouse::getPosition(*this->_data->window);
 
-                int i = 0; 
                 for (auto &element : visual_elements)
                 {
                     if (element.first.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)))
                     {
-                        element.first.setColor(sf::Color(255,255,255));
-                        i = element.second;
+                        if (add_to_path(element.second))
+                        {
+                            element.first.setColor(sf::Color(255,255,255));
+                        }
+                    
                         break;
-                    }
-                }
-
-                for (auto element : this->_data->city.get_visual_elements())
-                {
-                    if (element->get_info()->get_id() == i)
-                    {
-                        add_to_path(element->get_info());
                     }
                 }
 
@@ -158,8 +152,9 @@ void RouteSelect::init_visual_elements()
 
     for (auto visual_element : this->_data->city.get_visual_elements())
     {
-        auto bus_stop = std::dynamic_pointer_cast<BusStop>(visual_element->get_info());
-        auto traffic_light = std::dynamic_pointer_cast<TrafficLight>(visual_element->get_info()); 
+        auto visual_element_pointer = visual_element->get_info();
+        auto bus_stop = std::dynamic_pointer_cast<BusStop>(visual_element_pointer);
+        auto traffic_light = std::dynamic_pointer_cast<TrafficLight>(visual_element_pointer); 
 
         if (bus_stop)
         {
@@ -169,7 +164,7 @@ void RouteSelect::init_visual_elements()
             sprite.setOrigin(sprite.getLocalBounds().getCenter());
             sprite.setColor(sf::Color(75, 73, 71));
 
-            visual_elements.push_back(std::make_pair<sf::Sprite, int>(std::move(sprite), bus_stop->get_id())); 
+            visual_elements.push_back(std::make_pair<sf::Sprite, std::shared_ptr<VisualElement>>(std::move(sprite), std::move(visual_element_pointer))); 
         }
         else if (traffic_light)
         {
@@ -179,7 +174,7 @@ void RouteSelect::init_visual_elements()
             sprite.setOrigin(sprite.getLocalBounds().getCenter());
             sprite.setColor(sf::Color(75, 73, 71));
 
-            visual_elements.push_back(std::make_pair<sf::Sprite, int>(std::move(sprite), traffic_light->get_id())); 
+            visual_elements.push_back(std::make_pair<sf::Sprite, std::shared_ptr<VisualElement>>(std::move(sprite), std::move(visual_element_pointer))); 
         }
         else
         {
@@ -189,7 +184,7 @@ void RouteSelect::init_visual_elements()
             sprite.setOrigin(sprite.getLocalBounds().getCenter());
             sprite.setColor(sf::Color(75, 73, 71));
 
-            visual_elements.push_back(std::make_pair<sf::Sprite, int>(std::move(sprite), visual_element->get_info()->get_id())); 
+            visual_elements.push_back(std::make_pair<sf::Sprite, std::shared_ptr<VisualElement>>(std::move(sprite), std::move(visual_element_pointer))); 
         }
     }
 }
@@ -233,22 +228,18 @@ void RouteSelect::draw_lines()
     };
 }
 
-void RouteSelect::add_to_path(std::shared_ptr<VisualElement> visual_element)
+bool RouteSelect::add_to_path(std::shared_ptr<VisualElement> visual_element)
 {
     if(new_path.empty())
     {
         new_path.push_back(visual_element);
-        return;
+        return true;
     }
 
     bool connected = false;
 
     for (auto element : this->_data->city.get_streets())
     {
-        if (element->get_src_node()->get_info()->get_id() == visual_element->get_id() && element->get_tgt_node()->get_info()->get_id() == new_path.back()->get_id())
-        {
-            connected = true;
-        }
         if (element->get_tgt_node()->get_info()->get_id() == visual_element->get_id() && element->get_src_node()->get_info()->get_id() == new_path.back()->get_id())
         {
             connected = true;
@@ -264,6 +255,8 @@ void RouteSelect::add_to_path(std::shared_ptr<VisualElement> visual_element)
     {
         advertisement = "The elements are not connected";
     }
+
+    return connected;
 }
 
 RouteSelect::~RouteSelect()
