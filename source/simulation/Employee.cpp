@@ -6,7 +6,7 @@ Employee::Employee() : id(0), name(""), last_name(""), age(0), shift_len(0), fat
 }
 
 Employee::Employee(int _id, std::string _name, std::string _last_name, ushort _age, int _hourly_rate, ushort _shift_len, ushort _fatigue) 
-    : id(_id), name(_name), last_name(_last_name), age(_age), hourly_rate(_hourly_rate), accumulated_work_time(0), shift_len(_shift_len), fatigue(_fatigue)
+    : id(_id), name(_name), last_name(_last_name), age(_age), hourly_rate(_hourly_rate), total_work_hours(0), shift_len(_shift_len), fatigue(_fatigue)
 {
     //empty
 }
@@ -41,9 +41,9 @@ ushort Employee::get_fatigue() const noexcept
     return fatigue; 
 }
 
-int Employee::get_accumulated_work_time() const noexcept
+int Employee::get_total_work_hours() const noexcept
 {
-    return accumulated_work_time;
+    return total_work_hours;
 }
 
 int Employee::get_hourly_rate() const noexcept
@@ -81,9 +81,9 @@ void Employee::set_fatigue(const ushort& _fatigue)
     fatigue = _fatigue; 
 }
 
-void Employee::set_accumulated_work_time(const int& time)
+void Employee::set_total_work_hours(const int& time)
 {
-    accumulated_work_time = time;
+    total_work_hours = time;
 }
 
 void Employee::set_hourly_rate(const int& rate)
