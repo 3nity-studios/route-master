@@ -61,6 +61,7 @@ class City
     VisualElementNodeList get_visual_elements() const noexcept;
     StreetArcList get_streets() const noexcept;
     std::vector<int> get_current_passengers();
+    Designar::Graph<std::shared_ptr<VisualElement>, Street> get_city_map();
     
     void add_bus_stop(const BusStop& bus_stop);
     void add_street(const Street& street_info, const int& src_id, const int& tgt_id); 

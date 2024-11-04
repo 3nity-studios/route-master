@@ -2,6 +2,7 @@
 #include "states/simulation_state.hpp"
 #include "states/store_state.hpp"
 #include "states/inventory_state.hpp"
+#include "states/route_select.hpp"
 #include "states/payroll_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
@@ -27,6 +28,9 @@ void MainMenuState::init_state()
         });
     this->_data->gui.get<tgui::Button>("payroll_button")->onPress([this] {
             this->_data->states.add_state(Engine::StateRef(new PayrollState(this->_data)), false);
+        });
+    this->_data->gui.get<tgui::Button>("route_select")->onPress([this] {
+            this->_data->states.add_state(Engine::StateRef(new RouteSelect(this->_data)), false);
         });
 }
 

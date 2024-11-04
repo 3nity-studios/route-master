@@ -215,3 +215,8 @@ void City::update_passengers()
         }
     }
 }
+
+Designar::Graph<std::shared_ptr<VisualElement>, Street> City::get_city_map()
+{
+    return city_map;
+}
