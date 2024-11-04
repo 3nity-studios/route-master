@@ -48,11 +48,13 @@ int Player::get_balance()
 
 void Player::add_bus(Bus bus)
 {
+    bus.set_id(buses.size());
     buses.insert(bus);
 }
 
 void Player::add_employee(Employee employee)
 {
+    employee.set_id(employees.size());
     employees.insert(employee);
 }
 

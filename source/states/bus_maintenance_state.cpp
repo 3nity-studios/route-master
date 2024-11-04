@@ -4,8 +4,9 @@
 #include "states/management_state.hpp"
 #include <string>
 
-BusMaintenance::BusMaintenance(GameDataRef data, const int _bus_id) : _data(data), bus_id(bus_id)
+BusMaintenance::BusMaintenance(GameDataRef data, const int _bus_id) : _data(data), bus_id(_bus_id)
 {
+    // empty
 }
 
 void BusMaintenance::init_state()
@@ -18,7 +19,7 @@ void BusMaintenance::init_state()
         this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), false);
     });
 
-    const auto &item = this->_data->player.get_bus(this->bus_id);
+    const auto &item = this->_data->player.get_bus(bus_id);
 
     auto engineCheckbox = tgui::CheckBox::create();
     engineCheckbox->setWidgetName("EngineCheckbox");

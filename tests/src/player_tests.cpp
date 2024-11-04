@@ -111,6 +111,18 @@ TEST_CASE("Store buy_bus_maintenance", "[store_buy_bus_maintenance]") {
     Player player(1, "Alice", 10000);
     Bus bus(0, "Bus1", 50, {}, 0);
     store.add_bus_to_inventory(bus, 50, 1);
+    player.add_bus(bus);
     store.buy_bus_maintenance(bus.get_id(), player, true, true, true);
     REQUIRE(player.get_balance() < 10000);
+}
+
+TEST_CASE("Store pay_employee", "[store_pay_employee]") {
+    Store store;
+    Player player(1, "Alice", 1000);
+    Employee emp1(0, "Emp1", "LastName1", 30, 10, 8, 0);
+    emp1.set_total_work_hours(40);
+    player.add_employee(emp1);
+    store.pay_employee(emp1.get_id(), player);
+    REQUIRE(player.get_balance() == 600);
+    REQUIRE(player.get_employee(emp1.get_id()).get_total_work_hours() == 0);
 }

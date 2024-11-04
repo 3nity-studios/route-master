@@ -294,6 +294,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_inventory_panel()
         repairButton->setWidgetName(bus.get_id() + "RepairButton");
         repairButton->setText("Repair");
         repairButton->onPress([this, bus] {
+            // std::cout << this->_data->player.get_bus(bus.get_id()).get_name();;
             this->_data->states.add_state(Engine::StateRef(new BusMaintenance(this->_data, bus.get_id())), false);
         });
         grid->addWidget(repairButton, i + 1, 5);
