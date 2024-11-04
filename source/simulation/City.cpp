@@ -130,8 +130,9 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             simulation_info.time_state = std::make_pair<int, int>(0, simulation_info.bus.get_time_in_bus_stop());
             simulation_info.previous_time = current_time;
             simulation_info.next_is_street = true;
-            simulation_info.bus.leave_passengers(*bus_stop);
-            simulation_info.bus.add_passengers(current_time, *bus_stop);
+            int passengers_off = simulation_info.bus.leave_passengers(*bus_stop);
+            int passengers_on = simulation_info.bus.add_passengers(current_time, *bus_stop);
+            simulation_info.passengers_per_stop.push_back({passengers_on, passengers_off});
             simulation_info.projection_clock.restart();
         }
         else if (simulation_info.projection_clock.getElapsedTime().asSeconds() <= simulation_info.time_state.second)
@@ -154,6 +155,7 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
                     simulation_info.time_state = std::make_pair<int, int>(1, track->get_info().get_travel_time());
                     simulation_info.employee.calc_fatigue(track->get_info().get_distance());
                     simulation_info.bus.calc_wear(track->get_info().get_distance());
+                    simulation_info.times.push_back(track->get_info().get_travel_time());
                     break;
                 }
             }
@@ -168,8 +170,9 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             simulation_info.time_state = std::make_pair<int, int>(0, simulation_info.bus.get_time_in_bus_stop());
             simulation_info.previous_time = current_time;
             simulation_info.next_is_street = true;
-            simulation_info.bus.leave_passengers(*bus_stop);
-            simulation_info.bus.add_passengers(current_time, *bus_stop);
+            int passengers_off = simulation_info.bus.leave_passengers(*bus_stop);
+            int passengers_on = simulation_info.bus.add_passengers(current_time, *bus_stop);
+            simulation_info.passengers_per_stop.push_back({passengers_on, passengers_off});
             simulation_info.projection_clock.restart();
         }
         else if (traffic_light)
