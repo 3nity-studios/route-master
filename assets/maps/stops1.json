@@ -1,0 +1,99 @@
+{
+    "stops": [
+    {
+        "id": 1,
+        "name": "Stop1",
+        "avg_hourly_arrivals": [10, 11, 10],
+        "avg_arrival_time": 2.0,
+        "avg_waiting_time": 5.0,
+        "sd_waiting_time": 3.0,
+        "avg_bus_stop": 3.0,
+        "sd_bus_stop": 2.0,
+        "x": 350.0,
+        "y": 5.0
+    },
+    {
+        "id": 2,
+        "name": "Stop2",
+        "avg_hourly_arrivals": [10, 11, 10],
+        "avg_arrival_time": 3.0,
+        "avg_waiting_time": 10.0,
+        "sd_waiting_time": 3.0,
+        "avg_bus_stop": 3.0,
+        "sd_bus_stop": 2.0,
+        "x": 500.0,
+        "y": 5.0
+    },
+    {
+        "id": 3,
+        "name": "Stop3",
+        "avg_hourly_arrivals": [10, 8, 9],
+        "avg_arrival_time": 15.0,
+        "avg_waiting_time": 15.0,
+        "sd_waiting_time": 3.0,
+        "avg_bus_stop": 3.0,
+        "sd_bus_stop": 2.0,
+        "x": 750.0,
+        "y": 5.0
+    },
+    {
+        "id": 4,
+        "name": "Stop4",
+        "avg_hourly_arrivals": [10, 11, 10],
+        "avg_arrival_time": 15.0,
+        "avg_waiting_time": 15.0,
+        "sd_waiting_time": 3.0,
+        "avg_bus_stop": 3.0,
+        "sd_bus_stop": 2.0,
+        "x": 350.0,
+        "y": 250.0
+    },
+    {
+        "id": 5,
+        "name": "Stop5",
+        "avg_hourly_arrivals": [11, 10, 11],
+        "avg_arrival_time": 15.0,
+        "avg_waiting_time": 15.0,
+        "sd_waiting_time": 3.0,
+        "avg_bus_stop": 3.0,
+        "sd_bus_stop": 2.0,
+        "x": 600.0,
+        "y": 250.0
+    },
+    {
+        "id": 6,
+        "name": "Stop6",
+        "avg_hourly_arrivals": [10, 11, 10],
+        "avg_arrival_time": 15.0,
+        "avg_waiting_time": 15.0,
+        "sd_waiting_time": 3.0,
+        "avg_bus_stop": 3.0,
+        "sd_bus_stop": 2.0,
+        "x": 600.0,
+        "y": 500.0
+    }],
+    "traffic_lights": [
+    {
+        "id": 7,
+        "connections": [
+            {
+                "street_ids": [4, 5],
+                "green_light": true
+            }
+        ],
+        "time_to_change": 10,
+        "x": 450.0,
+        "y": 250.0
+    }],
+    "curves": [
+    {
+        "id": 8,
+        "x": 180.0,
+        "y": 200.0
+    },
+    {
+        "id": 9,
+        "x": 800.0,
+        "y": 500.0
+    }]
+}

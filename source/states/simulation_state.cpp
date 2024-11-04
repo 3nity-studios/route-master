@@ -63,6 +63,37 @@ SimulationState::SimulationState(GameDataRef data)
             throw exception;
         }
     }
+    const auto lights_json_data = j["traffic_lights"];
+    std::vector<TrafficLight> traffic_lights_v;
+    for (const auto &element : lights_json_data)
+    {
+        try
+        {
+            const int id_field{element.at("id")};
+            std::vector<std::pair<StreetConnectionIDs, bool>> connections_field;
+            for (auto& con : element["connections"])
+            {
+                std::vector<int> street_ids_v;
+                for (auto& id : con["street_ids"])
+                {
+                    street_ids_v.push_back(id);
+                }
+                const bool green_field{con.at("green_light")};
+                std::pair<StreetConnectionIDs, bool> connection({street_ids_v.at(0), street_ids_v.at(1)}, green_field);
+                connections_field.push_back(connection);
+            }
+            const int ttc_field{element.at("time_to_change")};
+            const float x_field{element.at("x")};
+            const float y_field{element.at("y")};
+            TrafficLight new_light(id_field, connections_field, ttc_field, x_field, y_field);
+            traffic_lights_v.push_back(new_light);
+        }
+        catch (const std::out_of_range & exception)
+        {
+            // std::cerr("Error in JSON data from `{}`: unknown stop: '{}'.", json_path, std::string(element));
+            throw exception;
+        }
+    }
     // j = JsonHelper::ReadJson(R"({        "id": 1,        "name": "Stop1",        "avg_hourly_arrivals": [10, 11, 10],
     // "avg_arrival_time": 2.0,        "avg_waiting_time": 5.0,        "sd_waiting_time": 3.0, "avg_bus_stop": 3.0,
     // "sd_bus_stop": 2.0,        "x": 350.0,        "y": 5.0})"); j["id"] = stop1.id; j["name"] = stop1.name;
@@ -77,13 +108,18 @@ SimulationState::SimulationState(GameDataRef data)
     VisualElement curve1(8, 180.f, 200.f);
     VisualElement curve2(9, 800.f, 500.f);
 
-    city.add_bus_stop(stop1);
-    city.add_bus_stop(stop2);
-    city.add_bus_stop(stop3);
-    city.add_bus_stop(stop4);
+    for (const auto &element : bus_stops_v)
+    {
+        std::cout << "adding bus_stop: " << element.name << std::endl;
+        city.add_bus_stop(element);
+    }
+
+    // for (const auto &element : bus_stops_v)
+    // {
+    //     std::cout << "adding traffic_light: " << element.name << std::endl;
+    //     city.add_traffic_light(element);
+    // }
     city.add_traffic_light(light1);
-    city.add_bus_stop(stop5);
-    city.add_bus_stop(stop6);
     city.add_curve(curve1);
     city.add_curve(curve2);
 
