@@ -10,6 +10,7 @@
 
 #include "player/Player.hpp"
 #include "player/Store.hpp"
+#include "simulation/City.hpp"
 
 struct GameData
 {
@@ -21,6 +22,9 @@ struct GameData
 
     Player player;
     Store store;
+    std::vector<std::vector<std::shared_ptr<VisualElement>>> paths;
+    City city;
+    std::vector<SimulationInfo> simulation_info; 
 };
 
 typedef std::shared_ptr<GameData> GameDataRef;

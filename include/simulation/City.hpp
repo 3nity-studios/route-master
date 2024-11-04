@@ -34,12 +34,15 @@ struct SimulationInfo
     {
         elements_path.clear();
 
-        for (auto track : path)
+        if (!path.is_empty())
         {
-            elements_path.push_back(track->get_src_node()->get_info());
-        }
+            for (auto track : path)
+            {
+                elements_path.push_back(track->get_src_node()->get_info());
+            }
 
-        elements_path.push_back(path.get_last()->get_tgt_node()->get_info());
+            elements_path.push_back(path.get_last()->get_tgt_node()->get_info());
+        }
     }
 };
 
@@ -61,6 +64,7 @@ class City
     VisualElementNodeList get_visual_elements() const noexcept;
     StreetArcList get_streets() const noexcept;
     std::vector<int> get_current_passengers();
+    Designar::Graph<std::shared_ptr<VisualElement>, Street> get_city_map();
     
     void add_bus_stop(const BusStop& bus_stop);
     void add_street(const Street& street_info, const int& src_id, const int& tgt_id); 
