@@ -6,11 +6,11 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
 
-class InventoryState : public Engine::State
+class ManagementState : public Engine::State
 {
   public:
-    InventoryState(GameDataRef data);
-    //~InventoryState() = default;
+    ManagementState(GameDataRef data);
+    //~ManagementState() = default;
 
     void init_state();
     void update_inputs();
@@ -19,4 +19,7 @@ class InventoryState : public Engine::State
 
   private:
     GameDataRef _data;
+
+    tgui::ScrollablePanel::Ptr create_payroll_panel();
+    tgui::ScrollablePanel::Ptr create_inventory_panel();
 };

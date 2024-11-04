@@ -177,12 +177,10 @@ set(
   ${SRCROOT}/states/map_viewer_state.cpp
   ${INCROOT}/states/simulation_state.hpp
   ${SRCROOT}/states/simulation_state.cpp
-  ${INCROOT}/states/inventory_state.hpp
-  ${SRCROOT}/states/inventory_state.cpp
   ${INCROOT}/states/bus_maintenance_state.hpp
   ${SRCROOT}/states/bus_maintenance_state.cpp
-  ${INCROOT}/states/payroll_state.hpp
-  ${SRCROOT}/states/payroll_state.cpp
+  ${INCROOT}/states/management_state.hpp
+  ${SRCROOT}/states/management_state.cpp
   ${INCROOT}/states/stats_state.hpp
   ${SRCROOT}/states/stats_state.cpp
 )

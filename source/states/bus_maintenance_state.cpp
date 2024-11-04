@@ -1,7 +1,7 @@
 #include "states/bus_maintenance_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
-#include "states/inventory_state.hpp"
+#include "states/management_state.hpp"
 #include <string>
 
 BusMaintenance::BusMaintenance(GameDataRef data, const int _bus_id) : _data(data), bus_id(bus_id)
@@ -15,7 +15,7 @@ void BusMaintenance::init_state()
     this->_data->gui.loadWidgetsFromFile("assets/screens/bus_maintenance.txt");
 
     this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this] {
-        this->_data->states.add_state(Engine::StateRef(new InventoryState(this->_data)), false);
+        this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), false);
     });
 
     const auto &item = this->_data->player.get_bus(this->bus_id);
@@ -44,7 +44,7 @@ void BusMaintenance::init_state()
                                             engineCheckbox->isChecked(),
                                             breaksCheckbox->isChecked(),
                                             tiresCheckbox->isChecked());
-        this->_data->states.add_state(Engine::StateRef(new InventoryState(this->_data)), false);
+        this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), false);
     });
 }
 
