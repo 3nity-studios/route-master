@@ -1,28 +1,37 @@
 #include "states/route_select.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
-#include <string>
-#include <cmath>
 #include "states/bus_select_state.hpp"
+#include <cmath>
+#include <string>
 
-RouteSelect::RouteSelect(GameDataRef data) : _data(data), map_icons_texture(sf::Image(sf::Vector2u(25, 25), sf::Color::Green)), sprite_pressed(false)
+RouteSelect::RouteSelect(GameDataRef data)
+    : _data(data), map_icons_texture(sf::Image(sf::Vector2u(25, 25), sf::Color::Green)), sprite_pressed(false)
 {
 }
 
 void RouteSelect::init_state()
-{ 
+{
     tgui::Theme::setDefault("assets/tgui/Kenney.txt");
-    this->gui.setWindow(*this->_data->window);
-    this->gui.loadWidgetsFromFile("assets/screens/route_select.txt");
+    this->_data->gui.setWindow(*this->_data->window);
+    this->_data->gui.loadWidgetsFromFile("assets/screens/route_select.txt");
 
-    this->gui.get<tgui::Button>("cancel_button")->onPress([this] {
-        this->_data->states.remove_state();
-    });
+    this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this] { this->_data->states.remove_state(); });
 
-    this->gui.get<tgui::Button>("select_button")->onPress([this] {
+    this->_data->gui.get<tgui::Button>("select_button")->onPress([this] {
         if (this->new_path.empty())
         {
-            this->advertisement = "The path is empty";
+            auto messageBox = tgui::MessageBox::create();
+            messageBox->setTitle("Warning");
+            messageBox->setText("The path is empty");
+            messageBox->addButton("OK");
+            messageBox->setPosition(this->_data->window->getSize().x / 2 - 200.0f,
+                                    this->_data->window->getSize().y / 2 - 50.0f);
+            messageBox->setSize(400.0f, 100.f);
+            messageBox->onButtonPress([msgBox = messageBox.get()](const tgui::String &button) {
+                msgBox->getParent()->remove(msgBox->shared_from_this());
+            });
+            this->_data->gui.add(messageBox);
         }
         else
         {
@@ -53,7 +62,7 @@ void RouteSelect::update_inputs()
     // Event Polling
     while (const std::optional event = this->_data->window->pollEvent())
     {
-        this->gui.handleEvent(*event);
+        this->_data->gui.handleEvent(*event);
 
         if (event->is<sf::Event::Closed>())
         {
@@ -74,14 +83,14 @@ void RouteSelect::update_inputs()
                     {
                         if (add_to_path(element.second))
                         {
-                            element.first.setColor(sf::Color(255,255,255));
+                            element.first.setColor(sf::Color(255, 255, 255));
                         }
-                    
+
                         break;
                     }
                 }
 
-                sprite_pressed = true; 
+                sprite_pressed = true;
 
                 return;
             }
@@ -97,7 +106,7 @@ void RouteSelect::update_inputs()
         {
             if (sprite_pressed)
             {
-                sprite_pressed = false; 
+                sprite_pressed = false;
             }
             // if mouse button is released stop draggin
             if (keyPress->button == sf::Mouse::Button::Right)
@@ -126,8 +135,7 @@ void RouteSelect::update_inputs()
             if (is_dragging)
             {
                 // calculate how far mouse has moved in view
-                const auto delta =
-                    target.mapPixelToCoords(mouse_position) - target.mapPixelToCoords(previous_mouse_pos);
+                const auto delta = target.mapPixelToCoords(mouse_position) - target.mapPixelToCoords(previous_mouse_pos);
                 // apply negatively to view
                 auto view = target.getView();
                 view.move(-delta);
@@ -151,6 +159,8 @@ void RouteSelect::draw_state(float dt __attribute__((unused)))
     // background color
     this->_data->window->clear(sf::Color::White);
 
+    this->_data->gui.draw();
+
     // write text
     sf::Font font("assets/fonts/joystix.ttf");
     sf::Text text(font);
@@ -169,31 +179,21 @@ void RouteSelect::draw_state(float dt __attribute__((unused)))
         this->_data->window->draw(visual_element.first);
     }
 
-    sf::Text advertisement_text(font);
-    advertisement_text.setString(advertisement);
-    advertisement_text.setCharacterSize(12);
-    advertisement_text.setPosition(sf::Vector2f(50.f, 500.f));
-    advertisement_text.setFillColor(sf::Color::Black);
-
-    gui.draw();
-
-    this->_data->window->draw(advertisement_text);
-
     // Displays rendered objects
     this->_data->window->display();
 }
 
 void RouteSelect::init_visual_elements()
 {
-    sf::IntRect traffic_light_rect(sf::Vector2i(0,0), sf::Vector2i(27,53));
-    sf::IntRect bus_stop_rect(sf::Vector2i(44,10), sf::Vector2i(52,52));
-    sf::IntRect curve_rect(sf::Vector2i(98,11), sf::Vector2i(53,52));
+    sf::IntRect traffic_light_rect(sf::Vector2i(0, 0), sf::Vector2i(27, 53));
+    sf::IntRect bus_stop_rect(sf::Vector2i(44, 10), sf::Vector2i(52, 52));
+    sf::IntRect curve_rect(sf::Vector2i(98, 11), sf::Vector2i(53, 52));
 
     for (auto visual_element : this->_data->city.get_visual_elements())
     {
         auto visual_element_pointer = visual_element->get_info();
         auto bus_stop = std::dynamic_pointer_cast<BusStop>(visual_element_pointer);
-        auto traffic_light = std::dynamic_pointer_cast<TrafficLight>(visual_element_pointer); 
+        auto traffic_light = std::dynamic_pointer_cast<TrafficLight>(visual_element_pointer);
 
         if (bus_stop)
         {
@@ -203,7 +203,8 @@ void RouteSelect::init_visual_elements()
             sprite.setOrigin(sprite.getLocalBounds().getCenter());
             sprite.setColor(sf::Color(75, 73, 71));
 
-            visual_elements.push_back(std::make_pair<sf::Sprite, std::shared_ptr<VisualElement>>(std::move(sprite), std::move(visual_element_pointer))); 
+            visual_elements.push_back(std::make_pair<sf::Sprite, std::shared_ptr<VisualElement>>(
+                std::move(sprite), std::move(visual_element_pointer)));
         }
         else if (traffic_light)
         {
@@ -213,7 +214,8 @@ void RouteSelect::init_visual_elements()
             sprite.setOrigin(sprite.getLocalBounds().getCenter());
             sprite.setColor(sf::Color(75, 73, 71));
 
-            visual_elements.push_back(std::make_pair<sf::Sprite, std::shared_ptr<VisualElement>>(std::move(sprite), std::move(visual_element_pointer))); 
+            visual_elements.push_back(std::make_pair<sf::Sprite, std::shared_ptr<VisualElement>>(
+                std::move(sprite), std::move(visual_element_pointer)));
         }
         else
         {
@@ -223,7 +225,8 @@ void RouteSelect::init_visual_elements()
             sprite.setOrigin(sprite.getLocalBounds().getCenter());
             sprite.setColor(sf::Color(75, 73, 71));
 
-            visual_elements.push_back(std::make_pair<sf::Sprite, std::shared_ptr<VisualElement>>(std::move(sprite), std::move(visual_element_pointer))); 
+            visual_elements.push_back(std::make_pair<sf::Sprite, std::shared_ptr<VisualElement>>(
+                std::move(sprite), std::move(visual_element_pointer)));
         }
     }
 }
@@ -238,10 +241,12 @@ void RouteSelect::draw_lines()
     for (auto element : this->_data->city.get_streets())
     {
         sf::Vertex ver1;
-        ver1.position = sf::Vector2f(element->get_src_node()->get_info()->get_x(), element->get_src_node()->get_info()->get_y());
+        ver1.position =
+            sf::Vector2f(element->get_src_node()->get_info()->get_x(), element->get_src_node()->get_info()->get_y());
         ver1.color = sf::Color::Black;
-        sf::Vertex ver2; 
-        ver2.position = sf::Vector2f(element->get_tgt_node()->get_info()->get_x(), element->get_tgt_node()->get_info()->get_y());
+        sf::Vertex ver2;
+        ver2.position =
+            sf::Vector2f(element->get_tgt_node()->get_info()->get_x(), element->get_tgt_node()->get_info()->get_y());
         ver2.color = sf::Color::Black;
 
         sf::Vertex line[] = {ver1, ver2};
@@ -252,12 +257,12 @@ void RouteSelect::draw_lines()
     for (int i = 1; i < new_path.size(); i++)
     {
         auto element = new_path.at(i);
-        auto element2 = new_path.at(i-1); 
+        auto element2 = new_path.at(i - 1);
 
         sf::Vertex ver1;
         ver1.position = sf::Vector2f(element->get_x(), element->get_y());
         ver1.color = sf::Color::Yellow;
-        sf::Vertex ver2; 
+        sf::Vertex ver2;
         ver2.position = sf::Vector2f(element2->get_x(), element2->get_y());
         ver2.color = sf::Color::Yellow;
 
@@ -269,7 +274,7 @@ void RouteSelect::draw_lines()
 
 bool RouteSelect::add_to_path(std::shared_ptr<VisualElement> visual_element)
 {
-    if(new_path.empty())
+    if (new_path.empty())
     {
         new_path.push_back(visual_element);
         return true;
@@ -279,7 +284,8 @@ bool RouteSelect::add_to_path(std::shared_ptr<VisualElement> visual_element)
 
     for (auto element : this->_data->city.get_streets())
     {
-        if (element->get_tgt_node()->get_info()->get_id() == visual_element->get_id() && element->get_src_node()->get_info()->get_id() == new_path.back()->get_id())
+        if (element->get_tgt_node()->get_info()->get_id() == visual_element->get_id() &&
+            element->get_src_node()->get_info()->get_id() == new_path.back()->get_id())
         {
             connected = true;
         }
@@ -288,11 +294,20 @@ bool RouteSelect::add_to_path(std::shared_ptr<VisualElement> visual_element)
     if (connected)
     {
         new_path.push_back(visual_element);
-        advertisement = "";
     }
     else
     {
-        advertisement = "The elements are not connected";
+        auto messageBox = tgui::MessageBox::create();
+        messageBox->setTitle("Warning");
+        messageBox->setText("The elements are not connected");
+        messageBox->addButton("OK");
+        messageBox->setPosition(this->_data->window->getSize().x / 2 - 200.0f,
+                                this->_data->window->getSize().y / 2 - 50.0f);
+        messageBox->setSize(400.0f, 100.f);
+        messageBox->onButtonPress([msgBox = messageBox.get()](const tgui::String &button) {
+            msgBox->getParent()->remove(msgBox->shared_from_this());
+        });
+        this->_data->gui.add(messageBox);
     }
 
     return connected;
