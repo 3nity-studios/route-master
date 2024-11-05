@@ -44,7 +44,7 @@ class SimulationState : public Engine::State
     void set_driver_sim(Employee _driver);
     void set_bus_sim(Bus _bus); 
     void set_simulation_parameters(std::list<std::pair<int, int>> _times);
-    ScreenScrollDirection isScreenScrollRequired(sf::RenderWindow &gameWindow);
+    ScreenScrollDirection is_screen_scroll_required(sf::RenderWindow &gameWindow);
     void scroll_map_view(ScreenScrollDirection passed_ScrollDirection, sf::View &mapView, sf::Clock gameClock, int scrollSpeed);
   private:
     GameDataRef _data;
@@ -71,4 +71,6 @@ class SimulationState : public Engine::State
     sf::View _gui_view;
     tmx::Map _map;
     sf::Vector2i _panning_anchor;
+    float _zoom_level;
+    ActionState _action_state;
 };

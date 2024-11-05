@@ -1,16 +1,22 @@
 #include "states/simulation_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
+#include "engine/asset_manager.hpp"
 #include "engine/stops_manager.hpp"
 #include "simulation/BusStop.hpp"
 #include "utils/json_helper.hpp"
 #include <SFML/Window/Mouse.hpp>
+#include <chrono>
 #include <cmath>
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json_fwd.hpp>
 #include <string>
-#include <chrono>
+
+const int NORMAL_SCROLL_SPEED = 30000;
+const int FAST_SCROLL_SPEED = 60000;
+const int NORMAL_SCROLL_MARGIN = 30;
+const int FAST_SCROLL_MARGIN = 10;
 
 float calc_distance(VisualElement element1, VisualElement element2)
 {
@@ -23,18 +29,7 @@ SimulationState::SimulationState(GameDataRef data)
       bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)),
       bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), bus(bus_texture)
 {
-    BusStop stop1(1, "Stop1", {10, 11, 10}, 2.0, 5.0, 3.0, 3.0, 2.0, 350.f, 5.f);
-    BusStop stop2(2, "Stop2", {10, 11, 10}, 3.0, 10.0, 3.0, 3.0, 2.0, 500.f, 5.f);
-    BusStop stop3(3, "Stop3", {10, 8, 9}, 15.0, 15.0, 3.0, 3.0, 2.0, 750.f, 5.f);
-    BusStop stop4(4, "Stop4", {10, 11, 10}, 15.0, 15.0, 3.0, 3.0, 2.0, 350.f, 250.f);
-    BusStop stop5(5, "Stop5", {11, 10, 11}, 15.0, 15.0, 3.0, 3.0, 2.0, 600.f, 250.f);
-    BusStop stop6(6, "Stop6", {10, 11, 10}, 15.0, 15.0, 3.0, 3.0, 2.0, 600.f, 500.f);
-
-    // conversion: bus_stop -> json
-    // nlohmann::json j = stop1;
-    // convert to JSON: copy each value into the JSON object
     nlohmann::json j;
-    // std::string n = "assets/maps/stops1.json";
     std::ifstream f("assets/maps/stops1.json");
     j = nlohmann::json::parse(f);
     const auto stops_json_data = j["stops"];
@@ -46,7 +41,7 @@ SimulationState::SimulationState(GameDataRef data)
             const int id_field{element.at("id")};
             const std::string name_field{element.at("name")};
             std::vector<int> aha_field;
-            for (auto& num : element["avg_hourly_arrivals"])
+            for (auto &num : element["avg_hourly_arrivals"])
                 aha_field.push_back(num);
             const float aat_field{element.at("avg_arrival_time")};
             const float awt_field{element.at("avg_waiting_time")};
@@ -55,12 +50,12 @@ SimulationState::SimulationState(GameDataRef data)
             const float sdb_field{element.at("sd_bus_stop")};
             const float x_field{element.at("x")};
             const float y_field{element.at("y")};
-            BusStop new_stop(id_field,name_field,aha_field,aat_field,awt_field,sdw_field,abs_field,sdb_field,x_field,y_field);
+            BusStop new_stop(id_field, name_field, aha_field, aat_field, awt_field, sdw_field, abs_field, sdb_field,
+                             x_field, y_field);
             bus_stops_v.push_back(new_stop);
         }
-        catch (const std::out_of_range & exception)
+        catch (const std::out_of_range &exception)
         {
-            // std::cerr("Error in JSON data from `{}`: unknown stop: '{}'.", json_path, std::string(element));
             throw exception;
         }
     }
@@ -72,10 +67,10 @@ SimulationState::SimulationState(GameDataRef data)
         {
             const int id_field{element.at("id")};
             std::vector<std::pair<StreetConnectionIDs, bool>> connections_field;
-            for (auto& con : element["connections"])
+            for (auto &con : element["connections"])
             {
                 std::vector<int> street_ids_v;
-                for (auto& id : con["street_ids"])
+                for (auto &id : con["street_ids"])
                 {
                     street_ids_v.push_back(id);
                 }
@@ -89,9 +84,8 @@ SimulationState::SimulationState(GameDataRef data)
             TrafficLight new_light(id_field, connections_field, ttc_field, x_field, y_field);
             traffic_lights_v.push_back(new_light);
         }
-        catch (const std::out_of_range & exception)
+        catch (const std::out_of_range &exception)
         {
-            // std::cerr("Error in JSON data from `{}`: unknown stop: '{}'.", json_path, std::string(element));
             throw exception;
         }
     }
@@ -107,62 +101,59 @@ SimulationState::SimulationState(GameDataRef data)
             VisualElement new_curve(id_field, x_field, y_field);
             curves_v.push_back(new_curve);
         }
-        catch (const std::out_of_range & exception)
+        catch (const std::out_of_range &exception)
         {
-            // std::cerr("Error in JSON data from `{}`: unknown stop: '{}'.", json_path, std::string(element));
             throw exception;
         }
     }
-    
-    std::cout << j << std::endl;
-
-    TrafficLight light1(7,
-                        std::vector<std::pair<StreetConnectionIDs, bool>>{
-                            std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(4, 5), true)},
-                        10, 450.f, 250.f);
-
-    VisualElement curve1(8, 180.f, 200.f);
-    VisualElement curve2(9, 800.f, 500.f);
+    const auto streets_json_data = j["streets"];
+    std::vector<Street> streets_v;
+    for (const auto &element : streets_json_data)
+    {
+        try
+        {
+            const int id_field{element.at("id")};
+            const std::string name_field{element.at("name")};
+            const float distance_field{element.at("distance")};
+            const float as_field{element.at("avg_speed")};
+            const float atd_field{element.at("avg_traffic_density")};
+            const float std_field{element.at("sd_traffic_density")};
+            const float seo_field{element.at("singular_event_odds")};
+            Street new_street(id_field, name_field, distance_field, as_field, atd_field, std_field, seo_field);
+            streets_v.push_back(new_street);
+        }
+        catch (const std::out_of_range &exception)
+        {
+            throw exception;
+        }
+    }
 
     for (const auto &element : bus_stops_v)
     {
-        std::cout << "adding bus_stop: " << element.name << std::endl;
         city.add_bus_stop(element);
     }
     for (const auto &element : traffic_lights_v)
     {
-        std::cout << "adding traffic_light: " << element.id << std::endl;
         city.add_traffic_light(element);
     }
     for (const auto &element : curves_v)
     {
-        std::cout << "adding curve: " << element.id << std::endl;
         city.add_curve(element);
+    }
+    {
+        int i = 0;
+        for (const auto &element : streets_v)
+        {
+            city.add_street(element, streets_json_data[i].at("src_id"), streets_json_data[i].at("tgt_id"));
+            i++;
+        }
     }
 
     city.initialize_bus_stops();
 
-    Street street1(1, "Street1", calc_distance(stop1, stop2), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street2(2, "Street2", calc_distance(stop2, stop3), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street3(3, "Street3", calc_distance(stop3, curve1), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street4(4, "Street4", calc_distance(curve1, stop4), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street5(5, "Street5", calc_distance(stop4, light1), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street6(6, "Street6", calc_distance(light1, stop5), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street7(7, "Street7", calc_distance(stop5, curve2), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street8(8, "Street8", calc_distance(curve2, stop6), 50.0f, 2.0f, 0.1f, 0.05f);
-
-    city.add_street(street1, 1, 2);
-    city.add_street(street2, 2, 3);
-    city.add_street(street3, 3, 8);
-    city.add_street(street4, 8, 4);
-    city.add_street(street5, 4, 7);
-    city.add_street(street6, 7, 5);
-    city.add_street(street7, 5, 9);
-    city.add_street(street8, 9, 6);
-
     StreetArcList path;
 
-    for (int i = 1; i < 9; i++)
+    for (int i = 1; i <= streets_v.size(); ++i)
     {
         for (auto street : city.get_streets())
         {
@@ -209,7 +200,39 @@ void calc_map_view(sf::RenderWindow &game_window, sf::View &map_view)
     map_view.setViewport(viewport_size);
 }
 
-void SimulationState::scroll_map_view(ScreenScrollDirection passed_scroll_direction, sf::View &map_view, sf::Clock game_clock, int scroll_speed)
+ScreenScrollDirection SimulationState::is_screen_scroll_required(sf::RenderWindow &game_window)
+{
+    sf::Vector2i mouse_pos = sf::Mouse::getPosition(game_window);
+    if (this->_game_view.getCenter().x > static_cast<float>(game_window.getSize().x / 2) &&
+        mouse_pos.x < NORMAL_SCROLL_MARGIN && mouse_pos.x >= 0)
+    {
+        return SCROLL_LEFT;
+    }
+    else if (this->_game_view.getCenter().x <
+                 this->_map.getBounds().width - static_cast<float>(game_window.getSize().x / 2) &&
+             mouse_pos.x > static_cast<int>(game_window.getSize().x) - NORMAL_SCROLL_MARGIN &&
+             mouse_pos.x <= static_cast<int>(game_window.getSize().x))
+    {
+        return SCROLL_RIGHT;
+    }
+    else if (this->_game_view.getCenter().y > static_cast<float>(game_window.getSize().y / 2) &&
+             mouse_pos.y < NORMAL_SCROLL_MARGIN && mouse_pos.y >= 0)
+    {
+        return SCROLL_UP;
+    }
+    else if (this->_game_view.getCenter().y <
+                 this->_map.getBounds().height - static_cast<float>(game_window.getSize().y / 2) &&
+             mouse_pos.y > static_cast<int>(game_window.getSize().y) - NORMAL_SCROLL_MARGIN &&
+             mouse_pos.y <= static_cast<int>(game_window.getSize().y))
+    {
+        return SCROLL_DOWN;
+    }
+
+    return NO_SCROLL;
+}
+
+void SimulationState::scroll_map_view(ScreenScrollDirection passed_scroll_direction, sf::View &map_view,
+                                      sf::Clock game_clock, int scroll_speed)
 {
     // std::cout << "game_clock.getElapsedTime().asSeconds()" << game_clock.getElapsedTime().asSeconds() << std::endl;
     switch (passed_scroll_direction)
@@ -232,86 +255,85 @@ void SimulationState::scroll_map_view(ScreenScrollDirection passed_scroll_direct
     }
 }
 
-void zoom_view(float zoom_delta, sf::View &map_view)
-{
-    map_view.zoom(zoom_delta);
-}
-
-sf::Vector2i mouse_pos;
-
-ScreenScrollDirection SimulationState::isScreenScrollRequired(sf::RenderWindow &game_window)
-{
-    mouse_pos = sf::Mouse::getPosition(game_window);
-    // std::cout << "View center position x: " << this->_game_view.getCenter().x << std::endl;
-    // std::cout << "View center position y: " << this->_game_view.getCenter().y << std::endl;
-    // std::cout << "Map position 2x: " << this->_map.getBounds().width << std::endl;
-    // std::cout << "Map position 2y: " << this->_map.getBounds().height << std::endl;
-    if (this->_game_view.getCenter().x > game_window.getSize().x/2 && mouse_pos.x < 30 && mouse_pos.x >= 0)
-    {
-        return SCROLL_LEFT;
-    }
-    else if (this->_game_view.getCenter().x < this->_map.getBounds().width - game_window.getSize().x/2 && mouse_pos.x > game_window.getSize().x - 30 && mouse_pos.x <= game_window.getSize().x)
-    {
-        return SCROLL_RIGHT;
-    }
-    else if (this->_game_view.getCenter().y > game_window.getSize().y/2 && mouse_pos.y < 30 && mouse_pos.y >= 0)
-    {
-        return SCROLL_UP;
-    }
-    else if (this->_game_view.getCenter().y < this->_map.getBounds().height - game_window.getSize().y/2 && mouse_pos.y > game_window.getSize().y - 30 && mouse_pos.y <= game_window.getSize().y)
-    {
-        return SCROLL_DOWN;
-    }
-
-    return NO_SCROLL;
-}
-
-sf::View view;
-float gameZoom;
-
 void SimulationState::init_state()
 {
     tgui::Theme::setDefault("assets/tgui/Kenney.txt");
-    if (!bus_texture.loadFromFile("assets/img/bus_top_view.png"))
-    {
-        throw GameException("Couldn't find file: assets/img/bus_top_view.png");
-    }
 
-    if (!bus_stops_texture.loadFromFile("assets/img/bus_stop_sprites.png"))
-    {
-        throw GameException("Couldn't find file: assets/img/bus_stop_sprites.png");
-    }
+    this->_data->assets.load_texture("bus_texture", "assets/img/new_bus_sprites.png");
+    bus_texture = this->_data->assets.get_texture("bus_texture");
+    this->_data->assets.load_texture("bus_stops_texture", "assets/img/bus_stop_sprites.png");
+    bus_stops_texture = this->_data->assets.get_texture("bus_stops_texture");
 
     calc_map_view(*this->_data->window, _game_view);
     this->_data->window->setView(_game_view);
+
     init_bus_stops();
     init_bus();
-    _map.load("assets/maps/demo.tmx");
+
+    this->_map.load("assets/maps/demo.tmx");
+    this->_action_state = ActionState::NONE;
+    this->_panning_anchor.x = 0;
+    this->_panning_anchor.y = 0;
+    this->_zoom_level = 1.0f;
 }
 
 void SimulationState::update_inputs()
 {
-    // Event Polling
     while (const std::optional event = this->_data->window->pollEvent())
     {
         this->_data->gui.handleEvent(*event);
 
-        if (const auto *mouseWheel = event->getIf<sf::Event::MouseWheelScrolled>())
+        if (const auto *mouseButton = event->getIf<sf::Event::MouseButtonPressed>())
         {
-            gameZoom += mouseWheel->delta;
-            zoom_view(gameZoom, _game_view);
-            this->_data->window->setView(_game_view);
+            if (mouseButton->button == sf::Mouse::Button::Right)
+            {
+                if (this->_action_state != ActionState::PANNING)
+                {
+                    this->_action_state = ActionState::PANNING;
+                    this->_panning_anchor = sf::Mouse::getPosition(*this->_data->window);
+                }
+            }
+            break;
         }
-
-        if (event->is<sf::Event::Closed>())
+        else if (const auto *mouseButton = event->getIf<sf::Event::MouseButtonReleased>())
+        {
+            if (mouseButton->button == sf::Mouse::Button::Right)
+            {
+                this->_action_state = ActionState::NONE;
+            }
+            break;
+        }
+        else if (event->getIf<sf::Event::MouseMoved>())
+        {
+            if (this->_action_state == ActionState::PANNING)
+            {
+                sf::Vector2f pos = sf::Vector2f(sf::Mouse::getPosition(*this->_data->window) - this->_panning_anchor);
+                _game_view.move(-1.0f * pos * this->_zoom_level);
+                _panning_anchor = sf::Mouse::getPosition(*this->_data->window);
+            }
+            break;
+        }
+        else if (const auto *mouseWheel = event->getIf<sf::Event::MouseWheelScrolled>())
+        {
+            if (mouseWheel->delta < 0 && _zoom_level <= 4.0f)
+            {
+                _game_view.zoom(2.0f);
+                _zoom_level *= 2.0f;
+            }
+            else
+            {
+                _game_view.zoom(0.5f);
+                _zoom_level *= 0.5f;
+            }
+            break;
+        }
+        else if (event->is<sf::Event::Closed>())
         {
             this->_data->window->close();
             break;
         }
-
-        if (const auto *keyPress = event->getIf<sf::Event::KeyPressed>())
+        else if (const auto *keyPress = event->getIf<sf::Event::KeyPressed>())
         {
-            // When the enter key is pressed, switch to the next handler type
             if (keyPress->code == sf::Keyboard::Key::Escape)
             {
                 this->_data->states.remove_state();
@@ -321,47 +343,46 @@ void SimulationState::update_inputs()
     }
 }
 
-// marks dt to not warn compiler
 void SimulationState::update_state(float dt __attribute__((unused)))
 {
     update_bus();
 }
 
-int calcScrollSpeed(sf::RenderWindow &gameWindow)
+int calc_scroll_speed(sf::RenderWindow &gameWindow)
 {
-    mouse_pos = sf::Mouse::getPosition(gameWindow);
+    sf::Vector2i mouse_pos = sf::Mouse::getPosition(gameWindow);
 
-    if (mouse_pos.x < 30)
+    if (mouse_pos.x < NORMAL_SCROLL_MARGIN)
     {
-        if (mouse_pos.x < 10)
+        if (mouse_pos.x < FAST_SCROLL_MARGIN)
         {
-            return 60000;
+            return FAST_SCROLL_SPEED;
         }
-        return 30000;
+        return NORMAL_SCROLL_SPEED;
     }
-    else if (mouse_pos.x > gameWindow.getSize().x - 30)
+    else if (mouse_pos.x > static_cast<int>(gameWindow.getSize().x - NORMAL_SCROLL_MARGIN))
     {
-        if (mouse_pos.x > gameWindow.getSize().x - 10)
+        if (mouse_pos.x > static_cast<int>(gameWindow.getSize().x - FAST_SCROLL_MARGIN))
         {
-            return 60000;
+            return FAST_SCROLL_SPEED;
         }
-        return 30000;
+        return NORMAL_SCROLL_SPEED;
     }
-    else if (mouse_pos.y < 30)
+    else if (mouse_pos.y < NORMAL_SCROLL_MARGIN)
     {
-        if (mouse_pos.y < 10)
+        if (mouse_pos.y < FAST_SCROLL_MARGIN)
         {
-            return 60000;
+            return FAST_SCROLL_SPEED;
         }
-        return 30000;
+        return NORMAL_SCROLL_SPEED;
     }
-    else if (mouse_pos.y > gameWindow.getSize().y - 30)
+    else if (mouse_pos.y > static_cast<int>(gameWindow.getSize().y - NORMAL_SCROLL_MARGIN))
     {
-        if (mouse_pos.y > gameWindow.getSize().y - 10)
+        if (mouse_pos.y > static_cast<int>(gameWindow.getSize().y - FAST_SCROLL_MARGIN))
         {
-            return 60000;
+            return FAST_SCROLL_SPEED;
         }
-        return 30000;
+        return NORMAL_SCROLL_SPEED;
     }
     return 0;
 }
@@ -375,7 +396,8 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     MapLayer layerTwo(_map, 2);
 
     sf::Clock globalClock;
-    scroll_map_view(isScreenScrollRequired(*this->_data->window), _game_view, globalClock, calcScrollSpeed(*this->_data->window));
+    scroll_map_view(is_screen_scroll_required(*this->_data->window), _game_view, globalClock,
+                    calc_scroll_speed(*this->_data->window));
     this->_data->window->setView(_game_view);
     this->_data->window->draw(layerZero);
     this->_data->window->draw(layerOne);
@@ -389,12 +411,9 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     }
 
     text.setString(status);
-
     text.setCharacterSize(12);
-
     text.setFillColor(sf::Color::White);
     text.setStyle(sf::Text::Bold | sf::Text::Underlined);
-
     text.setPosition(sf::Vector2f(300.f, 500.f));
 
     this->_data->window->draw(text);
@@ -417,22 +436,13 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     sf::Text text2(font);
     text2.setString("\nDriver: " + driver_sim.get_name() + " " + driver_sim.get_last_name() + "\n" +
                     "Bus: " + bus_sim.get_name());
-
-    text2.setCharacterSize(12); // in pixels, not points!
-
-    // set the color
+    text2.setCharacterSize(12);
     text2.setFillColor(sf::Color::White);
-
-    // set the text style
     text2.setStyle(sf::Text::Bold | sf::Text::Underlined);
-
     text2.setPosition(sf::Vector2f(300.f, 500.f));
 
-    // inside the main loop, between window.clear() and window.display()
     this->_data->window->draw(text2);
-
     this->_data->window->draw(layerTwo);
-    // Displays rendered objects
     this->_data->window->display();
 }
 
@@ -499,25 +509,20 @@ void SimulationState::update_bus_stops()
 
 void SimulationState::init_bus()
 {
-    sf::IntRect bus_texture(sf::Vector2i(8, 5), sf::Vector2i(358, 657));
-
+    sf::IntRect bus_texture(sf::Vector2i(0, 0), sf::Vector2i(48, 32));
     bus.setTextureRect(bus_texture);
-
     sf::FloatRect bounds = bus.getLocalBounds();
-
     bus.setOrigin(bounds.getCenter());
-
-    bus.rotate(sf::degrees(90));
-
     bus.setPosition(sf::Vector2f(385.f, 90.f));
-
-    bus.setScale(sf::Vector2<float>(0.1, 0.1));
+    bus.setScale({2.0f, 2.0f});
 }
 
 void SimulationState::update_bus()
 {
-    // sf::IntRect right_view(sf::Vector2i(0,0), sf::Vector2i(717,390));
-    // sf::IntRect left_view(sf::Vector2i(0,1172), sf::Vector2i(711,385));
+    sf::IntRect right_view(sf::Vector2i(0, 0), sf::Vector2i(48, 32));
+    sf::IntRect left_view(sf::Vector2i(0, 32), sf::Vector2i(48, 32));
+    sf::IntRect down_view(sf::Vector2i(48, 0), sf::Vector2i(16, 48));
+    sf::IntRect up_view(sf::Vector2i(64, 0), sf::Vector2i(16, 48));
 
     if (times.empty())
     {
@@ -560,13 +565,32 @@ void SimulationState::update_bus()
         elements_path.pop_front();
         auto stop2 = elements_path.front();
 
-        sf::Angle rotation =
-            sf::radians(M_PI - (atan((stop2->get_x() - stop1->get_x()) / (stop2->get_y() - stop1->get_y()))));
+        // sprite changes according to greatest difference between axis(es?)
+        if (abs(stop2->get_x() - stop1->get_x()) > abs(stop2->get_y() - stop1->get_y()))
+        {
+            if (stop2->get_x() - stop1->get_x() <= 0)
+            {
+                bus.setTextureRect(left_view);
+            }
+            else
+            {
+                bus.setTextureRect(right_view);
+            }
+        }
+        else
+        {
+            if (stop2->get_y() - stop1->get_y() <= 0)
+            {
+                bus.setTextureRect(up_view);
+            }
+            else
+            {
+                bus.setTextureRect(down_view);
+            }
+        }
 
-        bus.setRotation(rotation);
-
-        bus_speed = sf::Vector2f((stop2->get_x() - stop1->get_x()) / (time.second * 60.f),
-                                 (stop2->get_y() - stop1->get_y()) / (time.second * 60.f));
+        bus_speed = sf::Vector2f((stop2->get_x() - stop1->get_x()) / (time.second * 30.f),
+                                 (stop2->get_y() - stop1->get_y()) / (time.second * 30.f));
         status = "Travelling";
     }
     else if (time.first == 1 && simulation_clock.getElapsedTime().asSeconds() >= time.second)
