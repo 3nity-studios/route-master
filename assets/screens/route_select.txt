@@ -1,3 +1,49 @@
+Picture.Picture1 {
+    Size = (929, 608.944);
+
+    Renderer {
+        Texture = "../img/bg/title_screen.png" Smooth;
+        TransparentTexture = false;
+    }
+}
+
+Label.title {
+    AutoSize = true;
+    HorizontalAlignment = Center;
+    Position = (180, 20);
+    Size = (270, 73);
+    Text = Create Route;
+    TextSize = 60;
+
+    Renderer {
+        BorderColor = None;
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        TextColor = white;
+        TextOutlineColor = black;
+        TextOutlineThickness = 2;
+        TextureBackground = None;
+
+        Scrollbar {
+            ArrowBackgroundColor = None;
+            ArrowBackgroundColorHover = None;
+            ArrowColor = None;
+            ArrowColorHover = None;
+            TextureArrowDown = "../tgui/kenney/PNG/Blue/Default/arrow_basic_s_small.png" Smooth;
+            TextureArrowDownHover = "../tgui/kenney/PNG/Extra/Default/icon_arrow_down_outline.png" Smooth;
+            TextureArrowUp = "../tgui/kenney/PNG/Blue/Default/arrow_basic_n_small.png" Smooth;
+            TextureArrowUpHover = "../tgui/kenney/PNG/Extra/Default/icon_arrow_up_outline.png" Smooth;
+            TextureThumb = None;
+            TextureThumbHover = None;
+            TextureTrack = None;
+            TextureTrackHover = None;
+            ThumbColor = #35BAF3;
+            ThumbColorHover = #55FFFF;
+            TrackColor = #C3C3C3;
+            TrackColorHover = #DDDDDD;
+        }
+    }
+}
+
 Button.select_button {
     Position = (100, 500);
     Size = (180, 63);

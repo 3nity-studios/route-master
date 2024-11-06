@@ -28,6 +28,7 @@ class RouteSelect : public Engine::State
     sf::Texture map_icons_texture;
     std::vector<std::shared_ptr<VisualElement>> new_path;
     bool sprite_pressed;
+    tgui::CanvasSFML::Ptr canvas;
 
     void init_visual_elements(); 
     void draw_lines();

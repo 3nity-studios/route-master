@@ -16,6 +16,10 @@ void RouteSelect::init_state()
     this->_data->gui.setWindow(*this->_data->window);
     this->_data->gui.loadWidgetsFromFile("assets/screens/route_select.txt");
 
+    this->canvas = tgui::CanvasSFML::create({800, 400});
+    this->canvas->setPosition({10, 90});
+    this->_data->gui.add(this->canvas);
+
     this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this] { this->_data->states.remove_state(); });
 
     this->_data->gui.get<tgui::Button>("select_button")->onPress([this] {
@@ -46,7 +50,7 @@ void RouteSelect::init_state()
     }
 
     sf::View view(sf::FloatRect({0.f, 0.f}, {800.f, 600.f}));
-    this->_data->window->setView(view);
+    this->canvas->setView(view);
 
     init_visual_elements();
 }
@@ -58,7 +62,6 @@ bool is_dragging = false;
 
 void RouteSelect::update_inputs()
 {
-    sf::RenderTarget &target{*this->_data->window};
     // Event Polling
     while (const std::optional event = this->_data->window->pollEvent())
     {
@@ -75,7 +78,9 @@ void RouteSelect::update_inputs()
             if ((keyPress->button == sf::Mouse::Button::Left) && !sprite_pressed)
             {
                 sf::Vector2i mousePos = sf::Mouse::getPosition(*this->_data->window);
-                sf::Vector2f viewPos = this->_data->window->mapPixelToCoords(mousePos, this->_data->window->getView());
+                mousePos.x -= this->canvas->getPosition().x;
+                mousePos.y -= this->canvas->getPosition().y;
+                sf::Vector2f viewPos = this->canvas->getRenderTexture().mapPixelToCoords(mousePos, this->canvas->getView());
 
                 for (auto &element : visual_elements)
                 {
@@ -134,6 +139,8 @@ void RouteSelect::update_inputs()
             // if dragging, move view
             if (is_dragging)
             {
+                sf::RenderTarget &target{this->canvas->getRenderTexture()};
+
                 // calculate how far mouse has moved in view
                 const auto delta = target.mapPixelToCoords(mouse_position) - target.mapPixelToCoords(previous_mouse_pos);
                 // apply negatively to view
@@ -157,30 +164,20 @@ void RouteSelect::update_state(float dt __attribute__((unused)))
 void RouteSelect::draw_state(float dt __attribute__((unused)))
 {
     // background color
-    this->_data->window->clear(sf::Color::White);
-
     this->_data->gui.draw();
 
-    // write text
-    sf::Font font("assets/fonts/joystix.ttf");
-    sf::Text text(font);
-
-    // throws error if can't load font
-    if (!font.openFromFile("assets/fonts/joystix.ttf"))
-    {
-        // error...
-        throw GameException("Couldn't find file: assets/fonts/joystix.ttf");
-    }
+    this->canvas->clear(sf::Color::White);
 
     draw_lines();
 
     for (auto visual_element : visual_elements)
     {
-        this->_data->window->draw(visual_element.first);
+        this->canvas->draw(visual_element.first);
     }
 
     // Displays rendered objects
     this->_data->window->display();
+    this->canvas->display();
 }
 
 void RouteSelect::init_visual_elements()
@@ -251,7 +248,7 @@ void RouteSelect::draw_lines()
 
         sf::Vertex line[] = {ver1, ver2};
 
-        this->_data->window->draw(line, 2, sf::PrimitiveType::Lines);
+        this->canvas->draw(line, 2, sf::PrimitiveType::Lines);
     }
 
     for (int i = 1; i < new_path.size(); i++)
@@ -268,7 +265,7 @@ void RouteSelect::draw_lines()
 
         sf::Vertex line[] = {ver1, ver2};
 
-        this->_data->window->draw(line, 2, sf::PrimitiveType::Lines);
+        this->canvas->draw(line, 2, sf::PrimitiveType::Lines);
     };
 }
 
