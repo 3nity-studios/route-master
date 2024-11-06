@@ -46,5 +46,7 @@ class Player
     void add_employee(Employee employee);
     void increase_balance(int balance_to_increase);
     void decrease_balance(int balance_to_decrease);
+    
     nlohmann::json to_json();
+    void save();
 };

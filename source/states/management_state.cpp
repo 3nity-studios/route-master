@@ -185,6 +185,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_payroll_panel()
         payButton->setText("Pay");
         payButton->onPress([this, employee] {
             this->_data->store.pay_employee(employee.get_id(), this->_data->player);
+            this->_data->player.save();
         });
         grid->addWidget(payButton, i + 1, 5);
     }

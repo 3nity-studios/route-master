@@ -101,3 +101,10 @@ nlohmann::json Player::to_json()
     }
     return j;
 }
+
+void Player::save()
+{
+    std::ofstream player_file("data/player.json");
+    player_file << to_json().dump(4);
+    player_file.close();
+}

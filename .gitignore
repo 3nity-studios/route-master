@@ -2,6 +2,9 @@
 .idea/
 .vscode
 
+# JSON files
+data/*.json
+
 ### C++ ###
 # Prerequisites
 *.d

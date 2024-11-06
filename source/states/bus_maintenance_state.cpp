@@ -70,6 +70,7 @@ void BusMaintenanceState::init_state()
                                             breaksCheckbox->isChecked(),
                                             tiresCheckbox->isChecked(),
                                             fuelCheckbox->isChecked());
+        this->_data->player.save();
         this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), true);
     });
 

@@ -33,4 +33,5 @@ class Store
     void pay_employee(int id, Player &player);
 
     nlohmann::json to_json();
+    void save();
 };

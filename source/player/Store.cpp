@@ -232,3 +232,10 @@ nlohmann::json Store::to_json()
 
     return j;
 }
+
+void Store::save()
+{
+    std::ofstream store_file("data/store.json");
+    store_file << to_json().dump(4);
+    store_file.close();
+}
