@@ -172,7 +172,7 @@ TEST_CASE("Run simulation", "[run_simulation]") {
     Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
     Employee driver(0, "John", "Doe", 30, 20, 8, 0); 
 
-    SimulationInfo simulation_info(bus, driver, path);
+    SimulationInfo simulation_info(&bus, &driver, path);
     std::vector<SimulationInfo> aux;
     aux.push_back(simulation_info);
 
@@ -216,7 +216,7 @@ TEST_CASE("Driver fatigue", "[driver_fatigue]") {
     Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
     Employee driver(0, "John", "Doe", 30, 20, 8, 0); 
     
-    SimulationInfo simulation_info(bus, driver, path);
+    SimulationInfo simulation_info(&bus, &driver, path);
     std::vector<SimulationInfo> aux;
     aux.push_back(simulation_info);
 
@@ -225,7 +225,7 @@ TEST_CASE("Driver fatigue", "[driver_fatigue]") {
         city.run_simulation(aux);
     }
     
-    REQUIRE(aux.front().employee.get_fatigue() == 100);
+    REQUIRE(driver.get_fatigue() == 100);
 }
 
 TEST_CASE("Bus wear", "[bus_wear]") {
@@ -260,7 +260,7 @@ TEST_CASE("Bus wear", "[bus_wear]") {
     Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
     Employee driver(0, "John", "Doe", 30, 20, 8, 0); 
     
-    SimulationInfo simulation_info(bus, driver, path);
+    SimulationInfo simulation_info(&bus, &driver, path);
     std::vector<SimulationInfo> aux;
     aux.push_back(simulation_info);
 
@@ -269,10 +269,10 @@ TEST_CASE("Bus wear", "[bus_wear]") {
         city.run_simulation(aux);
     }
     
-    REQUIRE(aux.front().bus.get_engine_state() == 90);
-    REQUIRE(aux.front().bus.get_breaks_state() == 80);
-    REQUIRE(aux.front().bus.get_tires_state() == 80);
-    REQUIRE(aux.front().bus.get_fuel() == 34);
+    REQUIRE(bus.get_engine_state() == 90);
+    REQUIRE(bus.get_breaks_state() == 80);
+    REQUIRE(bus.get_tires_state() == 80);
+    REQUIRE(bus.get_fuel() == 34);
 }
 
 TEST_CASE("Simulation consistency", "[simulation_consistency]") {
@@ -319,7 +319,7 @@ TEST_CASE("Simulation consistency", "[simulation_consistency]") {
     Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 15);
     Employee driver(0, "John", "Doe", 30, 20, 8, 0); 
 
-    SimulationInfo simulation_info(bus, driver, path);
+    SimulationInfo simulation_info(&bus, &driver, path);
     std::vector<SimulationInfo> aux;
     aux.push_back(simulation_info);
 
@@ -342,7 +342,7 @@ TEST_CASE("Simulation consistency", "[simulation_consistency]") {
         }
     }
 
-    //total_passengers_after_simulation += aux.front().bus.get_attended_passengers();
+    total_passengers_after_simulation += aux.front().bus->get_attended_passengers();
     
     REQUIRE(total_passengers_after_simulation == total_passengers);
 }

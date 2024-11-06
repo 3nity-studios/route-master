@@ -114,8 +114,8 @@ void Game::init_variables()
     Bus bus_sim2(2, "Bus 2", 15, {}, 5);
     Employee driver_sim2(2, "Rodrigo", "Hernandez", 23, 30, 12, 0);
 
-    SimulationInfo simulation(bus_sim, driver_sim, path);
-    SimulationInfo simulation2(bus_sim2, driver_sim2, path2);
+    SimulationInfo simulation(&bus_sim, &driver_sim, path);
+    SimulationInfo simulation2(&bus_sim2, &driver_sim2, path2);
 
     this->_data->paths.push_back(simulation.elements_path);
     this->_data->paths.push_back(simulation2.elements_path);

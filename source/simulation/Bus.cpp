@@ -1,12 +1,12 @@
 #include "simulation/Bus.hpp"
 
-Bus::Bus() : id(0), name(""), max_capacity(0), current_passengers(std::list<Passenger>{}), time_in_bus_stop(0), engine_state(100), breaks_state(100), tires_state(100), fuel(100)
+Bus::Bus() : id(0), name(""), max_capacity(0), current_passengers(std::list<Passenger>{}), time_in_bus_stop(0), engine_state(100), breaks_state(100), tires_state(100), fuel(100), in_route(false)
 {
     //empty
 }
 
 Bus::Bus(int _id, std::string _name, int _max_capacity, std::list<Passenger> _current_passengers, int _time_in_bus_stop) 
-    : id(_id), name(_name), max_capacity(_max_capacity), current_passengers(_current_passengers), time_in_bus_stop(_time_in_bus_stop), engine_state(100), breaks_state(100), tires_state(100), fuel(100)
+    : id(_id), name(_name), max_capacity(_max_capacity), current_passengers(_current_passengers), time_in_bus_stop(_time_in_bus_stop), engine_state(100), breaks_state(100), tires_state(100), fuel(100), in_route(false)
 {
     //empty
 }
@@ -183,4 +183,14 @@ std::vector<int> Bus::calc_maintenance_price()
     }
 
     return std::vector<int> {engine_price, breaks_price, tires_price};
+}
+
+bool Bus::get_in_route() const noexcept
+{
+    return in_route;
+}
+
+void Bus::set_in_route(bool _in_route)
+{
+    in_route = _in_route;
 }

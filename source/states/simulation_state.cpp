@@ -362,6 +362,8 @@ void SimulationState::update_bus()
     {
         if (info.route_completed)
         {
+            info.employee->set_in_route(false);
+            info.bus->set_in_route(false);
             status = "Route completed";
             continue;
         }

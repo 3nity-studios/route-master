@@ -19,6 +19,7 @@ class Bus
     int breaks_state;
     int tires_state;
     int fuel; 
+    bool in_route; 
 
     public: 
     Bus();
@@ -34,12 +35,14 @@ class Bus
     int get_breaks_state() const noexcept;
     int get_tires_state() const noexcept;
     int get_fuel() const noexcept; 
+    bool get_in_route() const noexcept; 
 
     int leave_passengers(BusStop &current_stop);
     int add_passengers(const int& simulation_time, BusStop &bus_stop);
     int get_attended_passengers() const noexcept;
     void reset();
     void repair_bus(bool repair_engine, bool repair_breaks, bool repair_tires);
+    void set_in_route(bool _in_route); 
 
     void calc_wear(int km);
     std::vector <int> calc_maintenance_price();

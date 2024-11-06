@@ -35,8 +35,8 @@ class Player
     std::string get_name() const noexcept;
     Designar::SLList<Bus> get_buses();
     Designar::SLList<Employee> get_employees(); 
-    Bus get_bus(const int& id);
-    Employee get_employee(const int& id);
+    Bus &get_bus(const int& id);
+    Employee &get_employee(const int& id);
     int get_balance();
 
     void set_name(const std::string& name);

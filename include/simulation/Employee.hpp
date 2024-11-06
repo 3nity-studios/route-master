@@ -14,6 +14,7 @@ class Employee
     ushort fatigue; 
     int total_work_hours;
     int hourly_rate;
+    bool in_route; 
 
     public:
 
@@ -28,6 +29,7 @@ class Employee
     ushort get_fatigue() const noexcept;
     int get_total_work_hours()const noexcept;
     int get_hourly_rate() const noexcept;
+    bool get_in_route() const noexcept; 
 
     void set_id(const int& _id);
     void set_name(const std::string& _name);
@@ -37,6 +39,7 @@ class Employee
     void set_fatigue(const ushort& _fatigue);
     void set_total_work_hours(const int& time);
     void set_hourly_rate(const int& rate);
+    void set_in_route(const bool& _in_route);
 
     void calc_fatigue(int km);
 };
