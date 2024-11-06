@@ -1,7 +1,6 @@
 #include "states/bus_improvements_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
-#include "states/management_state.hpp"
 #include <string>
 
 BusImprovementsState::BusImprovementsState(GameDataRef data, const int _bus_id) : _data(data), bus_id(_bus_id)
@@ -18,7 +17,7 @@ void BusImprovementsState::init_state()
     this->_data->gui.get<tgui::Label>("title")->setText("Bus Improvements");
 
     this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this] {
-        this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), false);
+        this->_data->states.remove_state();
     });
 
     // Create a label for the player name
@@ -70,7 +69,7 @@ void BusImprovementsState::init_state()
                                             breaksCheckbox->isChecked(),
                                             tiresCheckbox->isChecked(),
                                             fuelCheckbox->isChecked());
-        this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), false);
+        this->_data->states.remove_state();
     });
 
     // Draw bus details view for the bus
