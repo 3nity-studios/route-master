@@ -4,6 +4,7 @@
 #include <map>
 #include <queue>
 #include <string>
+#include <nlohmann/json.hpp>
 #include "simulation/BusStop.hpp"
 
 static std::map<unsigned int, float> LevelMultiplier = {{1, 1.0}, {2, 1.25}, {3, 1.5}, {4, 2.0}, {5, 3.0}};
@@ -33,6 +34,7 @@ class Bus
     Bus(int _id, std::string _name, int _max_capacity, std::list<Passenger> _current_passengers, int _time_in_bus_stop,
         int engine_base_value, int engine_price, int breaks_base_value, int breaks_price, int tires_base_value,
         int tires_price, int fuel_base_value, int fuel_price);
+    Bus(nlohmann::json j);
 
     int get_id() const noexcept;
     void set_id(const int &_id);
@@ -58,4 +60,6 @@ class Bus
     void calc_wear(int travelled_distance);
     std::vector<int> calc_maintenance_price();
     std::vector<int> calc_improvements_price();
+
+    nlohmann::json to_json();
 };

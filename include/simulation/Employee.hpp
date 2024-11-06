@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <nlohmann/json.hpp>
 
 class Employee
 {
@@ -20,6 +21,7 @@ class Employee
 
     Employee();
     Employee(int _id, std::string _name, std::string _last_name, ushort _age, int _hourly_rate, ushort _shift_len, ushort _fatigue); 
+    Employee(nlohmann::json j);
 
     int get_id() const noexcept;
     std::string get_name() const noexcept;
@@ -42,4 +44,6 @@ class Employee
     void set_in_route(const bool& _in_route);
 
     void calc_fatigue(int km);
+
+    nlohmann::json to_json();
 };

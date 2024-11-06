@@ -11,6 +11,23 @@ Player::Player(int _id, const std::string& _name, int _balance)
     // empty
 }
 
+Player::Player(nlohmann::json j)
+{
+    id = j["id"];
+    name = j["name"];
+    balance = j["balance"];
+    for (auto& bus_json : j["buses"])
+    {
+        Bus bus(bus_json);
+        buses.insert(bus);
+    }
+    for (auto& employee_json : j["employees"])
+    {
+        Employee employee(employee_json);
+        employees.insert(employee);
+    }
+}
+
 int Player::get_id() const noexcept {
     return id;
 }
@@ -66,4 +83,21 @@ void Player::increase_balance(int balance_to_increase)
 void Player::decrease_balance(int balance_to_decrease)
 {
     balance -= balance_to_decrease;
+}
+
+nlohmann::json Player::to_json()
+{
+    nlohmann::json j;
+    j["id"] = id;
+    j["name"] = name;
+    j["balance"] = balance;
+    for(auto &bus : buses.to_list())
+    {
+        j["buses"].push_back(bus.to_json());
+    }
+    for(auto &employee : employees.to_list())
+    {
+        j["employees"].push_back(employee.to_json());
+    }
+    return j;
 }

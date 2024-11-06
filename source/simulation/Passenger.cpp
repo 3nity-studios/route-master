@@ -11,6 +11,13 @@ Passenger::Passenger(int _arrival_time, int _waiting_time, int _bus_stop)
     //empty
 }
 
+Passenger::Passenger(nlohmann::json j)
+{
+    arrival_time = j["arrival_time"];
+    waiting_time = j["waiting_time"];
+    bus_stop = j["bus_stop"];
+}
+
 bool Passenger::is_gone(int current_time) const noexcept
 {
     return arrival_time + waiting_time < current_time;
@@ -44,4 +51,15 @@ void Passenger::set_waiting_time(const int& _waiting_time)
 void Passenger::set_bus_stop(const int& _bus_stop)
 {
     bus_stop = _bus_stop;
+}
+
+nlohmann::json Passenger::to_json()
+{
+    nlohmann::json j;
+
+    j["arrival_time"] = arrival_time;
+    j["waiting_time"] = waiting_time;
+    j["bus_stop"] = bus_stop;
+
+    return j;
 }

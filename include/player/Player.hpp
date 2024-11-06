@@ -2,6 +2,7 @@
 
 #include <string>
 #include <Designar/tree.hpp>
+#include <nlohmann/json.hpp>
 #include "simulation/Bus.hpp"
 #include "simulation/Employee.hpp"
 
@@ -30,6 +31,7 @@ class Player
     public:
     Player();
     Player(int _id, const std::string& _name, int _balance);
+    Player(nlohmann::json j);
 
     int get_id() const noexcept;
     std::string get_name() const noexcept;
@@ -44,4 +46,5 @@ class Player
     void add_employee(Employee employee);
     void increase_balance(int balance_to_increase);
     void decrease_balance(int balance_to_decrease);
+    nlohmann::json to_json();
 };

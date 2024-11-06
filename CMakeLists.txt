@@ -82,7 +82,8 @@ target_link_libraries(route_master_config
   SFML::Audio
   SFML::System
   Designar::Designar
-  tmxlite::tmxlite)
+  tmxlite::tmxlite
+  nlohmann_json::nlohmann_json)
 
 # ---- engine
 
@@ -106,7 +107,8 @@ target_link_libraries(route_master_engine
   SFML::Audio
   SFML::System
   Designar::Designar
-  tmxlite::tmxlite)
+  tmxlite::tmxlite
+  nlohmann_json::nlohmann_json)
 
 # ---- simulation
 
@@ -139,7 +141,8 @@ target_link_libraries(route_master_simulation
   SFML::System
   TGUI::TGUI
   Designar::Designar
-  tmxlite::tmxlite)
+  tmxlite::tmxlite
+  nlohmann_json::nlohmann_json)
 
 # ---- player
 
@@ -162,6 +165,7 @@ target_link_libraries(route_master_player
   SFML::System
   TGUI::TGUI
   Designar::Designar
+  nlohmann_json::nlohmann_json
   route_master::simulation)
 
 # ---- states
@@ -201,6 +205,7 @@ target_link_libraries(route_master_states
   SFML::System
   Designar::Designar
   tmxlite::tmxlite
+  nlohmann_json::nlohmann_json
   route_master::simulation
   route_master::player)
 
@@ -250,7 +255,8 @@ target_link_libraries(route_master_platform
   SFML::Audio
   SFML::System
   Designar::Designar
-  tmxlite::tmxlite)
+  tmxlite::tmxlite
+  nlohmann_json::nlohmann_json)
 
 # ---- utils
 
@@ -268,7 +274,8 @@ target_link_libraries(route_master_utils
   SFML::Audio
   SFML::System
   Designar::Designar
-  tmxlite::tmxlite)
+  tmxlite::tmxlite
+  nlohmann_json::nlohmann_json)
 
 # ---- Group all modules
 

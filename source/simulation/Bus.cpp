@@ -19,6 +19,29 @@ Bus::Bus(int _id, std::string _name, int _max_capacity, std::list<Passenger> _cu
     features["fuel"] = {fuel_base_value, fuel_price, 0, 1};
 }
 
+Bus::Bus(nlohmann::json j)
+{
+    id = j["id"];
+    name = j["name"];
+    max_capacity = j["max_capacity"];
+    for (auto &passenger : j["current_passengers"].items())
+    {
+        current_passengers.push_back(Passenger(passenger.value()));
+    }
+    time_in_bus_stop = j["time_in_bus_stop"];
+    in_route = j["in_route"];
+
+    for (auto &feature : j["features"].items())
+    {
+        BusFeature bus_feature;
+        bus_feature.base_value = feature.value()["base_value"];
+        bus_feature.base_price = feature.value()["base_price"];
+        bus_feature.current_wear = feature.value()["current_wear"];
+        bus_feature.current_level = feature.value()["current_level"];
+        features[feature.key()] = bus_feature;
+    }
+}
+
 int Bus::get_id() const noexcept
 {
     return id;
@@ -241,4 +264,33 @@ bool Bus::get_in_route() const noexcept
 void Bus::set_in_route(bool _in_route)
 {
     in_route = _in_route;
+}
+
+nlohmann::json Bus::to_json()
+{
+    nlohmann::json bus_json;
+
+    bus_json["id"] = id;
+    bus_json["name"] = name;
+    bus_json["max_capacity"] = max_capacity;
+    for(auto &passenger : current_passengers)
+    {
+        bus_json["current_passengers"].push_back(passenger.to_json());
+    }
+    bus_json["time_in_bus_stop"] = time_in_bus_stop;
+    bus_json["in_route"] = in_route;
+
+    nlohmann::json features_json;
+    for (auto &feature : features)
+    {
+        nlohmann::json feature_json;
+        feature_json["base_value"] = feature.second.base_value;
+        feature_json["base_price"] = feature.second.base_price;
+        feature_json["current_wear"] = feature.second.current_wear;
+        feature_json["current_level"] = feature.second.current_level;
+        features_json[feature.first] = feature_json;
+    }
+    bus_json["features"] = features_json;
+
+    return bus_json;
 }
