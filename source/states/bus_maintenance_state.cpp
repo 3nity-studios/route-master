@@ -57,12 +57,17 @@ void BusMaintenance::init_state()
     tiresCheckbox->setWidgetName("TiresCheckbox");
     tiresCheckbox->setText("Repair Tires");
 
-    this->_data->gui.get<tgui::Button>("repair_button")->onPress([this, item, engineCheckbox, breaksCheckbox, tiresCheckbox] {
+    auto fuelCheckbox = tgui::CheckBox::create();
+    fuelCheckbox->setWidgetName("FuelCheckbox");
+    fuelCheckbox->setText("Refuel");
+
+    this->_data->gui.get<tgui::Button>("repair_button")->onPress([this, item, engineCheckbox, breaksCheckbox, tiresCheckbox, fuelCheckbox] {
         this->_data->store.buy_bus_maintenance(item.get_id(),
                                             this->_data->player,
                                             engineCheckbox->isChecked(),
                                             breaksCheckbox->isChecked(),
-                                            tiresCheckbox->isChecked());
+                                            tiresCheckbox->isChecked(),
+                                            fuelCheckbox->isChecked());
         this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), false);
     });
 
@@ -137,16 +142,31 @@ void BusMaintenance::init_state()
     tiresPriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(tiresPriceLabel, 4, 2);
 
+    auto fuelStateLabel = tgui::Label::create(std::to_string(item.get_fuel()) + "%");
+    fuelStateLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    fuelStateLabel->setSize({columnWidth, 30});
+    fuelStateLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
+    fuelStateLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
+    grid->addWidget(fuelStateLabel, 5, 1);
+
+    auto fuelPriceLabel = tgui::Label::create("$" + std::to_string(prices.at(3)));
+    fuelPriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    fuelPriceLabel->setSize({columnWidth, 30});
+    fuelPriceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
+    fuelPriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
+    grid->addWidget(fuelPriceLabel, 5, 2);
+
     auto totalPriceLabel = tgui::Label::create("Total: $" + std::to_string(prices.at(0) + prices.at(1) + prices.at(2)));
     totalPriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
     totalPriceLabel->setSize({150, 30});
     totalPriceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     totalPriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
-    grid->addWidget(totalPriceLabel, 5, 0);
+    grid->addWidget(totalPriceLabel, 6, 0);
 
     grid->addWidget(engineCheckbox, 2, 0);
     grid->addWidget(breaksCheckbox, 3, 0);
     grid->addWidget(tiresCheckbox, 4, 0);
+    grid->addWidget(fuelCheckbox, 5, 0);
 
     panel->add(grid);
     this->_data->gui.add(panel);

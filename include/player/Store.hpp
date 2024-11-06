@@ -26,6 +26,6 @@ class Store
     void add_employee_to_inventory(Employee employee, int price, int amount);
 
     void buy_item(Player &player, int item_id, int amount);
-    void buy_bus_maintenance(int id, Player &player, bool repair_engine, bool repair_breaks, bool repair_tires);
+    void buy_bus_maintenance(int id, Player &player, bool repair_engine, bool repair_breaks, bool repair_tires, bool refuel);
     void pay_employee(int id, Player &player);
 };

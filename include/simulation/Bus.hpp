@@ -3,7 +3,16 @@
 #include <queue>
 #include <list>
 #include <string>
+#include <map>
 #include "simulation/BusStop.hpp"
+
+struct BusFeature
+{
+    int base_value;
+    int base_price;
+    int current_wear;
+    unsigned int current_level;
+};
 
 class Bus
 {
@@ -15,14 +24,13 @@ class Bus
     std::list<Passenger> current_passengers;
     int attended_passengers;
     int time_in_bus_stop;
-    int engine_state;
-    int breaks_state;
-    int tires_state;
-    int fuel; 
+    std::map<std::string, BusFeature> features;
 
     public: 
     Bus();
-    Bus(int _id, std::string _name, int _max_capacity, std::list<Passenger> _current_passengers, int _time_in_bus_stop);
+    Bus(int _id, std::string _name, int _max_capacity, std::list<Passenger> _current_passengers, int _time_in_bus_stop, 
+         int engine_base_value, int engine_price, int breaks_base_value, int breaks_price, 
+         int tires_base_value, int tires_price, int fuel_base_value, int fuel_price);
 
     int get_id() const noexcept;
     void set_id(const int& _id);
@@ -39,8 +47,8 @@ class Bus
     int add_passengers(const int& simulation_time, BusStop &bus_stop);
     int get_attended_passengers() const noexcept;
     void reset();
-    void repair_bus(bool repair_engine, bool repair_breaks, bool repair_tires);
+    void repair_bus(bool repair_engine, bool repair_breaks, bool repair_tires, bool refuel);
 
-    void calc_wear(int km);
+    void calc_wear(int travelled_distance);
     std::vector <int> calc_maintenance_price();
-};;
+};
