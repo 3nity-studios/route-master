@@ -25,6 +25,7 @@ class Bus
     std::list<Passenger> current_passengers;
     int attended_passengers;
     int time_in_bus_stop;
+    bool in_route; 
     std::map<std::string, BusFeature> features;
 
   public:
@@ -43,12 +44,14 @@ class Bus
     int get_engine_state() const noexcept;
     int get_breaks_state() const noexcept;
     int get_tires_state() const noexcept;
-    int get_fuel() const noexcept;
+    int get_fuel() const noexcept; 
+    bool get_in_route() const noexcept; 
 
     int leave_passengers(BusStop &current_stop);
     int add_passengers(const int &simulation_time, BusStop &bus_stop);
     int get_attended_passengers() const noexcept;
     void reset();
+    void set_in_route(bool _in_route); 
     void repair_bus(bool repair_engine, bool repair_breaks, bool repair_tires, bool refuel);
     void improve_bus(bool improve_engine, bool improve_breaks, bool improve_tires, bool improve_fuel);
 

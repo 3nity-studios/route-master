@@ -33,11 +33,11 @@ Designar::SLList<Employee> Player::get_employees()
     return employees.to_list();
 }
 
-Bus Player::get_bus(const int& id) {
+Bus &Player::get_bus(const int& id) {
     return buses.select(id);
 }
 
-Employee Player::get_employee(const int& id) {
+Employee &Player::get_employee(const int& id) {
     return employees.select(id);
 }
 

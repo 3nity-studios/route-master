@@ -21,6 +21,8 @@ class BusSelectState : public Engine::State
   private:
     GameDataRef _data;
     SimulationInfo new_simulation_info;
+    Bus bus; 
+    Employee employee; 
     int selected_path;
 
     tgui::Panel::Ptr create_selection_panel();

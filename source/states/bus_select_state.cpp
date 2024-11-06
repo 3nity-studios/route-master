@@ -5,7 +5,7 @@
 #include <string>
 
 BusSelectState::BusSelectState(GameDataRef data)
-    : _data(data), new_simulation_info(SimulationInfo(Bus(), Employee(), {})), selected_path(0)
+    : _data(data), selected_path(0), bus(Bus()), employee(Employee()), new_simulation_info(&bus, &employee, {})
 {
 }
 
@@ -22,7 +22,7 @@ void BusSelectState::init_state()
     auto send_button_click = [this] {
         bool add = true;
 
-        if (new_simulation_info.bus.get_name() == "" || new_simulation_info.employee.get_name() == "" ||
+        if (new_simulation_info.bus->get_name() == "" || new_simulation_info.employee->get_name() == "" ||
             new_simulation_info.elements_path.empty())
         {
             auto messageBox = tgui::MessageBox::create();
@@ -95,8 +95,8 @@ tgui::Panel::Ptr BusSelectState::create_selection_panel()
     panel->setPosition({10, 90});
 
     auto info_label = tgui::Label::create();
-    info_label->setText("Bus: " + new_simulation_info.bus.get_name() + "\nDriver: " +
-                        new_simulation_info.employee.get_name() + "\nPath: " + std::to_string(selected_path));
+    info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
+                        new_simulation_info.employee->get_name() + "\nPath: " + std::to_string(selected_path));
     info_label->setPosition(5.0f, 5.0f);
     info_label->getRenderer()->setTextColor(tgui::Color::Black);
     panel->add(info_label);
@@ -107,24 +107,32 @@ tgui::Panel::Ptr BusSelectState::create_selection_panel()
     auto busList = tgui::ListBox::create();
     for (const auto &bus : this->_data->player.get_buses())
     {
-        busList->addItem(bus.get_name(), std::to_string(bus.get_id()));
+        if (!bus.get_in_route())
+        {
+            busList->addItem(bus.get_name(), std::to_string(bus.get_id()));
+        }
     }
     busList->onItemSelect([this, info_label](int index) {
-        this->new_simulation_info.bus = this->_data->player.get_bus(index);
-        info_label->setText("Bus: " + new_simulation_info.bus.get_name() + "\nDriver: " +
-                        new_simulation_info.employee.get_name() + "\nPath: " + std::to_string(selected_path));
+        this->new_simulation_info.bus = &this->_data->player.get_bus(index);
+        info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
+                        new_simulation_info.employee->get_name() + "\nPath: " + std::to_string(selected_path));
+        this->_data->player.get_bus(index).set_in_route(true); 
     });
     horizontalLayout->add(busList);
 
     auto employeeList = tgui::ListBox::create();
     for (const auto &employee : this->_data->player.get_employees())
     {
-        employeeList->addItem(employee.get_name(), std::to_string(employee.get_id()));
+        if (!employee.get_in_route())
+        {
+            employeeList->addItem(employee.get_name(), std::to_string(employee.get_id()));
+        }  
     }
     employeeList->onItemSelect([this, info_label](int index) {
-        this->new_simulation_info.employee = this->_data->player.get_employee(index);
-        info_label->setText("Bus: " + new_simulation_info.bus.get_name() + "\nDriver: " +
-                        new_simulation_info.employee.get_name() + "\nPath: " + std::to_string(selected_path));
+        this->new_simulation_info.employee = &this->_data->player.get_employee(index);
+        info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
+                        new_simulation_info.employee->get_name() + "\nPath: " + std::to_string(selected_path));
+        this->_data->player.get_employee(index).set_in_route(true); 
     });
     horizontalLayout->add(employeeList);
 
@@ -136,8 +144,8 @@ tgui::Panel::Ptr BusSelectState::create_selection_panel()
     pathList->onItemSelect([this, info_label](int index) {
         this->new_simulation_info.elements_path = this->_data->paths.at(index);
         this->selected_path = index + 1;
-        info_label->setText("Bus: " + new_simulation_info.bus.get_name() + "\nDriver: " +
-                        new_simulation_info.employee.get_name() + "\nPath: " + std::to_string(selected_path));
+        info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
+                        new_simulation_info.employee->get_name() + "\nPath: " + std::to_string(selected_path));
     });
     horizontalLayout->add(pathList);
 

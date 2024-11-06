@@ -1,6 +1,6 @@
 #include "simulation/Bus.hpp"
 
-Bus::Bus() : id(0), name(""), max_capacity(0), current_passengers(std::list<Passenger>{}), time_in_bus_stop(0)
+Bus::Bus() : id(0), name(""), max_capacity(0), current_passengers(std::list<Passenger>{}), time_in_bus_stop(0), in_route(false)
 {
     features["engine"] = {100, 500, 0, 1};
     features["breaks"] = {100, 200, 0, 1};
@@ -11,7 +11,7 @@ Bus::Bus() : id(0), name(""), max_capacity(0), current_passengers(std::list<Pass
 Bus::Bus(int _id, std::string _name, int _max_capacity, std::list<Passenger> _current_passengers, int _time_in_bus_stop, 
          int engine_base_value, int engine_price, int breaks_base_value, int breaks_price, 
          int tires_base_value, int tires_price, int fuel_base_value, int fuel_price) 
-    : id(_id), name(_name), max_capacity(_max_capacity), current_passengers(_current_passengers), time_in_bus_stop(_time_in_bus_stop)
+    : id(_id), name(_name), max_capacity(_max_capacity), current_passengers(_current_passengers), time_in_bus_stop(_time_in_bus_stop), in_route(false)
 {
     features["engine"] = {engine_base_value, engine_price, 0, 1};
     features["breaks"] = {breaks_base_value, breaks_price, 0, 1};
@@ -231,4 +231,14 @@ std::vector<int> Bus::calc_improvements_price()
     int fuel_price = features["fuel"].base_price * LevelMultiplier[features["fuel"].current_level];
 
     return std::vector<int> {engine_price, breaks_price, tires_price, fuel_price};
+}
+
+bool Bus::get_in_route() const noexcept
+{
+    return in_route;
+}
+
+void Bus::set_in_route(bool _in_route)
+{
+    in_route = _in_route;
 }
