@@ -44,6 +44,11 @@ std::list<Passenger> Bus::get_passenger_list() const noexcept
     return current_passengers;
 }
 
+BusFeature Bus::get_feature_info(const std::string name) const noexcept
+{
+    return features.at(name);
+}
+
 int Bus::get_time_in_bus_stop() const noexcept
 {
     return time_in_bus_stop;
@@ -51,22 +56,22 @@ int Bus::get_time_in_bus_stop() const noexcept
 
 int Bus::get_engine_state() const noexcept
 {
-    return 100 * (1 - static_cast<float>(features.at("engine").current_wear) / (features.at("engine").base_value * features.at("engine").current_level));
+    return 100 * (1 - static_cast<float>(features.at("engine").current_wear) / (features.at("engine").base_value * LevelMultiplier[features.at("engine").current_level]));
 }
 
 int Bus::get_breaks_state() const noexcept
 {
-    return 100 * (1 - static_cast<float>(features.at("breaks").current_wear) / (features.at("breaks").base_value * features.at("breaks").current_level));
+    return 100 * (1 - static_cast<float>(features.at("breaks").current_wear) / (features.at("breaks").base_value * LevelMultiplier[features.at("breaks").current_level]));
 }
 
 int Bus::get_tires_state() const noexcept
 {
-    return 100 * (1 - static_cast<float>(features.at("tires").current_wear) / (features.at("tires").base_value * features.at("tires").current_level));
+    return 100 * (1 - static_cast<float>(features.at("tires").current_wear) / (features.at("tires").base_value * LevelMultiplier[features.at("tires").current_level]));
 }
 
 int Bus::get_fuel() const noexcept
 {
-    return 100 * (1 - static_cast<float>(features.at("fuel").current_wear) / (features.at("fuel").base_value * features.at("fuel").current_level));
+    return 100 * (1 - static_cast<float>(features.at("fuel").current_wear) / (features.at("fuel").base_value * LevelMultiplier[features.at("fuel").current_level]));
 }
 
 int Bus::leave_passengers(BusStop &current_stop)
@@ -163,6 +168,26 @@ void Bus::repair_bus(bool repair_engine, bool repair_breaks, bool repair_tires, 
     }
 }
 
+void Bus::improve_bus(bool improve_engine, bool improve_breaks, bool improve_tires, bool improve_fuel)
+{
+    if (improve_engine && features["engine"].current_level < 5)
+    {
+        features["engine"].current_level++;
+    }
+    if (improve_breaks && features["breaks"].current_level < 5)
+    {
+        features["breaks"].current_level++;
+    }
+    if (improve_tires && features["tires"].current_level < 5)
+    {
+        features["tires"].current_level++;
+    }
+    if (improve_fuel && features["fuel"].current_level < 5)
+    {
+        features["fuel"].current_level++;
+    }
+}
+
 void Bus::calc_wear(int travelled_distance)
 {
     features["engine"].current_wear += (travelled_distance / 20);
@@ -194,6 +219,16 @@ std::vector<int> Bus::calc_maintenance_price()
     {
         fuel_price = 1000;
     }
+
+    return std::vector<int> {engine_price, breaks_price, tires_price, fuel_price};
+}
+
+std::vector<int> Bus::calc_improvements_price()
+{
+    int engine_price = features["engine"].base_price * LevelMultiplier[features["engine"].current_level];
+    int breaks_price = features["breaks"].base_price * LevelMultiplier[features["breaks"].current_level];
+    int tires_price = features["tires"].base_price * LevelMultiplier[features["tires"].current_level];
+    int fuel_price = features["fuel"].base_price * LevelMultiplier[features["fuel"].current_level];
 
     return std::vector<int> {engine_price, breaks_price, tires_price, fuel_price};
 }
