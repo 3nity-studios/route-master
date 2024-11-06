@@ -3,11 +3,31 @@
 
 Store::Store() : inventory(Designar::SLList<Item>{}), bus_list(Designar::SLList<Bus>{}), employee_list(Designar::SLList<Employee>{})
 {
+    // empty
 }
 
 Store::Store(Designar::SLList<Item> _inventory, Designar::SLList<Bus> _bus_list,
              Designar::SLList<Employee> _employee_list) : inventory(_inventory), bus_list(_bus_list), employee_list(_employee_list)
 {
+    // empty
+}
+
+Store::Store(nlohmann::json j)
+{
+    for (auto &item : j["inventory"])
+    {
+        inventory.append(Item(item));
+    }
+
+    for (auto &bus : j["bus_list"])
+    {
+        bus_list.append(Bus(bus));
+    }
+
+    for (auto &employee : j["employee_list"])
+    {
+        employee_list.append(Employee(employee));
+    }
 }
 
 void Store::add_bus_to_inventory(Bus bus, int price, int amount)
@@ -189,4 +209,26 @@ void Store::pay_employee(int id, Player &player)
         player.decrease_balance(paycheck);
         player.get_employee(id).set_total_work_hours(0);
     }
+}
+
+nlohmann::json Store::to_json()
+{
+    nlohmann::json j;
+
+    for (auto &item : inventory)
+    {
+        j["inventory"].push_back(item.to_json());
+    }
+
+    for (auto &bus : bus_list)
+    {
+        j["bus_list"].push_back(bus.to_json());
+    }
+
+    for (auto &employee : employee_list)
+    {
+        j["employee_list"].push_back(employee.to_json());
+    }
+
+    return j;
 }

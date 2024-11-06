@@ -14,6 +14,25 @@ BusStop::BusStop(int _id, std::string _name, std::vector<int> _avg_hourly_arriva
     // empty
 }
 
+BusStop::BusStop(nlohmann::json j)
+    : VisualElement(j)
+{
+    name = j["name"];
+    for (auto& passenger : j["passenger_list"])
+    {
+        passenger_list.push(Passenger(passenger));
+    }
+    for(auto avg : j["avg_hourly_arrivals"])
+    {
+        avg_hourly_arrivals.push_back(avg);
+    }
+    avg_arrival_time = j["avg_arrival_time"];
+    avg_waiting_time = j["avg_waiting_time"];
+    sd_waiting_time = j["sd_waiting_time"];
+    avg_bus_stop = j["avg_bus_stop"];
+    sd_bus_stop = j["sd_bus_stop"];
+}
+
 std::string BusStop::get_name() const noexcept
 {
     return name;
@@ -126,4 +145,30 @@ int BusStop::get_actual_passengers(int current_time)
     }
 
     return passengers;
+}
+
+nlohmann::json BusStop::to_json()
+{
+    nlohmann::json j = VisualElement::to_json();
+
+    j["name"] = name;
+
+    // Add passenger list
+    while(!passenger_list.empty())
+    {
+        Passenger passenger = passenger_list.top();
+        j["passenger_list"].push_back(passenger.to_json());
+        passenger_list.pop();
+    }
+    for(auto avg : avg_hourly_arrivals)
+    {
+        j["avg_hourly_arrivals"].push_back(avg);
+    }
+    j["avg_arrival_time"] = avg_arrival_time;
+    j["avg_waiting_time"] = avg_waiting_time;
+    j["sd_waiting_time"] = sd_waiting_time;
+    j["avg_bus_stop"] = avg_bus_stop;
+    j["sd_bus_stop"] = sd_bus_stop;
+
+    return j;
 }

@@ -16,6 +16,20 @@ Street::Street(int _id, std::string _name, float _distance, float _avg_speed, fl
     // empty
 }
 
+Street::Street(nlohmann::json j)
+{
+    id = j["id"];
+    name = j["name"];
+    distance = j["distance"];
+    avg_speed = j["avg_speed"];
+    avg_traffic_density = j["avg_traffic_density"];
+    sd_traffic_density = j["sd_traffic_density"];
+    singular_event_odds = j["singular_event_odds"];
+    current_traffic_density = j["current_traffic_density"];
+    singular_event_active = j["singular_event_active"];
+    current_singular_event_duration = j["current_singular_event_duration"];
+}
+
 int Street::get_id() const noexcept
 {
     return id;
@@ -84,4 +98,21 @@ void Street::update()
             current_singular_event_duration = singular_event_time(gen);
         }
     }
+}
+
+nlohmann::json Street::to_json()
+{
+    nlohmann::json j;
+    j["id"] = id;
+    j["name"] = name;
+    j["distance"] = distance;
+    j["avg_speed"] = avg_speed;
+    j["avg_traffic_density"] = avg_traffic_density;
+    j["sd_traffic_density"] = sd_traffic_density;
+    j["singular_event_odds"] = singular_event_odds;
+    j["current_traffic_density"] = current_traffic_density;
+    j["singular_event_active"] = singular_event_active;
+    j["current_singular_event_duration"] = current_singular_event_duration;
+
+    return j;
 }

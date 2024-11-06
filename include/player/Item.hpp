@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <nlohmann/json.hpp>
 
 enum class ItemType
 {
@@ -25,6 +26,7 @@ class Item
 
     Item();
     Item(int _id, std::string _name, int _price, int _amount, ItemType _category, bool _is_deleted);
+    Item(nlohmann::json j);
 
     void set_id(int _id);
     void set_name(std::string _name);
@@ -42,4 +44,6 @@ class Item
 
     void increase_amount(int amount_to_increase);
     void decrease_amount(int amount_to_decrease);
+
+    nlohmann::json to_json();
 };

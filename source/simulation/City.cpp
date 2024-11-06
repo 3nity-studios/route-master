@@ -11,6 +11,54 @@ City::City(int _id, std::string _name, Designar::Graph<std::shared_ptr<VisualEle
     //empty
 }
 
+City::City(nlohmann::json j)
+{
+    id = j["id"];
+    name = j["name"];
+    current_time = j["current_time"];
+
+    for (auto visual_element : j["visual_elements"])
+    {
+        if (visual_element["type"] == "BusStop")
+        {
+            city_map.insert_node(std::make_shared<BusStop>(visual_element));
+        }
+        else if (visual_element["type"] == "TrafficLight")
+        {
+            city_map.insert_node(std::make_shared<TrafficLight>(visual_element));
+        }
+        else
+        {
+            city_map.insert_node(std::make_shared<VisualElement>(visual_element));
+        }
+    }
+
+    for (auto street : j["streets"])
+    {
+        Designar::GraphNode<std::shared_ptr<VisualElement>, Street, Designar::EmptyClass> *src_visual_element = nullptr, *tgt_visual_element = nullptr;
+        for (auto visual_element : city_map.nodes())
+        {
+            if (visual_element->get_info()->get_id() == street["src_id"])
+            {
+                src_visual_element = visual_element;
+            }
+            else if (visual_element->get_info()->get_id() == street["tgt_id"])
+            {
+                tgt_visual_element = visual_element;
+            }
+        }
+
+        if (src_visual_element && tgt_visual_element)
+        {
+            city_map.insert_arc(src_visual_element, tgt_visual_element, Street(street));
+        }
+        else
+        {
+            throw std::runtime_error("Bus Stops not found");
+        }
+    }
+}
+
 int City::get_id() const noexcept
 {
     return id;
@@ -222,4 +270,31 @@ void City::update_passengers()
 Designar::Graph<std::shared_ptr<VisualElement>, Street> City::get_city_map()
 {
     return city_map;
+}
+
+nlohmann::json City::to_json()
+{
+    nlohmann::json j;
+
+    j["id"] = id;
+    j["name"] = name;
+    j["current_time"] = current_time;
+
+    nlohmann::json visual_elements_json = nlohmann::json::array();
+    for (auto visual_element : get_visual_elements())
+    {
+        visual_elements_json.push_back(visual_element->get_info()->to_json());
+    }
+
+    j["visual_elements"] = visual_elements_json;
+
+    nlohmann::json streets_json = nlohmann::json::array();
+    for (auto street : get_streets())
+    {
+        streets_json.push_back(street->get_info().to_json());
+    }
+
+    j["streets"] = streets_json;
+
+    return j;
 }

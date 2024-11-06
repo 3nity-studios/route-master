@@ -2,6 +2,7 @@
 
 #include <string>
 #include <Designar/graph.hpp>
+#include <nlohmann/json.hpp>
 #include "simulation/Bus.hpp"
 #include "simulation/Employee.hpp"
 #include "simulation/Street.hpp"
@@ -58,6 +59,7 @@ class City
     public:
     City();
     City(int _id, std::string _name, Designar::Graph<std::shared_ptr<VisualElement>, Street> _city_map, int _current_time);
+    City(nlohmann::json j);
 
     int get_id() const noexcept;
     std::string get_name() const noexcept;
@@ -76,4 +78,6 @@ class City
     void initialize_bus_stops();
     void update();
     void run_simulation(std::vector<SimulationInfo> &simulation_infos);
+
+    nlohmann::json to_json();
 };
