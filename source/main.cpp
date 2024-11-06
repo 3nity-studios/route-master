@@ -9,8 +9,6 @@
 
 int main()
 {
-    Designar::nat_t numero = 82;
-    std::cout << numero;
     tmx::Tileset tileset{"."};
     Game();
     return 0;

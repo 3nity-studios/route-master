@@ -49,7 +49,7 @@ void SimulationState::init_state()
     exitButton->setPosition(10, this->_data->window->getSize().y - (buttonHeight + 5));
     exitButton->setSize(buttonWidth, buttonHeight);
     exitButton->onPress([this] {
-            this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), false);
+            this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), true);
     });
     this->gui.add(exitButton);
 

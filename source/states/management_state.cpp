@@ -293,7 +293,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_inventory_panel()
         repairButton->setWidgetName(bus.get_id() + "RepairButton");
         repairButton->setText("Repair");
         repairButton->onPress([this, bus] {
-            this->_data->states.add_state(Engine::StateRef(new BusMaintenanceState(this->_data, bus.get_id())), false);
+            this->_data->states.add_state(Engine::StateRef(new BusMaintenanceState(this->_data, bus.get_id())), true);
         });
         grid->addWidget(repairButton, i + 1, 5);
 
@@ -302,7 +302,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_inventory_panel()
         improveButton->setWidgetName(bus.get_id() + "ImproveButton");
         improveButton->setText("Improve");
         improveButton->onPress([this, bus] {
-            this->_data->states.add_state(Engine::StateRef(new BusImprovementsState(this->_data, bus.get_id())), false);
+            this->_data->states.add_state(Engine::StateRef(new BusImprovementsState(this->_data, bus.get_id())), true);
         });
         grid->addWidget(improveButton, i + 1, 6);
         
