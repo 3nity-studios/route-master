@@ -13,7 +13,9 @@ void BusImprovementsState::init_state()
 {
     tgui::Theme::setDefault("assets/tgui/Kenney.txt");
     this->_data->gui.setWindow(*this->_data->window);
-    this->_data->gui.loadWidgetsFromFile("assets/screens/bus_maintenance.txt");
+    this->_data->gui.loadWidgetsFromFile("assets/screens/bus_payment.txt");
+
+    this->_data->gui.get<tgui::Label>("title")->setText("Bus Improvements");
 
     this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this] {
         this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), false);
@@ -61,7 +63,7 @@ void BusImprovementsState::init_state()
     fuelCheckbox->setWidgetName("FuelCheckbox");
     fuelCheckbox->setText("Improve Fuel");
 
-    this->_data->gui.get<tgui::Button>("repair_button")->onPress([this, item, engineCheckbox, breaksCheckbox, tiresCheckbox, fuelCheckbox] {
+    this->_data->gui.get<tgui::Button>("confirm_button")->onPress([this, item, engineCheckbox, breaksCheckbox, tiresCheckbox, fuelCheckbox] {
         this->_data->store.buy_bus_improvements(item.get_id(),
                                             this->_data->player,
                                             engineCheckbox->isChecked(),

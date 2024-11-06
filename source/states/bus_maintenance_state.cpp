@@ -4,16 +4,18 @@
 #include "states/management_state.hpp"
 #include <string>
 
-BusMaintenance::BusMaintenance(GameDataRef data, const int _bus_id) : _data(data), bus_id(_bus_id)
+BusMaintenanceState::BusMaintenanceState(GameDataRef data, const int _bus_id) : _data(data), bus_id(_bus_id)
 {
     // empty
 }
 
-void BusMaintenance::init_state()
+void BusMaintenanceState::init_state()
 {
     tgui::Theme::setDefault("assets/tgui/Kenney.txt");
     this->_data->gui.setWindow(*this->_data->window);
-    this->_data->gui.loadWidgetsFromFile("assets/screens/bus_maintenance.txt");
+    this->_data->gui.loadWidgetsFromFile("assets/screens/bus_payment.txt");
+
+    this->_data->gui.get<tgui::Label>("title")->setText("Bus Maintenance");
 
     this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this] {
         this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), false);
@@ -61,7 +63,7 @@ void BusMaintenance::init_state()
     fuelCheckbox->setWidgetName("FuelCheckbox");
     fuelCheckbox->setText("Refuel");
 
-    this->_data->gui.get<tgui::Button>("repair_button")->onPress([this, item, engineCheckbox, breaksCheckbox, tiresCheckbox, fuelCheckbox] {
+    this->_data->gui.get<tgui::Button>("confirm_button")->onPress([this, item, engineCheckbox, breaksCheckbox, tiresCheckbox, fuelCheckbox] {
         this->_data->store.buy_bus_maintenance(item.get_id(),
                                             this->_data->player,
                                             engineCheckbox->isChecked(),
@@ -172,7 +174,7 @@ void BusMaintenance::init_state()
     this->_data->gui.add(panel);
 }
 
-void BusMaintenance::update_inputs()
+void BusMaintenanceState::update_inputs()
 {
     // Event Polling
     while (const std::optional event = this->_data->window->pollEvent())
@@ -198,12 +200,12 @@ void BusMaintenance::update_inputs()
 }
 
 // marks dt to not warn compiler
-void BusMaintenance::update_state(float dt __attribute__((unused)))
+void BusMaintenanceState::update_state(float dt __attribute__((unused)))
 {
 }
 
 // marks dt to not warn compiler
-void BusMaintenance::draw_state(float dt __attribute__((unused)))
+void BusMaintenanceState::draw_state(float dt __attribute__((unused)))
 {
     this->_data->gui.draw();
 

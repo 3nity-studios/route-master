@@ -12,7 +12,7 @@ Label.title {
     HorizontalAlignment = Center;
     Position = (180, 20);
     Size = (270, 73);
-    Text = Bus Maintenance;
+    Text = Bus;
     TextSize = 60;
 
     Renderer {
@@ -44,10 +44,10 @@ Label.title {
     }
 }
 
-Button.repair_button {
+Button.confirm_button {
     Position = (200, 500);
     Size = (180, 63);
-    Text = "Repair";
+    Text = "Confirm";
     TextSize = 26;
 
     Renderer {
