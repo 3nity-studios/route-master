@@ -81,10 +81,10 @@ StatsState::StatsState(GameDataRef data) : _data(data)
         }
     }
 
-    Bus bus_sim(1, "Bus 1", 10, {}, 5);
+    Bus bus_sim(1, "Bus 1", 10, {}, 5, 100, 5, 80, 4, 60, 3, 40, 2);
     Employee driver_sim(1, "John", "Doe", 25, 50, 5, 0);
 
-    Bus bus_sim2(2, "Bus 2", 15, {}, 5);
+    Bus bus_sim2(2, "Bus 2", 15, {}, 5, 150, 7, 120, 6, 90, 5, 70, 3);
     Employee driver_sim2(2, "Rodrigo", "Hernandez", 23, 30, 12, 0);
 
     SimulationInfo simulation(&bus_sim, &driver_sim, path);

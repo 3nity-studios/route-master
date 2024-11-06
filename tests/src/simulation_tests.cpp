@@ -14,7 +14,7 @@ TEST_CASE("Get passengers on bus", "[get_passengers_on_bus]") {
     BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f, 50, 50);
     bus_stop.generate_passengers(0);
 
-    Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 0);
+    Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
     bus.add_passengers(3, bus_stop);
 
     bool test_passed = true;
@@ -37,7 +37,7 @@ TEST_CASE("Passengers leave bus stop", "[passengers_leave_stop]") {
 
     int initial_passenger_count = bus_stop.get_passenger_list().size();
 
-    Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 0);
+    Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
     bus.add_passengers(3, bus_stop);
 
     int final_passenger_count = bus_stop.get_passenger_list().size();
@@ -50,7 +50,7 @@ TEST_CASE("Future passengers don't get on the bus", "[future_passengers]") {
     BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f, 50, 50);
     bus_stop.generate_passengers(0);
 
-    Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 2);
+    Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 2, 100, 200, 100, 200, 100, 200, 100, 200);
     bus.add_passengers(3, bus_stop); // Current timestep is 3
 
     bool test_passed = true;
@@ -72,7 +72,7 @@ TEST_CASE("Gone passengers don't get on the bus", "[gone_passengers]") {
     BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f, 50, 50);
     bus_stop.generate_passengers(0);
 
-    Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 2);
+    Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 2, 100, 200, 100, 200, 100, 200, 100, 200);
     bus.add_passengers(3, bus_stop); // Current timestep is 3
 
     bool test_passed = true;
@@ -96,7 +96,7 @@ TEST_CASE("Leave passengers", "[leave_passengers]") {
         Passenger(2, 0, 3)
     };
 
-    Bus bus = Bus(0, "A", 15, passengers, 0);
+    Bus bus = Bus(0, "A", 15, passengers, 0, 100, 200, 100, 200, 100, 200, 100, 200);
     BusStop bus_stop(2, "Terminal", {5}, 4.0f, 3.0f, 2.0f, 1.0f, 1.0f, 50, 50);
 
     bus.leave_passengers(bus_stop); // Current stop
@@ -169,7 +169,7 @@ TEST_CASE("Run simulation", "[run_simulation]") {
         }
     }
 
-    Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
+    Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
     Employee driver(0, "John", "Doe", 30, 20, 8, 0); 
 
     SimulationInfo simulation_info(&bus, &driver, path);
@@ -213,7 +213,7 @@ TEST_CASE("Driver fatigue", "[driver_fatigue]") {
         }
     }
     
-    Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
+    Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
     Employee driver(0, "John", "Doe", 30, 20, 8, 0); 
     
     SimulationInfo simulation_info(&bus, &driver, path);
@@ -257,7 +257,7 @@ TEST_CASE("Bus wear", "[bus_wear]") {
         }
     }
     
-    Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 0);
+    Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
     Employee driver(0, "John", "Doe", 30, 20, 8, 0); 
     
     SimulationInfo simulation_info(&bus, &driver, path);
@@ -316,7 +316,7 @@ TEST_CASE("Simulation consistency", "[simulation_consistency]") {
         }
     }
     
-    Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 15);
+    Bus bus(0, "Bus1", 15, std::list<Passenger>{}, 15, 100, 200, 100, 200, 100, 200, 100, 200);
     Employee driver(0, "John", "Doe", 30, 20, 8, 0); 
 
     SimulationInfo simulation_info(&bus, &driver, path);

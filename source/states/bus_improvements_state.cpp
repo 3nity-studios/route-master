@@ -1,21 +1,21 @@
-#include "states/bus_maintenance_state.hpp"
+#include "states/bus_improvements_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
 #include "states/management_state.hpp"
 #include <string>
 
-BusMaintenanceState::BusMaintenanceState(GameDataRef data, const int _bus_id) : _data(data), bus_id(_bus_id)
+BusImprovementsState::BusImprovementsState(GameDataRef data, const int _bus_id) : _data(data), bus_id(_bus_id)
 {
     // empty
 }
 
-void BusMaintenanceState::init_state()
+void BusImprovementsState::init_state()
 {
     tgui::Theme::setDefault("assets/tgui/Kenney.txt");
     this->_data->gui.setWindow(*this->_data->window);
     this->_data->gui.loadWidgetsFromFile("assets/screens/bus_payment.txt");
 
-    this->_data->gui.get<tgui::Label>("title")->setText("Bus Maintenance");
+    this->_data->gui.get<tgui::Label>("title")->setText("Bus Improvements");
 
     this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this] {
         this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), false);
@@ -49,22 +49,22 @@ void BusMaintenanceState::init_state()
 
     auto engineCheckbox = tgui::CheckBox::create();
     engineCheckbox->setWidgetName("EngineCheckbox");
-    engineCheckbox->setText("Repair Engine");
+    engineCheckbox->setText("Improve Engine");
     
     auto breaksCheckbox = tgui::CheckBox::create();
     breaksCheckbox->setWidgetName("BreaksCheckbox");
-    breaksCheckbox->setText("Repair Breaks");
+    breaksCheckbox->setText("Improve Breaks");
     
     auto tiresCheckbox = tgui::CheckBox::create();
     tiresCheckbox->setWidgetName("TiresCheckbox");
-    tiresCheckbox->setText("Repair Tires");
+    tiresCheckbox->setText("Improve Tires");
 
     auto fuelCheckbox = tgui::CheckBox::create();
     fuelCheckbox->setWidgetName("FuelCheckbox");
-    fuelCheckbox->setText("Refuel");
+    fuelCheckbox->setText("Improve Fuel");
 
     this->_data->gui.get<tgui::Button>("confirm_button")->onPress([this, item, engineCheckbox, breaksCheckbox, tiresCheckbox, fuelCheckbox] {
-        this->_data->store.buy_bus_maintenance(item.get_id(),
+        this->_data->store.buy_bus_improvements(item.get_id(),
                                             this->_data->player,
                                             engineCheckbox->isChecked(),
                                             breaksCheckbox->isChecked(),
@@ -74,7 +74,7 @@ void BusMaintenanceState::init_state()
     });
 
     // Draw bus details view for the bus
-    const auto prices = this->_data->player.get_bus(this->bus_id).calc_maintenance_price();
+    const auto prices = this->_data->player.get_bus(this->bus_id).calc_improvements_price();
 
     // Create labels for the item details
     auto itemLabel = tgui::Label::create(item.get_name());
@@ -86,13 +86,13 @@ void BusMaintenanceState::init_state()
     itemLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(itemLabel, 0, 0);
 
-    auto stateHeaderLabel = tgui::Label::create("State (%)");
-    stateHeaderLabel->getRenderer()->setTextColor(tgui::Color::Black);
-    stateHeaderLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
-    stateHeaderLabel->setSize({columnWidth, 30});
-    stateHeaderLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
-    stateHeaderLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
-    grid->addWidget(stateHeaderLabel, 1, 1);
+    auto levelHeaderLabel = tgui::Label::create("Level");
+    levelHeaderLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    levelHeaderLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
+    levelHeaderLabel->setSize({columnWidth, 30});
+    levelHeaderLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
+    levelHeaderLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
+    grid->addWidget(levelHeaderLabel, 1, 1);
 
     auto priceHeaderLabel = tgui::Label::create("Price ($)");
     priceHeaderLabel->getRenderer()->setTextColor(tgui::Color::Black);
@@ -102,12 +102,12 @@ void BusMaintenanceState::init_state()
     priceHeaderLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(priceHeaderLabel, 1, 2);
 
-    auto engineStateLabel = tgui::Label::create(std::to_string(item.get_engine_state()) + "%");
-    engineStateLabel->getRenderer()->setTextColor(tgui::Color::Black);
-    engineStateLabel->setSize({columnWidth, 30});
-    engineStateLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
-    engineStateLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
-    grid->addWidget(engineStateLabel, 2, 1);
+    auto engineLevelLabel = tgui::Label::create(std::to_string(item.get_feature_info("engine").current_level));
+    engineLevelLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    engineLevelLabel->setSize({columnWidth, 30});
+    engineLevelLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
+    engineLevelLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
+    grid->addWidget(engineLevelLabel, 2, 1);
 
     auto enginePriceLabel = tgui::Label::create("$" + std::to_string(prices.at(0)));
     enginePriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
@@ -116,12 +116,12 @@ void BusMaintenanceState::init_state()
     enginePriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(enginePriceLabel, 2, 2);
 
-    auto breaksStateLabel = tgui::Label::create(std::to_string(item.get_breaks_state()) + "%");
-    breaksStateLabel->getRenderer()->setTextColor(tgui::Color::Black);
-    breaksStateLabel->setSize({columnWidth, 30});
-    breaksStateLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
-    breaksStateLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
-    grid->addWidget(breaksStateLabel, 3, 1);
+    auto breaksLevelLabel = tgui::Label::create(std::to_string(item.get_feature_info("breaks").current_level));
+    breaksLevelLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    breaksLevelLabel->setSize({columnWidth, 30});
+    breaksLevelLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
+    breaksLevelLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
+    grid->addWidget(breaksLevelLabel, 3, 1);
 
     auto breaksPriceLabel = tgui::Label::create("$" + std::to_string(prices.at(1)));
     breaksPriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
@@ -130,12 +130,12 @@ void BusMaintenanceState::init_state()
     breaksPriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(breaksPriceLabel, 3, 2);
 
-    auto tiresStateLabel = tgui::Label::create(std::to_string(item.get_tires_state()) + "%");
-    tiresStateLabel->getRenderer()->setTextColor(tgui::Color::Black);
-    tiresStateLabel->setSize({columnWidth, 30});
-    tiresStateLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
-    tiresStateLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
-    grid->addWidget(tiresStateLabel, 4, 1);
+    auto tiresLevelLabel = tgui::Label::create(std::to_string(item.get_feature_info("tires").current_level));
+    tiresLevelLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    tiresLevelLabel->setSize({columnWidth, 30});
+    tiresLevelLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
+    tiresLevelLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
+    grid->addWidget(tiresLevelLabel, 4, 1);
 
     auto tiresPriceLabel = tgui::Label::create("$" + std::to_string(prices.at(2)));
     tiresPriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
@@ -144,12 +144,12 @@ void BusMaintenanceState::init_state()
     tiresPriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(tiresPriceLabel, 4, 2);
 
-    auto fuelStateLabel = tgui::Label::create(std::to_string(item.get_fuel()) + "%");
-    fuelStateLabel->getRenderer()->setTextColor(tgui::Color::Black);
-    fuelStateLabel->setSize({columnWidth, 30});
-    fuelStateLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
-    fuelStateLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
-    grid->addWidget(fuelStateLabel, 5, 1);
+    auto fuelLevelLabel = tgui::Label::create(std::to_string(item.get_feature_info("fuel").current_level));
+    fuelLevelLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    fuelLevelLabel->setSize({columnWidth, 30});
+    fuelLevelLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
+    fuelLevelLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
+    grid->addWidget(fuelLevelLabel, 5, 1);
 
     auto fuelPriceLabel = tgui::Label::create("$" + std::to_string(prices.at(3)));
     fuelPriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
@@ -174,7 +174,7 @@ void BusMaintenanceState::init_state()
     this->_data->gui.add(panel);
 }
 
-void BusMaintenanceState::update_inputs()
+void BusImprovementsState::update_inputs()
 {
     // Event Polling
     while (const std::optional event = this->_data->window->pollEvent())
@@ -200,12 +200,12 @@ void BusMaintenanceState::update_inputs()
 }
 
 // marks dt to not warn compiler
-void BusMaintenanceState::update_state(float dt __attribute__((unused)))
+void BusImprovementsState::update_state(float dt __attribute__((unused)))
 {
 }
 
 // marks dt to not warn compiler
-void BusMaintenanceState::draw_state(float dt __attribute__((unused)))
+void BusImprovementsState::draw_state(float dt __attribute__((unused)))
 {
     this->_data->gui.draw();
 

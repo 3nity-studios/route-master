@@ -20,11 +20,11 @@ void Game::init_variables()
     this->_data->player = Player(0, "Player1", 50000);
 
     this->_data->store = Store();
-    this->_data->store.add_bus_to_inventory(Bus(1, "Bus1", 50, {}, 5), 100, 5);
-    this->_data->store.add_bus_to_inventory(Bus(2, "Bus2", 60, {}, 10), 150, 3);
-    this->_data->store.add_bus_to_inventory(Bus(3, "Bus3", 55, {}, 7), 120, 4);
-    this->_data->store.add_bus_to_inventory(Bus(4, "Bus4", 45, {}, 3), 90, 6);
-    this->_data->store.add_bus_to_inventory(Bus(5, "Bus5", 70, {}, 12), 200, 2);
+    this->_data->store.add_bus_to_inventory(Bus(1, "Bus1", 50, {}, 5, 100, 5, 80, 4, 60, 3, 40, 2), 100, 5);
+    this->_data->store.add_bus_to_inventory(Bus(2, "Bus2", 60, {}, 10, 150, 7, 120, 6, 90, 5, 70, 3), 150, 3);
+    this->_data->store.add_bus_to_inventory(Bus(3, "Bus3", 55, {}, 7, 120, 6, 100, 5, 80, 4, 60, 3), 120, 4);
+    this->_data->store.add_bus_to_inventory(Bus(4, "Bus4", 45, {}, 3, 90, 4, 70, 3, 50, 2, 30, 1), 90, 6);
+    this->_data->store.add_bus_to_inventory(Bus(5, "Bus5", 70, {}, 12, 200, 10, 180, 9, 160, 8, 140, 7), 200, 2);
 
     this->_data->store.add_employee_to_inventory(Employee(1, "John", "Doe", 25, 50, 5, 0), 50, 1);
     this->_data->store.add_employee_to_inventory(Employee(2, "Jane", "Smith", 30, 60, 7, 1), 60, 2);
@@ -108,10 +108,10 @@ void Game::init_variables()
         }
     }
 
-    Bus bus_sim(1, "Bus 1", 10, {}, 5);
+    Bus bus_sim(1, "Bus 1", 10, {}, 5, 100, 5, 80, 4, 60, 3, 40, 2);
     Employee driver_sim(1, "John", "Doe", 25, 50, 5, 0);
 
-    Bus bus_sim2(2, "Bus 2", 15, {}, 5);
+    Bus bus_sim2(2, "Bus 2", 15, {}, 5, 150, 7, 120, 6, 90, 5, 70, 3);
     Employee driver_sim2(2, "Rodrigo", "Hernandez", 23, 30, 12, 0);
 
     SimulationInfo simulation(&bus_sim, &driver_sim, path);

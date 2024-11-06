@@ -181,6 +181,8 @@ set(
   ${SRCROOT}/states/simulation_state.cpp
   ${INCROOT}/states/bus_maintenance_state.hpp
   ${SRCROOT}/states/bus_maintenance_state.cpp
+  ${INCROOT}/states/bus_improvements_state.hpp
+  ${SRCROOT}/states/bus_improvements_state.cpp
   ${INCROOT}/states/bus_select_state.hpp
   ${INCROOT}/states/route_select.hpp
   ${INCROOT}/states/management_state.hpp

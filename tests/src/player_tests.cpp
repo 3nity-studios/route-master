@@ -15,8 +15,8 @@ TEST_CASE("Player set_name", "[player_set_name]") {
 
 TEST_CASE("Player get_buses", "[player_get_buses]") {
     Player player(4, "Eve", 400);
-    Bus bus1(0, "Bus1", 50, {}, 0);
-    Bus bus2(1, "Bus2", 50, {}, 0);
+    Bus bus1(0, "Bus1", 50, {}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
+    Bus bus2(1, "Bus2", 50, {}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
     player.add_bus(bus1);
     player.add_bus(bus2);
     auto buses = player.get_buses();
@@ -39,9 +39,9 @@ TEST_CASE("Player get_employees", "[player_get_employees]") {
 
 TEST_CASE("Player get_bus", "[player_get_bus]") {
     Player player(2, "Charlie", 200);
-    Bus bus1(0, "Bus1", 50, {}, 0);
-    Bus bus2(1, "Bus2", 50, {}, 0);
-    Bus bus3(2, "Bus3", 50, {}, 0);
+    Bus bus1(0, "Bus1", 50, {}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
+    Bus bus2(1, "Bus2", 50, {}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
+    Bus bus3(2, "Bus3", 50, {}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
     player.add_bus(bus1);
     player.add_bus(bus2);
     player.add_bus(bus3);
@@ -69,7 +69,7 @@ TEST_CASE("Store constructor", "[store_constructor]") {
 
 TEST_CASE("Store add_bus", "[store_add_bus]") {
     Store store;
-    Bus bus(0, "Bus1", 50, {}, 0);
+    Bus bus(0, "Bus1", 50, {}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
     store.add_bus_to_inventory(bus, 100, 5);
     REQUIRE(store.get_bus_list().size() == 1);
     REQUIRE(store.get_bus_list()[0].get_name() == "Bus1");
@@ -98,7 +98,7 @@ TEST_CASE("Store set_inventory", "[store_set_inventory]") {
 TEST_CASE("Store buy_item", "[store_buy_item]") {
     Store store;
     Player player(1, "Alice", 1000);
-    Bus bus(0, "Bus1", 50, {}, 0);
+    Bus bus(0, "Bus1", 50, {}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
     store.add_bus_to_inventory(bus, 10, 1);
     store.buy_item(player, 0, 1);
     REQUIRE(player.get_balance() == 990);
@@ -109,10 +109,10 @@ TEST_CASE("Store buy_item", "[store_buy_item]") {
 TEST_CASE("Store buy_bus_maintenance", "[store_buy_bus_maintenance]") {
     Store store;
     Player player(1, "Alice", 10000);
-    Bus bus(0, "Bus1", 50, {}, 0);
+    Bus bus(0, "Bus1", 50, {}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
     store.add_bus_to_inventory(bus, 50, 1);
     player.add_bus(bus);
-    store.buy_bus_maintenance(bus.get_id(), player, true, true, true);
+    store.buy_bus_maintenance(bus.get_id(), player, true, true, true, true);
     REQUIRE(player.get_balance() < 10000);
 }
 

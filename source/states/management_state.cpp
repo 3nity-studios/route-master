@@ -1,5 +1,6 @@
 #include "states/management_state.hpp"
 #include "states/bus_maintenance_state.hpp"
+#include "states/bus_improvements_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
 #include <string>
@@ -203,7 +204,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_inventory_panel()
     grid->setPosition({5.0f, 5.0f});
     grid->setAutoSize(true);
 
-    float columnWidth = (this->_data->window->getSize().x - 30.0f) / 6;
+    float columnWidth = (this->_data->window->getSize().x - 30.0f) / 7;
     float rowHeight = 30;
 
     // Add headers
@@ -287,16 +288,24 @@ tgui::ScrollablePanel::Ptr ManagementState::create_inventory_panel()
         fuelLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(fuelLabel, i + 1, 4);
 
-        // Create a button for doing maintenance to the bus
         auto repairButton = tgui::Button::create();
         repairButton->setSize({columnWidth, 25});
         repairButton->setWidgetName(bus.get_id() + "RepairButton");
         repairButton->setText("Repair");
         repairButton->onPress([this, bus] {
-            // std::cout << this->_data->player.get_bus(bus.get_id()).get_name();;
-            this->_data->states.add_state(Engine::StateRef(new BusMaintenance(this->_data, bus.get_id())), false);
+            this->_data->states.add_state(Engine::StateRef(new BusMaintenanceState(this->_data, bus.get_id())), false);
         });
         grid->addWidget(repairButton, i + 1, 5);
+
+        auto improveButton = tgui::Button::create();
+        improveButton->setSize({columnWidth, 25});
+        improveButton->setWidgetName(bus.get_id() + "ImproveButton");
+        improveButton->setText("Improve");
+        improveButton->onPress([this, bus] {
+            this->_data->states.add_state(Engine::StateRef(new BusImprovementsState(this->_data, bus.get_id())), false);
+        });
+        grid->addWidget(improveButton, i + 1, 6);
+        
     }
 
     panel->add(grid);

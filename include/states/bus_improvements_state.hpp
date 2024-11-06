@@ -6,11 +6,11 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
 
-class BusMaintenanceState : public Engine::State
+class BusImprovementsState : public Engine::State
 {
   public:
-    BusMaintenanceState(GameDataRef data, const int _bus_id);
-    //~BusMaintenanceState() = default;
+    BusImprovementsState(GameDataRef data, const int _bus_id);
+    //~BusImprovementsState() = default;
 
     void init_state();
     void update_inputs();
