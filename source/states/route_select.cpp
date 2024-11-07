@@ -1,7 +1,9 @@
 #include "states/route_select.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
+#include "engine/input_manager.hpp"
 #include "states/bus_select_state.hpp"
+#include <SFML/Window/Mouse.hpp>
 #include <cmath>
 #include <string>
 
@@ -77,15 +79,11 @@ void RouteSelect::update_inputs()
         {
             if ((keyPress->button == sf::Mouse::Button::Left) && !sprite_pressed)
             {
-                sf::Vector2i mousePos = sf::Mouse::getPosition(*this->_data->window);
-                mousePos.x -= this->canvas->getPosition().x;
-                mousePos.y -= this->canvas->getPosition().y;
-                sf::Vector2f viewPos = this->canvas->getRenderTexture().mapPixelToCoords(mousePos, this->canvas->getView());
-
                 for (auto &element : visual_elements)
                 {
-                    if (element.first.getGlobalBounds().contains(static_cast<sf::Vector2f>(viewPos)))
+                    if (this->_data->inputs.is_sprite_clicked(element.first, sf::Mouse::Button::Left, *this->_data->window, this->canvas->getRenderTexture()))
                     {
+                        // std::cout << "Detected a click on sprite at " << sf::Mouse::getPosition(*this->_data->window).x  << ", " << sf::Mouse::getPosition(*this->_data->window).y << std::endl;
                         if (add_to_path(element.second))
                         {
                             element.first.setColor(sf::Color(255, 255, 255));
@@ -173,6 +171,7 @@ void RouteSelect::draw_state(float dt __attribute__((unused)))
     for (auto visual_element : visual_elements)
     {
         this->canvas->draw(visual_element.first);
+        // std::cout << "Created sprite at " << visual_element.first.getPosition().x << ", " << visual_element.first.getPosition().y << std::endl;
     }
 
     // Displays rendered objects
