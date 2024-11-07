@@ -93,20 +93,24 @@ void StatsState::draw_state(float dt __attribute__((unused)))
     grid->addWidget(employeeLabel, 1, 0, tgui::Grid::Alignment::Left);
 
     auto timesListView = tgui::ListView::create();
-    timesListView->addColumn("Element");
+    timesListView->addColumn("Track");
     timesListView->addColumn("Time");
-    for(int i = 0; i < this->_data->simulation_info[current_info].times.size(); ++i)
+    for(int i = 0; i < this->_data->simulation_info[current_info].track_times.size(); ++i)
     {
-        timesListView->addItem({"", std::to_string(this->_data->simulation_info[current_info].times[i])});
+        timesListView->addItem({this->_data->simulation_info[current_info].track_names[i], std::to_string(this->_data->simulation_info[current_info].track_times[i])});
     }
 
     auto passengersListView = tgui::ListView::create();
     passengersListView->addColumn("Bus Stop");
     passengersListView->addColumn("On");
     passengersListView->addColumn("Off");
-    for(int i = 0; i < this->_data->simulation_info[current_info].times.size(); ++i)
+    for(int i = 0; i < this->_data->simulation_info[current_info].passenger_stop_names.size(); ++i)
     {
-        passengersListView->addItem({"", std::to_string(this->_data->simulation_info[current_info].passengers_per_stop[i].first), std::to_string(this->_data->simulation_info[current_info].passengers_per_stop[i].second)});
+        passengersListView->addItem({
+            this->_data->simulation_info[current_info].passenger_stop_names[i], 
+            std::to_string(this->_data->simulation_info[current_info].passengers_per_stop[i].first), 
+            std::to_string(this->_data->simulation_info[current_info].passengers_per_stop[i].second)
+        });
     }
 
     auto horizontalLayout = tgui::HorizontalLayout::create();
