@@ -201,7 +201,7 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
                 if (track->get_src_node()->get_info()->get_id() == simulation_info.elements_path.at(simulation_info.path_index)->get_id() && track->get_tgt_node()->get_info()->get_id() == simulation_info.elements_path.at(simulation_info.path_index + 1)->get_id())
                 {
                     simulation_info.time_state = std::make_pair<int, int>(1, track->get_info().get_travel_time());
-                    simulation_info.employee->calc_fatigue(track->get_info().get_distance());
+                    simulation_info.employee->calc_fatigue(track->get_info().get_distance(), track->get_info().get_travel_time());
                     simulation_info.bus->calc_wear(track->get_info().get_distance());
                     simulation_info.times.push_back(track->get_info().get_travel_time());
                     break;
