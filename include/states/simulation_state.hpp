@@ -33,6 +33,9 @@ class SimulationState : public Engine::State
     void resume_state() override;
     void pause_state() override;
     void add_simulation_info(SimulationInfo _simulation_info);
+    SimulationInfo simulation_info_from_json(nlohmann::json j);
+    void save(); 
+    nlohmann::json simulation_info_to_json(); 
 
     void set_simulation_info(std::vector<SimulationInfo> _simulation_info);
     std::vector<SimulationInfo> get_simulation_info();

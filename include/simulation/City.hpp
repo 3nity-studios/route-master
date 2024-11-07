@@ -45,6 +45,51 @@ struct SimulationInfo
             elements_path.push_back(path.get_last()->get_tgt_node()->get_info());
         }
     }
+
+    nlohmann::json to_json()
+    {
+        projection_clock.stop(); 
+
+        nlohmann::json j; 
+
+        j["bus"] = bus->to_json();
+        j["employee"] = employee->to_json(); 
+       
+        nlohmann::json elements_path_json = nlohmann::json::array();
+        for (auto visual_element : elements_path)
+        {
+            elements_path_json.push_back(visual_element->to_json());
+        }
+
+        j["elements_path"] = elements_path_json;
+        j["time_state_first"] = time_state.first;
+        j["time_state_second"] = time_state.second;
+        j["path_index"] = path_index; 
+        j["next_is_street"] = next_is_street;
+        j["route_completed"] = route_completed; 
+
+        nlohmann::json times_vector = nlohmann::json::array();
+        for (auto time : times)
+        {
+            times_vector.push_back(time);
+        }
+
+        j["times"] = times_vector;
+
+        nlohmann::json passengers_per_stop_first = nlohmann::json::array();
+        nlohmann::json passengers_per_stop_second = nlohmann::json::array(); 
+
+        for (auto passengers : passengers_per_stop)
+        {
+            passengers_per_stop_first.push_back(passengers.first);
+            passengers_per_stop_second.push_back(passengers.second);
+        }
+
+        j["passengers_stop_first"] = passengers_per_stop_first;
+        j["passengers_stop_second"] = passengers_per_stop_second;
+
+        return j; 
+    }
 };
 
 class City
@@ -80,4 +125,5 @@ class City
     void run_simulation(std::vector<SimulationInfo> &simulation_infos);
 
     nlohmann::json to_json();
+    void save(); 
 };
