@@ -213,10 +213,10 @@ void Bus::improve_bus(bool improve_engine, bool improve_breaks, bool improve_tir
 
 void Bus::calc_wear(int travelled_distance)
 {
-    features["engine"].current_wear += (travelled_distance / 20);
-    features["breaks"].current_wear += (travelled_distance / 10);
-    features["tires"].current_wear += (travelled_distance / 10);
-    features["fuel"].current_wear += (travelled_distance / 3);
+    features["engine"].current_wear += (travelled_distance / 200);
+    features["breaks"].current_wear += (travelled_distance / 100);
+    features["tires"].current_wear += (travelled_distance / 100);
+    features["fuel"].current_wear += (travelled_distance / 30);
 }
 
 std::vector<int> Bus::calc_maintenance_price()
@@ -232,15 +232,15 @@ std::vector<int> Bus::calc_maintenance_price()
     }
     if (features["breaks"].current_wear >= features["breaks"].base_value * features["breaks"].current_level)
     {
-        breaks_price = 2000;
+        breaks_price = 800;
     }
     if (features["tires"].current_wear >= features["tires"].base_value * features["tires"].current_level)
     {
-        tires_price = 2000;
+        tires_price = 400;
     }
     if (features["fuel"].current_wear >= features["fuel"].base_value * features["fuel"].current_level)
     {
-        fuel_price = 1000;
+        fuel_price = 80;
     }
 
     return std::vector<int> {engine_price, breaks_price, tires_price, fuel_price};
