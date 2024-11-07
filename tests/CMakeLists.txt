@@ -93,11 +93,41 @@ target_link_libraries(
 )
 target_compile_features(player_tests PRIVATE cxx_std_17)
 
+set(JSON_TESTS_SOURCES
+    ${CMAKE_SOURCE_DIR}/tests/src/json_tests.cpp
+)
+
+add_executable(json_tests ${JSON_TESTS_SOURCES})
+
+target_include_directories(json_tests PRIVATE ${CMAKE_SOURCE_DIR}/include/player)
+
+target_link_libraries(
+    json_tests PRIVATE
+        SFML::Graphics
+    SFML::Window
+    SFML::Audio
+    SFML::System
+    TGUI::TGUI
+    route_master::states
+    route_master::config
+    route_master::platform
+    route_master::engine
+    route_master::utils
+    tmxlite::tmxlite
+    nlohmann_json::nlohmann_json
+    route_master::simulation
+    route_master::player
+    Designar::Designar
+    Catch2::Catch2WithMain
+)
+target_compile_features(json_tests PRIVATE cxx_std_17)
+
 # add_test(NAME route_master_test COMMAND route_master_test)
 
 catch_discover_tests(route_master_test)
 catch_discover_tests(simulation_tests)
 catch_discover_tests(player_tests)
+catch_discover_tests(json_tests)
 
 # ---- End-of-file commands ----
 

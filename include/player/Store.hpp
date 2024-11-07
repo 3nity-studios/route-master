@@ -1,4 +1,5 @@
 #include <Designar/list.hpp>
+#include <nlohmann/json.hpp>
 #include "player/Item.hpp"
 #include "player/Player.hpp"
 
@@ -13,6 +14,7 @@ class Store
 
     Store();
     Store(Designar::SLList<Item> _inventory, Designar::SLList<Bus> _bus_list, Designar::SLList<Employee> _employee_list);
+    Store(nlohmann::json j);
 
     Designar::SLList<Item> get_inventory();
     Designar::SLList<Bus> get_bus_list();
@@ -26,6 +28,10 @@ class Store
     void add_employee_to_inventory(Employee employee, int price, int amount);
 
     void buy_item(Player &player, int item_id, int amount);
-    void buy_bus_maintenance(int id, Player &player, bool repair_engine, bool repair_breaks, bool repair_tires);
+    void buy_bus_maintenance(int id, Player &player, bool repair_engine, bool repair_breaks, bool repair_tires, bool refuel);
+    void buy_bus_improvements(int id, Player &player, bool improve_engine, bool improve_breaks, bool improve_tires, bool improve_fuel);
     void pay_employee(int id, Player &player);
+
+    nlohmann::json to_json();
+    void save();
 };

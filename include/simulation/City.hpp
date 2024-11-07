@@ -2,6 +2,7 @@
 
 #include <string>
 #include <Designar/graph.hpp>
+#include <nlohmann/json.hpp>
 #include "simulation/Bus.hpp"
 #include "simulation/Employee.hpp"
 #include "simulation/Street.hpp"
@@ -12,8 +13,8 @@ using StreetArcList = Designar::SLList<Designar::GraphArc<Designar::GraphNode<st
 
 struct SimulationInfo
 {
-    Bus bus;
-    Employee employee;
+    Bus *bus;
+    Employee *employee;
     std::vector<std::shared_ptr<VisualElement>> elements_path;
     std::pair<int, int> time_state;
     int path_index;
@@ -28,7 +29,7 @@ struct SimulationInfo
     std::vector<int> times;
     std::vector<std::pair<int, int>> passengers_per_stop;
 
-    SimulationInfo(Bus _bus, Employee _employee, StreetArcList _path) : bus(_bus), employee(_employee), time_state(std::make_pair<int,int>(-1, 0)), path_index(0), next_is_street(false), route_completed(false), projection_bus_texture(sf::Texture()), projection_bus(projection_bus_texture) {set_path(_path);}
+    SimulationInfo(Bus *_bus, Employee *_employee, StreetArcList _path) : bus(_bus), employee(_employee), time_state(std::make_pair<int,int>(-1, 0)), path_index(0), next_is_street(false), route_completed(false), projection_bus_texture(sf::Texture()), projection_bus(projection_bus_texture) {set_path(_path);}
    
     void set_path(StreetArcList path)
     {
@@ -58,6 +59,7 @@ class City
     public:
     City();
     City(int _id, std::string _name, Designar::Graph<std::shared_ptr<VisualElement>, Street> _city_map, int _current_time);
+    City(nlohmann::json j);
 
     int get_id() const noexcept;
     std::string get_name() const noexcept;
@@ -76,4 +78,6 @@ class City
     void initialize_bus_stops();
     void update();
     void run_simulation(std::vector<SimulationInfo> &simulation_infos);
+
+    nlohmann::json to_json();
 };

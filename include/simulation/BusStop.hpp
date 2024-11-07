@@ -2,6 +2,7 @@
 
 #include "simulation/Passenger.hpp"
 #include "simulation/VisualElement.hpp"
+#include <nlohmann/json.hpp>
 #include <queue>
 #include <string>
 #include <vector>
@@ -34,6 +35,7 @@ class BusStop : public VisualElement
 
     BusStop();
     BusStop(int _id, std::string _name, std::vector<int> _avg_hourly_arrivals, float _avg_arrival_time, float _avg_waiting_time, float _sd_waiting_time, float _avg_bus_stop, float _sd_bus_stop, float _x, float _y);
+    BusStop(nlohmann::json j);
 
     std::string get_name() const noexcept;
     void set_name(const std::string& _name);
@@ -49,6 +51,8 @@ class BusStop : public VisualElement
 
     int get_gone_passengers() const noexcept;
     void add_gone_passengers(const int& num);
+
+    nlohmann::json to_json();
 
     bool operator==(const BusStop& other) const {
         return this->get_id() == other.get_id();

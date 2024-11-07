@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <vector>
+#include <nlohmann/json.hpp>
 #include "simulation/VisualElement.hpp"
 
 using StreetConnectionIDs = std::pair<int, int>;
@@ -17,6 +18,7 @@ class TrafficLight : public VisualElement
 
     TrafficLight();
     TrafficLight(int _id, std::vector<std::pair<StreetConnectionIDs, bool>> _connections, int _time_to_change, float _x, float _y);
+    TrafficLight(nlohmann::json j);
 
     void set_connections(std::vector<std::pair<StreetConnectionIDs, bool>> _connections);
     void set_time_to_change(int _time_to_change); 
@@ -25,4 +27,6 @@ class TrafficLight : public VisualElement
     int get_time_to_change();
 
     void update(int current_time);
+
+    nlohmann::json to_json();
 };

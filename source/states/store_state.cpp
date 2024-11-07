@@ -196,6 +196,8 @@ tgui::ScrollablePanel::Ptr StoreState::create_store_panel()
         buyButton->onPress([this, item] { 
             this->_data->store.buy_item(this->_data->player, item.get_id(), 1);
             this->update_items_to_show(this->_data->gui.get<tgui::ComboBox>("filter_combobox")->getSelectedItem());
+            this->_data->player.save();
+            this->_data->store.save();
         });
         grid->addWidget(buyButton, i+1, 3);
     }

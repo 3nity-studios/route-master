@@ -2,10 +2,19 @@
 
 VisualElement::VisualElement() : id(0), x(0.f), y (0.f)
 {
+    //empty
 }
 
 VisualElement::VisualElement(int _id, float _x, float _y) : id(_id), x(_x), y(_y)
 {
+    //empty
+}
+
+VisualElement::VisualElement(nlohmann::json j)
+{
+    id = j["id"];
+    x = j["x"];
+    y = j["y"];
 }
 
 void VisualElement::set_id(int _id)
@@ -36,4 +45,15 @@ float VisualElement::get_x()
 float VisualElement::get_y()
 {
     return y; 
+}
+
+nlohmann::json VisualElement::to_json()
+{
+    nlohmann::json j;
+
+    j["id"] = id;
+    j["x"] = x;
+    j["y"] = y;
+
+    return j;
 }

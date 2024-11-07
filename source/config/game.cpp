@@ -7,6 +7,9 @@
 #include "simulation/Bus.hpp"
 #include "simulation/Employee.hpp"
 
+#include <fstream>
+#include <nlohmann/json.hpp>
+
 float calc_distance(VisualElement element1, VisualElement element2)
 {
     return sqrt(pow(element1.get_x() - element2.get_x(), 2) + pow(element1.get_y() - element2.get_y(), 2));
@@ -17,20 +20,47 @@ void Game::init_variables()
 {
     this->_data->window = nullptr;
     this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), false);
-    this->_data->player = Player(0, "Player1", 50000);
 
-    this->_data->store = Store();
-    this->_data->store.add_bus_to_inventory(Bus(1, "Bus1", 50, {}, 5), 100, 5);
-    this->_data->store.add_bus_to_inventory(Bus(2, "Bus2", 60, {}, 10), 150, 3);
-    this->_data->store.add_bus_to_inventory(Bus(3, "Bus3", 55, {}, 7), 120, 4);
-    this->_data->store.add_bus_to_inventory(Bus(4, "Bus4", 45, {}, 3), 90, 6);
-    this->_data->store.add_bus_to_inventory(Bus(5, "Bus5", 70, {}, 12), 200, 2);
+    std::ifstream player_file("data/player.json");
+    if (player_file.is_open())
+    {
+        nlohmann::json player_json;
+        player_file >> player_json;
+        this->_data->player = Player(player_json);
+        player_file.close();
+    }
+    else
+    {
+        this->_data->player = Player(0, "Player1", 50000);
+        this->_data->player.save();
+    }
 
-    this->_data->store.add_employee_to_inventory(Employee(1, "John", "Doe", 25, 50, 5, 0), 50, 1);
-    this->_data->store.add_employee_to_inventory(Employee(2, "Jane", "Smith", 30, 60, 7, 1), 60, 2);
-    this->_data->store.add_employee_to_inventory(Employee(3, "Alice", "Johnson", 28, 55, 6, 2), 55, 3);
-    this->_data->store.add_employee_to_inventory(Employee(4, "Bob", "Brown", 35, 70, 10, 3), 70, 1);
-    this->_data->store.add_employee_to_inventory(Employee(5, "Charlie", "Davis", 40, 80, 15, 4), 80, 2);
+    // Load store data from JSON if it exists
+    std::ifstream store_file("data/store.json");
+    if (store_file.is_open())
+    {
+        nlohmann::json store_json;
+        store_file >> store_json;
+        this->_data->store = Store(store_json);
+        store_file.close();
+    }
+    else
+    {
+        this->_data->store = Store();
+        this->_data->store.add_bus_to_inventory(Bus(1, "Bus1", 50, {}, 5, 100, 5, 80, 4, 60, 3, 40, 2), 100, 5);
+        this->_data->store.add_bus_to_inventory(Bus(2, "Bus2", 60, {}, 10, 150, 7, 120, 6, 90, 5, 70, 3), 150, 3);
+        this->_data->store.add_bus_to_inventory(Bus(3, "Bus3", 55, {}, 7, 120, 6, 100, 5, 80, 4, 60, 3), 120, 4);
+        this->_data->store.add_bus_to_inventory(Bus(4, "Bus4", 45, {}, 3, 90, 4, 70, 3, 50, 2, 30, 1), 90, 6);
+        this->_data->store.add_bus_to_inventory(Bus(5, "Bus5", 70, {}, 12, 200, 10, 180, 9, 160, 8, 140, 7), 200, 2);
+
+        this->_data->store.add_employee_to_inventory(Employee(1, "John", "Doe", 25, 50, 5, 0), 50, 1);
+        this->_data->store.add_employee_to_inventory(Employee(2, "Jane", "Smith", 30, 60, 7, 1), 60, 2);
+        this->_data->store.add_employee_to_inventory(Employee(3, "Alice", "Johnson", 28, 55, 6, 2), 55, 3);
+        this->_data->store.add_employee_to_inventory(Employee(4, "Bob", "Brown", 35, 70, 10, 3), 70, 1);
+        this->_data->store.add_employee_to_inventory(Employee(5, "Charlie", "Davis", 40, 80, 15, 4), 80, 2);
+
+        this->_data->store.save();
+    }
 
     BusStop stop1(1, "Stop1", {2, 3, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 750.f, 5.f);
     BusStop stop2(2, "Stop2", {2, 3, 4}, 3.0, 10.0, 3.0, 3.0, 2.0, 500.f, 5.f);
@@ -108,14 +138,14 @@ void Game::init_variables()
         }
     }
 
-    Bus bus_sim(1, "Bus 1", 10, {}, 5);
+    Bus bus_sim(1, "Bus 1", 10, {}, 5, 100, 5, 80, 4, 60, 3, 40, 2);
     Employee driver_sim(1, "John", "Doe", 25, 50, 5, 0);
 
-    Bus bus_sim2(2, "Bus 2", 15, {}, 5);
+    Bus bus_sim2(2, "Bus 2", 15, {}, 5, 150, 7, 120, 6, 90, 5, 70, 3);
     Employee driver_sim2(2, "Rodrigo", "Hernandez", 23, 30, 12, 0);
 
-    SimulationInfo simulation(bus_sim, driver_sim, path);
-    SimulationInfo simulation2(bus_sim2, driver_sim2, path2);
+    SimulationInfo simulation(&bus_sim, &driver_sim, path);
+    SimulationInfo simulation2(&bus_sim2, &driver_sim2, path2);
 
     this->_data->paths.push_back(simulation.elements_path);
     this->_data->paths.push_back(simulation2.elements_path);

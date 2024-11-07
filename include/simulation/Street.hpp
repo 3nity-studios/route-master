@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <nlohmann/json.hpp>
 
 struct SingularEvent
 {
@@ -39,6 +40,7 @@ class Street
 
     Street();
     Street(int _id, std::string _name, float _distance, float _avg_speed, float _avg_traffic_density, float _sd_traffic_density, float _singular_event_odds);
+    Street(nlohmann::json j);
 
     int get_id() const noexcept;
     std::string get_name() const noexcept;
@@ -48,6 +50,8 @@ class Street
     int get_travel_time() const;
 
     void update();
+
+    nlohmann::json to_json();
 
     bool operator==(const Street& other) const {
         return this->id == other.id;

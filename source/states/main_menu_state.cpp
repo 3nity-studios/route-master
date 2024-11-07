@@ -14,7 +14,7 @@ void MainMenuState::init_state()
     this->_data->gui.setWindow(*this->_data->window);
     this->_data->gui.loadWidgetsFromFile("assets/screens/main_menu.txt");
     this->_data->gui.get<tgui::Button>("play_button")->onPress([this] {
-            this->_data->states.add_state(Engine::StateRef(new SimulationState(this->_data)), false);
+            this->_data->states.add_state(Engine::StateRef(new SimulationState(this->_data)), true);
         });
     this->_data->gui.get<tgui::Button>("exit_button")->onPress([this] {
             this->_data->window->close();

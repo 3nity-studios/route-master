@@ -81,13 +81,13 @@ StatsState::StatsState(GameDataRef data) : _data(data)
         }
     }
 
-    Bus bus_sim(1, "Bus 1", 10, {}, 5);
+    Bus bus_sim(1, "Bus 1", 10, {}, 5, 100, 5, 80, 4, 60, 3, 40, 2);
     Employee driver_sim(1, "John", "Doe", 25, 50, 5, 0);
 
-    Bus bus_sim2(2, "Bus 2", 15, {}, 5);
+    Bus bus_sim2(2, "Bus 2", 15, {}, 5, 150, 7, 120, 6, 90, 5, 70, 3);
     Employee driver_sim2(2, "Rodrigo", "Hernandez", 23, 30, 12, 0);
 
-    SimulationInfo simulation(bus_sim, driver_sim, path);
+    SimulationInfo simulation(&bus_sim, &driver_sim, path);
 
     this->infos.push_back(simulation);
 
@@ -169,13 +169,13 @@ void StatsState::draw_state(float dt __attribute__((unused)))
     grid->setPosition({10, 90});
 
     auto busLabel = tgui::Label::create();
-    busLabel->setText("Bus: " + infos[0].bus.get_name());
+    busLabel->setText("Bus: " + infos[0].bus->get_name());
     busLabel->setPosition({0.0f, 0.0f});
     busLabel->setSize({200.0f, 30.0f});
     grid->addWidget(busLabel, 0, 0, tgui::Grid::Alignment::Left);
 
     auto employeeLabel = tgui::Label::create();
-    employeeLabel->setText("Employee: " + infos[0].employee.get_name() + " " + infos[0].employee.get_last_name());
+    employeeLabel->setText("Employee: " + infos[0].employee->get_name() + " " + infos[0].employee->get_last_name());
     employeeLabel->setPosition({0.0f, 30.0f});
     employeeLabel->setSize({200.0f, 30.0f});
     grid->addWidget(employeeLabel, 1, 0, tgui::Grid::Alignment::Left);
