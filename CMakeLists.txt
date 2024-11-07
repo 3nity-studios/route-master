@@ -83,7 +83,8 @@ target_link_libraries(route_master_config
   SFML::System
   Designar::Designar
   tmxlite::tmxlite
-  nlohmann_json::nlohmann_json)
+  nlohmann_json::nlohmann_json
+  route_master::states)
 
 # ---- engine
 
@@ -207,7 +208,8 @@ target_link_libraries(route_master_states
   tmxlite::tmxlite
   nlohmann_json::nlohmann_json
   route_master::simulation
-  route_master::player)
+  route_master::player
+  route_master::engine)
 
 # ---- platform
 
@@ -264,7 +266,7 @@ set(
   RM_UTILS_SRC
   ${INCROOT}/utils/filesystem.hpp
 )
-add_library(route_master_utils ${RM_STATES_SRC})
+add_library(route_master_utils ${RM_UTILS_SRC})
 add_library(route_master::utils ALIAS route_master_utils)
 target_link_libraries(route_master_utils
   PRIVATE
