@@ -128,7 +128,8 @@ void StatsState::update_inputs()
 
         if (event->is<sf::Event::Closed>())
         {
-            this->_data->window->close();
+            this->_data->city.save();
+this->_data->window->close();
             break;
         }
 
@@ -137,7 +138,8 @@ void StatsState::update_inputs()
             // When the enter key is pressed, switch to the next handler type
             if (keyPress->code == sf::Keyboard::Key::Escape)
             {
-                this->_data->window->close();
+                this->_data->city.save();
+this->_data->window->close();
                 break;
             }
         }

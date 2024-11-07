@@ -121,6 +121,8 @@ void Game::init_variables()
         this->_data->city.add_street(street8, 5, 10);
         this->_data->city.add_street(street9, 10, 11);
         this->_data->city.add_street(street10, 11, 6);
+
+        this->_data->city.save();
     }
 
     StreetArcList path;

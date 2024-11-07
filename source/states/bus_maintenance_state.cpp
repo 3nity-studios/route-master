@@ -23,8 +23,8 @@ void BusMaintenanceState::init_state()
 
     // Create a label for the player name
     auto playerInfoLabel = tgui::Label::create();
-    playerInfoLabel->setText("Player: " + this->_data->player.get_name() + 
-                            "\nBalance: $" + std::to_string(this->_data->player.get_balance()));
+    playerInfoLabel->setText("Player: " + this->_data->player.get_name() + "\nBalance: $" +
+                             std::to_string(this->_data->player.get_balance()));
     playerInfoLabel->getRenderer()->setTextColor(sf::Color::White);
     playerInfoLabel->getRenderer()->setTextOutlineColor(sf::Color::Black);
     playerInfoLabel->getRenderer()->setTextOutlineThickness(2);
@@ -50,11 +50,11 @@ void BusMaintenanceState::init_state()
     auto engineCheckbox = tgui::CheckBox::create();
     engineCheckbox->setWidgetName("EngineCheckbox");
     engineCheckbox->setText("Repair Engine");
-    
+
     auto breaksCheckbox = tgui::CheckBox::create();
     breaksCheckbox->setWidgetName("BreaksCheckbox");
     breaksCheckbox->setText("Repair Breaks");
-    
+
     auto tiresCheckbox = tgui::CheckBox::create();
     tiresCheckbox->setWidgetName("TiresCheckbox");
     tiresCheckbox->setText("Repair Tires");
@@ -63,16 +63,14 @@ void BusMaintenanceState::init_state()
     fuelCheckbox->setWidgetName("FuelCheckbox");
     fuelCheckbox->setText("Refuel");
 
-    this->_data->gui.get<tgui::Button>("confirm_button")->onPress([this, item, engineCheckbox, breaksCheckbox, tiresCheckbox, fuelCheckbox] {
-        this->_data->store.buy_bus_maintenance(item.get_id(),
-                                            this->_data->player,
-                                            engineCheckbox->isChecked(),
-                                            breaksCheckbox->isChecked(),
-                                            tiresCheckbox->isChecked(),
-                                            fuelCheckbox->isChecked());
-        this->_data->player.save();
-        this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), true);
-    });
+    this->_data->gui.get<tgui::Button>("confirm_button")
+        ->onPress([this, item, engineCheckbox, breaksCheckbox, tiresCheckbox, fuelCheckbox] {
+            this->_data->store.buy_bus_maintenance(item.get_id(), this->_data->player, engineCheckbox->isChecked(),
+                                                   breaksCheckbox->isChecked(), tiresCheckbox->isChecked(),
+                                                   fuelCheckbox->isChecked());
+            this->_data->player.save();
+            this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), true);
+        });
 
     // Draw bus details view for the bus
     const auto prices = this->_data->player.get_bus(this->bus_id).calc_maintenance_price();
@@ -184,6 +182,7 @@ void BusMaintenanceState::update_inputs()
 
         if (event->is<sf::Event::Closed>())
         {
+            this->_data->city.save();
             this->_data->window->close();
             break;
         }
@@ -193,6 +192,7 @@ void BusMaintenanceState::update_inputs()
             // When the enter key is pressed, switch to the next handler type
             if (keyPress->code == sf::Keyboard::Key::Escape)
             {
+                this->_data->city.save();
                 this->_data->window->close();
                 break;
             }

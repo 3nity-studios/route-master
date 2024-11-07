@@ -69,7 +69,8 @@ void RouteSelect::update_inputs()
 
         if (event->is<sf::Event::Closed>())
         {
-            this->_data->window->close();
+            this->_data->city.save();
+this->_data->window->close();
             break;
         }
 

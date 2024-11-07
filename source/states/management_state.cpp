@@ -1,8 +1,8 @@
 #include "states/management_state.hpp"
-#include "states/bus_maintenance_state.hpp"
-#include "states/bus_improvements_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
+#include "states/bus_improvements_state.hpp"
+#include "states/bus_maintenance_state.hpp"
 #include <string>
 
 ManagementState::ManagementState(GameDataRef data) : _data(data)
@@ -17,14 +17,12 @@ void ManagementState::init_state()
     this->_data->gui.loadWidgetsFromFile("assets/screens/basic_screen.txt");
     this->_data->gui.get<tgui::Label>("title")->setText("Management");
 
-    this->_data->gui.get<tgui::Button>("exit_button")->onPress([this] {
-        this->_data->states.remove_state();
-    });
+    this->_data->gui.get<tgui::Button>("exit_button")->onPress([this] { this->_data->states.remove_state(); });
 
     // Create a label for the player name
     auto playerInfoLabel = tgui::Label::create();
-    playerInfoLabel->setText("Player: " + this->_data->player.get_name() + 
-                            "\nBalance: $" + std::to_string(this->_data->player.get_balance()));
+    playerInfoLabel->setText("Player: " + this->_data->player.get_name() + "\nBalance: $" +
+                             std::to_string(this->_data->player.get_balance()));
     playerInfoLabel->getRenderer()->setTextColor(sf::Color::White);
     playerInfoLabel->getRenderer()->setTextOutlineColor(sf::Color::Black);
     playerInfoLabel->getRenderer()->setTextOutlineThickness(2);
@@ -54,6 +52,7 @@ void ManagementState::update_inputs()
 
         if (event->is<sf::Event::Closed>())
         {
+            this->_data->city.save();
             this->_data->window->close();
             break;
         }
@@ -63,6 +62,7 @@ void ManagementState::update_inputs()
             // When the enter key is pressed, switch to the next handler type
             if (keyPress->code == sf::Keyboard::Key::Escape)
             {
+                this->_data->city.save();
                 this->_data->window->close();
                 break;
             }
@@ -79,7 +79,7 @@ void ManagementState::update_state(float dt __attribute__((unused)))
 void ManagementState::draw_state(float dt __attribute__((unused)))
 {
     this->_data->gui.draw();
-    
+
     // Displays rendered objects
     this->_data->window->display();
 }
@@ -171,14 +171,15 @@ tgui::ScrollablePanel::Ptr ManagementState::create_payroll_panel()
         hourlyRateLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(hourlyRateLabel, i + 1, 3);
 
-        auto paycheckLabel = tgui::RichTextLabel::create(std::to_string(employee.get_hourly_rate() * employee.get_total_work_hours()));
+        auto paycheckLabel =
+            tgui::RichTextLabel::create(std::to_string(employee.get_hourly_rate() * employee.get_total_work_hours()));
         paycheckLabel->setSize({columnWidth, 30});
         paycheckLabel->getRenderer()->setTextColor(sf::Color::Black);
         paycheckLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         paycheckLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(paycheckLabel, i + 1, 4);
 
-         // Create a button for doing maintenance to the bus
+        // Create a button for doing maintenance to the bus
         auto payButton = tgui::Button::create();
         payButton->setSize({columnWidth, 25});
         payButton->setWidgetName(employee.get_id() + "PayButton");
@@ -306,7 +307,6 @@ tgui::ScrollablePanel::Ptr ManagementState::create_inventory_panel()
             this->_data->states.add_state(Engine::StateRef(new BusImprovementsState(this->_data, bus.get_id())), true);
         });
         grid->addWidget(improveButton, i + 1, 6);
-        
     }
 
     panel->add(grid);
