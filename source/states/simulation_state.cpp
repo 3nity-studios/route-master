@@ -24,9 +24,9 @@ void SimulationState::init_state()
     tgui::Theme::setDefault("assets/tgui/Kenney.txt");
     this->gui.setWindow(*this->_data->window);
 
-    if (!bus_texture.loadFromFile("assets/img/bus_top_view.png"))
+    if (!bus_texture.loadFromFile("assets/img/buses/encava_base.png"))
     {
-        throw GameException("Couldn't find file: assets/img/bus_top_view.png");
+        throw GameException("Couldn't find file: assets/img/buses/encava_base.png");
     }
 
     if (!bus_stops_texture.loadFromFile("assets/img/bus_stop_sprites.png"))
@@ -318,7 +318,7 @@ void SimulationState::draw_passengers()
 
 void SimulationState::init_bus()
 {
-    sf::IntRect bus_rect(sf::Vector2i(8,5), sf::Vector2i(358,657));
+    sf::IntRect bus_rect(sf::Vector2i(0, 0), sf::Vector2i(48, 32));
 
     for (auto &info : this->_data->simulation_info)
     {
@@ -326,14 +326,17 @@ void SimulationState::init_bus()
         info.projection_bus.setTextureRect(bus_rect);
         sf::FloatRect bounds = info.projection_bus.getLocalBounds();
         info.projection_bus.setOrigin(bounds.getCenter());
-        info.projection_bus.rotate(sf::degrees(270));
         info.projection_bus.setPosition(sf::Vector2f(info.elements_path.front()->get_x() + 35.f, info.elements_path.front()->get_y() + 85.f));
-        info.projection_bus.setScale(sf::Vector2<float>(0.1, 0.1));
+        info.projection_bus.setScale(sf::Vector2<float>(2.0, 2.0)); // twice cuz tileset rendering in 32x32
     }
 }
 
 void SimulationState::update_bus()
 {
+    sf::IntRect right_view(sf::Vector2i(0, 0), sf::Vector2i(48, 32));
+    sf::IntRect left_view(sf::Vector2i(0, 32), sf::Vector2i(48, 32));
+    sf::IntRect down_view(sf::Vector2i(48, 0), sf::Vector2i(16, 48));
+    sf::IntRect up_view(sf::Vector2i(64, 0), sf::Vector2i(16, 48));
     if (first_time)
     {
         simulation_clock.restart();
@@ -388,8 +391,29 @@ void SimulationState::update_bus()
             auto stop1 = info.elements_path.at(info.path_index - 1);
             auto stop2 = info.elements_path.at(info.path_index);
 
-            sf::Angle rotation = sf::radians(M_PI - (atan((stop2->get_x() - stop1->get_x()) / (stop2->get_y() - stop1->get_y()))));
-            info.projection_bus.setRotation(rotation);
+            //encava changes according to greatest difference between axis(es?)
+            if (abs(stop2->get_x() - stop1->get_x()) > abs(stop2->get_y() - stop1->get_y()))
+            {
+                if (stop2->get_x() - stop1->get_x() <= 0)
+                {
+                    info.projection_bus.setTextureRect(left_view);
+                }
+                else
+                {
+                    info.projection_bus.setTextureRect(right_view);
+                }
+            }
+            else
+            {
+                if (stop2->get_y() - stop1->get_y() <= 0)
+                {
+                    info.projection_bus.setTextureRect(up_view);
+                }
+                else
+                {
+                    info.projection_bus.setTextureRect(down_view);
+                }
+            }
 
             info.projection_bus_speed = sf::Vector2f((stop2->get_x() - stop1->get_x()) / (time.second * 60.f), (stop2->get_y() - stop1->get_y()) / (time.second * 60.f));
             status = "Travelling";
@@ -411,7 +435,7 @@ std::vector<SimulationInfo> SimulationState::get_simulation_info()
 
 void SimulationState::resume_state()
 {
-    sf::IntRect bus_rect(sf::Vector2i(8,5), sf::Vector2i(358,657));
+    sf::IntRect bus_rect(sf::Vector2i(0, 0), sf::Vector2i(48, 32));
 
     for (auto &info : this->_data->simulation_info)
     {
@@ -421,9 +445,8 @@ void SimulationState::resume_state()
             info.projection_bus.setTextureRect(bus_rect);
             sf::FloatRect bounds = info.projection_bus.getLocalBounds();
             info.projection_bus.setOrigin(bounds.getCenter());
-            info.projection_bus.rotate(sf::degrees(270));
             info.projection_bus.setPosition(sf::Vector2f(info.elements_path.front()->get_x() + 35.f, info.elements_path.front()->get_y() + 85.f));
-            info.projection_bus.setScale(sf::Vector2<float>(0.1, 0.1));
+            info.projection_bus.setScale(sf::Vector2<float>(2.0, 2.0)); //twice size yadda yadda, why is this code repeated?
         }
     }
 
