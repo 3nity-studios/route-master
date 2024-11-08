@@ -18,14 +18,35 @@ void RouteSelect::init_state()
     this->_data->gui.setWindow(*this->_data->window);
     this->_data->gui.loadWidgetsFromFile("assets/screens/route_select.txt");
 
+    auto panel = tgui::Panel::create();
+    panel->getRenderer()->setBackgroundColor(tgui::Color(217, 217, 217));
+    panel->setSize({this->_data->window->getSize().x - 20.0f, 370.0f});
+    panel->setPosition({10, 90});
+    this->_data->gui.add(panel);
+
+    auto nameLabel = tgui::Label::create();
+    nameLabel->setText("Route Name:");
+    nameLabel->setPosition({5.0f, 5.0f});
+    nameLabel->setSize({150.0f, 30.0f});
+    nameLabel->getRenderer()->setTextColor(sf::Color::Black);
+    panel->add(nameLabel);
+
+    auto nameEditBox = tgui::EditBox::create();
+    nameEditBox->setSize({200.0f, 30.0f});
+    nameEditBox->setPosition({150.0f, 5.0f});
+    nameEditBox->onTextChange([this](const tgui::String& text){
+        this->route.name = text.toStdString();
+    });
+    panel->add(nameEditBox);
+
     this->canvas = tgui::CanvasSFML::create({800, 400});
-    this->canvas->setPosition({10, 90});
-    this->_data->gui.add(this->canvas);
+    this->canvas->setPosition({5.0f, 40.0f});
+    panel->add(this->canvas);
 
     this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this] { this->_data->states.remove_state(); });
 
     this->_data->gui.get<tgui::Button>("select_button")->onPress([this] {
-        if (this->new_path.empty())
+        if (this->route.route.empty())
         {
             auto messageBox = tgui::MessageBox::create();
             messageBox->setTitle("Warning");
@@ -41,7 +62,7 @@ void RouteSelect::init_state()
         }
         else
         {
-            this->_data->paths.push_back(this->new_path);
+            this->_data->routes.push_back(this->route);
             this->_data->states.remove_state();
         }
     });
@@ -250,10 +271,10 @@ void RouteSelect::draw_lines()
         this->canvas->draw(line, 2, sf::PrimitiveType::Lines);
     }
 
-    for (int i = 1; i < new_path.size(); i++)
+    for (int i = 1; i < route.route.size(); i++)
     {
-        auto element = new_path.at(i);
-        auto element2 = new_path.at(i - 1);
+        auto element = route.route.at(i);
+        auto element2 = route.route.at(i - 1);
 
         sf::Vertex ver1;
         ver1.position = sf::Vector2f(element->get_x(), element->get_y());
@@ -270,9 +291,9 @@ void RouteSelect::draw_lines()
 
 bool RouteSelect::add_to_path(std::shared_ptr<VisualElement> visual_element)
 {
-    if (new_path.empty())
+    if (route.route.empty())
     {
-        new_path.push_back(visual_element);
+        route.route.push_back(visual_element);
         return true;
     }
 
@@ -281,7 +302,7 @@ bool RouteSelect::add_to_path(std::shared_ptr<VisualElement> visual_element)
     for (auto element : this->_data->city.get_streets())
     {
         if (element->get_tgt_node()->get_info()->get_id() == visual_element->get_id() &&
-            element->get_src_node()->get_info()->get_id() == new_path.back()->get_id())
+            element->get_src_node()->get_info()->get_id() == route.route.back()->get_id())
         {
             connected = true;
         }
@@ -289,7 +310,7 @@ bool RouteSelect::add_to_path(std::shared_ptr<VisualElement> visual_element)
 
     if (connected)
     {
-        new_path.push_back(visual_element);
+        route.route.push_back(visual_element);
     }
     else
     {

@@ -153,8 +153,8 @@ void Game::init_variables()
     SimulationInfo simulation(&bus_sim, &driver_sim, path);
     SimulationInfo simulation2(&bus_sim2, &driver_sim2, path2);
 
-    this->_data->paths.push_back(simulation.elements_path);
-    this->_data->paths.push_back(simulation2.elements_path);
+    this->_data->routes.push_back(Route("Route 1", simulation.elements_path));
+    this->_data->routes.push_back(Route("Route 2", simulation2.elements_path));
 
     this->_data->city.update();
     this->_data->city.update_passengers();

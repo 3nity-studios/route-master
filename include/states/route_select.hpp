@@ -26,7 +26,7 @@ class RouteSelect : public Engine::State
     GameDataRef _data;
     std::list<std::pair<sf::Sprite, std::shared_ptr<VisualElement>>> visual_elements;
     sf::Texture map_icons_texture;
-    std::vector<std::shared_ptr<VisualElement>> new_path;
+    Route route;
     bool sprite_pressed;
     tgui::CanvasSFML::Ptr canvas;
 
