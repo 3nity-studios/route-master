@@ -33,6 +33,7 @@ class SimulationState : public Engine::State
     void resume_state() override;
     void pause_state() override;
     void add_simulation_info(SimulationInfo _simulation_info);
+    void manage_collisions(SimulationInfo &info, int i);
 
     void set_simulation_info(std::vector<SimulationInfo> _simulation_info);
     std::vector<SimulationInfo> get_simulation_info();

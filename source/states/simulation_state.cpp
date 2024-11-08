@@ -370,6 +370,8 @@ void SimulationState::update_bus()
         return;
     }
 
+    int i = 0; 
+
     for (auto &info : this->_data->simulation_info)
     {
         if (info.route_completed)
@@ -377,6 +379,7 @@ void SimulationState::update_bus()
             info.employee->set_in_route(false);
             info.bus->set_in_route(false);
             status = "Route completed";
+            i++;
             continue;
         }
 
@@ -427,6 +430,10 @@ void SimulationState::update_bus()
             info.projection_bus_speed = sf::Vector2f((stop2->get_x() - stop1->get_x()) / (time.second * 60.f), (stop2->get_y() - stop1->get_y()) / (time.second * 60.f));
             status = "Travelling";
         }
+
+        manage_collisions(info, i);
+
+        i++;
 
         info.projection_bus.move(info.projection_bus_speed);
     }
@@ -480,6 +487,31 @@ void SimulationState::pause_state()
 void SimulationState::add_simulation_info(SimulationInfo _simulation_info)
 {
     this->_data->simulation_info.push_back(_simulation_info);
+}
+
+void SimulationState::manage_collisions(SimulationInfo &info, int i)
+{
+    int j = 0; 
+
+    for (auto &info2: this->_data->simulation_info)
+    {
+        if (i == j)
+        {
+            continue; 
+        }
+
+        if (info2.projection_bus.getGlobalBounds().contains(info.calc_vector_tip()))
+        {
+            info.projection_bus_speed = sf::Vector2f(0.f, 0.f);
+            info.projection_clock.stop();
+        }
+        else
+        {
+            info.projection_clock.start();
+        }
+
+        j++;
+    }
 }
 
 SimulationState::~SimulationState()
