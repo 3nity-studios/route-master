@@ -232,7 +232,10 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
 
     for (auto info : this->_data->simulation_info)
     {
-        this->_data->window->draw(info.projection_bus);
+        if (info.isVisible)
+        {
+            this->_data->window->draw(info.projection_bus);
+        }
     }
 
     this->_data->window->draw(layerTwo);
@@ -331,12 +334,15 @@ void SimulationState::init_bus()
 
     for (auto &info : this->_data->simulation_info)
     {
-        info.projection_bus.setTexture(bus_texture);
-        info.projection_bus.setTextureRect(bus_rect);
-        sf::FloatRect bounds = info.projection_bus.getLocalBounds();
-        info.projection_bus.setOrigin(bounds.getCenter());
-        info.projection_bus.setPosition(sf::Vector2f(info.elements_path.front()->get_x() + 35.f, info.elements_path.front()->get_y() + 85.f));
-        info.projection_bus.setScale(sf::Vector2<float>(2.0, 2.0)); // twice cuz tileset rendering in 32x32
+        if (info.time_state.first == -1)
+        {
+            info.projection_bus.setTexture(bus_texture);
+            info.projection_bus.setTextureRect(bus_rect);
+            sf::FloatRect bounds = info.projection_bus.getLocalBounds();
+            info.projection_bus.setOrigin(bounds.getCenter());
+            info.projection_bus.setPosition(sf::Vector2f(info.elements_path.front()->get_x() + 35.f, info.elements_path.front()->get_y() + 85.f));
+            info.projection_bus.setScale(sf::Vector2<float>(2.0, 2.0)); // twice cuz tileset rendering in 32x32
+        }
     }
 }
 
@@ -381,6 +387,13 @@ void SimulationState::update_bus()
             status = "Route completed";
             i++;
             continue;
+        }
+
+        if (!info.isVisible)
+        {
+            i++;
+            check_is_visible(info);
+            continue; 
         }
 
         auto time = info.time_state;
@@ -451,26 +464,24 @@ std::vector<SimulationInfo> SimulationState::get_simulation_info()
 
 void SimulationState::resume_state()
 {
-    sf::IntRect bus_rect(sf::Vector2i(0, 0), sf::Vector2i(48, 32));
-
-    for (auto &info : this->_data->simulation_info)
-    {
-        if (info.time_state.first == -1)
-        {
-            info.projection_bus.setTexture(bus_texture);
-            info.projection_bus.setTextureRect(bus_rect);
-            sf::FloatRect bounds = info.projection_bus.getLocalBounds();
-            info.projection_bus.setOrigin(bounds.getCenter());
-            info.projection_bus.setPosition(sf::Vector2f(info.elements_path.front()->get_x() + 35.f, info.elements_path.front()->get_y() + 85.f));
-            info.projection_bus.setScale(sf::Vector2<float>(2.0, 2.0)); //twice size yadda yadda, why is this code repeated?
-        }
-    }
+    init_bus(); 
 
     simulation_clock.start();
 
+    int i = 0; 
+
     for (auto &info : this->_data->simulation_info)
     {
+        if (i != this->_data->simulation_info.size() - 1)
+        {
+            if (info.projection_bus.getGlobalBounds().findIntersection(this->_data->simulation_info.back().projection_bus.getGlobalBounds()) != std::nullopt)
+            {
+                this->_data->simulation_info.back().isVisible = false; 
+            }
+        }
+       
         info.projection_clock.start();
+        i++;
     }
 }
 
@@ -511,6 +522,17 @@ void SimulationState::manage_collisions(SimulationInfo &info, int i)
         }
 
         j++;
+    }
+}
+
+void SimulationState::check_is_visible(SimulationInfo &info_to_check)
+{
+    for (auto info : this->_data->simulation_info)
+    {
+        if (info.projection_bus.getGlobalBounds().findIntersection(info_to_check.projection_bus.getGlobalBounds()) == std::nullopt)
+        {
+            info_to_check.isVisible = true;
+        }
     }
 }
 
