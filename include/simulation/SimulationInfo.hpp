@@ -15,14 +15,15 @@ struct SimulationInfo
     std::vector<std::shared_ptr<VisualElement>> elements_path;
     std::pair<int, int> time_state;
     int path_index;
-    int previous_time;
     bool next_is_street;
     bool route_completed;
     bool isVisible; 
+    bool have_previous_time; 
     sf::Clock projection_clock;
     sf::Sprite projection_bus;
     sf::Vector2f projection_bus_speed;
     sf::Texture projection_bus_texture;
+    float previous_time; 
 
     std::vector<std::string> track_names;
     std::vector<int> track_times;
@@ -34,4 +35,5 @@ struct SimulationInfo
     void set_path(StreetArcList path); 
     nlohmann::json to_json(); 
     sf::Vector2f calc_vector_tip(); 
+    float get_elapsed_time(); 
 };

@@ -188,7 +188,7 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             simulation_info.passengers_per_stop.push_back({passengers_on, passengers_off});
             simulation_info.projection_clock.restart();
         }
-        else if (simulation_info.projection_clock.getElapsedTime().asSeconds() <= simulation_info.time_state.second)
+        else if (simulation_info.get_elapsed_time() <= simulation_info.time_state.second)
         {
             continue;
         }
@@ -243,6 +243,11 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             simulation_info.next_is_street = true;
             simulation_info.previous_time = current_time;
             simulation_info.projection_clock.restart();
+        }
+
+        if (simulation_info.have_previous_time)
+        {
+            simulation_info.have_previous_time = false; 
         }
     }
 

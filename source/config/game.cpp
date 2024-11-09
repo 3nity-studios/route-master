@@ -75,6 +75,7 @@ void Game::init_variables()
         city_file >> city_json;
         this->_data->city = City(city_json);
         city_file.close();
+        this->_data->city.update_passengers();
     }
     else
     {
@@ -128,6 +129,8 @@ void Game::init_variables()
         this->_data->city.add_street(street9, 10, 11);
         this->_data->city.add_street(street10, 11, 6);
 
+        this->_data->city.update();
+
         this->_data->city.save();
     }
 
@@ -168,9 +171,6 @@ void Game::init_variables()
 
     this->_data->routes.push_back(Route("Route 1", simulation.elements_path));
     this->_data->routes.push_back(Route("Route 2", simulation2.elements_path));
-
-    this->_data->city.update();
-    this->_data->city.update_passengers();
 }
 void Game::init_window()
 {

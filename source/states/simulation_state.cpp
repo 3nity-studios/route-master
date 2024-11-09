@@ -69,6 +69,10 @@ SimulationInfo SimulationState::simulation_info_from_json(nlohmann::json j)
     simulation_info.path_index = j["path_index"];
     simulation_info.next_is_street = j["next_is_street"];
     simulation_info.route_completed =  j["route_completed"]; 
+    simulation_info.have_previous_time = j["have_previous_time"];
+    simulation_info.previous_time = j["previous_time"];
+    simulation_info.isVisible = j["isVisible"];
+    simulation_info.projection_bus.setPosition(sf::Vector2f(j["position_x"], j["position_y"]));
 
     for (auto time : j["times"])
     {
@@ -85,13 +89,6 @@ SimulationInfo SimulationState::simulation_info_from_json(nlohmann::json j)
     {
         passengers.second = j["passengers_stop_second"].at(i);
         i++;
-    }
-
-    if(!simulation_info.next_is_street && !simulation_info.route_completed)
-    {
-        simulation_info.path_index--;
-        simulation_info.track_times.pop_back();
-        simulation_info.time_state = std::make_pair<int, int>(0,0); 
     }
 
     simulation_info.projection_clock.restart();
@@ -438,13 +435,16 @@ void SimulationState::init_bus()
 
     for (auto &info : this->_data->simulation_info)
     {
-        if (info.time_state.first == -1)
+        if (info.time_state.first == -1 || info.have_previous_time)
         {
             info.projection_bus.setTexture(bus_texture);
             info.projection_bus.setTextureRect(bus_rect);
             sf::FloatRect bounds = info.projection_bus.getLocalBounds();
             info.projection_bus.setOrigin(bounds.getCenter());
-            info.projection_bus.setPosition(sf::Vector2f(info.elements_path.at(info.path_index)->get_x() + 35.f, info.elements_path.at(info.path_index)->get_y() + 85.f));
+            if (info.time_state.first == -1)
+            {
+                info.projection_bus.setPosition(sf::Vector2f(info.elements_path.at(info.path_index)->get_x() + 35.f, info.elements_path.at(info.path_index)->get_y() + 85.f));
+            }
             info.projection_bus.setScale(sf::Vector2<float>(2.0, 2.0)); // twice cuz tileset rendering in 32x32
         }
     }
