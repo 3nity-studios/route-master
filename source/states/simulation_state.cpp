@@ -384,6 +384,8 @@ void SimulationState::update_bus()
         {
             info.employee->set_in_route(false);
             info.bus->set_in_route(false);
+            info.isVisible = false;
+            info.projection_bus.setTextureRect(sf::IntRect(sf::Vector2i(0.f, 0.f), sf::Vector2i(0.f, 0.f)));
             status = "Route completed";
             i++;
             continue;
