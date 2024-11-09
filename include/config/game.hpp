@@ -22,7 +22,7 @@ struct GameData
 
     Player player;
     Store store;
-    std::vector<std::vector<std::shared_ptr<VisualElement>>> paths;
+    std::vector<Route> routes;
     City city;
     std::vector<SimulationInfo> simulation_info; 
 };
