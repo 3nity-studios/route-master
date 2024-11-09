@@ -1,22 +1,22 @@
-#include "states/route_select.hpp"
+#include "states/route_edit_state.hpp"
+#include "states/route_list_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
 #include "engine/input_manager.hpp"
-#include "states/bus_select_state.hpp"
 #include <SFML/Window/Mouse.hpp>
 #include <cmath>
 #include <string>
 
-RouteSelect::RouteSelect(GameDataRef data)
-    : _data(data), map_icons_texture(sf::Image(sf::Vector2u(25, 25), sf::Color::Green)), sprite_pressed(false)
+RouteEditState::RouteEditState(GameDataRef data, Route _route)
+    : _data(data), map_icons_texture(sf::Image(sf::Vector2u(25, 25), sf::Color::Green)), sprite_pressed(false), route(_route)
 {
 }
 
-void RouteSelect::init_state()
+void RouteEditState::init_state()
 {
     tgui::Theme::setDefault("assets/tgui/Kenney.txt");
     this->_data->gui.setWindow(*this->_data->window);
-    this->_data->gui.loadWidgetsFromFile("assets/screens/route_select.txt");
+    this->_data->gui.loadWidgetsFromFile("assets/screens/route_edit.txt");
 
     auto panel = tgui::Panel::create();
     panel->getRenderer()->setBackgroundColor(tgui::Color(217, 217, 217));
@@ -34,6 +34,7 @@ void RouteSelect::init_state()
     auto nameEditBox = tgui::EditBox::create();
     nameEditBox->setSize({200.0f, 30.0f});
     nameEditBox->setPosition({150.0f, 5.0f});
+    nameEditBox->setText(this->route.name);
     nameEditBox->onTextChange([this](const tgui::String& text){
         this->route.name = text.toStdString();
     });
@@ -43,7 +44,10 @@ void RouteSelect::init_state()
     this->canvas->setPosition({5.0f, 40.0f});
     panel->add(this->canvas);
 
-    this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this] { this->_data->states.remove_state(); });
+    this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this]
+    { 
+        this->_data->states.add_state(Engine::StateRef(new RouteListState(this->_data)), true);
+    });
 
     this->_data->gui.get<tgui::Button>("select_button")->onPress([this] {
         if (this->route.route.empty())
@@ -63,7 +67,7 @@ void RouteSelect::init_state()
         else
         {
             this->_data->routes.push_back(this->route);
-            this->_data->states.remove_state();
+            this->_data->states.add_state(Engine::StateRef(new RouteListState(this->_data)), true);
         }
     });
 
@@ -83,7 +87,7 @@ sf::Vector2i previous_mouse_pos;
 /// whether we are dragging or not
 bool is_dragging = false;
 
-void RouteSelect::update_inputs()
+void RouteEditState::update_inputs()
 {
     // Event Polling
     while (const std::optional event = this->_data->window->pollEvent())
@@ -175,12 +179,12 @@ void RouteSelect::update_inputs()
 }
 
 // marks dt to not warn compiler
-void RouteSelect::update_state(float dt __attribute__((unused)))
+void RouteEditState::update_state(float dt __attribute__((unused)))
 {
 }
 
 // marks dt to not warn compiler
-void RouteSelect::draw_state(float dt __attribute__((unused)))
+void RouteEditState::draw_state(float dt __attribute__((unused)))
 {
     // background color
     this->_data->gui.draw();
@@ -200,7 +204,7 @@ void RouteSelect::draw_state(float dt __attribute__((unused)))
     this->canvas->display();
 }
 
-void RouteSelect::init_visual_elements()
+void RouteEditState::init_visual_elements()
 {
     sf::IntRect traffic_light_rect(sf::Vector2i(0, 0), sf::Vector2i(27, 53));
     sf::IntRect bus_stop_rect(sf::Vector2i(44, 10), sf::Vector2i(52, 52));
@@ -253,7 +257,7 @@ float calc_distance1(VisualElement element1, VisualElement element2)
     return sqrt(pow(element1.get_x() - element2.get_x(), 2) + pow(element1.get_y() - element2.get_y(), 2));
 }
 
-void RouteSelect::draw_lines()
+void RouteEditState::draw_lines()
 {
     for (auto element : this->_data->city.get_streets())
     {
@@ -289,7 +293,7 @@ void RouteSelect::draw_lines()
     };
 }
 
-bool RouteSelect::add_to_path(std::shared_ptr<VisualElement> visual_element)
+bool RouteEditState::add_to_path(std::shared_ptr<VisualElement> visual_element)
 {
     if (route.route.empty())
     {
@@ -330,6 +334,6 @@ bool RouteSelect::add_to_path(std::shared_ptr<VisualElement> visual_element)
     return connected;
 }
 
-RouteSelect::~RouteSelect()
+RouteEditState::~RouteEditState()
 {
 }

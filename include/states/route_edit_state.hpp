@@ -11,11 +11,11 @@
 
 #include "engine/tmx_core.hpp"
 
-class RouteSelect : public Engine::State
+class RouteEditState : public Engine::State
 {
   public:
-    RouteSelect(GameDataRef data);
-    ~RouteSelect();
+    RouteEditState(GameDataRef data, Route _route);
+    ~RouteEditState();
 
     void init_state();
     void update_inputs();

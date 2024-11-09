@@ -178,8 +178,6 @@ set(
   ${SRCROOT}/states/main_menu_state.cpp
   ${INCROOT}/states/store_state.hpp
   ${SRCROOT}/states/store_state.cpp
-  ${SRCROOT}/states/bus_select_state.cpp
-  ${SRCROOT}/states/route_select.cpp
   ${INCROOT}/states/map_viewer_state.hpp
   ${SRCROOT}/states/map_viewer_state.cpp
   ${INCROOT}/states/simulation_state.hpp
@@ -189,7 +187,11 @@ set(
   ${INCROOT}/states/bus_improvements_state.hpp
   ${SRCROOT}/states/bus_improvements_state.cpp
   ${INCROOT}/states/bus_select_state.hpp
-  ${INCROOT}/states/route_select.hpp
+  ${SRCROOT}/states/bus_select_state.cpp
+  ${INCROOT}/states/route_edit_state.hpp
+  ${SRCROOT}/states/route_edit_state.cpp
+  ${INCROOT}/states/route_list_state.hpp
+  ${SRCROOT}/states/route_list_state.cpp
   ${INCROOT}/states/management_state.hpp
   ${SRCROOT}/states/management_state.cpp
   ${INCROOT}/states/stats_state.hpp

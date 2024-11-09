@@ -7,7 +7,7 @@
 #include "states/main_menu_state.hpp"
 #include "states/simulation_state.hpp"
 #include "states/store_state.hpp"
-#include "states/route_select.hpp"
+#include "states/route_list_state.hpp"
 #include "states/management_state.hpp"
 #include "states/stats_state.hpp"
 
@@ -78,11 +78,11 @@ void SimulationState::init_state()
     });
     this->gui.add(managementButton);
 
-    auto designRouteButton = tgui::Button::create("Design Route");
+    auto designRouteButton = tgui::Button::create("Routes");
     designRouteButton->setPosition(10, this->_data->window->getSize().y - 5*(buttonHeight + 5));
     designRouteButton->setSize(buttonWidth, buttonHeight);
     designRouteButton->onPress([this] {
-        this->_data->states.add_state(Engine::StateRef(new RouteSelect(this->_data)), false);
+        this->_data->states.add_state(Engine::StateRef(new RouteListState(this->_data)), false);
     });
     this->gui.add(designRouteButton);
 
