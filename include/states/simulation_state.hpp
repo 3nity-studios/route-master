@@ -36,6 +36,9 @@ class SimulationState : public Engine::State
     SimulationInfo simulation_info_from_json(nlohmann::json j);
     void save(); 
     nlohmann::json simulation_info_to_json(); 
+    void manage_collisions(SimulationInfo &info, int i);
+    void check_is_visible(SimulationInfo &info_to_check);
+
 
     void set_simulation_info(std::vector<SimulationInfo> _simulation_info);
     std::vector<SimulationInfo> get_simulation_info();

@@ -2,16 +2,16 @@
 
 #include "config/game.hpp"
 #include "config/global.hpp"
+#include "states/simulation_state.hpp"
 #include "states/state.hpp"
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
-#include "simulation/City.hpp"
 
-class StatsState : public Engine::State
+class RouteListState : public Engine::State
 {
   public:
-    StatsState(GameDataRef data);
-    //~StatsState() = default;
+    RouteListState(GameDataRef data);
+    //~RouteListState() = default;
 
     void init_state();
     void update_inputs();
@@ -20,5 +20,5 @@ class StatsState : public Engine::State
 
   private:
     GameDataRef _data;
-    int current_info;
+    tgui::ScrollablePanel::Ptr create_route_list();
 };

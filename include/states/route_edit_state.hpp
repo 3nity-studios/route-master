@@ -11,11 +11,11 @@
 
 #include "engine/tmx_core.hpp"
 
-class RouteSelect : public Engine::State
+class RouteEditState : public Engine::State
 {
   public:
-    RouteSelect(GameDataRef data);
-    ~RouteSelect();
+    RouteEditState(GameDataRef data, Route &_route);
+    ~RouteEditState();
 
     void init_state();
     void update_inputs();
@@ -24,11 +24,14 @@ class RouteSelect : public Engine::State
 
   private:
     GameDataRef _data;
-    std::list<std::pair<sf::Sprite, std::shared_ptr<VisualElement>>> visual_elements;
+    std::list<std::tuple<sf::Sprite, std::shared_ptr<VisualElement>, bool>> visual_elements;
     sf::Texture map_icons_texture;
-    std::vector<std::shared_ptr<VisualElement>> new_path;
+    Route &route;
     bool sprite_pressed;
+    bool create_new_path; 
     tgui::CanvasSFML::Ptr canvas;
+    Route route_copy;
+    std::vector<std::shared_ptr<VisualElement>> redo_stack;
 
     void init_visual_elements(); 
     void draw_lines();

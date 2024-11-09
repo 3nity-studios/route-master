@@ -169,6 +169,11 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             continue;
         }
 
+        if (!simulation_info.isVisible)
+        {
+            continue;
+        }
+
         auto bus_stop = std::dynamic_pointer_cast<BusStop>(simulation_info.elements_path.at(simulation_info.path_index));
         auto traffic_light = std::dynamic_pointer_cast<TrafficLight>(simulation_info.elements_path.at(simulation_info.path_index));
 
@@ -179,6 +184,7 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             simulation_info.next_is_street = true;
             int passengers_off = simulation_info.bus->leave_passengers(*bus_stop);
             int passengers_on = simulation_info.bus->add_passengers(current_time, *bus_stop);
+            simulation_info.passenger_stop_names.push_back(bus_stop->get_name());
             simulation_info.passengers_per_stop.push_back({passengers_on, passengers_off});
             simulation_info.projection_clock.restart();
         }
@@ -200,9 +206,10 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
                 if (track->get_src_node()->get_info()->get_id() == simulation_info.elements_path.at(simulation_info.path_index)->get_id() && track->get_tgt_node()->get_info()->get_id() == simulation_info.elements_path.at(simulation_info.path_index + 1)->get_id())
                 {
                     simulation_info.time_state = std::make_pair<int, int>(1, track->get_info().get_travel_time());
-                    simulation_info.employee->calc_fatigue(track->get_info().get_distance());
+                    simulation_info.employee->calc_fatigue(track->get_info().get_distance(), track->get_info().get_travel_time());
                     simulation_info.bus->calc_wear(track->get_info().get_distance());
-                    simulation_info.times.push_back(track->get_info().get_travel_time());
+                    simulation_info.track_names.push_back(track->get_info().get_name());
+                    simulation_info.track_times.push_back(track->get_info().get_travel_time());
                     break;
                 }
             }
@@ -219,6 +226,7 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             simulation_info.next_is_street = true;
             int passengers_off = simulation_info.bus->leave_passengers(*bus_stop);
             int passengers_on = simulation_info.bus->add_passengers(current_time, *bus_stop);
+            simulation_info.passenger_stop_names.push_back(bus_stop->get_name());
             simulation_info.passengers_per_stop.push_back({passengers_on, passengers_off});
             simulation_info.projection_clock.restart();
         }

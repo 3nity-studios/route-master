@@ -83,7 +83,8 @@ target_link_libraries(route_master_config
   SFML::System
   Designar::Designar
   tmxlite::tmxlite
-  nlohmann_json::nlohmann_json)
+  nlohmann_json::nlohmann_json
+  route_master::states)
 
 # ---- engine
 
@@ -177,8 +178,6 @@ set(
   ${SRCROOT}/states/main_menu_state.cpp
   ${INCROOT}/states/store_state.hpp
   ${SRCROOT}/states/store_state.cpp
-  ${SRCROOT}/states/bus_select_state.cpp
-  ${SRCROOT}/states/route_select.cpp
   ${INCROOT}/states/map_viewer_state.hpp
   ${SRCROOT}/states/map_viewer_state.cpp
   ${INCROOT}/states/simulation_state.hpp
@@ -188,7 +187,11 @@ set(
   ${INCROOT}/states/bus_improvements_state.hpp
   ${SRCROOT}/states/bus_improvements_state.cpp
   ${INCROOT}/states/bus_select_state.hpp
-  ${INCROOT}/states/route_select.hpp
+  ${SRCROOT}/states/bus_select_state.cpp
+  ${INCROOT}/states/route_edit_state.hpp
+  ${SRCROOT}/states/route_edit_state.cpp
+  ${INCROOT}/states/route_list_state.hpp
+  ${SRCROOT}/states/route_list_state.cpp
   ${INCROOT}/states/management_state.hpp
   ${SRCROOT}/states/management_state.cpp
   ${INCROOT}/states/stats_state.hpp
@@ -207,7 +210,8 @@ target_link_libraries(route_master_states
   tmxlite::tmxlite
   nlohmann_json::nlohmann_json
   route_master::simulation
-  route_master::player)
+  route_master::player
+  route_master::engine)
 
 # ---- platform
 
@@ -264,7 +268,7 @@ set(
   RM_UTILS_SRC
   ${INCROOT}/utils/filesystem.hpp
 )
-add_library(route_master_utils ${RM_STATES_SRC})
+add_library(route_master_utils ${RM_UTILS_SRC})
 add_library(route_master::utils ALIAS route_master_utils)
 target_link_libraries(route_master_utils
   PRIVATE

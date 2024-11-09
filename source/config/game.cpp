@@ -31,7 +31,7 @@ void Game::init_variables()
     }
     else
     {
-        this->_data->player = Player(0, "Player1", 50000);
+        this->_data->player = Player(0, "Player1", 80000);
         this->_data->player.save();
     }
 
@@ -47,17 +47,23 @@ void Game::init_variables()
     else
     {
         this->_data->store = Store();
-        this->_data->store.add_bus_to_inventory(Bus(1, "Bus1", 50, {}, 5, 100, 5, 80, 4, 60, 3, 40, 2), 100, 5);
-        this->_data->store.add_bus_to_inventory(Bus(2, "Bus2", 60, {}, 10, 150, 7, 120, 6, 90, 5, 70, 3), 150, 3);
-        this->_data->store.add_bus_to_inventory(Bus(3, "Bus3", 55, {}, 7, 120, 6, 100, 5, 80, 4, 60, 3), 120, 4);
-        this->_data->store.add_bus_to_inventory(Bus(4, "Bus4", 45, {}, 3, 90, 4, 70, 3, 50, 2, 30, 1), 90, 6);
-        this->_data->store.add_bus_to_inventory(Bus(5, "Bus5", 70, {}, 12, 200, 10, 180, 9, 160, 8, 140, 7), 200, 2);
+        this->_data->store.add_bus_to_inventory(Bus(0, "Encava", 50, {}, 5, 100, 500, 80, 150, 60, 150, 80, 150), 35000, 10);
+        this->_data->store.add_bus_to_inventory(Bus(1, "Gillig Low-Floor", 35, {}, 10, 150, 650, 120, 200, 90, 200, 100, 200), 40000, 5);
+        this->_data->store.add_bus_to_inventory(Bus(2, "Gillig ADA", 55, {}, 7, 120, 800, 100, 300, 80, 300, 150, 300), 58800, 3);
 
-        this->_data->store.add_employee_to_inventory(Employee(1, "John", "Doe", 25, 50, 5, 0), 50, 1);
-        this->_data->store.add_employee_to_inventory(Employee(2, "Jane", "Smith", 30, 60, 7, 1), 60, 2);
-        this->_data->store.add_employee_to_inventory(Employee(3, "Alice", "Johnson", 28, 55, 6, 2), 55, 3);
-        this->_data->store.add_employee_to_inventory(Employee(4, "Bob", "Brown", 35, 70, 10, 3), 70, 1);
-        this->_data->store.add_employee_to_inventory(Employee(5, "Charlie", "Davis", 40, 80, 15, 4), 80, 2);
+        this->_data->store.add_employee_to_inventory(Employee(0, "Jane", "Smith", 30, 20, 7, 1), 500, 1);
+        this->_data->store.add_employee_to_inventory(Employee(1, "Alice", "Johnson", 28, 20, 6, 2), 450, 1);
+        this->_data->store.add_employee_to_inventory(Employee(2, "Bob", "Brown", 35, 70, 20, 3), 500, 1);
+        this->_data->store.add_employee_to_inventory(Employee(3, "Charlie", "Davis", 40, 20, 15, 4), 500, 1);
+        this->_data->store.add_employee_to_inventory(Employee(4, "Abdul", "Qureshi", 32, 20, 8, 5), 500, 1);
+        this->_data->store.add_employee_to_inventory(Employee(5, "Erick", "Moukoko", 29, 20, 7, 6), 500, 1);
+        this->_data->store.add_employee_to_inventory(Employee(6, "Hans", "Schlafzimmer", 45, 20, 12, 7), 500, 1);
+        this->_data->store.add_employee_to_inventory(Employee(7, "Katarina", "Marinkovic", 27, 20, 6, 8), 450, 1);
+        this->_data->store.add_employee_to_inventory(Employee(8, "Nanako", "Miyamoto", 30, 20, 7, 9), 500, 1);
+        this->_data->store.add_employee_to_inventory(Employee(9, "Juliana", "Contreras", 33, 20, 9, 10), 500, 1);
+        this->_data->store.add_employee_to_inventory(Employee(10, "Sofía", "Pérez", 26, 50, 5, 20), 500, 1);
+        this->_data->store.add_employee_to_inventory(Employee(11, "Pedro", "López", 28, 55, 6, 20), 500, 1);
+        this->_data->store.add_employee_to_inventory(Employee(12, "Alejandro", "Muñoz", 31, 47, 8, 13), 500, 1);
 
         this->_data->store.save();
     }
@@ -160,8 +166,8 @@ void Game::init_variables()
     SimulationInfo simulation(&bus_sim, &driver_sim, path);
     SimulationInfo simulation2(&bus_sim2, &driver_sim2, path2);
 
-    this->_data->paths.push_back(simulation.elements_path);
-    this->_data->paths.push_back(simulation2.elements_path);
+    this->_data->routes.push_back(Route("Route 1", simulation.elements_path));
+    this->_data->routes.push_back(Route("Route 2", simulation2.elements_path));
 
     this->_data->city.update();
     this->_data->city.update_passengers();

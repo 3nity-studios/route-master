@@ -98,7 +98,7 @@ tgui::Panel::Ptr BusSelectState::create_selection_panel()
 
     auto info_label = tgui::Label::create();
     info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
-                        new_simulation_info.employee->get_name() + "\nPath: " + std::to_string(selected_path));
+                        new_simulation_info.employee->get_name() + "\nRoute: ");
     info_label->setPosition(5.0f, 5.0f);
     info_label->getRenderer()->setTextColor(tgui::Color::Black);
     panel->add(info_label);
@@ -117,7 +117,7 @@ tgui::Panel::Ptr BusSelectState::create_selection_panel()
     busList->onItemSelect([this, info_label](int index) {
         this->new_simulation_info.bus = &this->_data->player.get_bus(index);
         info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
-                        new_simulation_info.employee->get_name() + "\nPath: " + std::to_string(selected_path));
+                        new_simulation_info.employee->get_name() + "\nRoute: " + this->_data->routes[selected_path].name);
         this->_data->player.get_bus(index).set_in_route(true); 
     });
     horizontalLayout->add(busList);
@@ -133,21 +133,21 @@ tgui::Panel::Ptr BusSelectState::create_selection_panel()
     employeeList->onItemSelect([this, info_label](int index) {
         this->new_simulation_info.employee = &this->_data->player.get_employee(index);
         info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
-                        new_simulation_info.employee->get_name() + "\nPath: " + std::to_string(selected_path));
+                        new_simulation_info.employee->get_name() + "\nRoute: " + this->_data->routes[selected_path].name);
         this->_data->player.get_employee(index).set_in_route(true); 
     });
     horizontalLayout->add(employeeList);
 
     auto pathList = tgui::ListBox::create();
-    for (size_t i = 0; i < this->_data->paths.size(); ++i)
+    for (size_t i = 0; i < this->_data->routes.size(); ++i)
     {
-        pathList->addItem("Path " + std::to_string(i + 1), std::to_string(i));
+        pathList->addItem(this->_data->routes[i].name, std::to_string(i));
     }
     pathList->onItemSelect([this, info_label](int index) {
-        this->new_simulation_info.elements_path = this->_data->paths.at(index);
-        this->selected_path = index + 1;
+        this->new_simulation_info.elements_path = this->_data->routes[index].route;
+        this->selected_path = index;
         info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
-                        new_simulation_info.employee->get_name() + "\nPath: " + std::to_string(selected_path));
+                        new_simulation_info.employee->get_name() + "\nRoute: " + this->_data->routes[selected_path].name);
     });
     horizontalLayout->add(pathList);
 

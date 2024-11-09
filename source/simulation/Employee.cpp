@@ -54,7 +54,7 @@ ushort Employee::get_fatigue() const noexcept
     return fatigue; 
 }
 
-int Employee::get_total_work_hours() const noexcept
+float Employee::get_total_work_hours() const noexcept
 {
     return total_work_hours;
 }
@@ -99,7 +99,7 @@ void Employee::set_fatigue(const ushort& _fatigue)
     fatigue = _fatigue; 
 }
 
-void Employee::set_total_work_hours(const int& time)
+void Employee::set_total_work_hours(const float& time)
 {
     total_work_hours = time;
 }
@@ -109,9 +109,10 @@ void Employee::set_hourly_rate(const int& rate)
     hourly_rate = rate;
 }
 
-void Employee::calc_fatigue(int km)
+void Employee::calc_fatigue(int distance, int time)
 {
-    fatigue = fatigue + (km/2);
+    fatigue += distance / 2;
+    total_work_hours += time / 60.0f;
 }
 
 void Employee::set_in_route(const bool& _in_route)
