@@ -21,6 +21,7 @@ struct SimulationInfo
     int previous_time;
     bool next_is_street;
     bool route_completed;
+    bool isVisible; 
     sf::Clock projection_clock;
     sf::Sprite projection_bus;
     sf::Vector2f projection_bus_speed;
@@ -38,7 +39,6 @@ struct SimulationInfo
     {
         set_path(_path);
     }
-
     void set_path(StreetArcList path)
     {
         elements_path.clear();
@@ -52,6 +52,26 @@ struct SimulationInfo
 
             elements_path.push_back(path.get_last()->get_tgt_node()->get_info());
         }
+    }
+
+    sf::Vector2f calc_vector_tip()
+    {
+        float bus_speed_module = sqrt((projection_bus_speed.x * projection_bus_speed.x) + (projection_bus_speed.y * projection_bus_speed.y));
+
+        sf::Vector2f norm_direction_vector;
+
+        if (bus_speed_module == 0)
+        {
+            norm_direction_vector = sf::Vector2f(0.f, 0.f);
+        }
+        else
+        {
+            norm_direction_vector = projection_bus_speed / bus_speed_module;
+        }
+
+        sf::Vector2f position_vector_tip = projection_bus.getPosition() + (norm_direction_vector * 60.f);
+
+        return position_vector_tip;
     }
 };
 

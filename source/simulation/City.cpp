@@ -170,6 +170,11 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             continue;
         }
 
+        if (!simulation_info.isVisible)
+        {
+            continue;
+        }
+
         auto bus_stop = std::dynamic_pointer_cast<BusStop>(simulation_info.elements_path.at(simulation_info.path_index));
         auto traffic_light = std::dynamic_pointer_cast<TrafficLight>(simulation_info.elements_path.at(simulation_info.path_index));
 
