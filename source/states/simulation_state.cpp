@@ -72,7 +72,7 @@ SimulationInfo SimulationState::simulation_info_from_json(nlohmann::json j)
 
     for (auto time : j["times"])
     {
-        simulation_info.times.push_back(time);
+        simulation_info.track_times.push_back(time);
     }
 
     for (auto passengers : j["passengers_stop_first"])
@@ -90,7 +90,7 @@ SimulationInfo SimulationState::simulation_info_from_json(nlohmann::json j)
     if(!simulation_info.next_is_street && !simulation_info.route_completed)
     {
         simulation_info.path_index--;
-        simulation_info.times.pop_back();
+        simulation_info.track_times.pop_back();
         simulation_info.time_state = std::make_pair<int, int>(0,0); 
     }
 
