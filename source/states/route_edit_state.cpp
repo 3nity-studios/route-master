@@ -7,8 +7,8 @@
 #include <cmath>
 #include <string>
 
-RouteEditState::RouteEditState(GameDataRef data, Route _route)
-    : _data(data), map_icons_texture(sf::Image(sf::Vector2u(25, 25), sf::Color::Green)), sprite_pressed(false), route(_route)
+RouteEditState::RouteEditState(GameDataRef data, Route &_route)
+    : _data(data), map_icons_texture(sf::Image(sf::Vector2u(25, 25), sf::Color::Green)), sprite_pressed(false), route(_route), create_new_path(false)
 {
 }
 
@@ -46,15 +46,31 @@ void RouteEditState::init_state()
 
     this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this]
     { 
+        if (this->create_new_path)
+        {
+            this->_data->routes.pop_back();
+        }
+        else
+        {
+            this->route = route_copy;
+        }
+        
         this->_data->states.add_state(Engine::StateRef(new RouteListState(this->_data)), true);
     });
 
     this->_data->gui.get<tgui::Button>("select_button")->onPress([this] {
-        if (this->route.route.empty())
+        if (this->route.name == "" || this->route.route.empty())
         {
             auto messageBox = tgui::MessageBox::create();
             messageBox->setTitle("Warning");
-            messageBox->setText("The path is empty");
+            if (this->route.name == "")
+            {
+                messageBox->setText("Name cannot be empty");
+            }
+            else
+            {
+                messageBox->setText("The path is empty");
+            }
             messageBox->addButton("OK");
             messageBox->setPosition(this->_data->window->getSize().x / 2 - 200.0f,
                                     this->_data->window->getSize().y / 2 - 50.0f);
@@ -66,7 +82,6 @@ void RouteEditState::init_state()
         }
         else
         {
-            this->_data->routes.push_back(this->route);
             this->_data->states.add_state(Engine::StateRef(new RouteListState(this->_data)), true);
         }
     });
@@ -78,6 +93,13 @@ void RouteEditState::init_state()
 
     sf::View view(sf::FloatRect({0.f, 0.f}, {800.f, 600.f}));
     this->canvas->setView(view);
+
+    route_copy = route; 
+
+    if (route.route.empty())
+    {
+        create_new_path = true; 
+    }
 
     init_visual_elements();
 }
@@ -106,12 +128,13 @@ void RouteEditState::update_inputs()
             {
                 for (auto &element : visual_elements)
                 {
-                    if (this->_data->inputs.is_sprite_clicked(element.first, sf::Mouse::Button::Left, *this->_data->window, this->canvas->getRenderTexture()))
+                    if (this->_data->inputs.is_sprite_clicked(std::get<0>(element), sf::Mouse::Button::Left, *this->_data->window, this->canvas->getRenderTexture()))
                     {
                         // std::cout << "Detected a click on sprite at " << sf::Mouse::getPosition(*this->_data->window).x  << ", " << sf::Mouse::getPosition(*this->_data->window).y << std::endl;
-                        if (add_to_path(element.second))
+                        if (add_to_path(std::get<1>(element)))
                         {
-                            element.first.setColor(sf::Color(255, 255, 255));
+                            std::get<0>(element).setColor(sf::Color(255, 255, 255));
+                            std::get<2>(element) = true; 
                         }
 
                         break;
@@ -151,6 +174,22 @@ void RouteEditState::update_inputs()
             {
                 this->_data->states.remove_state();
                 break;
+            }
+            if (keyPress->code == sf::Keyboard::Key::Z)
+            {
+                if (!route.route.empty())
+                {
+                    auto back = route.route.back();
+                    route.route.pop_back();
+                    for (auto &visual_element : visual_elements)
+                    {
+                        if (back->get_id() == std::get<1>(visual_element)->get_id())
+                        {
+                            std::get<2>(visual_element) = false;
+                            break;
+                        }
+                    }
+                }
             }
         }
 
@@ -195,7 +234,7 @@ void RouteEditState::draw_state(float dt __attribute__((unused)))
 
     for (auto visual_element : visual_elements)
     {
-        this->canvas->draw(visual_element.first);
+        this->canvas->draw(std::get<0>(visual_element));
         // std::cout << "Created sprite at " << visual_element.first.getPosition().x << ", " << visual_element.first.getPosition().y << std::endl;
     }
 
@@ -224,8 +263,8 @@ void RouteEditState::init_visual_elements()
             sprite.setOrigin(sprite.getLocalBounds().getCenter());
             sprite.setColor(sf::Color(75, 73, 71));
 
-            visual_elements.push_back(std::make_pair<sf::Sprite, std::shared_ptr<VisualElement>>(
-                std::move(sprite), std::move(visual_element_pointer)));
+            visual_elements.push_back(std::make_tuple<sf::Sprite, std::shared_ptr<VisualElement>, bool>(
+                std::move(sprite), std::move(visual_element_pointer), false));
         }
         else if (traffic_light)
         {
@@ -235,8 +274,8 @@ void RouteEditState::init_visual_elements()
             sprite.setOrigin(sprite.getLocalBounds().getCenter());
             sprite.setColor(sf::Color(75, 73, 71));
 
-            visual_elements.push_back(std::make_pair<sf::Sprite, std::shared_ptr<VisualElement>>(
-                std::move(sprite), std::move(visual_element_pointer)));
+            visual_elements.push_back(std::make_tuple<sf::Sprite, std::shared_ptr<VisualElement>, bool>(
+                std::move(sprite), std::move(visual_element_pointer), false));
         }
         else
         {
@@ -246,15 +285,21 @@ void RouteEditState::init_visual_elements()
             sprite.setOrigin(sprite.getLocalBounds().getCenter());
             sprite.setColor(sf::Color(75, 73, 71));
 
-            visual_elements.push_back(std::make_pair<sf::Sprite, std::shared_ptr<VisualElement>>(
-                std::move(sprite), std::move(visual_element_pointer)));
+            visual_elements.push_back(std::make_tuple<sf::Sprite, std::shared_ptr<VisualElement>, bool>(
+                std::move(sprite), std::move(visual_element_pointer), false));
+        }
+
+        if (!route.route.empty())
+        {
+            for (auto &visual_element2 : route.route)
+            {
+                if (visual_element2->get_id() == std::get<1>(visual_elements.back())->get_id())
+                {
+                    std::get<2>(visual_elements.back()) = true; 
+                }
+            }
         }
     }
-}
-
-float calc_distance1(VisualElement element1, VisualElement element2)
-{
-    return sqrt(pow(element1.get_x() - element2.get_x(), 2) + pow(element1.get_y() - element2.get_y(), 2));
 }
 
 void RouteEditState::draw_lines()
@@ -291,6 +336,18 @@ void RouteEditState::draw_lines()
 
         this->canvas->draw(line, 2, sf::PrimitiveType::Lines);
     };
+
+    for (auto &visual_element : visual_elements)
+    {
+        if (std::get<2>(visual_element))
+        {
+            std::get<0>(visual_element).setColor(sf::Color(255, 255, 255));
+        }
+        else
+        {
+            std::get<0>(visual_element).setColor(sf::Color(75, 73, 71));
+        }
+    }
 }
 
 bool RouteEditState::add_to_path(std::shared_ptr<VisualElement> visual_element)

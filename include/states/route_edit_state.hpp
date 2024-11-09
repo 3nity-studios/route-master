@@ -14,7 +14,7 @@
 class RouteEditState : public Engine::State
 {
   public:
-    RouteEditState(GameDataRef data, Route _route);
+    RouteEditState(GameDataRef data, Route &_route);
     ~RouteEditState();
 
     void init_state();
@@ -24,11 +24,13 @@ class RouteEditState : public Engine::State
 
   private:
     GameDataRef _data;
-    std::list<std::pair<sf::Sprite, std::shared_ptr<VisualElement>>> visual_elements;
+    std::list<std::tuple<sf::Sprite, std::shared_ptr<VisualElement>, bool>> visual_elements;
     sf::Texture map_icons_texture;
-    Route route;
+    Route &route;
     bool sprite_pressed;
+    bool create_new_path; 
     tgui::CanvasSFML::Ptr canvas;
+    Route route_copy; 
 
     void init_visual_elements(); 
     void draw_lines();

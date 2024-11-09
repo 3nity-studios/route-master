@@ -26,7 +26,8 @@ void RouteListState::init_state()
     newRouteButton->setPosition({600, 90});
     newRouteButton->setText("New Route");
     newRouteButton->onPress([this] { 
-        this->_data->states.add_state(Engine::StateRef(new RouteEditState(this->_data, Route())), true);
+        this->_data->routes.push_back(Route());
+        this->_data->states.add_state(Engine::StateRef(new RouteEditState(this->_data, this->_data->routes.back())), true);
     });
     this->_data->gui.add(newRouteButton);
     this->_data->gui.add(create_route_list());
@@ -123,7 +124,7 @@ tgui::ScrollablePanel::Ptr RouteListState::create_route_list()
         auto editButton = tgui::Button::create();
         editButton->setSize({120, 25});
         editButton->setText("Edit");
-        editButton->onPress([this, route] { 
+        editButton->onPress([this, &route] { 
             this->_data->states.add_state(Engine::StateRef(new RouteEditState(this->_data, route)), true);
         });
         grid->addWidget(editButton, i+1, 3);
