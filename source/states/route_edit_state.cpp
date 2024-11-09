@@ -1,14 +1,15 @@
 #include "states/route_edit_state.hpp"
-#include "states/route_list_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
 #include "engine/input_manager.hpp"
+#include "states/route_list_state.hpp"
 #include <SFML/Window/Mouse.hpp>
 #include <cmath>
 #include <string>
 
 RouteEditState::RouteEditState(GameDataRef data, Route &_route)
-    : _data(data), map_icons_texture(sf::Image(sf::Vector2u(25, 25), sf::Color::Green)), sprite_pressed(false), route(_route), create_new_path(false)
+    : _data(data), map_icons_texture(sf::Image(sf::Vector2u(25, 25), sf::Color::Green)), sprite_pressed(false),
+      route(_route), create_new_path(false)
 {
 }
 
@@ -35,17 +36,59 @@ void RouteEditState::init_state()
     nameEditBox->setSize({200.0f, 30.0f});
     nameEditBox->setPosition({150.0f, 5.0f});
     nameEditBox->setText(this->route.name);
-    nameEditBox->onTextChange([this](const tgui::String& text){
-        this->route.name = text.toStdString();
-    });
+    nameEditBox->onTextChange([this](const tgui::String &text) { this->route.name = text.toStdString(); });
     panel->add(nameEditBox);
+
+    auto undoButton = tgui::Button::create();
+    undoButton->setText("Undo");
+    undoButton->setSize({100.0f, 30.0f});
+    undoButton->setPosition({360.0f, 5.0f});
+    undoButton->onPress([this] {
+        if (!route.route.empty())
+        {
+            auto back = route.route.back();
+            route.route.pop_back();
+            redo_stack.push_back(back);
+            for (auto &visual_element : visual_elements)
+            {
+                if (back->get_id() == std::get<1>(visual_element)->get_id())
+                {
+                    std::get<2>(visual_element) = false;
+                    break;
+                }
+            }
+        }
+    });
+    panel->add(undoButton);
+
+    auto redoButton = tgui::Button::create();
+    redoButton->setText("Redo");
+    redoButton->setSize({100.0f, 30.0f});
+    redoButton->setPosition({470.0f, 5.0f});
+    redoButton->onPress([this] {
+        if (!redo_stack.empty())
+        {
+            auto back = redo_stack.back();
+            redo_stack.pop_back();
+            add_to_path(back);
+            route.route.push_back(back);
+            for (auto &visual_element : visual_elements)
+            {
+                if (back->get_id() == std::get<1>(visual_element)->get_id())
+                {
+                    std::get<2>(visual_element) = true;
+                    break;
+                }
+            }
+        }
+    });
+    panel->add(redoButton);
 
     this->canvas = tgui::CanvasSFML::create({800, 400});
     this->canvas->setPosition({5.0f, 40.0f});
     panel->add(this->canvas);
 
-    this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this]
-    { 
+    this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this] {
         if (this->create_new_path)
         {
             this->_data->routes.pop_back();
@@ -54,7 +97,7 @@ void RouteEditState::init_state()
         {
             this->route = route_copy;
         }
-        
+
         this->_data->states.add_state(Engine::StateRef(new RouteListState(this->_data)), true);
     });
 
@@ -94,11 +137,11 @@ void RouteEditState::init_state()
     sf::View view(sf::FloatRect({0.f, 0.f}, {800.f, 600.f}));
     this->canvas->setView(view);
 
-    route_copy = route; 
+    route_copy = route;
 
     if (route.route.empty())
     {
-        create_new_path = true; 
+        create_new_path = true;
     }
 
     init_visual_elements();
@@ -128,13 +171,16 @@ void RouteEditState::update_inputs()
             {
                 for (auto &element : visual_elements)
                 {
-                    if (this->_data->inputs.is_sprite_clicked(std::get<0>(element), sf::Mouse::Button::Left, *this->_data->window, this->canvas->getRenderTexture()))
+                    if (this->_data->inputs.is_sprite_clicked(std::get<0>(element), sf::Mouse::Button::Left,
+                                                              *this->_data->window, this->canvas->getRenderTexture()))
                     {
-                        // std::cout << "Detected a click on sprite at " << sf::Mouse::getPosition(*this->_data->window).x  << ", " << sf::Mouse::getPosition(*this->_data->window).y << std::endl;
+                        // std::cout << "Detected a click on sprite at " <<
+                        // sf::Mouse::getPosition(*this->_data->window).x  << ", " <<
+                        // sf::Mouse::getPosition(*this->_data->window).y << std::endl;
                         if (add_to_path(std::get<1>(element)))
                         {
                             std::get<0>(element).setColor(sf::Color(255, 255, 255));
-                            std::get<2>(element) = true; 
+                            std::get<2>(element) = true;
                         }
 
                         break;
@@ -169,18 +215,38 @@ void RouteEditState::update_inputs()
 
         if (const auto *keyPress = event->getIf<sf::Event::KeyPressed>())
         {
-            // When the enter key is pressed, switch to the next handler type
             if (keyPress->code == sf::Keyboard::Key::Escape)
             {
                 this->_data->states.remove_state();
                 break;
             }
-            if (keyPress->code == sf::Keyboard::Key::Z)
+            // When Ctrl+Shift+Z is pressed, redo the last undone route addition
+            if (keyPress->code == sf::Keyboard::Key::Z && keyPress->control && keyPress->shift)
+            {
+                if (!redo_stack.empty())
+                {
+                    auto back = redo_stack.back();
+                    redo_stack.pop_back();
+                    add_to_path(back);
+                    route.route.push_back(back);
+                    for (auto &visual_element : visual_elements)
+                    {
+                        if (back->get_id() == std::get<1>(visual_element)->get_id())
+                        {
+                            std::get<2>(visual_element) = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            // When Ctrl+Z is pressed, undo the last route addition
+            else if (keyPress->code == sf::Keyboard::Key::Z && keyPress->control)
             {
                 if (!route.route.empty())
                 {
                     auto back = route.route.back();
                     route.route.pop_back();
+                    redo_stack.push_back(back);
                     for (auto &visual_element : visual_elements)
                     {
                         if (back->get_id() == std::get<1>(visual_element)->get_id())
@@ -204,7 +270,8 @@ void RouteEditState::update_inputs()
                 sf::RenderTarget &target{this->canvas->getRenderTexture()};
 
                 // calculate how far mouse has moved in view
-                const auto delta = target.mapPixelToCoords(mouse_position) - target.mapPixelToCoords(previous_mouse_pos);
+                const auto delta =
+                    target.mapPixelToCoords(mouse_position) - target.mapPixelToCoords(previous_mouse_pos);
                 // apply negatively to view
                 auto view = target.getView();
                 view.move(-delta);
@@ -235,7 +302,8 @@ void RouteEditState::draw_state(float dt __attribute__((unused)))
     for (auto visual_element : visual_elements)
     {
         this->canvas->draw(std::get<0>(visual_element));
-        // std::cout << "Created sprite at " << visual_element.first.getPosition().x << ", " << visual_element.first.getPosition().y << std::endl;
+        // std::cout << "Created sprite at " << visual_element.first.getPosition().x << ", " <<
+        // visual_element.first.getPosition().y << std::endl;
     }
 
     // Displays rendered objects
@@ -295,7 +363,7 @@ void RouteEditState::init_visual_elements()
             {
                 if (visual_element2->get_id() == std::get<1>(visual_elements.back())->get_id())
                 {
-                    std::get<2>(visual_elements.back()) = true; 
+                    std::get<2>(visual_elements.back()) = true;
                 }
             }
         }

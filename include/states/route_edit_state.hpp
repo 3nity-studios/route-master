@@ -30,7 +30,8 @@ class RouteEditState : public Engine::State
     bool sprite_pressed;
     bool create_new_path; 
     tgui::CanvasSFML::Ptr canvas;
-    Route route_copy; 
+    Route route_copy;
+    std::vector<std::shared_ptr<VisualElement>> redo_stack;
 
     void init_visual_elements(); 
     void draw_lines();
