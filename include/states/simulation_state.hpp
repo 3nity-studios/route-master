@@ -56,4 +56,5 @@ class SimulationState : public Engine::State
     int actual_stop;
     int current_time;
     tgui::Gui gui; 
+    tmx::Map _map;
 };

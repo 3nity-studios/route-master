@@ -10,6 +10,7 @@
 #include "states/route_list_state.hpp"
 #include "states/management_state.hpp"
 #include "states/stats_state.hpp"
+#include "utils/calc_view.hpp"
 
 SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), person_texture (sf::Image(sf::Vector2u(100, 50), sf::Color::White))
 {
@@ -139,8 +140,8 @@ void SimulationState::init_state()
         throw GameException("Couldn't find file: assets/img/person.png");
     }
 
-    sf::View view(sf::FloatRect({0.f, 0.f}, {1000.f, 600.f}));
-    this->_data->window->setView(view);
+    sf::View view;
+    util::calc_view(*this->_data->window, view);
 
     int buttonHeight = 35;
     int buttonWidth = 150;
@@ -196,6 +197,8 @@ void SimulationState::init_state()
 
     init_bus_stops();
     init_bus();
+
+    this->_map.load("assets/maps/demo.tmx");
 }
 
 /// the last known mouse position
@@ -283,18 +286,30 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     // background color
     this->_data->window->clear(sf::Color::Black);
 
-    tmx::Map map;
-    map.load("assets/maps/demo.tmx");
+    static MapLayer layerZero(_map, 0);
+    static MapLayer layerOne(_map, 1);
+    static MapLayer layerTwo(_map, 2);
+    static MapLayer layerThree(_map, 3);
+    static MapLayer layerFour(_map, 4);
+    static MapLayer layerFive(_map, 5);
+    static MapLayer layerSix(_map, 6);
+    static MapLayer layerSeven(_map, 7);
+    static MapLayer layerEight(_map, 8);
+    static MapLayer layerNine(_map, 9);
 
-    MapLayer layerZero(map, 0);
-    MapLayer layerOne(map, 1);
-    MapLayer layerTwo(map, 2);
-
-    sf::Clock globalClock;
-    sf::Time duration = globalClock.restart();
-    layerZero.update(duration);
-    this->_data->window->draw(layerZero);
-    this->_data->window->draw(layerOne);
+    // sf::Clock globalClock;
+    // sf::Time duration = globalClock.restart();
+    // layerZero.update(duration);
+    layerZero.draw(*this->_data->window, sf::RenderStates::Default);
+    layerOne.draw(*this->_data->window, sf::RenderStates::Default);
+    layerTwo.draw(*this->_data->window, sf::RenderStates::Default);
+    layerThree.draw(*this->_data->window, sf::RenderStates::Default);
+    layerFour.draw(*this->_data->window, sf::RenderStates::Default);
+    layerFive.draw(*this->_data->window, sf::RenderStates::Default);
+    layerSix.draw(*this->_data->window, sf::RenderStates::Default);
+    layerSeven.draw(*this->_data->window, sf::RenderStates::Default);
+    layerEight.draw(*this->_data->window, sf::RenderStates::Default);
+    layerNine.draw(*this->_data->window, sf::RenderStates::Default);
 
     // write text
     sf::Font font("assets/fonts/joystix.ttf");
@@ -339,7 +354,6 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
         }
     }
 
-    this->_data->window->draw(layerTwo);
 
     this->gui.draw();
     // Displays rendered objects
