@@ -1,7 +1,6 @@
-#include "config/game.hpp"
-#include "player/Achievements.hpp"
-#include <functional>
-#include <string>
+#pragma once
+
+#include "player/Achievement.hpp"
 #include <vector>
 
 class AchievementManager
@@ -10,6 +9,7 @@ class AchievementManager
     std::vector<Achievement> achievements;
 
   public:
+    std::vector<Achievement> get_achievements() noexcept;
     void add_achievement(const Achievement &achievement);
-    void update(const GameData& gameData);
+    void update(Player &player, Store &store, std::vector<SimulationInfo> &simulation_info);
 };

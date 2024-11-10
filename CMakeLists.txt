@@ -152,12 +152,12 @@ set(
   ${INCROOT}/player/Player.hpp
   ${INCROOT}/player/Store.hpp
   ${INCROOT}/player/Item.hpp
-  ${INCROOT}/player/Achievements.hpp
+  ${INCROOT}/player/Achievement.hpp
   ${INCROOT}/player/AchievementManager.hpp
   ${SRCROOT}/player/Player.cpp
   ${SRCROOT}/player/Store.cpp
   ${SRCROOT}/player/Item.cpp
-  ${SRCROOT}/player/Achievements.cpp
+  ${SRCROOT}/player/Achievement.cpp
   ${SRCROOT}/player/AchievementManager.cpp
 )
 add_library(route_master_player ${RM_PLAYER_SRC})

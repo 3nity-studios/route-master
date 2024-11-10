@@ -10,6 +10,7 @@
 
 #include "player/Player.hpp"
 #include "player/Store.hpp"
+#include "player/AchievementManager.hpp"
 #include "simulation/City.hpp"
 
 struct GameData
@@ -24,10 +25,12 @@ struct GameData
     Store store;
     std::vector<Route> routes;
     City city;
-    std::vector<SimulationInfo> simulation_info; 
+    std::vector<SimulationInfo> simulation_info;
+    AchievementManager achievement_manager;
 };
 
 typedef std::shared_ptr<GameData> GameDataRef;
+
 class Game
 {
   private:
