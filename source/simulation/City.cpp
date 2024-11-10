@@ -17,20 +17,19 @@ City::City(nlohmann::json j)
     name = j["name"];
     current_time = j["current_time"];
 
-    for (auto visual_element : j["visual_elements"])
+    for (auto bus_stop : j["visual_elements_bus"])
     {
-        if (visual_element["type"] == "BusStop")
-        {
-            city_map.insert_node(std::make_shared<BusStop>(visual_element));
-        }
-        else if (visual_element["type"] == "TrafficLight")
-        {
-            city_map.insert_node(std::make_shared<TrafficLight>(visual_element));
-        }
-        else
-        {
-            city_map.insert_node(std::make_shared<VisualElement>(visual_element));
-        }
+        city_map.insert_node(std::make_shared<BusStop>(bus_stop));
+    }
+
+    for (auto light : j["visual_elements_light"])
+    {
+        city_map.insert_node(std::make_shared<TrafficLight>(light));
+    }
+
+    for (auto curve : j["visual_elements_curve"])
+    {
+        city_map.insert_node(std::make_shared<VisualElement>(curve));
     }
 
     for (auto street : j["streets"])
@@ -189,7 +188,7 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             simulation_info.passengers_per_stop.push_back({passengers_on, passengers_off});
             simulation_info.projection_clock.restart();
         }
-        else if (simulation_info.projection_clock.getElapsedTime().asSeconds() <= simulation_info.time_state.second)
+        else if (simulation_info.get_elapsed_time() <= simulation_info.time_state.second)
         {
             continue;
         }
@@ -245,6 +244,11 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             simulation_info.previous_time = current_time;
             simulation_info.projection_clock.restart();
         }
+
+        if (simulation_info.have_previous_time)
+        {
+            simulation_info.have_previous_time = false; 
+        }
     }
 
     update_passengers();
@@ -288,21 +292,48 @@ nlohmann::json City::to_json()
     j["name"] = name;
     j["current_time"] = current_time;
 
-    nlohmann::json visual_elements_json = nlohmann::json::array();
+    nlohmann::json visual_elements_bus_json = nlohmann::json::array();
+    nlohmann::json visual_elements_curve_json = nlohmann::json::array();
+    nlohmann::json visual_elements_light_json = nlohmann::json::array();
     for (auto visual_element : get_visual_elements())
     {
-        visual_elements_json.push_back(visual_element->get_info()->to_json());
+        auto bus_stop = std::dynamic_pointer_cast<BusStop>(visual_element->get_info());
+        auto light = std::dynamic_pointer_cast<TrafficLight>(visual_element->get_info());
+
+        if (bus_stop)
+        {
+            visual_elements_bus_json.push_back(bus_stop->to_json());
+        }
+        else if (light)
+        {
+            visual_elements_light_json.push_back(light->to_json());
+        }
+        else
+        {
+            visual_elements_curve_json.push_back(visual_element->get_info()->to_json()); 
+        }
     }
 
-    j["visual_elements"] = visual_elements_json;
+    j["visual_elements_bus"] = visual_elements_bus_json;
+    j["visual_elements_light"] = visual_elements_light_json;
+    j["visual_elements_curve"] = visual_elements_curve_json;
 
     nlohmann::json streets_json = nlohmann::json::array();
     for (auto street : get_streets())
     {
         streets_json.push_back(street->get_info().to_json());
+        streets_json.back()["src_id"] = (street->get_src_node()->get_info()->get_id());
+        streets_json.back()["tgt_id"] = (street->get_tgt_node()->get_info()->get_id());
     }
 
     j["streets"] = streets_json;
 
     return j;
+}
+
+void City::save()
+{
+    std::ofstream city_file("data/city.json");
+    city_file << to_json().dump(4);
+    city_file.close();
 }

@@ -120,6 +120,8 @@ set(
   ${INCROOT}/simulation/BusStop.hpp
   ${INCROOT}/simulation/TrafficLight.hpp
   ${INCROOT}/simulation/City.hpp
+  ${INCROOT}/simulation/Route.hpp
+  ${INCROOT}/simulation/SimulationInfo.hpp
   ${INCROOT}/simulation/Employee.hpp
   ${INCROOT}/simulation/Passenger.hpp
   ${INCROOT}/simulation/Street.hpp
@@ -128,6 +130,8 @@ set(
   ${SRCROOT}/simulation/BusStop.cpp
   ${SRCROOT}/simulation/TrafficLight.cpp
   ${SRCROOT}/simulation/City.cpp
+  ${SRCROOT}/simulation/Route.cpp
+  ${SRCROOT}/simulation/SimulationInfo.cpp
   ${SRCROOT}/simulation/Employee.cpp
   ${SRCROOT}/simulation/Passenger.cpp
   ${SRCROOT}/simulation/Street.cpp
