@@ -281,12 +281,6 @@ MenuBar {
     DistanceToSide                = 5;
 }
 
-ProgressBar {
-    TextureBackground = "Black.png" Part(1, 1, 90, 40) Middle(20, 0) Smooth;
-    TextureFill       = "Black.png" Part(1, 43, 90, 40) Middle(16, 0) Smooth;
-    TextColorFilled   = rgb(250, 250, 250);
-}
-
 RadioButton {
     TextureUnchecked        = "Black.png" Part(219, 137, 32, 32) Smooth;
     TextureChecked          = "Black.png" Part(187, 35, 32, 32) Smooth;
