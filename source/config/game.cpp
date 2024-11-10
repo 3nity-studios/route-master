@@ -75,7 +75,6 @@ void Game::init_variables()
         city_file >> city_json;
         this->_data->city = City(city_json);
         city_file.close();
-        this->_data->city.update_passengers();
     }
     else
     {
@@ -130,8 +129,7 @@ void Game::init_variables()
         this->_data->city.add_street(street10, 11, 6);
 
         this->_data->city.update();
-
-        this->_data->city.save();
+        this->_data->city.update_passengers(); 
     }
 
     StreetArcList path;
