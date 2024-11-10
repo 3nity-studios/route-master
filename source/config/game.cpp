@@ -9,6 +9,7 @@
 
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include "utils/street_factory.hpp"
 
 float calc_distance(VisualElement element1, VisualElement element2)
 {
@@ -106,7 +107,7 @@ void Game::init_variables()
 
         this->_data->city.initialize_bus_stops();
 
-        Street street1(1, "Street1", calc_distance(stop1, stop2), 200.0f, 2.0f, 0.1f, 0.05f);
+        Street street1 = util::StreetFactory(_data, 1, "Street1", 1, 2, 200.0f, 2.0f, 0.1f, 0.05f);
         Street street2(2, "Street2", calc_distance(stop2, stop3), 50.0f, 2.0f, 0.1f, 0.05f);
         Street street3(3, "Street3", calc_distance(stop3, curve1), 100.0f, 2.0f, 0.1f, 0.05f);
         Street street4(4, "Street4", calc_distance(curve1, curve2), 25.0f, 2.0f, 0.1f, 0.05f);
