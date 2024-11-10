@@ -271,6 +271,8 @@ target_link_libraries(route_master_platform
 set(
   RM_UTILS_SRC
   ${INCROOT}/utils/filesystem.hpp
+  ${INCROOT}/utils/street_factory.hpp
+  ${SRCROOT}/utils/street_factory.cpp
 )
 add_library(route_master_utils ${RM_UTILS_SRC})
 add_library(route_master::utils ALIAS route_master_utils)
