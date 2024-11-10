@@ -1,12 +1,12 @@
 #include "simulation/City.hpp"
 
-City::City() : id(0), name(""), current_time(0)
+City::City() : id(0), name(""), current_time_hours(0), current_time_minutes(0)
 {
     //empty
 }
 
-City::City(int _id, std::string _name, Designar::Graph<std::shared_ptr<VisualElement>, Street> _city_map, int _current_time)
-    : id(_id), name(_name), city_map(_city_map), current_time(_current_time)
+City::City(int _id, std::string _name, Designar::Graph<std::shared_ptr<VisualElement>, Street> _city_map, int _current_time_hours)
+    : id(_id), name(_name), city_map(_city_map), current_time_hours(_current_time_hours), current_time_minutes(0)
 {
     //empty
 }
@@ -15,7 +15,6 @@ City::City(nlohmann::json j)
 {
     id = j["id"];
     name = j["name"];
-    current_time = j["current_time"];
 
     for (auto bus_stop : j["visual_elements_bus"])
     {
@@ -128,14 +127,26 @@ void City::initialize_bus_stops()
 
         if (bus_stop)
         {
-            bus_stop->generate_passengers(current_time);
+            bus_stop->generate_passengers();
         }
     }
 }
 
 void City::update()
 {
-    current_time++;
+    current_time_minutes++; 
+
+    if (current_time_minutes == 60)
+    {
+        current_time_minutes = 0;
+        current_time_hours++; 
+    }
+
+    if (current_time_hours == 24)
+    {
+        initialize_bus_stops(); 
+        current_time_hours == 0; 
+    }
 
     for(auto &stop : city_map.nodes())
     {
@@ -143,14 +154,14 @@ void City::update()
 
         if (bus_stop)
         {
-            bus_stop->update(current_time);
+            bus_stop->update(current_time_hours + current_time_minutes/60.f);
         }
 
         auto traffic_light = std::dynamic_pointer_cast<TrafficLight>(stop->get_info());
 
         if (traffic_light)
         {
-            traffic_light->update(current_time);
+            traffic_light->update(current_time_hours + current_time_minutes/60.f);
         }
     }
 
@@ -180,10 +191,9 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
         if (simulation_info.time_state.first == -1)
         {
             simulation_info.time_state = std::make_pair<int, int>(0, simulation_info.bus->get_time_in_bus_stop());
-            simulation_info.previous_time = current_time;
             simulation_info.next_is_street = true;
             int passengers_off = simulation_info.bus->leave_passengers(*bus_stop);
-            int passengers_on = simulation_info.bus->add_passengers(current_time, *bus_stop);
+            int passengers_on = simulation_info.bus->add_passengers(current_time_hours + current_time_minutes/60.f, *bus_stop);
             simulation_info.passenger_stop_names.push_back(bus_stop->get_name());
             simulation_info.passengers_per_stop.push_back({passengers_on, passengers_off});
             simulation_info.projection_clock.restart();
@@ -215,17 +225,15 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             }
 
             simulation_info.next_is_street = false;
-            simulation_info.previous_time = current_time;
             simulation_info.path_index++;
             simulation_info.projection_clock.restart();
         }
         else if (bus_stop)
         {
             simulation_info.time_state = std::make_pair<int, int>(0, simulation_info.bus->get_time_in_bus_stop());
-            simulation_info.previous_time = current_time;
             simulation_info.next_is_street = true;
             int passengers_off = simulation_info.bus->leave_passengers(*bus_stop);
-            int passengers_on = simulation_info.bus->add_passengers(current_time, *bus_stop);
+            int passengers_on = simulation_info.bus->add_passengers(current_time_hours + current_time_minutes/60.f, *bus_stop);
             simulation_info.passenger_stop_names.push_back(bus_stop->get_name());
             simulation_info.passengers_per_stop.push_back({passengers_on, passengers_off});
             simulation_info.projection_clock.restart();
@@ -234,14 +242,12 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
         {
             simulation_info.time_state = std::make_pair<int, int>(2, traffic_light->get_time_to_change());
             simulation_info.next_is_street = true;
-            simulation_info.previous_time = current_time;
             simulation_info.projection_clock.restart();
         }
         else
         {
             simulation_info.time_state = std::make_pair<int, int>(3, 0);
             simulation_info.next_is_street = true;
-            simulation_info.previous_time = current_time;
             simulation_info.projection_clock.restart();
         }
 
@@ -251,6 +257,7 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
         }
     }
 
+    update(); 
     update_passengers();
 }
 
@@ -274,7 +281,7 @@ void City::update_passengers()
 
         if (bus_stop)
         {
-            current_passengers.push_back(bus_stop->get_passenger_list().size());
+            current_passengers.push_back(bus_stop->get_actual_passengers(current_time_hours + current_time_minutes/60.f));
         }
     }
 }
@@ -290,7 +297,6 @@ nlohmann::json City::to_json()
 
     j["id"] = id;
     j["name"] = name;
-    j["current_time"] = current_time;
 
     nlohmann::json visual_elements_bus_json = nlohmann::json::array();
     nlohmann::json visual_elements_curve_json = nlohmann::json::array();

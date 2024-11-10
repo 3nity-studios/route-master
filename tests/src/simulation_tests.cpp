@@ -5,14 +5,14 @@
 TEST_CASE("Passenger generation in BusStop", "[passenger_generation]") {
 
     BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f, 50, 50);
-    bus_stop.generate_passengers(0);
+    bus_stop.generate_passengers();
     REQUIRE(bus_stop.get_passenger_list().size() >= 0);
 }
 
 TEST_CASE("Get passengers on bus", "[get_passengers_on_bus]") {
 
     BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f, 50, 50);
-    bus_stop.generate_passengers(0);
+    bus_stop.generate_passengers();
 
     Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
     bus.add_passengers(3, bus_stop);
@@ -33,7 +33,7 @@ TEST_CASE("Get passengers on bus", "[get_passengers_on_bus]") {
 TEST_CASE("Passengers leave bus stop", "[passengers_leave_stop]") {
 
     BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f, 50, 50);
-    bus_stop.generate_passengers(0);
+    bus_stop.generate_passengers();
 
     int initial_passenger_count = bus_stop.get_passenger_list().size();
 
@@ -48,7 +48,7 @@ TEST_CASE("Passengers leave bus stop", "[passengers_leave_stop]") {
 TEST_CASE("Future passengers don't get on the bus", "[future_passengers]") {
 
     BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f, 50, 50);
-    bus_stop.generate_passengers(0);
+    bus_stop.generate_passengers();
 
     Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 2, 100, 200, 100, 200, 100, 200, 100, 200);
     bus.add_passengers(3, bus_stop); // Current timestep is 3
@@ -70,7 +70,7 @@ TEST_CASE("Future passengers don't get on the bus", "[future_passengers]") {
 TEST_CASE("Gone passengers don't get on the bus", "[gone_passengers]") {
 
     BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f, 50, 50);
-    bus_stop.generate_passengers(0);
+    bus_stop.generate_passengers();
 
     Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 2, 100, 200, 100, 200, 100, 200, 100, 200);
     bus.add_passengers(3, bus_stop); // Current timestep is 3
@@ -79,7 +79,7 @@ TEST_CASE("Gone passengers don't get on the bus", "[gone_passengers]") {
 
     for (auto passenger : bus.get_passenger_list())
     {
-        if (passenger.get_arrival_time() + passenger.get_waiting_time() < 3)
+        if (passenger.get_arrival_time() + passenger.get_waiting_time()/60.f < 3)
         {
             test_passed = false;
             break;

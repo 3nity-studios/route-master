@@ -53,7 +53,7 @@ void BusStop::set_passenger_list(const PassengerHeap& _passenger_list)
     passenger_list = _passenger_list;
 }
 
-void BusStop::update(int current_time)
+void BusStop::update(float current_time)
 {
     if(!passenger_list.empty())
     {
@@ -65,7 +65,7 @@ void BusStop::update(int current_time)
     }
 }
 
-void BusStop::generate_passengers(int current_time)
+void BusStop::generate_passengers()
 {
     gone_passengers = 0;
     while(!passenger_list.empty())
@@ -79,7 +79,7 @@ void BusStop::generate_passengers(int current_time)
     // Initialize random number generator
     std::mt19937 gen(rd());
 
-    std::exponential_distribution<> arrival_time_dist(avg_arrival_time); // Exponential distribution
+    std::normal_distribution<> arrival_time_dist(avg_arrival_time, 30.f); // Exponential distribution
     std::normal_distribution<> waiting_time_dist(avg_waiting_time, sd_waiting_time);
     std::normal_distribution<> bus_stop_dist(avg_bus_stop, sd_bus_stop);
 
@@ -91,8 +91,8 @@ void BusStop::generate_passengers(int current_time)
         for(int j = 0; j < num_passengers; j++)
         {
             // Generate random values for passenger attributes
-            int arrival_time = current_time + std::round(arrival_time_dist(gen));
-            int waiting_time = current_time + std::round(waiting_time_dist(gen));
+            float arrival_time = i + arrival_time_dist(gen)/60.f;
+            float waiting_time = waiting_time_dist(gen)/60.f;
             int bus_stop = std::round(bus_stop_dist(gen));
 
             // Create a new passenger with generated values
@@ -127,7 +127,7 @@ void BusStop::add_gone_passengers(const int& num)
     gone_passengers += num;
 }
 
-int BusStop::get_actual_passengers(int current_time)
+int BusStop::get_actual_passengers(float current_time)
 {
     int passengers = 0; 
     auto aux = passenger_list;
@@ -136,7 +136,7 @@ int BusStop::get_actual_passengers(int current_time)
     {
         auto passenger = aux.top();
 
-        if ((passenger.get_arrival_time() >= current_time) && (passenger.get_arrival_time() + passenger.get_waiting_time() <= current_time))
+        if (passenger.get_arrival_time() <= current_time)
         {
             passengers++;
         }

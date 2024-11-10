@@ -16,8 +16,9 @@ class City
     int id;
     std::string name;
     Designar::Graph<std::shared_ptr<VisualElement>, Street> city_map;
-    int current_time;
     std::vector<int> current_passengers;
+    int current_time_hours; 
+    int current_time_minutes; 
 
   public:
     City();

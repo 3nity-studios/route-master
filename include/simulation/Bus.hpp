@@ -50,7 +50,7 @@ class Bus
     bool get_in_route() const noexcept; 
 
     int leave_passengers(BusStop &current_stop);
-    int add_passengers(const int &simulation_time, BusStop &bus_stop);
+    int add_passengers(const float &simulation_time, BusStop &bus_stop);
     int get_attended_passengers() const noexcept;
     void reset();
     void set_in_route(bool _in_route); 

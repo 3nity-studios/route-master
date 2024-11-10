@@ -5,23 +5,23 @@ class Passenger
 {
     private:
 
-    int arrival_time;
-    int waiting_time;
+    float arrival_time;
+    float waiting_time;
     int bus_stop;
 
     public:
 
     Passenger();
-    Passenger(int _arrival_time, int _waiting_time, int _bus_stop);
+    Passenger(float _arrival_time, float _waiting_time, int _bus_stop);
     Passenger(nlohmann::json j);
 
-    int get_arrival_time() const noexcept;
-    int get_waiting_time() const noexcept;
+    float get_arrival_time() const noexcept;
+    float get_waiting_time() const noexcept;
     int get_bus_stop() const noexcept;
-    bool is_gone(int current_time) const noexcept;
+    bool is_gone(float current_time) const noexcept;
 
-    void set_arrival_time(const int& _arrival_time);
-    void set_waiting_time(const int& _waiting_time);
+    void set_arrival_time(const float& _arrival_time);
+    void set_waiting_time(const float& _waiting_time);
     void set_bus_stop(const int& _bus_stop);
 
     nlohmann::json to_json();
