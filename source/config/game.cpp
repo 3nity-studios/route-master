@@ -136,7 +136,7 @@ void Game::init_variables()
         },
         {2000, 10000, 50000}
     ));
-
+    this->_data->achievement_manager.update_from_json();
 
 
     BusStop stop1(1, "Stop1", {2, 3, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 750.f, 5.f);
