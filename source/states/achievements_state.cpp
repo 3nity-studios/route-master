@@ -67,9 +67,17 @@ void AchievementsState::init_state()
                                           "%");
 
             levels->removeAllWidgets();
-            for (int i = 0; i < achievement.get_current_level(); ++i)
+            for (int i = 0; i < 3; ++i)
             {
-                levels->add(tgui::Picture::create("assets/img/logo.png"));
+                if(achievement.get_current_level() < i)
+                {
+                    levels->add(tgui::Picture::create("assets/img/logo.png"));
+                }
+                else
+                {
+                    // TODO: Use different icon
+                    levels->add(tgui::Picture::create("assets/img/logo.png"));
+                }
             }
         }
     });

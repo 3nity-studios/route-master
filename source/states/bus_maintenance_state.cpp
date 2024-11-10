@@ -71,6 +71,7 @@ void BusMaintenanceState::init_state()
                                             tiresCheckbox->isChecked(),
                                             fuelCheckbox->isChecked());
         this->_data->player.save();
+        this->_data->achievement_manager.update(this->_data->player, this->_data->store, this->_data->simulation_info);
         this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), true);
     });
 
