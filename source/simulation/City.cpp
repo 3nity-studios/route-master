@@ -15,6 +15,8 @@ City::City(nlohmann::json j)
 {
     id = j["id"];
     name = j["name"];
+    current_time_hours = j["current_time_hours"];
+    current_time_minutes = j["current_time_minutes"]; 
 
     for (auto bus_stop : j["visual_elements_bus"])
     {
@@ -297,6 +299,8 @@ nlohmann::json City::to_json()
 
     j["id"] = id;
     j["name"] = name;
+    j["current_time_hours"] = current_time_hours;
+    j["current_time_minutes"] = current_time_minutes; 
 
     nlohmann::json visual_elements_bus_json = nlohmann::json::array();
     nlohmann::json visual_elements_curve_json = nlohmann::json::array();
