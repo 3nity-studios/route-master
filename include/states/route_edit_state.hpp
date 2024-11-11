@@ -10,6 +10,8 @@
 #include <tmxlite/Map.hpp>
 
 #include "engine/tmx_core.hpp"
+#include <memory>
+#include "utils/view_dragger.hpp"
 
 class RouteEditState : public Engine::State
 {
@@ -32,6 +34,7 @@ class RouteEditState : public Engine::State
     tgui::CanvasSFML::Ptr canvas;
     Route route_copy;
     std::vector<std::shared_ptr<VisualElement>> redo_stack;
+    std::optional<util::ViewDragger> _view_dragger;
 
     void init_visual_elements(); 
     void draw_lines();

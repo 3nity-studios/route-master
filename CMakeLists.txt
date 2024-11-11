@@ -275,6 +275,8 @@ set(
   ${SRCROOT}/utils/street_factory.cpp
   ${INCROOT}/utils/calc_view.hpp
   ${SRCROOT}/utils/calc_view.cpp
+  ${INCROOT}/utils/view_dragger.hpp
+  ${SRCROOT}/utils/view_dragger.cpp
 )
 add_library(route_master_utils ${RM_UTILS_SRC})
 add_library(route_master::utils ALIAS route_master_utils)
