@@ -1,12 +1,12 @@
 #include "simulation/City.hpp"
 
-City::City() : id(0), name(""), current_time_hours(0), current_time_minutes(0)
+City::City() : id(0), name(""), current_time_hours(0), current_time_minutes(0), current_time_day(0)
 {
     //empty
 }
 
-City::City(int _id, std::string _name, Designar::Graph<std::shared_ptr<VisualElement>, Street> _city_map, int _current_time_hours)
-    : id(_id), name(_name), city_map(_city_map), current_time_hours(_current_time_hours), current_time_minutes(0)
+City::City(int _id, std::string _name, Designar::Graph<std::shared_ptr<VisualElement>, Street> _city_map, int _current_time_day)
+    : id(_id), name(_name), city_map(_city_map), current_time_hours(0), current_time_minutes(0), current_time_day(_current_time_day)
 {
     //empty
 }
@@ -17,6 +17,7 @@ City::City(nlohmann::json j)
     name = j["name"];
     current_time_hours = j["current_time_hours"];
     current_time_minutes = j["current_time_minutes"]; 
+    current_time_day = j["current_time_day"];
 
     for (auto bus_stop : j["visual_elements_bus"])
     {
@@ -121,7 +122,7 @@ void City::add_curve(const VisualElement &curve)
     city_map.insert_node(std::make_shared<VisualElement>(curve));
 }
 
-void City::initialize_bus_stops()
+void City::initialize_bus_stops(int current_time_day)
 {
     for(auto &stop : city_map.nodes())
     {
@@ -129,7 +130,7 @@ void City::initialize_bus_stops()
 
         if (bus_stop)
         {
-            bus_stop->generate_passengers();
+            bus_stop->generate_passengers(current_time_day);
         }
     }
 }
@@ -146,8 +147,9 @@ void City::update()
 
     if (current_time_hours == 24)
     {
-        initialize_bus_stops(); 
-        current_time_hours == 0; 
+        current_time_day++; 
+        initialize_bus_stops(current_time_day); 
+        current_time_hours = 0; 
     }
 
     for(auto &stop : city_map.nodes())
@@ -171,6 +173,8 @@ void City::update()
     {
         street->get_info().update();
     }
+
+    update_passengers();
 }
 
 void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
@@ -195,7 +199,7 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             simulation_info.time_state = std::make_pair<int, int>(0, simulation_info.bus->get_time_in_bus_stop());
             simulation_info.next_is_street = true;
             int passengers_off = simulation_info.bus->leave_passengers(*bus_stop);
-            int passengers_on = simulation_info.bus->add_passengers(current_time_hours + current_time_minutes/60.f, *bus_stop);
+            int passengers_on = simulation_info.bus->add_passengers(24*current_time_day + current_time_hours + current_time_minutes/60.f, *bus_stop);
             simulation_info.passenger_stop_names.push_back(bus_stop->get_name());
             simulation_info.passengers_per_stop.push_back({passengers_on, passengers_off});
             simulation_info.projection_clock.restart();
@@ -235,7 +239,7 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             simulation_info.time_state = std::make_pair<int, int>(0, simulation_info.bus->get_time_in_bus_stop());
             simulation_info.next_is_street = true;
             int passengers_off = simulation_info.bus->leave_passengers(*bus_stop);
-            int passengers_on = simulation_info.bus->add_passengers(current_time_hours + current_time_minutes/60.f, *bus_stop);
+            int passengers_on = simulation_info.bus->add_passengers(24*current_time_day + current_time_hours + current_time_minutes/60.f, *bus_stop);
             simulation_info.passenger_stop_names.push_back(bus_stop->get_name());
             simulation_info.passengers_per_stop.push_back({passengers_on, passengers_off});
             simulation_info.projection_clock.restart();
@@ -260,7 +264,6 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
     }
 
     update(); 
-    update_passengers();
 }
 
 std::vector<int> City::get_current_passengers()
@@ -301,6 +304,7 @@ nlohmann::json City::to_json()
     j["name"] = name;
     j["current_time_hours"] = current_time_hours;
     j["current_time_minutes"] = current_time_minutes; 
+    j["current_time_day"] = current_time_day; 
 
     nlohmann::json visual_elements_bus_json = nlohmann::json::array();
     nlohmann::json visual_elements_curve_json = nlohmann::json::array();

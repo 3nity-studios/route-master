@@ -44,7 +44,7 @@ class BusStop : public VisualElement
     void set_passenger_list(const PassengerHeap& _passenger_list);
 
     void update(float current_time);
-    void generate_passengers();
+    void generate_passengers(int current_time_day);
     void add_passenger(const Passenger& passenger);
     Passenger pop_first_passenger();
     int get_actual_passengers(float current_time);

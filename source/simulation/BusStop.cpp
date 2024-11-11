@@ -65,7 +65,7 @@ void BusStop::update(float current_time)
     }
 }
 
-void BusStop::generate_passengers()
+void BusStop::generate_passengers(int current_time_day)
 {
     gone_passengers = 0;
     while(!passenger_list.empty())
@@ -91,7 +91,7 @@ void BusStop::generate_passengers()
         for(int j = 0; j < num_passengers; j++)
         {
             // Generate random values for passenger attributes
-            float arrival_time = i + arrival_time_dist(gen)/60.f;
+            float arrival_time = 24*current_time_day + i + arrival_time_dist(gen)/60.f;
             float waiting_time = waiting_time_dist(gen)/60.f;
             int bus_stop = std::round(bus_stop_dist(gen));
 

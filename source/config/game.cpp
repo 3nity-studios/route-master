@@ -104,7 +104,7 @@ void Game::init_variables()
         this->_data->city.add_curve(curve3);
         this->_data->city.add_curve(curve4);
 
-        this->_data->city.initialize_bus_stops();
+        this->_data->city.initialize_bus_stops(0);
 
         Street street1(1, "Street1", calc_distance(stop1, stop2), 200.0f, 2.0f, 0.1f, 0.05f);
         Street street2(2, "Street2", calc_distance(stop2, stop3), 50.0f, 2.0f, 0.1f, 0.05f);

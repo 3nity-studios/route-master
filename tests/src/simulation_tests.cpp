@@ -5,14 +5,14 @@
 TEST_CASE("Passenger generation in BusStop", "[passenger_generation]") {
 
     BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f, 50, 50);
-    bus_stop.generate_passengers();
+    bus_stop.generate_passengers(0);
     REQUIRE(bus_stop.get_passenger_list().size() >= 0);
 }
 
 TEST_CASE("Get passengers on bus", "[get_passengers_on_bus]") {
 
     BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f, 50, 50);
-    bus_stop.generate_passengers();
+    bus_stop.generate_passengers(0);
 
     Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
     bus.add_passengers(3, bus_stop);
@@ -33,7 +33,7 @@ TEST_CASE("Get passengers on bus", "[get_passengers_on_bus]") {
 TEST_CASE("Passengers leave bus stop", "[passengers_leave_stop]") {
 
     BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f, 50, 50);
-    bus_stop.generate_passengers();
+    bus_stop.generate_passengers(0);
 
     int initial_passenger_count = bus_stop.get_passenger_list().size();
 
@@ -48,7 +48,7 @@ TEST_CASE("Passengers leave bus stop", "[passengers_leave_stop]") {
 TEST_CASE("Future passengers don't get on the bus", "[future_passengers]") {
 
     BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f, 50, 50);
-    bus_stop.generate_passengers();
+    bus_stop.generate_passengers(0);
 
     Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 2, 100, 200, 100, 200, 100, 200, 100, 200);
     bus.add_passengers(3, bus_stop); // Current timestep is 3
@@ -70,7 +70,7 @@ TEST_CASE("Future passengers don't get on the bus", "[future_passengers]") {
 TEST_CASE("Gone passengers don't get on the bus", "[gone_passengers]") {
 
     BusStop bus_stop = BusStop(0, "A", {5}, 5.0f, 3.0f, 3.0f, 2.0f, 2.0f, 50, 50);
-    bus_stop.generate_passengers();
+    bus_stop.generate_passengers(0);
 
     Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 2, 100, 200, 100, 200, 100, 200, 100, 200);
     bus.add_passengers(3, bus_stop); // Current timestep is 3
@@ -151,7 +151,7 @@ TEST_CASE("Run simulation", "[run_simulation]") {
     city.add_bus_stop(stop2);
     city.add_bus_stop(stop3);
 
-    city.initialize_bus_stops();
+    city.initialize_bus_stops(0);
     
     Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f, 0.05f);
     Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f, 0.05f);
@@ -195,7 +195,7 @@ TEST_CASE("Driver fatigue", "[driver_fatigue]") {
     city.add_bus_stop(stop2);
     city.add_bus_stop(stop3);
 
-    city.initialize_bus_stops();
+    city.initialize_bus_stops(0);
     
     Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f, 0.05f);
     Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f, 0.05f);
@@ -239,7 +239,7 @@ TEST_CASE("Bus wear", "[bus_wear]") {
     city.add_bus_stop(stop2);
     city.add_bus_stop(stop3);
 
-    city.initialize_bus_stops();
+    city.initialize_bus_stops(0);
     
     Street street1(1, "Street1", 100, 10.0f, 2.0f, 0.1f, 0.05f);
     Street street2(2, "Street2", 100, 10.0f, 2.0f, 0.1f, 0.05f);
@@ -286,7 +286,7 @@ TEST_CASE("Simulation consistency", "[simulation_consistency]") {
     city.add_bus_stop(stop2);
     city.add_bus_stop(stop3);
 
-    city.initialize_bus_stops();
+    city.initialize_bus_stops(0);
 
     int total_passengers = 0;
 
