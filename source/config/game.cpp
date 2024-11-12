@@ -10,6 +10,7 @@
 
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include "utils/street_factory.hpp"
 
 float calc_distance(VisualElement element1, VisualElement element2)
 {
@@ -138,56 +139,69 @@ void Game::init_variables()
     ));
     this->_data->achievement_manager.update_from_json();
 
+    std::ifstream city_file("data/city.json");
+    if (city_file.is_open())
+    {
+        nlohmann::json city_json;
+        city_file >> city_json;
+        this->_data->city = City(city_json);
+        city_file.close();
+    }
+    else
+    {
+        BusStop stop1(1, "Stop1", {2, 3, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 750.f, 5.f);
+        BusStop stop2(2, "Stop2", {2, 3, 4}, 3.0, 10.0, 3.0, 3.0, 2.0, 500.f, 5.f);
+        BusStop stop3(3, "Stop3", {2, 3, 3}, 3.0, 5.0, 3.0, 3.0, 2.0, 350.f, 5.f);
+        BusStop stop4(4, "Stop4", {2, 4, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 350.f, 250.f);
+        BusStop stop5(5, "Stop5", {2, 5, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 600.f, 250.f);
+        BusStop stop6(6, "Stop6", {2, 6, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 600.f, 500.f);
 
-    BusStop stop1(1, "Stop1", {2, 3, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 750.f, 5.f);
-    BusStop stop2(2, "Stop2", {2, 3, 4}, 3.0, 10.0, 3.0, 3.0, 2.0, 500.f, 5.f);
-    BusStop stop3(3, "Stop3", {2, 3, 3}, 3.0, 5.0, 3.0, 3.0, 2.0, 350.f, 5.f);
-    BusStop stop4(4, "Stop4", {2, 4, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 350.f, 250.f);
-    BusStop stop5(5, "Stop5", {2, 5, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 600.f, 250.f);
-    BusStop stop6(6, "Stop6", {2, 6, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 600.f, 500.f);
+        TrafficLight light1(7, std::vector<std::pair<StreetConnectionIDs, bool>>{std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(6,7), true)}, 10, 450.f, 250.f);
 
-    TrafficLight light1(7, std::vector<std::pair<StreetConnectionIDs, bool>>{std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(6,7), true)}, 10, 450.f, 250.f);
+        VisualElement curve1(8, 220.f, 50.f);
+        VisualElement curve2(9, 220.f, 250.f);
+        VisualElement curve3(10, 745.f, 275.f);
+        VisualElement curve4(11, 745.f, 500.f);
 
-    VisualElement curve1(8, 220.f, 50.f);
-    VisualElement curve2(9, 220.f, 250.f);
-    VisualElement curve3(10, 745.f, 275.f);
-    VisualElement curve4(11, 745.f, 500.f);
+        this->_data->city.add_bus_stop(stop1);
+        this->_data->city.add_bus_stop(stop2);
+        this->_data->city.add_bus_stop(stop3);
+        this->_data->city.add_bus_stop(stop4);
+        this->_data->city.add_traffic_light(light1);
+        this->_data->city.add_bus_stop(stop5);
+        this->_data->city.add_bus_stop(stop6);
+        this->_data->city.add_curve(curve1);
+        this->_data->city.add_curve(curve2);
+        this->_data->city.add_curve(curve3);
+        this->_data->city.add_curve(curve4);
 
-    this->_data->city.add_bus_stop(stop1);
-    this->_data->city.add_bus_stop(stop2);
-    this->_data->city.add_bus_stop(stop3);
-    this->_data->city.add_bus_stop(stop4);
-    this->_data->city.add_traffic_light(light1);
-    this->_data->city.add_bus_stop(stop5);
-    this->_data->city.add_bus_stop(stop6);
-    this->_data->city.add_curve(curve1);
-    this->_data->city.add_curve(curve2);
-    this->_data->city.add_curve(curve3);
-    this->_data->city.add_curve(curve4);
+        this->_data->city.initialize_bus_stops();
 
-    this->_data->city.initialize_bus_stops();
+        Street street1 = util::StreetFactory(_data, 1, "Street1", 1, 2, 200.0f, 2.0f, 0.1f, 0.05f);
+        Street street2(2, "Street2", calc_distance(stop2, stop3), 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street3(3, "Street3", calc_distance(stop3, curve1), 100.0f, 2.0f, 0.1f, 0.05f);
+        Street street4(4, "Street4", calc_distance(curve1, curve2), 25.0f, 2.0f, 0.1f, 0.05f);
+        Street street5(5, "Street5", calc_distance(curve2, stop4), 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street6(6, "Street6", calc_distance(stop4, light1), 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street7(7, "Street7", calc_distance(light1, stop5), 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street8(8, "Street8", calc_distance(stop5, curve3), 100.0f, 2.0f, 0.1f, 0.05f);
+        Street street9(9, "Street9", calc_distance(curve3, curve4), 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street10(10, "Street10", calc_distance(curve4, stop6), 50.0f, 2.0f, 0.1f, 0.05f);
 
-    Street street1(1, "Street1", calc_distance(stop1, stop2), 200.0f, 2.0f, 0.1f, 0.05f);
-    Street street2(2, "Street2", calc_distance(stop2, stop3), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street3(3, "Street3", calc_distance(stop3, curve1), 100.0f, 2.0f, 0.1f, 0.05f);
-    Street street4(4, "Street4", calc_distance(curve1, curve2), 25.0f, 2.0f, 0.1f, 0.05f);
-    Street street5(5, "Street5", calc_distance(curve2, stop4), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street6(6, "Street6", calc_distance(stop4, light1), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street7(7, "Street7", calc_distance(light1, stop5), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street8(8, "Street8", calc_distance(stop5, curve3), 100.0f, 2.0f, 0.1f, 0.05f);
-    Street street9(9, "Street9", calc_distance(curve3, curve4), 50.0f, 2.0f, 0.1f, 0.05f);
-    Street street10(10, "Street10", calc_distance(curve4, stop6), 50.0f, 2.0f, 0.1f, 0.05f);
+        this->_data->city.add_street(street1, 1, 2);
+        this->_data->city.add_street(street2, 2, 3);
+        this->_data->city.add_street(street3, 3, 8);
+        this->_data->city.add_street(street4, 8, 9);
+        this->_data->city.add_street(street5, 9, 4);
+        this->_data->city.add_street(street6, 4, 7);
+        this->_data->city.add_street(street7, 7, 5);
+        this->_data->city.add_street(street8, 5, 10);
+        this->_data->city.add_street(street9, 10, 11);
+        this->_data->city.add_street(street10, 11, 6);
 
-    this->_data->city.add_street(street1, 1, 2);
-    this->_data->city.add_street(street2, 2, 3);
-    this->_data->city.add_street(street3, 3, 8);
-    this->_data->city.add_street(street4, 8, 9);
-    this->_data->city.add_street(street5, 9, 4);
-    this->_data->city.add_street(street6, 4, 7);
-    this->_data->city.add_street(street7, 7, 5);
-    this->_data->city.add_street(street8, 5, 10);
-    this->_data->city.add_street(street9, 10, 11);
-    this->_data->city.add_street(street10, 11, 6);
+        this->_data->city.update();
+        this->_data->city.update_passengers(); 
+    }
 
     StreetArcList path;
 
@@ -226,9 +240,6 @@ void Game::init_variables()
 
     this->_data->routes.push_back(Route("Route 1", simulation.elements_path));
     this->_data->routes.push_back(Route("Route 2", simulation2.elements_path));
-
-    this->_data->city.update();
-    this->_data->city.update_passengers();
 }
 void Game::init_window()
 {

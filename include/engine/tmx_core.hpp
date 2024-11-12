@@ -25,6 +25,8 @@ and must not be misrepresented as being the original software.
 source distribution.
 *********************************************************************/
 
+// Altered source version.
+
 /*
 Creates an SFML drawable from an Orthogonal tmx map layer.
 This is an example of drawing with SFML - not all features
@@ -170,7 +172,6 @@ class MapLayer final : public sf::Drawable
         }
     }
 
-  private:
     // increasing m_chunkSize by 4; fixes render problems when mapsize != chunksize
     // sf::Vector2f m_chunkSize = sf::Vector2f(1024.f, 1024.f);
     sf::Vector2f m_chunkSize = sf::Vector2f(512.f, 512.f);
@@ -467,8 +468,6 @@ class MapLayer final : public sf::Drawable
                 flipD(v0, v1, v2, v3, v4, v5);
             }
         }
-
-      private:
         class ChunkArray final : public sf::Drawable
         {
           public:
@@ -639,12 +638,16 @@ class MapLayer final : public sf::Drawable
     void updateVisibility(const sf::View &view) const
     {
         sf::Vector2f viewCorner = view.getCenter();
+        // std::cout << "viewCorner.x = " << viewCorner.x << " viewCorner.y = " << viewCorner.y << std::endl;
         viewCorner -= view.getSize() / 2.f;
-
         std::int32_t posX = static_cast<std::int32_t>(std::floor(viewCorner.x / m_chunkSize.x));
         std::int32_t posY = static_cast<std::int32_t>(std::floor(viewCorner.y / m_chunkSize.y));
         std::int32_t posX2 = static_cast<std::int32_t>(std::ceil((viewCorner.x + view.getSize().x) / m_chunkSize.x));
-        std::int32_t posY2 = static_cast<std::int32_t>(std::ceil((viewCorner.y + view.getSize().x) / m_chunkSize.y));
+        std::int32_t posY2 = static_cast<std::int32_t>(std::ceil((viewCorner.y + view.getSize().y) / m_chunkSize.y));
+        // std::cout << "view.getSize().x = " << view.getSize().x << " view.getSize().y = " << view.getSize().y << std::endl;
+        // std::cout << "new viewCorner.x = " << viewCorner.x << " new viewCorner.y = " << viewCorner.y << std::endl;
+        // std::cout << "posX = " << posX << " posY = " << posY << std::endl;
+        // std::cout << "posX2 = " << posX2 << " posY2 = " << posY2 << std::endl;
 
         std::vector<Chunk *> visible;
         for (auto y = posY; y < posY2; ++y)
@@ -668,6 +671,7 @@ class MapLayer final : public sf::Drawable
 
         // calc view coverage and draw nearest chunks
         updateVisibility(rt.getView());
+        // std::cout << "Number of visible chunks is: " << m_visibleChunks.size() << std::endl;
         for (const auto &c : m_visibleChunks)
         {
             rt.draw(*c, states);

@@ -23,8 +23,8 @@ void BusImprovementsState::init_state()
 
     // Create a label for the player name
     auto playerInfoLabel = tgui::Label::create();
-    playerInfoLabel->setText("Player: " + this->_data->player.get_name() + 
-                            "\nBalance: $" + std::to_string(this->_data->player.get_balance()));
+    playerInfoLabel->setText("Player: " + this->_data->player.get_name() + "\nBalance: $" +
+                             std::to_string(this->_data->player.get_balance()));
     playerInfoLabel->getRenderer()->setTextColor(sf::Color::White);
     playerInfoLabel->getRenderer()->setTextOutlineColor(sf::Color::Black);
     playerInfoLabel->getRenderer()->setTextOutlineThickness(2);
@@ -50,11 +50,11 @@ void BusImprovementsState::init_state()
     auto engineCheckbox = tgui::CheckBox::create();
     engineCheckbox->setWidgetName("EngineCheckbox");
     engineCheckbox->setText("Improve Engine");
-    
+
     auto breaksCheckbox = tgui::CheckBox::create();
     breaksCheckbox->setWidgetName("BreaksCheckbox");
     breaksCheckbox->setText("Improve Breaks");
-    
+
     auto tiresCheckbox = tgui::CheckBox::create();
     tiresCheckbox->setWidgetName("TiresCheckbox");
     tiresCheckbox->setText("Improve Tires");
@@ -185,6 +185,7 @@ void BusImprovementsState::update_inputs()
 
         if (event->is<sf::Event::Closed>())
         {
+            this->_data->city.save();
             this->_data->window->close();
             break;
         }
@@ -194,6 +195,7 @@ void BusImprovementsState::update_inputs()
             // When the enter key is pressed, switch to the next handler type
             if (keyPress->code == sf::Keyboard::Key::Escape)
             {
+                this->_data->city.save();
                 this->_data->window->close();
                 break;
             }
