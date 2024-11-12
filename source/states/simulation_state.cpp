@@ -72,6 +72,7 @@ SimulationInfo SimulationState::simulation_info_from_json(nlohmann::json j)
     simulation_info.previous_time = j["previous_time"];
     simulation_info.isVisible = j["isVisible"];
     simulation_info.projection_bus.setPosition(sf::Vector2f(j["position_x"], j["position_y"]));
+    simulation_info.projection_bus_speed = sf::Vector2f(j["speed_x"], j["speed_y"]);
 
     for (auto time : j["times"])
     {
@@ -457,9 +458,19 @@ void SimulationState::update_bus()
     sf::IntRect left_view(sf::Vector2i(0, 32), sf::Vector2i(48, 32));
     sf::IntRect down_view(sf::Vector2i(48, 0), sf::Vector2i(16, 48));
     sf::IntRect up_view(sf::Vector2i(64, 0), sf::Vector2i(16, 48));
+    
     if (first_time)
     {
         simulation_clock.restart();
+
+        if (!this->_data->simulation_info.empty())
+        {
+            for (auto &info : this->_data->simulation_info)
+            {
+                info.projection_clock.restart(); 
+            }
+        }
+        
         this->_data->city.run_simulation(this->_data->simulation_info);
         first_time = false;
     }

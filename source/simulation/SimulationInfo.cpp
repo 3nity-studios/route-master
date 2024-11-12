@@ -68,6 +68,8 @@ nlohmann::json SimulationInfo::to_json()
     j["passengers_stop_second"] = passengers_per_stop_second;
     j["position_x"] = projection_bus.getPosition().x;
     j["position_y"] = projection_bus.getPosition().y;
+    j["speed_x"] = projection_bus_speed.x;
+    j["speed_y"] = projection_bus_speed.y; 
 
     return j; 
 }
