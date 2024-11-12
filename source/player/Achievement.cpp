@@ -1,6 +1,6 @@
 #include "player/Achievement.hpp"
 
-Achievement::Achievement() : id(0), name(""), description(""), current_level(0)
+Achievement::Achievement() : id(0), name(""), description(""), current_level(0), completed(false)
 {
     // empty
 }
@@ -11,7 +11,7 @@ Achievement::Achievement(
         _criteria, std::vector<std::function<int(Player &player, Store &store, std::vector<SimulationInfo> &simulation_info)>>
         _progress,
     std::vector<int> _rewards)
-    : id(_id), name(_name), description(_description), criteria(_criteria), progress(_progress), rewards(_rewards), current_level(0)
+    : id(_id), name(_name), description(_description), criteria(_criteria), progress(_progress), rewards(_rewards), current_level(0), completed(false)
 {
     // empty
 }
@@ -38,9 +38,15 @@ std::vector<int> Achievement::get_rewards() const
 {
     return rewards;
 }
+
 int Achievement::get_current_level() const
 {
     return current_level;
+}
+
+bool Achievement::is_completed() const
+{
+    return completed;
 }
 
 void Achievement::set_id(const int &_id)
@@ -75,14 +81,28 @@ void Achievement::set_current_level(const int &_current_level)
 
 void Achievement::check_and_unlock(Player &player, Store &store, std::vector<SimulationInfo> &simulation_info)
 {
+    if(completed)
+    {
+        return;
+    }
+    
     while (current_level < criteria.size() && criteria[current_level](player, store, simulation_info))
     {
         rewards[current_level];
         current_level++;
+
+        if(current_level == 4)
+        {
+            completed = true;
+        }
     }
 }
 
 int Achievement::get_progress(Player &player, Store &store, std::vector<SimulationInfo> &simulation_info)
 {
+    if(completed)
+    {
+        return 100;
+    }
     return progress[current_level](player, store, simulation_info);
 }

@@ -67,17 +67,29 @@ void AchievementsState::init_state()
                                           "%");
 
             levels->removeAllWidgets();
-            for (int i = 0; i < 3; ++i)
+
+            switch (achievement.get_current_level())
             {
-                if(achievement.get_current_level() < i)
-                {
-                    levels->add(tgui::Picture::create("assets/img/logo.png"));
-                }
-                else
-                {
-                    // TODO: Use different icon
-                    levels->add(tgui::Picture::create("assets/img/logo.png"));
-                }
+            case 1:
+                levels->add(tgui::Picture::create("assets/img/medals/bronze.png"));
+                levels->add(tgui::Picture::create("assets/img/medals/off.png"));
+                levels->add(tgui::Picture::create("assets/img/medals/off.png"));
+                break;
+            case 2:
+                levels->add(tgui::Picture::create("assets/img/medals/bronze.png"));
+                levels->add(tgui::Picture::create("assets/img/medals/silver.png"));
+                levels->add(tgui::Picture::create("assets/img/medals/off.png"));
+                break;
+            case 3:
+                levels->add(tgui::Picture::create("assets/img/medals/bronze.png"));
+                levels->add(tgui::Picture::create("assets/img/medals/silver.png"));
+                levels->add(tgui::Picture::create("assets/img/medals/gold.png"));
+                break;
+            default:
+                levels->add(tgui::Picture::create("assets/img/medals/off.png"));
+                levels->add(tgui::Picture::create("assets/img/medals/off.png"));
+                levels->add(tgui::Picture::create("assets/img/medals/off.png"));
+                break;
             }
         }
     });

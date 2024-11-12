@@ -19,6 +19,7 @@ class Achievement
         progress;
     std::vector<int> rewards;
     int current_level;
+    bool completed;
 
   public:
     Achievement();
@@ -35,6 +36,7 @@ class Achievement
     std::vector<std::function<bool(Player &player, Store &store, std::vector<SimulationInfo> &simulation_info)>> get_criteria() const;
     std::vector<int> get_rewards() const;
     int get_current_level() const;
+    bool is_completed() const;
 
     void set_id(const int &_id);
     void set_name(const std::string &_name);
