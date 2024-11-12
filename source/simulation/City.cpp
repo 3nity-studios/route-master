@@ -202,6 +202,7 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             int passengers_on = simulation_info.bus->add_passengers(24*current_time_day + current_time_hours + current_time_minutes/60.f, *bus_stop, simulation_info.elements_path, simulation_info.path_index);
             simulation_info.passenger_stop_names.push_back(bus_stop->get_name());
             simulation_info.passengers_per_stop.push_back({passengers_on, passengers_off});
+            simulation_info.previous_time = 0; 
             simulation_info.projection_clock.restart();
         }
         else if (simulation_info.get_elapsed_time() <= simulation_info.time_state.second)
@@ -232,6 +233,7 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
 
             simulation_info.next_is_street = false;
             simulation_info.path_index++;
+            simulation_info.previous_time = 0; 
             simulation_info.projection_clock.restart();
         }
         else if (bus_stop)
@@ -242,24 +244,22 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             int passengers_on = simulation_info.bus->add_passengers(24*current_time_day + current_time_hours + current_time_minutes/60.f, *bus_stop, simulation_info.elements_path, simulation_info.path_index);
             simulation_info.passenger_stop_names.push_back(bus_stop->get_name());
             simulation_info.passengers_per_stop.push_back({passengers_on, passengers_off});
+            simulation_info.previous_time = 0; 
             simulation_info.projection_clock.restart();
         }
         else if (traffic_light)
         {
             simulation_info.time_state = std::make_pair<int, int>(2, traffic_light->get_time_to_change());
+            simulation_info.previous_time = 0; 
             simulation_info.next_is_street = true;
             simulation_info.projection_clock.restart();
         }
         else
         {
             simulation_info.time_state = std::make_pair<int, int>(3, 0);
+            simulation_info.previous_time = 0; 
             simulation_info.next_is_street = true;
             simulation_info.projection_clock.restart();
-        }
-
-        if (simulation_info.have_previous_time)
-        {
-            simulation_info.have_previous_time = false; 
         }
     }
 

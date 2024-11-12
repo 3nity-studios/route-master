@@ -54,6 +54,5 @@ class SimulationState : public Engine::State
     sf::Texture bus_stops_texture;
     sf::Texture person_texture; 
     int actual_stop;
-    int current_time;
     tgui::Gui gui; 
 };

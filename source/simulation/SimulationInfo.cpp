@@ -2,7 +2,7 @@
 
 SimulationInfo::SimulationInfo(Bus *_bus, Employee *_employee, StreetArcList _path) : bus(_bus), employee(_employee), time_state(std::make_pair<int, int>(-1, 0)), path_index(0),
           next_is_street(false), route_completed(false), projection_bus_texture(sf::Texture()),
-          projection_bus(projection_bus_texture), have_previous_time(false), isVisible(true)
+          projection_bus(projection_bus_texture), isVisible(true), previous_time(0)
 {
     set_path(_path);
 }
@@ -26,7 +26,6 @@ nlohmann::json SimulationInfo::to_json()
 {
     projection_clock.stop(); 
     previous_time = projection_clock.getElapsedTime().asSeconds();
-    have_previous_time = true; 
 
     nlohmann::json j; 
 
@@ -45,7 +44,6 @@ nlohmann::json SimulationInfo::to_json()
     j["path_index"] = path_index; 
     j["next_is_street"] = next_is_street;
     j["route_completed"] = route_completed; 
-    j["have_previous_time"] = have_previous_time;
     j["previous_time"] = previous_time;
     j["isVisible"] = isVisible; 
 
@@ -96,12 +94,5 @@ sf::Vector2f SimulationInfo::calc_vector_tip()
 
 float SimulationInfo::get_elapsed_time()
 {
-    if (have_previous_time)
-    {
-        return previous_time + projection_clock.getElapsedTime().asSeconds();
-    }
-    else
-    {
-        return projection_clock.getElapsedTime().asSeconds();
-    }
+    return previous_time + projection_clock.getElapsedTime().asSeconds();
 }

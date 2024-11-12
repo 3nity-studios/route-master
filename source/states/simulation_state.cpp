@@ -69,7 +69,6 @@ SimulationInfo SimulationState::simulation_info_from_json(nlohmann::json j)
     simulation_info.path_index = j["path_index"];
     simulation_info.next_is_street = j["next_is_street"];
     simulation_info.route_completed =  j["route_completed"]; 
-    simulation_info.have_previous_time = j["have_previous_time"];
     simulation_info.previous_time = j["previous_time"];
     simulation_info.isVisible = j["isVisible"];
     simulation_info.projection_bus.setPosition(sf::Vector2f(j["position_x"], j["position_y"]));
@@ -105,6 +104,8 @@ void SimulationState::save()
 
 nlohmann::json SimulationState::simulation_info_to_json()
 {
+    simulation_clock.stop(); 
+
     nlohmann::json j; 
 
     nlohmann::json simulation_info = nlohmann::json::array(); 
@@ -435,7 +436,7 @@ void SimulationState::init_bus()
 
     for (auto &info : this->_data->simulation_info)
     {
-        if (info.time_state.first == -1 || info.have_previous_time)
+        if (info.time_state.first == -1 || info.previous_time != 0)
         {
             info.projection_bus.setTexture(bus_texture);
             info.projection_bus.setTextureRect(bus_rect);
@@ -460,7 +461,6 @@ void SimulationState::update_bus()
     {
         simulation_clock.restart();
         this->_data->city.run_simulation(this->_data->simulation_info);
-        current_time++;
         first_time = false;
     }
 
@@ -468,7 +468,6 @@ void SimulationState::update_bus()
     {
         simulation_clock.restart();
         this->_data->city.run_simulation(this->_data->simulation_info);
-        current_time++;
     }
     else
     {
