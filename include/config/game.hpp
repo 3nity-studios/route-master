@@ -11,6 +11,7 @@
 #include "player/Player.hpp"
 #include "player/Store.hpp"
 #include "player/AchievementManager.hpp"
+#include "player/Message.hpp"
 #include "simulation/City.hpp"
 
 struct GameData
@@ -27,6 +28,7 @@ struct GameData
     City city;
     std::vector<SimulationInfo> simulation_info;
     AchievementManager achievement_manager;
+    std::vector<Message> messages;
 };
 
 typedef std::shared_ptr<GameData> GameDataRef;

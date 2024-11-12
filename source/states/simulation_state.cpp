@@ -11,6 +11,7 @@
 #include "states/management_state.hpp"
 #include "states/stats_state.hpp"
 #include "states/achievements_state.hpp"
+#include "states/messages_state.hpp"
 #include "utils/calc_view.hpp"
 
 SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), person_texture (sf::Image(sf::Vector2u(100, 50), sf::Color::White))
@@ -146,6 +147,14 @@ void SimulationState::init_state()
 
     int buttonHeight = 35;
     int buttonWidth = 150;
+
+    auto messagesButton = tgui::Button::create("Messages");
+    messagesButton->setPosition(10, 10);
+    messagesButton->setSize(buttonWidth, buttonHeight);
+    messagesButton->onPress([this] {
+            this->_data->states.add_state(Engine::StateRef(new MessagesState(this->_data)), false);
+    });
+    this->gui.add(messagesButton);
 
     auto exitButton = tgui::Button::create("Back to Menu");
     exitButton->setPosition(10, this->_data->window->getSize().y - (buttonHeight + 5));
