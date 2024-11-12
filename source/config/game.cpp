@@ -6,6 +6,7 @@
 
 #include "simulation/Bus.hpp"
 #include "simulation/Employee.hpp"
+#include "player/AchievementManager.hpp"
 
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -68,6 +69,75 @@ void Game::init_variables()
 
         this->_data->store.save();
     }
+
+    this->_data->achievement_manager = AchievementManager();
+    this->_data->achievement_manager.add_achievement(Achievement(
+        0, 
+        "Buy Buses", 
+        "Add buses to your fleet.",
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_buses().size() >= 1; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_buses().size() >= 5; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_buses().size() >= 10; }
+        },
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_buses().size() / 1) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_buses().size() / 5) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_buses().size() / 10) * 100; }
+        },
+        {10000, 20000, 100000}
+    ));
+    this->_data->achievement_manager.add_achievement(Achievement(
+        1, 
+        "Hire Employees", 
+        "Hire employees for your company.",
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_employees().size() >= 1; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_employees().size() >= 5; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_employees().size() >= 10; }
+        },
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_employees().size() / 1) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_employees().size() / 5) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_employees().size() / 10) * 100; }
+        },
+        {5000, 10000, 50000}
+    ));
+
+    this->_data->achievement_manager.add_achievement(Achievement(
+        2, 
+        "Earn Money", 
+        "Accumulate money in your account.",
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_balance() >= 10000; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_balance() >= 50000; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_balance() >= 100000; }
+        },
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_balance() / 10000) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_balance() / 50000) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_balance() / 100000) * 100; }
+        },
+        {1000, 5000, 10000}
+    ));
+
+    this->_data->achievement_manager.add_achievement(Achievement(
+        3, 
+        "Complete Routes", 
+        "Successfully complete bus routes.",
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return simulation_info.size() >= 1; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return simulation_info.size() >= 5; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return simulation_info.size() >= 10; }
+        },
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (simulation_info.size() / 1) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (simulation_info.size() / 5) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (simulation_info.size() / 10) * 100; }
+        },
+        {2000, 10000, 50000}
+    ));
+    this->_data->achievement_manager.update_from_json();
 
     std::ifstream city_file("data/city.json");
     if (city_file.is_open())

@@ -63,14 +63,17 @@ void BusImprovementsState::init_state()
     fuelCheckbox->setWidgetName("FuelCheckbox");
     fuelCheckbox->setText("Improve Fuel");
 
-    this->_data->gui.get<tgui::Button>("confirm_button")
-        ->onPress([this, item, engineCheckbox, breaksCheckbox, tiresCheckbox, fuelCheckbox] {
-            this->_data->store.buy_bus_improvements(item.get_id(), this->_data->player, engineCheckbox->isChecked(),
-                                                    breaksCheckbox->isChecked(), tiresCheckbox->isChecked(),
-                                                    fuelCheckbox->isChecked());
-            this->_data->player.save();
-            this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), true);
-        });
+    this->_data->gui.get<tgui::Button>("confirm_button")->onPress([this, item, engineCheckbox, breaksCheckbox, tiresCheckbox, fuelCheckbox] {
+        this->_data->store.buy_bus_improvements(item.get_id(),
+                                            this->_data->player,
+                                            engineCheckbox->isChecked(),
+                                            breaksCheckbox->isChecked(),
+                                            tiresCheckbox->isChecked(),
+                                            fuelCheckbox->isChecked());
+        this->_data->player.save();
+        this->_data->achievement_manager.update(this->_data->player, this->_data->store, this->_data->simulation_info);
+        this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), true);
+    });
 
     // Draw bus details view for the bus
     const auto prices = this->_data->player.get_bus(this->bus_id).calc_improvements_price();

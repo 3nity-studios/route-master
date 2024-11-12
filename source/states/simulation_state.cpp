@@ -10,6 +10,7 @@
 #include "states/route_list_state.hpp"
 #include "states/management_state.hpp"
 #include "states/stats_state.hpp"
+#include "states/achievements_state.hpp"
 #include "utils/calc_view.hpp"
 
 SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), person_texture (sf::Image(sf::Vector2u(100, 50), sf::Color::White))
@@ -154,8 +155,16 @@ void SimulationState::init_state()
     });
     this->gui.add(exitButton);
 
+    auto achievementsButton = tgui::Button::create("Achievements");
+    achievementsButton->setPosition(10, this->_data->window->getSize().y - 2*(buttonHeight + 5));
+    achievementsButton->setSize(buttonWidth, buttonHeight);
+    achievementsButton->onPress([this] {
+            this->_data->states.add_state(Engine::StateRef(new AchievementsState(this->_data)), false);
+    });
+    this->gui.add(achievementsButton);
+
     auto statsButton = tgui::Button::create("Statistics");
-    statsButton->setPosition(10, this->_data->window->getSize().y - 2*(buttonHeight + 5));
+    statsButton->setPosition(10, this->_data->window->getSize().y - 3*(buttonHeight + 5));
     statsButton->setSize(buttonWidth, buttonHeight);
     statsButton->onPress([this] {
             this->_data->states.add_state(Engine::StateRef(new StatsState(this->_data)), false);
@@ -163,7 +172,7 @@ void SimulationState::init_state()
     this->gui.add(statsButton);
 
     auto storeButton = tgui::Button::create("Store");
-    storeButton->setPosition(10, this->_data->window->getSize().y - 3*(buttonHeight + 5));
+    storeButton->setPosition(10, this->_data->window->getSize().y - 4*(buttonHeight + 5));
     storeButton->setSize(buttonWidth, buttonHeight);
     storeButton->onPress([this] {
         this->_data->states.add_state(Engine::StateRef(new StoreState(this->_data)), false);
@@ -171,7 +180,7 @@ void SimulationState::init_state()
     this->gui.add(storeButton);
 
     auto managementButton = tgui::Button::create("Management");
-    managementButton->setPosition(10, this->_data->window->getSize().y - 4*(buttonHeight + 5));
+    managementButton->setPosition(10, this->_data->window->getSize().y - 5*(buttonHeight + 5));
     managementButton->setSize(buttonWidth, buttonHeight);
     managementButton->onPress([this] {
         this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), false);
@@ -179,7 +188,7 @@ void SimulationState::init_state()
     this->gui.add(managementButton);
 
     auto designRouteButton = tgui::Button::create("Routes");
-    designRouteButton->setPosition(10, this->_data->window->getSize().y - 5*(buttonHeight + 5));
+    designRouteButton->setPosition(10, this->_data->window->getSize().y - 6*(buttonHeight + 5));
     designRouteButton->setSize(buttonWidth, buttonHeight);
     designRouteButton->onPress([this] {
         this->_data->states.add_state(Engine::StateRef(new RouteListState(this->_data)), false);
@@ -187,7 +196,8 @@ void SimulationState::init_state()
     this->gui.add(designRouteButton);
 
     auto sendBusButton = tgui::Button::create("Send Bus");
-    sendBusButton->setPosition(10, this->_data->window->getSize().y - 6*(buttonHeight + 5));
+    sendBusButton->setPosition(10, this->_data->window->getSize().y - 7
+    *(buttonHeight + 5));
     sendBusButton->setSize(buttonWidth, buttonHeight);
     sendBusButton->onPress([this] {
             this->_data->states.add_state(Engine::StateRef(new BusSelectState(this->_data)), false);
@@ -570,6 +580,8 @@ void SimulationState::update_bus()
 
         info.projection_bus.move(info.projection_bus_speed);
     }
+
+    this->_data->achievement_manager.update(this->_data->player, this->_data->store, this->_data->simulation_info);
 }
 
 void SimulationState::set_simulation_info(std::vector<SimulationInfo> _simulation_info)
