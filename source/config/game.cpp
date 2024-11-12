@@ -149,12 +149,12 @@ void Game::init_variables()
     }
     else
     {
-        BusStop stop1(1, "Stop1", {2, 3, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 750.f, 5.f);
-        BusStop stop2(2, "Stop2", {2, 3, 4}, 3.0, 10.0, 3.0, 3.0, 2.0, 500.f, 5.f);
-        BusStop stop3(3, "Stop3", {2, 3, 3}, 3.0, 5.0, 3.0, 3.0, 2.0, 350.f, 5.f);
-        BusStop stop4(4, "Stop4", {2, 4, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 350.f, 250.f);
-        BusStop stop5(5, "Stop5", {2, 5, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 600.f, 250.f);
-        BusStop stop6(6, "Stop6", {2, 6, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 600.f, 500.f);
+        BusStop stop1(1, "Stop1", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 5.0, 2.0, 750.f, 5.f);
+        BusStop stop2(2, "Stop2", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 3.0, 2.0, 500.f, 5.f);
+        BusStop stop3(3, "Stop3", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 350.f, 5.f);
+        BusStop stop4(4, "Stop4", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 5.0, 2.0, 350.f, 250.f);
+        BusStop stop5(5, "Stop5", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 600.f, 250.f);
+        BusStop stop6(6, "Stop6", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 600.f, 500.f);
 
         TrafficLight light1(7, std::vector<std::pair<StreetConnectionIDs, bool>>{std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(6,7), true)}, 10, 450.f, 250.f);
 
@@ -175,7 +175,7 @@ void Game::init_variables()
         this->_data->city.add_curve(curve3);
         this->_data->city.add_curve(curve4);
 
-        this->_data->city.initialize_bus_stops();
+        this->_data->city.initialize_bus_stops(0);
 
         Street street1 = util::StreetFactory(_data, 1, "Street1", 1, 2, 200.0f, 2.0f, 0.1f, 0.05f);
         Street street2(2, "Street2", calc_distance(stop2, stop3), 50.0f, 2.0f, 0.1f, 0.05f);
@@ -198,9 +198,6 @@ void Game::init_variables()
         this->_data->city.add_street(street8, 5, 10);
         this->_data->city.add_street(street9, 10, 11);
         this->_data->city.add_street(street10, 11, 6);
-
-        this->_data->city.update();
-        this->_data->city.update_passengers(); 
     }
 
     StreetArcList path;

@@ -18,7 +18,6 @@ struct SimulationInfo
     bool next_is_street;
     bool route_completed;
     bool isVisible; 
-    bool have_previous_time; 
     sf::Clock projection_clock;
     sf::Sprite projection_bus;
     sf::Vector2f projection_bus_speed;

@@ -4,14 +4,14 @@
 
 Street::Street()
     : id(0), name(""), distance(0), avg_speed(0), avg_traffic_density(1), sd_traffic_density(),
-      singular_event_odds(0.01)
+      singular_event_odds(0.01), current_singular_event_index(0)
 {
     // empty
 }
 
 Street::Street(int _id, std::string _name, float _distance, float _avg_speed, float _avg_traffic_density, float _sd_traffic_density, float _singular_event_odds)
     : id(_id), name(std::move(_name)), distance(_distance), avg_speed(_avg_speed), avg_traffic_density(_avg_traffic_density), sd_traffic_density(_sd_traffic_density), singular_event_odds(_singular_event_odds),
-      current_traffic_density(0.0f), singular_event_active(false), current_singular_event_duration(0)
+      current_traffic_density(0.0f), singular_event_active(false), current_singular_event_duration(0), current_singular_event_index(0)
 {
     // empty
 }
@@ -28,6 +28,8 @@ Street::Street(nlohmann::json j)
     current_traffic_density = j["current_traffic_density"];
     singular_event_active = j["singular_event_active"];
     current_singular_event_duration = j["current_singular_event_duration"];
+    current_singular_event_index = j["current_singular_event_index"];
+    current_singular_event = singular_event_parameters.at(current_singular_event_index);
 }
 
 int Street::get_id() const noexcept
@@ -91,7 +93,8 @@ void Street::update()
         if (singular_event_dist(gen))
         {
             std::uniform_int_distribution<> event_selector(0, singular_event_parameters.size() - 1);
-            current_singular_event = singular_event_parameters.at(event_selector(gen));
+            current_singular_event_index = event_selector(gen);
+            current_singular_event = singular_event_parameters.at(current_singular_event_index);
             std::weibull_distribution<> singular_event_time(current_singular_event.shape, current_singular_event.avg_duration);
 
             singular_event_active = true;
@@ -112,6 +115,7 @@ nlohmann::json Street::to_json()
     j["singular_event_odds"] = singular_event_odds;
     j["current_traffic_density"] = current_traffic_density;
     j["singular_event_active"] = singular_event_active;
+    j["current_singular_event_index"] = current_singular_event_index;
     j["current_singular_event_duration"] = current_singular_event_duration;
 
     return j;

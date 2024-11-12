@@ -119,7 +119,7 @@ int Bus::leave_passengers(BusStop &current_stop)
     return passengers;
 }
 
-int Bus::add_passengers(const int& simulation_time, BusStop &bus_stop)
+int Bus::add_passengers(const float &simulation_time, BusStop &bus_stop, std::vector<std::shared_ptr<VisualElement>> path, int path_index)
 {
     std::list<Passenger> aux;
     int passengers = 0; 
@@ -128,19 +128,35 @@ int Bus::add_passengers(const int& simulation_time, BusStop &bus_stop)
     {
         Passenger first_passenger = bus_stop.pop_first_passenger();
 
-        if (((simulation_time + time_in_bus_stop) < first_passenger.get_arrival_time()) || (current_passengers.size() >= max_capacity))
+        if (((simulation_time + time_in_bus_stop/60.f) < first_passenger.get_arrival_time()) || (current_passengers.size() >= max_capacity))
         {
             aux.push_back(first_passenger);
             break;
         }
 
-        if ((first_passenger.get_arrival_time() + first_passenger.get_waiting_time()) < simulation_time) // Gone passengers
+        if ((first_passenger.get_arrival_time() + first_passenger.get_waiting_time()/60.f) < simulation_time) // Gone passengers
         {
             bus_stop.add_gone_passengers(1);
             continue;
         }
 
-        if (true) //Aquí va la condición que determina si el pasajero va a una parada de la ruta del bus actual (Por ahora todos se suben)
+        bool get_on = false;
+
+        for (int i = path_index + 1; i < path.size(); i++)
+        {
+            auto stop = std::dynamic_pointer_cast<BusStop>(path.at(i));
+
+            if (stop)
+            {
+                if (first_passenger.get_bus_stop() == stop->get_id())
+                {
+                    get_on = true; 
+                    break;
+                }
+            }
+        }
+
+        if (get_on) 
         {
             passengers++;
             current_passengers.push_back(first_passenger);

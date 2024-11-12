@@ -36,9 +36,9 @@ int TrafficLight::get_time_to_change()
     return time_to_change;
 }
 
-void TrafficLight::update(int current_time)
+void TrafficLight::update(float current_time)
 {
-    if (last_change + time_to_change < current_time)
+    if (last_change + time_to_change/60.f < current_time)
     {
         return;
     }

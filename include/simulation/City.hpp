@@ -16,13 +16,15 @@ class City
     int id;
     std::string name;
     Designar::Graph<std::shared_ptr<VisualElement>, Street> city_map;
-    int current_time;
     std::vector<int> current_passengers;
+    int current_time_hours; 
+    int current_time_minutes; 
+    int current_time_day; 
 
   public:
     City();
     City(int _id, std::string _name, Designar::Graph<std::shared_ptr<VisualElement>, Street> _city_map,
-         int _current_time);
+         int _current_time_day);
     City(nlohmann::json j);
 
     int get_id() const noexcept;
@@ -39,7 +41,7 @@ class City
     void set_current_passengers(std::vector<int> _current_passengers);
     void update_passengers();
 
-    void initialize_bus_stops();
+    void initialize_bus_stops(int current_time_day);
     void update();
     void run_simulation(std::vector<SimulationInfo> &simulation_infos);
 
