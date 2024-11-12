@@ -119,7 +119,7 @@ int Bus::leave_passengers(BusStop &current_stop)
     return passengers;
 }
 
-int Bus::add_passengers(const float& simulation_time, BusStop &bus_stop)
+int Bus::add_passengers(const float &simulation_time, BusStop &bus_stop, std::vector<std::shared_ptr<VisualElement>> path, int path_index)
 {
     std::list<Passenger> aux;
     int passengers = 0; 
@@ -140,7 +140,23 @@ int Bus::add_passengers(const float& simulation_time, BusStop &bus_stop)
             continue;
         }
 
-        if (true) 
+        bool get_on = false;
+
+        for (int i = path_index + 1; i < path.size(); i++)
+        {
+            auto stop = std::dynamic_pointer_cast<BusStop>(path.at(i));
+
+            if (stop)
+            {
+                if (first_passenger.get_bus_stop() == stop->get_id())
+                {
+                    get_on = true; 
+                    break;
+                }
+            }
+        }
+
+        if (get_on) 
         {
             passengers++;
             current_passengers.push_back(first_passenger);

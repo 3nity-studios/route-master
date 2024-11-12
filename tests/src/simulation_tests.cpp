@@ -15,7 +15,11 @@ TEST_CASE("Get passengers on bus", "[get_passengers_on_bus]") {
     bus_stop.generate_passengers(0);
 
     Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
-    bus.add_passengers(3, bus_stop);
+    Employee employee;
+
+    SimulationInfo info(&bus, &employee, {});
+
+    bus.add_passengers(3, bus_stop, info.elements_path, info.path_index);
 
     bool test_passed = true;
     for (auto passenger : bus.get_passenger_list())
@@ -38,7 +42,11 @@ TEST_CASE("Passengers leave bus stop", "[passengers_leave_stop]") {
     int initial_passenger_count = bus_stop.get_passenger_list().size();
 
     Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 0, 100, 200, 100, 200, 100, 200, 100, 200);
-    bus.add_passengers(3, bus_stop);
+    Employee employee; 
+    
+    SimulationInfo info(&bus, &employee, {});
+
+    bus.add_passengers(3, bus_stop, info.elements_path, info.path_index);
 
     int final_passenger_count = bus_stop.get_passenger_list().size();
 
@@ -51,7 +59,11 @@ TEST_CASE("Future passengers don't get on the bus", "[future_passengers]") {
     bus_stop.generate_passengers(0);
 
     Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 2, 100, 200, 100, 200, 100, 200, 100, 200);
-    bus.add_passengers(3, bus_stop); // Current timestep is 3
+    Employee employee; 
+
+    SimulationInfo info(&bus, &employee, {});
+
+    bus.add_passengers(3, bus_stop, info.elements_path, info.path_index);// Current timestep is 3
 
     bool test_passed = true;
 
@@ -73,7 +85,11 @@ TEST_CASE("Gone passengers don't get on the bus", "[gone_passengers]") {
     bus_stop.generate_passengers(0);
 
     Bus bus = Bus(0, "A", 15, std::list<Passenger>{}, 2, 100, 200, 100, 200, 100, 200, 100, 200);
-    bus.add_passengers(3, bus_stop); // Current timestep is 3
+    Employee employee; 
+
+    SimulationInfo info(&bus, &employee, {});
+
+    bus.add_passengers(3, bus_stop, info.elements_path, info.path_index);
 
     bool test_passed = true;
 

@@ -199,7 +199,7 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             simulation_info.time_state = std::make_pair<int, int>(0, simulation_info.bus->get_time_in_bus_stop());
             simulation_info.next_is_street = true;
             int passengers_off = simulation_info.bus->leave_passengers(*bus_stop);
-            int passengers_on = simulation_info.bus->add_passengers(24*current_time_day + current_time_hours + current_time_minutes/60.f, *bus_stop);
+            int passengers_on = simulation_info.bus->add_passengers(24*current_time_day + current_time_hours + current_time_minutes/60.f, *bus_stop, simulation_info.elements_path, simulation_info.path_index);
             simulation_info.passenger_stop_names.push_back(bus_stop->get_name());
             simulation_info.passengers_per_stop.push_back({passengers_on, passengers_off});
             simulation_info.projection_clock.restart();
@@ -239,7 +239,7 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             simulation_info.time_state = std::make_pair<int, int>(0, simulation_info.bus->get_time_in_bus_stop());
             simulation_info.next_is_street = true;
             int passengers_off = simulation_info.bus->leave_passengers(*bus_stop);
-            int passengers_on = simulation_info.bus->add_passengers(24*current_time_day + current_time_hours + current_time_minutes/60.f, *bus_stop);
+            int passengers_on = simulation_info.bus->add_passengers(24*current_time_day + current_time_hours + current_time_minutes/60.f, *bus_stop, simulation_info.elements_path, simulation_info.path_index);
             simulation_info.passenger_stop_names.push_back(bus_stop->get_name());
             simulation_info.passengers_per_stop.push_back({passengers_on, passengers_off});
             simulation_info.projection_clock.restart();
