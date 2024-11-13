@@ -5,7 +5,7 @@
 #include <string>
 
 BusSelectState::BusSelectState(GameDataRef data)
-    : _data(data), selected_path(0), bus(Bus()), employee(Employee()), new_simulation_info(&bus, &employee, {})
+    : _data(data), selected_path(-1), bus(Bus()), employee(Employee()), new_simulation_info(&bus, &employee, {})
 {
 }
 
@@ -40,6 +40,8 @@ void BusSelectState::init_state()
 
         if (add)
         {
+            new_simulation_info.bus->set_in_route(true);
+            new_simulation_info.employee->set_in_route(true); 
             this->_data->simulation_info.push_back(this->new_simulation_info);
             this->_data->states.remove_state();
         }
@@ -116,9 +118,16 @@ tgui::Panel::Ptr BusSelectState::create_selection_panel()
     }
     busList->onItemSelect([this, info_label](int index) {
         this->new_simulation_info.bus = &this->_data->player.get_bus(index);
-        info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
+        if (!this->_data->routes.empty() && this->selected_path != -1)
+        {
+            info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
                         new_simulation_info.employee->get_name() + "\nRoute: " + this->_data->routes[selected_path].name);
-        this->_data->player.get_bus(index).set_in_route(true); 
+        }
+        else
+        {
+            info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
+                        new_simulation_info.employee->get_name() + "\nRoute: ");
+        }
     });
     horizontalLayout->add(busList);
 
@@ -132,9 +141,16 @@ tgui::Panel::Ptr BusSelectState::create_selection_panel()
     }
     employeeList->onItemSelect([this, info_label](int index) {
         this->new_simulation_info.employee = &this->_data->player.get_employee(index);
-        info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
+        if (!this->_data->routes.empty() && this->selected_path != -1)
+        {
+            info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
                         new_simulation_info.employee->get_name() + "\nRoute: " + this->_data->routes[selected_path].name);
-        this->_data->player.get_employee(index).set_in_route(true); 
+        }
+        else
+        {
+            info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
+                        new_simulation_info.employee->get_name() + "\nRoute: ");
+        }
     });
     horizontalLayout->add(employeeList);
 
