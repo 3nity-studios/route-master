@@ -188,6 +188,13 @@ tgui::ScrollablePanel::Ptr ManagementState::create_payroll_panel()
             this->_data->store.pay_employee(employee.get_id(), this->_data->player);
             this->_data->player.save();
             this->_data->achievement_manager.update(this->_data->player, this->_data->simulation_info);
+            for (const auto &achievement : this->_data->achievement_manager.get_achievements())
+            {
+                if (!achievement.is_claimed())
+                {
+                    this->_data->messages.push_back(Message("Achievement Unlocked", achievement.get_name(), MessageType::AchievementMessage, 0));
+                }
+            }
         });
         grid->addWidget(payButton, i + 1, 5);
     }

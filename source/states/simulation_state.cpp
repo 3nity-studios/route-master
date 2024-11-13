@@ -1,27 +1,31 @@
 #include "states/simulation_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
-#include <string>
-#include <cmath>
+#include "states/achievements_state.hpp"
 #include "states/bus_select_state.hpp"
 #include "states/main_menu_state.hpp"
-#include "states/simulation_state.hpp"
-#include "states/store_state.hpp"
-#include "states/route_list_state.hpp"
 #include "states/management_state.hpp"
-#include "states/stats_state.hpp"
-#include "states/achievements_state.hpp"
 #include "states/messages_state.hpp"
+#include "states/route_list_state.hpp"
+#include "states/simulation_state.hpp"
+#include "states/stats_state.hpp"
+#include "states/store_state.hpp"
 #include "utils/calc_view.hpp"
+#include <cmath>
+#include <string>
 
-SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), person_texture (sf::Image(sf::Vector2u(100, 50), sf::Color::White))
+SimulationState::SimulationState(GameDataRef data)
+    : _data(data), first_time(true), status("Picking up passengers"),
+      bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)),
+      bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)),
+      person_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White))
 {
     std::ifstream info_file("data/simulation_info.json");
     if (info_file.is_open())
     {
         nlohmann::json info_json;
         info_file >> info_json;
-        
+
         for (auto info : info_json["simulation_info"])
         {
             this->_data->simulation_info.push_back(simulation_info_from_json(info));
@@ -32,7 +36,8 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
 }
 
 SimulationState::SimulationState(GameDataRef data, std::vector<SimulationInfo> _simulation_info)
-                : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue))
+    : _data(data), first_time(true), status("Picking up passengers"),
+      bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue))
 {
 }
 
@@ -41,16 +46,16 @@ SimulationInfo SimulationState::simulation_info_from_json(nlohmann::json j)
     Bus aux_bus = j["bus"];
     Bus *j_bus = &_data->player.get_bus(aux_bus.get_id());
     Employee aux_employee = j["employee"];
-    Employee *j_employee = &_data->player.get_employee(aux_employee.get_id()); 
+    Employee *j_employee = &_data->player.get_employee(aux_employee.get_id());
 
     std::vector<VisualElement> elements_path_vector;
 
     for (auto visual_element : j["elements_path"])
     {
-        elements_path_vector.push_back(visual_element); 
+        elements_path_vector.push_back(visual_element);
     }
 
-    std::vector<std::shared_ptr<VisualElement>> j_elements_path; 
+    std::vector<std::shared_ptr<VisualElement>> j_elements_path;
 
     for (auto visual_element : elements_path_vector)
     {
@@ -65,13 +70,13 @@ SimulationInfo SimulationState::simulation_info_from_json(nlohmann::json j)
     }
 
     SimulationInfo simulation_info(j_bus, j_employee, {});
-    
+
     simulation_info.elements_path = j_elements_path;
     simulation_info.time_state.first = j["time_state_first"];
     simulation_info.time_state.second = j["time_state_second"];
     simulation_info.path_index = j["path_index"];
     simulation_info.next_is_street = j["next_is_street"];
-    simulation_info.route_completed =  j["route_completed"]; 
+    simulation_info.route_completed = j["route_completed"];
     simulation_info.have_previous_time = j["have_previous_time"];
     simulation_info.previous_time = j["previous_time"];
     simulation_info.isVisible = j["isVisible"];
@@ -87,7 +92,7 @@ SimulationInfo SimulationState::simulation_info_from_json(nlohmann::json j)
         simulation_info.passengers_per_stop.push_back(std::make_pair<int, int>(passengers, 0));
     }
 
-    int i = 0; 
+    int i = 0;
     for (auto &passengers : simulation_info.passengers_per_stop)
     {
         passengers.second = j["passengers_stop_second"].at(i);
@@ -108,22 +113,22 @@ void SimulationState::save()
 
 nlohmann::json SimulationState::simulation_info_to_json()
 {
-    nlohmann::json j; 
+    nlohmann::json j;
 
-    nlohmann::json simulation_info = nlohmann::json::array(); 
+    nlohmann::json simulation_info = nlohmann::json::array();
 
     for (auto info : this->_data->simulation_info)
     {
         simulation_info.push_back(info.to_json());
     }
 
-    j["simulation_info"] = simulation_info; 
+    j["simulation_info"] = simulation_info;
 
-    return j; 
+    return j;
 }
 
 void SimulationState::init_state()
-{ 
+{
     tgui::Theme::setDefault("assets/tgui/Kenney.txt");
     this->gui.setWindow(*this->_data->window);
 
@@ -151,68 +156,58 @@ void SimulationState::init_state()
     auto messagesButton = tgui::Button::create("Messages");
     messagesButton->setPosition(10, 10);
     messagesButton->setSize(buttonWidth, buttonHeight);
-    messagesButton->onPress([this] {
-            this->_data->states.add_state(Engine::StateRef(new MessagesState(this->_data)), false);
-    });
+    messagesButton->onPress(
+        [this] { this->_data->states.add_state(Engine::StateRef(new MessagesState(this->_data)), false); });
     this->gui.add(messagesButton);
 
     auto exitButton = tgui::Button::create("Back to Menu");
     exitButton->setPosition(10, this->_data->window->getSize().y - (buttonHeight + 5));
     exitButton->setSize(buttonWidth, buttonHeight);
-    exitButton->onPress([this] {
-            this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), true);
-    });
+    exitButton->onPress(
+        [this] { this->_data->states.add_state(Engine::StateRef(new MainMenuState(this->_data)), true); });
     this->gui.add(exitButton);
 
     auto achievementsButton = tgui::Button::create("Achievements");
-    achievementsButton->setPosition(10, this->_data->window->getSize().y - 2*(buttonHeight + 5));
+    achievementsButton->setPosition(10, this->_data->window->getSize().y - 2 * (buttonHeight + 5));
     achievementsButton->setSize(buttonWidth, buttonHeight);
-    achievementsButton->onPress([this] {
-            this->_data->states.add_state(Engine::StateRef(new AchievementsState(this->_data)), false);
-    });
+    achievementsButton->onPress(
+        [this] { this->_data->states.add_state(Engine::StateRef(new AchievementsState(this->_data)), false); });
     this->gui.add(achievementsButton);
 
     auto statsButton = tgui::Button::create("Statistics");
-    statsButton->setPosition(10, this->_data->window->getSize().y - 3*(buttonHeight + 5));
+    statsButton->setPosition(10, this->_data->window->getSize().y - 3 * (buttonHeight + 5));
     statsButton->setSize(buttonWidth, buttonHeight);
-    statsButton->onPress([this] {
-            this->_data->states.add_state(Engine::StateRef(new StatsState(this->_data)), false);
-    });
+    statsButton->onPress(
+        [this] { this->_data->states.add_state(Engine::StateRef(new StatsState(this->_data)), false); });
     this->gui.add(statsButton);
 
     auto storeButton = tgui::Button::create("Store");
-    storeButton->setPosition(10, this->_data->window->getSize().y - 4*(buttonHeight + 5));
+    storeButton->setPosition(10, this->_data->window->getSize().y - 4 * (buttonHeight + 5));
     storeButton->setSize(buttonWidth, buttonHeight);
-    storeButton->onPress([this] {
-        this->_data->states.add_state(Engine::StateRef(new StoreState(this->_data)), false);
-    });
+    storeButton->onPress(
+        [this] { this->_data->states.add_state(Engine::StateRef(new StoreState(this->_data)), false); });
     this->gui.add(storeButton);
 
     auto managementButton = tgui::Button::create("Management");
-    managementButton->setPosition(10, this->_data->window->getSize().y - 5*(buttonHeight + 5));
+    managementButton->setPosition(10, this->_data->window->getSize().y - 5 * (buttonHeight + 5));
     managementButton->setSize(buttonWidth, buttonHeight);
-    managementButton->onPress([this] {
-        this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), false);
-    });
+    managementButton->onPress(
+        [this] { this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), false); });
     this->gui.add(managementButton);
 
     auto designRouteButton = tgui::Button::create("Routes");
-    designRouteButton->setPosition(10, this->_data->window->getSize().y - 6*(buttonHeight + 5));
+    designRouteButton->setPosition(10, this->_data->window->getSize().y - 6 * (buttonHeight + 5));
     designRouteButton->setSize(buttonWidth, buttonHeight);
-    designRouteButton->onPress([this] {
-        this->_data->states.add_state(Engine::StateRef(new RouteListState(this->_data)), false);
-    });
+    designRouteButton->onPress(
+        [this] { this->_data->states.add_state(Engine::StateRef(new RouteListState(this->_data)), false); });
     this->gui.add(designRouteButton);
 
     auto sendBusButton = tgui::Button::create("Send Bus");
-    sendBusButton->setPosition(10, this->_data->window->getSize().y - 7
-    *(buttonHeight + 5));
+    sendBusButton->setPosition(10, this->_data->window->getSize().y - 7 * (buttonHeight + 5));
     sendBusButton->setSize(buttonWidth, buttonHeight);
-    sendBusButton->onPress([this] {
-            this->_data->states.add_state(Engine::StateRef(new BusSelectState(this->_data)), false);
-    });
+    sendBusButton->onPress(
+        [this] { this->_data->states.add_state(Engine::StateRef(new BusSelectState(this->_data)), false); });
     this->gui.add(sendBusButton);
-
 
     init_bus_stops();
     init_bus();
@@ -236,7 +231,7 @@ void SimulationState::update_inputs()
         if (event->is<sf::Event::Closed>())
         {
             save();
-            this->_data->city.save(); 
+            this->_data->city.save();
             this->_data->window->close();
             break;
         }
@@ -373,7 +368,6 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
         }
     }
 
-
     this->gui.draw();
     // Displays rendered objects
     this->_data->window->display();
@@ -388,7 +382,7 @@ void SimulationState::init_bus_stops()
         if (stop)
         {
             sf::Sprite bus_stop(bus_stops_texture);
-            bus_stop.setTextureRect(sf::IntRect(sf::Vector2i(617,200), sf::Vector2i(197,104)));
+            bus_stop.setTextureRect(sf::IntRect(sf::Vector2i(617, 200), sf::Vector2i(197, 104)));
             bus_stop.setPosition(sf::Vector2f(stop->get_x(), stop->get_y()));
             bus_stop.setScale(sf::Vector2<float>(0.5, 0.5));
             bus_stops.push_back(bus_stop);
@@ -397,13 +391,13 @@ void SimulationState::init_bus_stops()
 }
 
 void SimulationState::update_bus_stops()
-{   
+{
 }
 
 void SimulationState::draw_passengers()
 {
-    int j = 0; 
-    int k = 0; 
+    int j = 0;
+    int k = 0;
     sf::IntRect person_select(sf::Vector2i(0, 0), sf::Vector2i(15, 20));
 
     for (auto visual_element : this->_data->city.get_visual_elements())
@@ -412,30 +406,31 @@ void SimulationState::draw_passengers()
 
         if (bus_stop)
         {
-            float passenger_distance = 0; 
-            float vertical_distance = 35; 
-            k = 0; 
+            float passenger_distance = 0;
+            float vertical_distance = 35;
+            k = 0;
 
             for (int i = 0; i < this->_data->city.get_current_passengers().at(j); i++)
             {
                 switch (k)
                 {
-                    case 0: 
-                        person_select.position = sf::Vector2i(0, 0);
-                        break;
-                    case 1: 
-                        person_select.position = sf::Vector2i(15, 0);
-                        break;
-                    case 2: 
-                        person_select.position = sf::Vector2i(30, 0);
-                        break;
-                    default:
-                        person_select.position = sf::Vector2i(45,0);
+                case 0:
+                    person_select.position = sf::Vector2i(0, 0);
+                    break;
+                case 1:
+                    person_select.position = sf::Vector2i(15, 0);
+                    break;
+                case 2:
+                    person_select.position = sf::Vector2i(30, 0);
+                    break;
+                default:
+                    person_select.position = sf::Vector2i(45, 0);
                     break;
                 }
 
                 sf::Sprite person(person_texture);
-                person.setPosition(sf::Vector2f(bus_stop->get_x() + passenger_distance, bus_stop->get_y() + vertical_distance));
+                person.setPosition(
+                    sf::Vector2f(bus_stop->get_x() + passenger_distance, bus_stop->get_y() + vertical_distance));
                 person.setTextureRect(person_select);
                 this->_data->window->draw(person);
 
@@ -443,13 +438,13 @@ void SimulationState::draw_passengers()
 
                 if (passenger_distance > 90.f)
                 {
-                    passenger_distance = 0.f; 
+                    passenger_distance = 0.f;
                     vertical_distance += 10.f;
                 }
 
                 if (k == 3)
                 {
-                    k = 0; 
+                    k = 0;
                 }
                 else
                 {
@@ -476,7 +471,8 @@ void SimulationState::init_bus()
             info.projection_bus.setOrigin(bounds.getCenter());
             if (info.time_state.first == -1)
             {
-                info.projection_bus.setPosition(sf::Vector2f(info.elements_path.at(info.path_index)->get_x() + 35.f, info.elements_path.at(info.path_index)->get_y() + 85.f));
+                info.projection_bus.setPosition(sf::Vector2f(info.elements_path.at(info.path_index)->get_x() + 35.f,
+                                                             info.elements_path.at(info.path_index)->get_y() + 85.f));
             }
             info.projection_bus.setScale(sf::Vector2<float>(2.0, 2.0)); // twice cuz tileset rendering in 32x32
         }
@@ -513,7 +509,7 @@ void SimulationState::update_bus()
         return;
     }
 
-    int i = 0; 
+    int i = 0;
 
     for (auto &info : this->_data->simulation_info)
     {
@@ -532,7 +528,7 @@ void SimulationState::update_bus()
         {
             i++;
             check_is_visible(info);
-            continue; 
+            continue;
         }
 
         auto time = info.time_state;
@@ -555,7 +551,7 @@ void SimulationState::update_bus()
             auto stop1 = info.elements_path.at(info.path_index - 1);
             auto stop2 = info.elements_path.at(info.path_index);
 
-            //encava changes according to greatest difference between axis(es?)
+            // encava changes according to greatest difference between axis(es?)
             if (abs(stop2->get_x() - stop1->get_x()) > abs(stop2->get_y() - stop1->get_y()))
             {
                 if (stop2->get_x() - stop1->get_x() <= 0)
@@ -579,7 +575,8 @@ void SimulationState::update_bus()
                 }
             }
 
-            info.projection_bus_speed = sf::Vector2f((stop2->get_x() - stop1->get_x()) / (time.second * 60.f), (stop2->get_y() - stop1->get_y()) / (time.second * 60.f));
+            info.projection_bus_speed = sf::Vector2f((stop2->get_x() - stop1->get_x()) / (time.second * 60.f),
+                                                     (stop2->get_y() - stop1->get_y()) / (time.second * 60.f));
             status = "Travelling";
         }
 
@@ -591,6 +588,14 @@ void SimulationState::update_bus()
     }
 
     this->_data->achievement_manager.update(this->_data->player, this->_data->simulation_info);
+    for (const auto &achievement : this->_data->achievement_manager.get_achievements())
+    {
+        if (!achievement.is_claimed())
+        {
+            this->_data->messages.push_back(
+                Message("Achievement Unlocked", achievement.get_name(), MessageType::AchievementMessage, 0));
+        }
+    }
 }
 
 void SimulationState::set_simulation_info(std::vector<SimulationInfo> _simulation_info)
@@ -605,22 +610,23 @@ std::vector<SimulationInfo> SimulationState::get_simulation_info()
 
 void SimulationState::resume_state()
 {
-    init_bus(); 
+    init_bus();
 
     simulation_clock.start();
 
-    int i = 0; 
+    int i = 0;
 
     for (auto &info : this->_data->simulation_info)
     {
         if (i != this->_data->simulation_info.size() - 1)
         {
-            if (info.projection_bus.getGlobalBounds().findIntersection(this->_data->simulation_info.back().projection_bus.getGlobalBounds()) != std::nullopt)
+            if (info.projection_bus.getGlobalBounds().findIntersection(
+                    this->_data->simulation_info.back().projection_bus.getGlobalBounds()) != std::nullopt)
             {
-                this->_data->simulation_info.back().isVisible = false; 
+                this->_data->simulation_info.back().isVisible = false;
             }
         }
-       
+
         info.projection_clock.start();
         i++;
     }
@@ -643,13 +649,13 @@ void SimulationState::add_simulation_info(SimulationInfo _simulation_info)
 
 void SimulationState::manage_collisions(SimulationInfo &info, int i)
 {
-    int j = 0; 
+    int j = 0;
 
-    for (auto &info2: this->_data->simulation_info)
+    for (auto &info2 : this->_data->simulation_info)
     {
         if (i == j)
         {
-            continue; 
+            continue;
         }
 
         if (info2.projection_bus.getGlobalBounds().contains(info.calc_vector_tip()))
@@ -670,7 +676,8 @@ void SimulationState::check_is_visible(SimulationInfo &info_to_check)
 {
     for (auto info : this->_data->simulation_info)
     {
-        if (info.projection_bus.getGlobalBounds().findIntersection(info_to_check.projection_bus.getGlobalBounds()) == std::nullopt)
+        if (info.projection_bus.getGlobalBounds().findIntersection(info_to_check.projection_bus.getGlobalBounds()) ==
+            std::nullopt)
         {
             info_to_check.isVisible = true;
         }

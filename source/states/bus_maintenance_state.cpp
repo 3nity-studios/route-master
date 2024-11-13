@@ -72,6 +72,13 @@ void BusMaintenanceState::init_state()
                                             fuelCheckbox->isChecked());
         this->_data->player.save();
         this->_data->achievement_manager.update(this->_data->player, this->_data->simulation_info);
+        for (const auto &achievement : this->_data->achievement_manager.get_achievements())
+        {
+            if (!achievement.is_claimed())
+            {
+                this->_data->messages.push_back(Message("Achievement Unlocked", achievement.get_name(), MessageType::AchievementMessage, 0));
+            }
+        }
         this->_data->states.add_state(Engine::StateRef(new ManagementState(this->_data)), true);
     });
 

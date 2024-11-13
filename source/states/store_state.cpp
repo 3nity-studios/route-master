@@ -201,6 +201,13 @@ tgui::ScrollablePanel::Ptr StoreState::create_store_panel()
             this->_data->player.save();
             this->_data->store.save();
             this->_data->achievement_manager.update(this->_data->player, this->_data->simulation_info);
+            for (const auto &achievement : this->_data->achievement_manager.get_achievements())
+            {
+                if (!achievement.is_claimed())
+                {
+                    this->_data->messages.push_back(Message("Achievement Unlocked", achievement.get_name(), MessageType::AchievementMessage, 0));
+                }
+            }
         });
         grid->addWidget(buyButton, i+1, 3);
     }

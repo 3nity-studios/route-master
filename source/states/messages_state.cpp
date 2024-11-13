@@ -87,9 +87,9 @@ void MessagesState::draw_state(float dt __attribute__((unused)))
 tgui::Panel::Ptr MessagesState::create_message_box(const Message &message, int message_number)
 {
     auto panel = tgui::Panel::create();
-    panel->getRenderer()->setBackgroundColor(tgui::Color(255, 255, 255));
-    panel->setSize({"100%", 100});
-    panel->setPosition({0, message_number * 150});
+    panel->getRenderer()->setBackgroundColor(tgui::Color(50, 185, 242));
+    panel->setSize({this->_data->window->getSize().x - 40, 120});
+    panel->setPosition({10, 10 + (message_number * 130)});
 
     auto titleLabel = tgui::Label::create();
     titleLabel->setText(message.get_title());
@@ -114,8 +114,8 @@ tgui::Panel::Ptr MessagesState::create_message_box(const Message &message, int m
     {
             executeButton->setText("Pay");
     }	
-    executeButton->setSize({100, 30});
-    executeButton->setPosition({panel->getSize().x - 110, 60});
+    executeButton->setSize({150, 35});
+    executeButton->setPosition({panel->getSize().x * 3 / 4, (panel->getSize().y - 35) / 2});
     executeButton->onPress([message] {
         // message.execute();
     });
