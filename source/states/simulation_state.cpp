@@ -445,11 +445,16 @@ void SimulationState::update_bus()
             }
             else
             {
-                info.employee->set_in_route(false);
-                info.bus->set_in_route(false);
-                info.isVisible = false;
-                info.projection_bus.setTextureRect(sf::IntRect(sf::Vector2i(0.f, 0.f), sf::Vector2i(0.f, 0.f)));
-                status = "Route completed";
+                if (info.time_state.first != 3)
+                {
+                    info.employee->set_in_route(false);
+                    info.bus->set_in_route(false);
+                    info.isVisible = false;
+                    info.projection_bus.setTextureRect(sf::IntRect(sf::Vector2i(0.f, 0.f), sf::Vector2i(0.f, 0.f)));
+                    status = "Route completed";
+                    info.time_state.first = 3; 
+                }
+                
                 i++;
             }
             continue;
