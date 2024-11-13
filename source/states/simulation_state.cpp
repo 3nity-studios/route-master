@@ -264,6 +264,8 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     static MapLayer layerSeven(_map, 7);
     static MapLayer layerEight(_map, 8);
     static MapLayer layerNine(_map, 9);
+    static MapLayer layerTen(_map, 10);
+    static MapLayer layerEleven(_map, 11);
 
     // sf::Clock globalClock;
     // sf::Time duration = globalClock.restart();
@@ -278,6 +280,8 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     layerSeven.draw(*this->_data->window, sf::RenderStates::Default);
     layerEight.draw(*this->_data->window, sf::RenderStates::Default);
     layerNine.draw(*this->_data->window, sf::RenderStates::Default);
+    layerTen.draw(*this->_data->window, sf::RenderStates::Default);
+    layerEleven.draw(*this->_data->window, sf::RenderStates::Default);
 
     // write text
     sf::Font font("assets/fonts/joystix.ttf");
