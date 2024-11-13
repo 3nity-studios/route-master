@@ -22,13 +22,12 @@ class SimulationState : public Engine::State
     SimulationState(GameDataRef data, std::vector<SimulationInfo> _simulation_info);
 
     void init_state();
-    void init_bus_stops();
     void init_bus();
     void update_inputs();
     void update_state(float dt __attribute__((unused)));
     void update_bus();
     void update_bus_stops();
-    void draw_passengers();
+    void draw_passengers(sf::Font font);
     void draw_state(float dt __attribute__((unused)));
     void resume_state() override;
     void pause_state() override;
