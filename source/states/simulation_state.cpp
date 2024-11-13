@@ -374,19 +374,19 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
 
 void SimulationState::init_bus_stops()
 {
-    for (auto visual_element : this->_data->city.get_visual_elements())
-    {
-        auto stop = std::dynamic_pointer_cast<BusStop>(visual_element->get_info());
+    // for (auto visual_element : this->_data->city.get_visual_elements())
+    // {
+    //     auto stop = std::dynamic_pointer_cast<BusStop>(visual_element->get_info());
 
-        if (stop)
-        {
-            sf::Sprite bus_stop(bus_stops_texture);
-            bus_stop.setTextureRect(sf::IntRect(sf::Vector2i(617,200), sf::Vector2i(197,104)));
-            bus_stop.setPosition(sf::Vector2f(stop->get_x(), stop->get_y()));
-            bus_stop.setScale(sf::Vector2<float>(0.5, 0.5));
-            bus_stops.push_back(bus_stop);
-        }
-    }
+    //     if (stop)
+    //     {
+    //         sf::Sprite bus_stop(bus_stops_texture);
+    //         bus_stop.setTextureRect(sf::IntRect(sf::Vector2i(617,200), sf::Vector2i(197,104)));
+    //         bus_stop.setPosition(sf::Vector2f(stop->get_x(), stop->get_y()));
+    //         bus_stop.setScale(sf::Vector2<float>(0.5, 0.5));
+    //         bus_stops.push_back(bus_stop);
+    //     }
+    // }
 }
 
 void SimulationState::update_bus_stops()
@@ -405,8 +405,8 @@ void SimulationState::draw_passengers()
 
         if (bus_stop)
         {
-            float passenger_distance = 0; 
-            float vertical_distance = 35; 
+            float passenger_distance = -64; 
+            float vertical_distance = 0; 
             k = 0; 
 
             for (int i = 0; i < this->_data->city.get_current_passengers().at(j); i++)
