@@ -45,11 +45,11 @@ void AchievementManager::update_from_json()
     }
 }
 
-void AchievementManager::update(Player &player, Store &store, std::vector<SimulationInfo> &simulation_info)
+void AchievementManager::update(Player &player, std::vector<SimulationInfo> &simulation_info)
 {
     for (Achievement &achievement : achievements)
     {
-        achievement.check_and_unlock(player, store, simulation_info);
+        achievement.check_and_unlock(player, simulation_info);
     }
     to_json();
 }

@@ -590,7 +590,7 @@ void SimulationState::update_bus()
         info.projection_bus.move(info.projection_bus_speed);
     }
 
-    this->_data->achievement_manager.update(this->_data->player, this->_data->store, this->_data->simulation_info);
+    this->_data->achievement_manager.update(this->_data->player, this->_data->simulation_info);
 }
 
 void SimulationState::set_simulation_info(std::vector<SimulationInfo> _simulation_info)

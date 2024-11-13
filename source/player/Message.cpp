@@ -5,6 +5,12 @@ Message::Message() : title(""), content(""), type(MessageType::AchievementMessag
     // empty
 }
 
+Message::Message(const std::string &_title, const std::string &_content, MessageType _type, int _timestamp)
+    : title(_title), content(_content), type(_type), timestamp(_timestamp)
+{
+    // empty
+}
+
 std::string Message::get_title() const
 {
     return title;
@@ -43,4 +49,32 @@ MessageType Message::get_type() const
 void Message::set_type(const MessageType &_type)
 {
     type = _type;
+}
+
+void Message::execute(Store &store, Player &player, std::vector<std::shared_ptr<Message>> &messages)
+{
+    switch (type)
+    {
+    case MessageType::AchievementMessage:
+        // store.claim_achievement(player, achievement);
+        break;
+    case MessageType::TowMessage:
+        // store.pay_tow(player, bus_id);
+        break;
+    case MessageType::DemandMessage:
+        // store.pay_demand(player, amount);
+        break;
+    default:
+        break;
+    }
+
+    // Remove the message from the vector
+    for (auto it = messages.begin(); it != messages.end(); ++it)
+    {
+        if ((*it)->get_timestamp() == timestamp)
+        {
+            messages.erase(it);
+            break;
+        }
+    }
 }

@@ -211,6 +211,45 @@ void Store::pay_employee(int id, Player &player)
     }
 }
 
+void Store::claim_achievement(Player &player, Achievement &achievement)
+{
+    if (!achievement.is_claimed())
+    {
+        player.increase_balance(achievement.get_accumulated_rewards(true));
+    }
+    else
+    {
+        std::cout << "Achievement already claimed" << std::endl;
+    }
+}
+
+void Store::pay_demand(Player &player, int amount)
+{
+    if (player.get_balance() < amount)
+    {
+        std::cout << "The player's balance is not sufficient to pay the demand" << std::endl;
+    }
+    else
+    {
+        player.decrease_balance(amount);
+    }
+}
+
+void Store::pay_tow(Player &player, int id)
+{
+    auto tow = player.get_bus(id);
+    buy_bus_maintenance(id, player, true, true, true, true);
+    int amount = 5000;
+    if (player.get_balance() < amount)
+    {
+        std::cout << "The player's balance is not sufficient to pay the tow fee" << std::endl;
+    }
+    else
+    {
+        player.decrease_balance(amount);
+    }
+}
+
 nlohmann::json Store::to_json()
 {
     nlohmann::json j;

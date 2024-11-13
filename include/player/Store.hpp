@@ -4,6 +4,7 @@
 #include <nlohmann/json.hpp>
 #include "player/Item.hpp"
 #include "player/Player.hpp"
+#include "player/Achievement.hpp"
 
 class Store
 {
@@ -33,6 +34,10 @@ class Store
     void buy_bus_maintenance(int id, Player &player, bool repair_engine, bool repair_breaks, bool repair_tires, bool refuel);
     void buy_bus_improvements(int id, Player &player, bool improve_engine, bool improve_breaks, bool improve_tires, bool improve_fuel);
     void pay_employee(int id, Player &player);
+
+    void claim_achievement(Player &player, Achievement &achievement);
+    void pay_demand(Player &player, int amount);
+    void pay_tow(Player &player, int id);
 
     nlohmann::json to_json();
     void save();

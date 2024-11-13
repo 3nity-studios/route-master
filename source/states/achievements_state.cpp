@@ -61,9 +61,9 @@ void AchievementsState::init_state()
             achievement_name->setText(achievement.get_name());
             achievement_description->setText(achievement.get_description());
             achievement_progress->setValue(
-                achievement.get_progress(this->_data->player, this->_data->store, this->_data->simulation_info));
+                achievement.get_progress(this->_data->player, this->_data->simulation_info));
             achievement_progress->setText(std::to_string(achievement.get_progress(
-                                              this->_data->player, this->_data->store, this->_data->simulation_info)) +
+                                              this->_data->player, this->_data->simulation_info)) +
                                           "%");
 
             levels->removeAllWidgets();

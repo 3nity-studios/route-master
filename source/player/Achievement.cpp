@@ -1,17 +1,17 @@
 #include "player/Achievement.hpp"
 
-Achievement::Achievement() : id(0), name(""), description(""), current_level(0), completed(false)
+Achievement::Achievement() : id(0), name(""), description(""), current_level(0), completed(false), last_claimed_level(0)
 {
     // empty
 }
 
 Achievement::Achievement(
     const int &_id, const std::string &_name, const std::string &_description,
-    std::vector<std::function<bool(Player &player, Store &store, std::vector<SimulationInfo> &simulation_info)>>
-        _criteria, std::vector<std::function<int(Player &player, Store &store, std::vector<SimulationInfo> &simulation_info)>>
+    std::vector<std::function<bool(Player &player, std::vector<SimulationInfo> &simulation_info)>>
+        _criteria, std::vector<std::function<int(Player &player, std::vector<SimulationInfo> &simulation_info)>>
         _progress,
     std::vector<int> _rewards)
-    : id(_id), name(_name), description(_description), criteria(_criteria), progress(_progress), rewards(_rewards), current_level(0), completed(false)
+    : id(_id), name(_name), description(_description), criteria(_criteria), progress(_progress), rewards(_rewards), current_level(0), completed(false), last_claimed_level(0)
 {
     // empty
 }
@@ -29,7 +29,7 @@ std::string Achievement::get_description() const
 {
     return description;
 }
-std::vector<std::function<bool(Player &player, Store &store, std::vector<SimulationInfo> &simulation_info)>> Achievement::get_criteria() const
+std::vector<std::function<bool(Player &player, std::vector<SimulationInfo> &simulation_info)>> Achievement::get_criteria() const
 {
     return criteria;
 }
@@ -49,6 +49,11 @@ bool Achievement::is_completed() const
     return completed;
 }
 
+bool Achievement::is_claimed() const
+{
+    return last_claimed_level == current_level;
+}
+
 void Achievement::set_id(const int &_id)
 {
     id = _id;
@@ -64,7 +69,7 @@ void Achievement::set_description(const std::string &_description)
     description = _description;
 }
 
-void Achievement::set_criteria(const std::vector<std::function<bool(Player &player, Store &store, std::vector<SimulationInfo> &simulation_info)>> &_criteria)
+void Achievement::set_criteria(const std::vector<std::function<bool(Player &player, std::vector<SimulationInfo> &simulation_info)>> &_criteria)
 {
     criteria = _criteria;
 }
@@ -79,14 +84,14 @@ void Achievement::set_current_level(const int &_current_level)
     current_level = _current_level;
 }
 
-void Achievement::check_and_unlock(Player &player, Store &store, std::vector<SimulationInfo> &simulation_info)
+void Achievement::check_and_unlock(Player &player, std::vector<SimulationInfo> &simulation_info)
 {
     if(completed)
     {
         return;
     }
     
-    while (current_level < criteria.size() && criteria[current_level](player, store, simulation_info))
+    while (current_level < criteria.size() && criteria[current_level](player, simulation_info))
     {
         rewards[current_level];
         current_level++;
@@ -98,11 +103,27 @@ void Achievement::check_and_unlock(Player &player, Store &store, std::vector<Sim
     }
 }
 
-int Achievement::get_progress(Player &player, Store &store, std::vector<SimulationInfo> &simulation_info)
+int Achievement::get_progress(Player &player, std::vector<SimulationInfo> &simulation_info)
 {
     if(completed)
     {
         return 100;
     }
-    return progress[current_level](player, store, simulation_info);
+    return progress[current_level](player, simulation_info);
+}
+
+int Achievement::get_accumulated_rewards(bool claim)
+{
+    int accumulated_rewards = 0;
+    for (int i = last_claimed_level; i < current_level; i++)
+    {
+        accumulated_rewards += rewards[i];
+    }
+
+    if (claim)
+    {
+        last_claimed_level = current_level;
+    }
+
+    return accumulated_rewards;
 }

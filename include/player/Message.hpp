@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include "player/Player.hpp"
+#include "player/Store.hpp"
 
 enum MessageType
 {
@@ -21,6 +23,7 @@ class Message
 
     public:
         Message();
+        Message(const std::string &_title, const std::string &_content, MessageType _type, int _timestamp);
 
         std::string get_title() const;
         std::string get_content() const;
@@ -31,4 +34,5 @@ class Message
         void set_content(const std::string &_content);
         void set_type(const MessageType &_type);
         void set_timestamp(int _timestamp);
+        void execute(Store &store, Player &player, std::vector<std::shared_ptr<Message>> &messages);
 };

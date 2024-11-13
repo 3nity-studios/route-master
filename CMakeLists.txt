@@ -165,8 +165,6 @@ set(
   ${SRCROOT}/player/AchievementManager.cpp
   ${INCROOT}/player/Message.hpp
   ${SRCROOT}/player/Message.cpp
-  ${INCROOT}/player/AchievementMessage.hpp
-  ${SRCROOT}/player/AchievementMessage.cpp
 )
 add_library(route_master_player ${RM_PLAYER_SRC})
 add_library(route_master::player ALIAS route_master_player)

@@ -76,14 +76,14 @@ void Game::init_variables()
         "Buy Buses", 
         "Add buses to your fleet.",
         {
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_buses().size() >= 1; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_buses().size() >= 5; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_buses().size() >= 10; }
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return player.get_buses().size() >= 1; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return player.get_buses().size() >= 5; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return player.get_buses().size() >= 10; }
         },
         {
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_buses().size() / 1) * 100; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_buses().size() / 5) * 100; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_buses().size() / 10) * 100; }
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return (player.get_buses().size() / 1) * 100; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return (player.get_buses().size() / 5) * 100; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return (player.get_buses().size() / 10) * 100; }
         },
         {10000, 20000, 100000}
     ));
@@ -92,14 +92,14 @@ void Game::init_variables()
         "Hire Employees", 
         "Hire employees for your company.",
         {
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_employees().size() >= 1; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_employees().size() >= 5; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_employees().size() >= 10; }
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return player.get_employees().size() >= 1; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return player.get_employees().size() >= 5; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return player.get_employees().size() >= 10; }
         },
         {
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_employees().size() / 1) * 100; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_employees().size() / 5) * 100; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_employees().size() / 10) * 100; }
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return (player.get_employees().size() / 1) * 100; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return (player.get_employees().size() / 5) * 100; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return (player.get_employees().size() / 10) * 100; }
         },
         {5000, 10000, 50000}
     ));
@@ -109,14 +109,14 @@ void Game::init_variables()
         "Earn Money", 
         "Accumulate money in your account.",
         {
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_balance() >= 10000; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_balance() >= 50000; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_balance() >= 100000; }
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return player.get_balance() >= 10000; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return player.get_balance() >= 50000; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return player.get_balance() >= 100000; }
         },
         {
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_balance() / 10000) * 100; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_balance() / 50000) * 100; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_balance() / 100000) * 100; }
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return (player.get_balance() / 10000) * 100; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return (player.get_balance() / 50000) * 100; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return (player.get_balance() / 100000) * 100; }
         },
         {1000, 5000, 10000}
     ));
@@ -126,14 +126,14 @@ void Game::init_variables()
         "Complete Routes", 
         "Successfully complete bus routes.",
         {
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return simulation_info.size() >= 1; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return simulation_info.size() >= 5; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return simulation_info.size() >= 10; }
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return simulation_info.size() >= 1; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return simulation_info.size() >= 5; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return simulation_info.size() >= 10; }
         },
         {
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (simulation_info.size() / 1) * 100; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (simulation_info.size() / 5) * 100; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (simulation_info.size() / 10) * 100; }
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return (simulation_info.size() / 1) * 100; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return (simulation_info.size() / 5) * 100; },
+            [](Player &player, std::vector<SimulationInfo> &simulation_info) { return (simulation_info.size() / 10) * 100; }
         },
         {2000, 10000, 50000}
     ));
