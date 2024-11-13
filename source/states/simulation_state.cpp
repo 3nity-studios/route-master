@@ -207,8 +207,6 @@ void SimulationState::init_state()
     });
     this->gui.add(sendBusButton);
 
-
-    init_bus_stops();
     init_bus();
 
     this->_map.load("assets/maps/demo.tmx");
@@ -312,8 +310,6 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
         this->_data->window->draw(bus_stop);
     }
 
-    draw_passengers();
-
     for (auto info : this->_data->simulation_info)
     {
         if (info.isVisible)
@@ -322,38 +318,20 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
         }
     }
 
+    draw_passengers(font);
 
     this->gui.draw();
     // Displays rendered objects
     this->_data->window->display();
 }
 
-void SimulationState::init_bus_stops()
-{
-    for (auto visual_element : this->_data->city.get_visual_elements())
-    {
-        auto stop = std::dynamic_pointer_cast<BusStop>(visual_element->get_info());
-
-        if (stop)
-        {
-            sf::Sprite bus_stop(bus_stops_texture);
-            bus_stop.setTextureRect(sf::IntRect(sf::Vector2i(617,200), sf::Vector2i(197,104)));
-            bus_stop.setPosition(sf::Vector2f(stop->get_x(), stop->get_y()));
-            bus_stop.setScale(sf::Vector2<float>(0.5, 0.5));
-            bus_stops.push_back(bus_stop);
-        }
-    }
-}
-
 void SimulationState::update_bus_stops()
 {   
 }
 
-void SimulationState::draw_passengers()
+void SimulationState::draw_passengers(sf::Font font)
 {
     int j = 0; 
-    int k = 0; 
-    sf::IntRect person_select(sf::Vector2i(0, 0), sf::Vector2i(15, 20));
 
     for (auto visual_element : this->_data->city.get_visual_elements())
     {
@@ -361,50 +339,13 @@ void SimulationState::draw_passengers()
 
         if (bus_stop)
         {
-            float passenger_distance = 0; 
-            float vertical_distance = 35; 
-            k = 0; 
+            sf::Text amount(font); 
 
-            for (int i = 0; i < this->_data->city.get_current_passengers().at(j); i++)
-            {
-                switch (k)
-                {
-                    case 0: 
-                        person_select.position = sf::Vector2i(0, 0);
-                        break;
-                    case 1: 
-                        person_select.position = sf::Vector2i(15, 0);
-                        break;
-                    case 2: 
-                        person_select.position = sf::Vector2i(30, 0);
-                        break;
-                    default:
-                        person_select.position = sf::Vector2i(45,0);
-                    break;
-                }
+            amount.setString(bus_stop->get_name() + ": " + std::to_string(this->_data->city.get_current_passengers().at(j)) + " passengers");
+            amount.setPosition(sf::Vector2f(bus_stop->get_x(), bus_stop->get_y()));
+            amount.setCharacterSize(24); 
 
-                sf::Sprite person(person_texture);
-                person.setPosition(sf::Vector2f(bus_stop->get_x() + passenger_distance, bus_stop->get_y() + vertical_distance));
-                person.setTextureRect(person_select);
-                this->_data->window->draw(person);
-
-                passenger_distance = passenger_distance + 15.f;
-
-                if (passenger_distance > 90.f)
-                {
-                    passenger_distance = 0.f; 
-                    vertical_distance += 10.f;
-                }
-
-                if (k == 3)
-                {
-                    k = 0; 
-                }
-                else
-                {
-                    k++;
-                }
-            }
+            this->_data->window->draw(amount); 
 
             j++;
         }
@@ -425,7 +366,7 @@ void SimulationState::init_bus()
             info.projection_bus.setOrigin(bounds.getCenter());
             if (info.time_state.first == -1)
             {
-                info.projection_bus.setPosition(sf::Vector2f(info.elements_path.at(info.path_index)->get_x() + 35.f, info.elements_path.at(info.path_index)->get_y() + 85.f));
+                info.projection_bus.setPosition(sf::Vector2f(info.elements_path.at(info.path_index)->get_x(), info.elements_path.at(info.path_index)->get_y()));
             }
             info.projection_bus.setScale(sf::Vector2<float>(2.0, 2.0)); // twice cuz tileset rendering in 32x32
         }

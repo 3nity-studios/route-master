@@ -289,7 +289,8 @@ void RouteEditState::init_visual_elements()
         if (bus_stop)
         {
             sf::Sprite sprite(map_icons_texture);
-            sprite.setPosition(sf::Vector2f(bus_stop->get_x(), bus_stop->get_y()));
+            sprite.setScale({0.7, 0.7});
+            sprite.setPosition(sf::Vector2f(0.2*bus_stop->get_x(), 0.2*bus_stop->get_y()));
             sprite.setTextureRect(bus_stop_rect);
             sprite.setOrigin(sprite.getLocalBounds().getCenter());
             sprite.setColor(sf::Color(75, 73, 71));
@@ -300,7 +301,8 @@ void RouteEditState::init_visual_elements()
         else if (traffic_light)
         {
             sf::Sprite sprite(map_icons_texture);
-            sprite.setPosition(sf::Vector2f(traffic_light->get_x(), traffic_light->get_y()));
+            sprite.setScale({0.7, 0.7});
+            sprite.setPosition(sf::Vector2f(0.2*traffic_light->get_x(), 0.2*traffic_light->get_y()));
             sprite.setTextureRect(traffic_light_rect);
             sprite.setOrigin(sprite.getLocalBounds().getCenter());
             sprite.setColor(sf::Color(75, 73, 71));
@@ -311,7 +313,8 @@ void RouteEditState::init_visual_elements()
         else
         {
             sf::Sprite sprite(map_icons_texture);
-            sprite.setPosition(sf::Vector2f(visual_element->get_info()->get_x(), visual_element->get_info()->get_y()));
+            sprite.setScale({0.7, 0.7});
+            sprite.setPosition(sf::Vector2f(0.2*visual_element->get_info()->get_x(), 0.2*visual_element->get_info()->get_y()));
             sprite.setTextureRect(curve_rect);
             sprite.setOrigin(sprite.getLocalBounds().getCenter());
             sprite.setColor(sf::Color(75, 73, 71));
@@ -339,11 +342,11 @@ void RouteEditState::draw_lines()
     {
         sf::Vertex ver1;
         ver1.position =
-            sf::Vector2f(element->get_src_node()->get_info()->get_x(), element->get_src_node()->get_info()->get_y());
+            sf::Vector2f(0.2*element->get_src_node()->get_info()->get_x(), 0.2*element->get_src_node()->get_info()->get_y());
         ver1.color = sf::Color::Black;
         sf::Vertex ver2;
         ver2.position =
-            sf::Vector2f(element->get_tgt_node()->get_info()->get_x(), element->get_tgt_node()->get_info()->get_y());
+            sf::Vector2f(0.2*element->get_tgt_node()->get_info()->get_x(), 0.2*element->get_tgt_node()->get_info()->get_y());
         ver2.color = sf::Color::Black;
 
         sf::Vertex line[] = {ver1, ver2};
@@ -357,10 +360,10 @@ void RouteEditState::draw_lines()
         auto element2 = route.route.at(i - 1);
 
         sf::Vertex ver1;
-        ver1.position = sf::Vector2f(element->get_x(), element->get_y());
+        ver1.position = sf::Vector2f(0.2*element->get_x(), 0.2*element->get_y());
         ver1.color = sf::Color::Yellow;
         sf::Vertex ver2;
-        ver2.position = sf::Vector2f(element2->get_x(), element2->get_y());
+        ver2.position = sf::Vector2f(0.2*element2->get_x(), 0.2*element2->get_y());
         ver2.color = sf::Color::Yellow;
 
         sf::Vertex line[] = {ver1, ver2};

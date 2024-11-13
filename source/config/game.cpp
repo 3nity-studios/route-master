@@ -149,94 +149,166 @@ void Game::init_variables()
     }
     else
     {
-        BusStop stop1(1, "Stop1", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 5.0, 2.0, 750.f, 5.f);
-        BusStop stop2(2, "Stop2", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 3.0, 2.0, 500.f, 5.f);
-        BusStop stop3(3, "Stop3", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 350.f, 5.f);
-        BusStop stop4(4, "Stop4", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 5.0, 2.0, 350.f, 250.f);
-        BusStop stop5(5, "Stop5", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 600.f, 250.f);
-        BusStop stop6(6, "Stop6", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 600.f, 500.f);
+        BusStop stop1(1, "Stop1", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 5.0, 2.0, 3200.f, 128.f);
+        BusStop stop2(2, "Stop2", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 3.0, 2.0, 1824.f, 128.f);
+        BusStop stop3(3, "Stop3", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 704.f, 416.f);
+        BusStop stop4(4, "Stop4", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 5.0, 2.0, 704.f, 1792.f);
+        BusStop stop5(5, "Stop5", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 1056.f, 1440.f);
+        BusStop stop6(6, "Stop6", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 1248.f, 736.f);
+        BusStop stop7(7, "Stop7", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 1440.f, 416.f);
+        BusStop stop8(8, "Stop8", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 1440.f, 1760.f);
+        BusStop stop9(9, "Stop9", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 1984.f, 2048.f);
+        BusStop stop10(10, "Stop10", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 2784.f, 1440.f);
+        BusStop stop11(11, "Stop11", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 2784.f, 736.f);
+        BusStop stop12(12, "Stop12", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 2976.f, 448.f);
+        BusStop stop13(13, "Stop13", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 3744.f, 352.f);
+        BusStop stop14(14, "Stop14", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 3424.f, 1440.f);
 
-        TrafficLight light1(7, std::vector<std::pair<StreetConnectionIDs, bool>>{std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(6,7), true)}, 10, 450.f, 250.f);
-
-        VisualElement curve1(8, 220.f, 50.f);
-        VisualElement curve2(9, 220.f, 250.f);
-        VisualElement curve3(10, 745.f, 275.f);
-        VisualElement curve4(11, 745.f, 500.f);
+        VisualElement curve15(15, 3744.f, 128.f);
+        VisualElement curve16(16, 2976.f, 128.f);
+        VisualElement curve17(17, 2208.f, 128.f);
+        VisualElement curve18(18, 1440.f, 128.f);
+        VisualElement curve19(19, 704.f, 128.f);
+        VisualElement curve20(20, 704.f, 736.f);
+        VisualElement curve21(21, 704.f, 1440.f);
+        VisualElement curve22(22, 704.f, 2048.f);
+        VisualElement curve23(23, 32.f, 736.f);
+        VisualElement curve24(24, 32.f, 1440.f);
+        VisualElement curve25(25, 1440.f, 736.f);
+        VisualElement curve26(26, 2208.f, 736.f);
+        VisualElement curve27(27, 2976.f, 736.f);
+        VisualElement curve28(28, 3744.f, 736.f);
+        VisualElement curve29(29, 1440.f, 1440.f);
+        VisualElement curve30(30, 2208.f, 1440.f);
+        VisualElement curve31(31, 2976.f, 1440.f);
+        VisualElement curve32(32, 3744.f, 1440.f);
+        VisualElement curve33(33, 1440.f, 2048.f);
+        VisualElement curve34(34, 2208.f, 2048.f);
+        VisualElement curve35(35, 2976.f, 2048.f);
 
         this->_data->city.add_bus_stop(stop1);
         this->_data->city.add_bus_stop(stop2);
         this->_data->city.add_bus_stop(stop3);
         this->_data->city.add_bus_stop(stop4);
-        this->_data->city.add_traffic_light(light1);
         this->_data->city.add_bus_stop(stop5);
         this->_data->city.add_bus_stop(stop6);
-        this->_data->city.add_curve(curve1);
-        this->_data->city.add_curve(curve2);
-        this->_data->city.add_curve(curve3);
-        this->_data->city.add_curve(curve4);
+        this->_data->city.add_bus_stop(stop7);
+        this->_data->city.add_bus_stop(stop8);
+        this->_data->city.add_bus_stop(stop9);
+        this->_data->city.add_bus_stop(stop10);
+        this->_data->city.add_bus_stop(stop11);
+        this->_data->city.add_bus_stop(stop12);
+        this->_data->city.add_bus_stop(stop13);
+        this->_data->city.add_bus_stop(stop14);
+        this->_data->city.add_curve(curve15);
+        this->_data->city.add_curve(curve16);
+        this->_data->city.add_curve(curve17);
+        this->_data->city.add_curve(curve18);
+        this->_data->city.add_curve(curve19);
+        this->_data->city.add_curve(curve20);
+        this->_data->city.add_curve(curve21);
+        this->_data->city.add_curve(curve22);
+        this->_data->city.add_curve(curve23);
+        this->_data->city.add_curve(curve24);
+        this->_data->city.add_curve(curve25);
+        this->_data->city.add_curve(curve26);
+        this->_data->city.add_curve(curve27);
+        this->_data->city.add_curve(curve28);
+        this->_data->city.add_curve(curve29);
+        this->_data->city.add_curve(curve30);
+        this->_data->city.add_curve(curve31);
+        this->_data->city.add_curve(curve32);
+        this->_data->city.add_curve(curve33);
+        this->_data->city.add_curve(curve34);
+        this->_data->city.add_curve(curve35);
 
         this->_data->city.initialize_bus_stops(0);
 
-        Street street1 = util::StreetFactory(_data, 1, "Street1", 1, 2, 200.0f, 2.0f, 0.1f, 0.05f);
-        Street street2(2, "Street2", calc_distance(stop2, stop3), 50.0f, 2.0f, 0.1f, 0.05f);
-        Street street3(3, "Street3", calc_distance(stop3, curve1), 100.0f, 2.0f, 0.1f, 0.05f);
-        Street street4(4, "Street4", calc_distance(curve1, curve2), 25.0f, 2.0f, 0.1f, 0.05f);
-        Street street5(5, "Street5", calc_distance(curve2, stop4), 50.0f, 2.0f, 0.1f, 0.05f);
-        Street street6(6, "Street6", calc_distance(stop4, light1), 50.0f, 2.0f, 0.1f, 0.05f);
-        Street street7(7, "Street7", calc_distance(light1, stop5), 50.0f, 2.0f, 0.1f, 0.05f);
-        Street street8(8, "Street8", calc_distance(stop5, curve3), 100.0f, 2.0f, 0.1f, 0.05f);
-        Street street9(9, "Street9", calc_distance(curve3, curve4), 50.0f, 2.0f, 0.1f, 0.05f);
-        Street street10(10, "Street10", calc_distance(curve4, stop6), 50.0f, 2.0f, 0.1f, 0.05f);
-
-        this->_data->city.add_street(street1, 1, 2);
-        this->_data->city.add_street(street2, 2, 3);
-        this->_data->city.add_street(street3, 3, 8);
-        this->_data->city.add_street(street4, 8, 9);
-        this->_data->city.add_street(street5, 9, 4);
-        this->_data->city.add_street(street6, 4, 7);
-        this->_data->city.add_street(street7, 7, 5);
-        this->_data->city.add_street(street8, 5, 10);
-        this->_data->city.add_street(street9, 10, 11);
-        this->_data->city.add_street(street10, 11, 6);
+        Street street1 = util::StreetFactory(_data, 1, "Street1", 15, 1, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street2 = util::StreetFactory(_data, 2, "Street2", 1, 16, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street3 = util::StreetFactory(_data, 3, "Street3", 16, 17, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street4 = util::StreetFactory(_data, 4, "Street4", 17, 2, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street5 = util::StreetFactory(_data, 5, "Street5", 2, 18, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street6 = util::StreetFactory(_data, 6, "Street6", 18, 19, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street7 = util::StreetFactory(_data, 7, "Street7", 23, 20, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street8 = util::StreetFactory(_data, 8, "Street8", 20, 6, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street9 = util::StreetFactory(_data, 9, "Street9", 6, 25, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street10 = util::StreetFactory(_data, 10, "Street10", 25, 26, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street11 = util::StreetFactory(_data, 11, "Street11", 26, 11, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street12 = util::StreetFactory(_data, 12, "Street12", 11, 27, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street13 = util::StreetFactory(_data, 13, "Street13", 27, 28, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street14 = util::StreetFactory(_data, 14, "Street14", 32, 14, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street15 = util::StreetFactory(_data, 15, "Street15", 14, 31, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street16 = util::StreetFactory(_data, 16, "Street16", 31, 10, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street17 = util::StreetFactory(_data, 17, "Street17", 10, 30, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street18 = util::StreetFactory(_data, 18, "Street18", 30, 29, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street19 = util::StreetFactory(_data, 19, "Street19", 29, 5, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street20 = util::StreetFactory(_data, 20, "Street20", 5, 21, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street21 = util::StreetFactory(_data, 21, "Street21", 21, 24, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street22 = util::StreetFactory(_data, 22, "Street22", 22, 33, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street23 = util::StreetFactory(_data, 23, "Street23", 33, 9, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street24 = util::StreetFactory(_data, 24, "Street24", 9, 34, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street25 = util::StreetFactory(_data, 25, "Street25", 34, 35, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street26 = util::StreetFactory(_data, 26, "Street26", 23, 24, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street27 = util::StreetFactory(_data, 27, "Street27", 19, 3, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street28 = util::StreetFactory(_data, 28, "Street28", 3, 20, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street29 = util::StreetFactory(_data, 29, "Street29", 20, 21, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street30 = util::StreetFactory(_data, 30, "Street30", 21, 4, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street31 = util::StreetFactory(_data, 31, "Street31", 4, 22, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street32 = util::StreetFactory(_data, 32, "Street32", 33, 8, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street33 = util::StreetFactory(_data, 33, "Street33", 8, 29, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street34 = util::StreetFactory(_data, 34, "Street34", 29, 25, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street35 = util::StreetFactory(_data, 35, "Street35", 25, 7, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street36 = util::StreetFactory(_data, 36, "Street36", 7, 18, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street37 = util::StreetFactory(_data, 37, "Street37", 17, 26, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street38 = util::StreetFactory(_data, 38, "Street38", 26, 30, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street39 = util::StreetFactory(_data, 39, "Street39", 30, 34, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street40 = util::StreetFactory(_data, 40, "Street40", 35, 31, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street41 = util::StreetFactory(_data, 41, "Street41", 31, 27, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street42 = util::StreetFactory(_data, 42, "Street42", 27, 12, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street43 = util::StreetFactory(_data, 43, "Street43", 12, 16, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street44 = util::StreetFactory(_data, 44, "Street44", 15, 13, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street45 = util::StreetFactory(_data, 45, "Street45", 13, 28, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street46 = util::StreetFactory(_data, 46, "Street46", 28, 32, 10.f, 2.0f, 0.1f, 0.05f);
     }
 
-    StreetArcList path;
+    //StreetArcList path;
 
-    for (int i = 1; i < 6; i++)
-    {
-        for (auto street : this->_data->city.get_streets())
-        {
-            if (street->get_info().get_id() == i)
-            {
-                path.append(street);
-            }
-        }
-    }
+    // for (int i = 1; i < 6; i++)
+    // {
+    //     for (auto street : this->_data->city.get_streets())
+    //     {
+    //         if (street->get_info().get_id() == i)
+    //         {
+    //             path.append(street);
+    //         }
+    //     }
+    // }
 
-    StreetArcList path2;
+    // StreetArcList path2;
 
-    for (int i = 6; i < 11; i++)
-    {
-        for (auto street : this->_data->city.get_streets())
-        {
-            if (street->get_info().get_id() == i)
-            {
-                path2.append(street);
-            }
-        }
-    }
+    // for (int i = 6; i < 11; i++)
+    // {
+    //     for (auto street : this->_data->city.get_streets())
+    //     {
+    //         if (street->get_info().get_id() == i)
+    //         {
+    //             path2.append(street);
+    //         }
+    //     }
+    // }
 
-    Bus bus_sim(1, "Bus 1", 10, {}, 5, 100, 5, 80, 4, 60, 3, 40, 2);
-    Employee driver_sim(1, "John", "Doe", 25, 50, 5, 0);
+    // Bus bus_sim(1, "Bus 1", 10, {}, 5, 100, 5, 80, 4, 60, 3, 40, 2);
+    // Employee driver_sim(1, "John", "Doe", 25, 50, 5, 0);
 
-    Bus bus_sim2(2, "Bus 2", 15, {}, 5, 150, 7, 120, 6, 90, 5, 70, 3);
-    Employee driver_sim2(2, "Rodrigo", "Hernandez", 23, 30, 12, 0);
+    // Bus bus_sim2(2, "Bus 2", 15, {}, 5, 150, 7, 120, 6, 90, 5, 70, 3);
+    // Employee driver_sim2(2, "Rodrigo", "Hernandez", 23, 30, 12, 0);
 
-    SimulationInfo simulation(&bus_sim, &driver_sim, path);
-    SimulationInfo simulation2(&bus_sim2, &driver_sim2, path2);
+    // SimulationInfo simulation(&bus_sim, &driver_sim, path);
+    // SimulationInfo simulation2(&bus_sim2, &driver_sim2, path2);
 
-    this->_data->routes.push_back(Route("Route 1", simulation.elements_path));
-    this->_data->routes.push_back(Route("Route 2", simulation2.elements_path));
+    // this->_data->routes.push_back(Route("Route 1", simulation.elements_path));
+    // this->_data->routes.push_back(Route("Route 2", simulation2.elements_path));
 }
 void Game::init_window()
 {

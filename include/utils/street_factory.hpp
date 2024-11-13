@@ -35,6 +35,10 @@ static Street StreetFactory(GameDataRef game_data, int id, std::string name, int
     auto y = element1->get_y() - element2->get_y();
     auto distance = std::hypot(x, y);
 
-    return Street(id, name, distance, avg_speed, avg_traffic_density, sd_traffic_density, singular_event_odds);
+    Street street(id, name, distance, avg_speed, avg_traffic_density, sd_traffic_density, singular_event_odds);
+
+    game_data->city.add_street(street, v_element1_id, v_element2_id);
+
+    return street;
 }
 } // namespace util
