@@ -57,7 +57,7 @@ class SimulationState : public Engine::State
     sf::Texture person_texture;
     int actual_stop;
     int current_time;
-    tgui::Gui gui;
+    tgui::Gui gui; 
     tmx::Map _map;
     std::unique_ptr<util::ViewDragger> _view_dragger;
 };

@@ -156,9 +156,13 @@ set(
   ${INCROOT}/player/Player.hpp
   ${INCROOT}/player/Store.hpp
   ${INCROOT}/player/Item.hpp
+  ${INCROOT}/player/Achievement.hpp
+  ${INCROOT}/player/AchievementManager.hpp
   ${SRCROOT}/player/Player.cpp
   ${SRCROOT}/player/Store.cpp
   ${SRCROOT}/player/Item.cpp
+  ${SRCROOT}/player/Achievement.cpp
+  ${SRCROOT}/player/AchievementManager.cpp
 )
 add_library(route_master_player ${RM_PLAYER_SRC})
 add_library(route_master::player ALIAS route_master_player)
@@ -200,6 +204,8 @@ set(
   ${SRCROOT}/states/management_state.cpp
   ${INCROOT}/states/stats_state.hpp
   ${SRCROOT}/states/stats_state.cpp
+  ${INCROOT}/states/achievements_state.hpp
+  ${SRCROOT}/states/achievements_state.cpp
 )
 add_library(route_master_states ${RM_STATES_SRC})
 add_library(route_master::states ALIAS route_master_states)

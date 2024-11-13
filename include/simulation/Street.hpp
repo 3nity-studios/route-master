@@ -35,6 +35,7 @@ class Street
     bool singular_event_active;
     SingularEvent current_singular_event;
     int current_singular_event_duration;
+    int current_singular_event_index; 
 
     public: 
 

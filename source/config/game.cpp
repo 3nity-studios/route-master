@@ -6,6 +6,7 @@
 
 #include "simulation/Bus.hpp"
 #include "simulation/Employee.hpp"
+#include "player/AchievementManager.hpp"
 
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -69,6 +70,75 @@ void Game::init_variables()
         this->_data->store.save();
     }
 
+    this->_data->achievement_manager = AchievementManager();
+    this->_data->achievement_manager.add_achievement(Achievement(
+        0, 
+        "Buy Buses", 
+        "Add buses to your fleet.",
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_buses().size() >= 1; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_buses().size() >= 5; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_buses().size() >= 10; }
+        },
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_buses().size() / 1) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_buses().size() / 5) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_buses().size() / 10) * 100; }
+        },
+        {10000, 20000, 100000}
+    ));
+    this->_data->achievement_manager.add_achievement(Achievement(
+        1, 
+        "Hire Employees", 
+        "Hire employees for your company.",
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_employees().size() >= 1; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_employees().size() >= 5; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_employees().size() >= 10; }
+        },
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_employees().size() / 1) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_employees().size() / 5) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_employees().size() / 10) * 100; }
+        },
+        {5000, 10000, 50000}
+    ));
+
+    this->_data->achievement_manager.add_achievement(Achievement(
+        2, 
+        "Earn Money", 
+        "Accumulate money in your account.",
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_balance() >= 10000; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_balance() >= 50000; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_balance() >= 100000; }
+        },
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_balance() / 10000) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_balance() / 50000) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_balance() / 100000) * 100; }
+        },
+        {1000, 5000, 10000}
+    ));
+
+    this->_data->achievement_manager.add_achievement(Achievement(
+        3, 
+        "Complete Routes", 
+        "Successfully complete bus routes.",
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return simulation_info.size() >= 1; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return simulation_info.size() >= 5; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return simulation_info.size() >= 10; }
+        },
+        {
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (simulation_info.size() / 1) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (simulation_info.size() / 5) * 100; },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (simulation_info.size() / 10) * 100; }
+        },
+        {2000, 10000, 50000}
+    ));
+    this->_data->achievement_manager.update_from_json();
+
     std::ifstream city_file("data/city.json");
     if (city_file.is_open())
     {
@@ -79,12 +149,12 @@ void Game::init_variables()
     }
     else
     {
-        BusStop stop1(1, "Stop1", {2, 3, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 750.f, 5.f);
-        BusStop stop2(2, "Stop2", {2, 3, 4}, 3.0, 10.0, 3.0, 3.0, 2.0, 500.f, 5.f);
-        BusStop stop3(3, "Stop3", {2, 3, 3}, 3.0, 5.0, 3.0, 3.0, 2.0, 350.f, 5.f);
-        BusStop stop4(4, "Stop4", {2, 4, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 350.f, 250.f);
-        BusStop stop5(5, "Stop5", {2, 5, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 600.f, 250.f);
-        BusStop stop6(6, "Stop6", {2, 6, 3}, 3.0, 15.0, 3.0, 3.0, 2.0, 600.f, 500.f);
+        BusStop stop1(1, "Stop1", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 5.0, 2.0, 750.f, 5.f);
+        BusStop stop2(2, "Stop2", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 3.0, 2.0, 500.f, 5.f);
+        BusStop stop3(3, "Stop3", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 350.f, 5.f);
+        BusStop stop4(4, "Stop4", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 5.0, 2.0, 350.f, 250.f);
+        BusStop stop5(5, "Stop5", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 600.f, 250.f);
+        BusStop stop6(6, "Stop6", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 600.f, 500.f);
 
         TrafficLight light1(7, std::vector<std::pair<StreetConnectionIDs, bool>>{std::make_pair<StreetConnectionIDs, bool>(std::make_pair<int, int>(6,7), true)}, 10, 450.f, 250.f);
 
@@ -105,7 +175,7 @@ void Game::init_variables()
         this->_data->city.add_curve(curve3);
         this->_data->city.add_curve(curve4);
 
-        this->_data->city.initialize_bus_stops();
+        this->_data->city.initialize_bus_stops(0);
 
         Street street1 = util::StreetFactory(_data, 1, "Street1", 1, 2, 200.0f, 2.0f, 0.1f, 0.05f);
         Street street2(2, "Street2", calc_distance(stop2, stop3), 50.0f, 2.0f, 0.1f, 0.05f);
@@ -128,9 +198,6 @@ void Game::init_variables()
         this->_data->city.add_street(street8, 5, 10);
         this->_data->city.add_street(street9, 10, 11);
         this->_data->city.add_street(street10, 11, 6);
-
-        this->_data->city.update();
-        this->_data->city.update_passengers(); 
     }
 
     StreetArcList path;

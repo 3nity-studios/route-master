@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Designar/list.hpp>
 #include <nlohmann/json.hpp>
 #include "player/Item.hpp"
