@@ -86,13 +86,13 @@ Button.confirm_button {
         TextStyleDownHover = Regular;
         TextStyleFocused = Regular;
         TextStyleHover = Regular;
-        Texture = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
+        Texture = "../tgui/kenney/PNG/Green/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
         TextureDisabled = None;
         TextureDown = None;
         TextureDownFocused = None;
-        TextureDownHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_flat.png" Middle(4, 4, 96, 32) Smooth;
+        TextureDownHover = "../tgui/kenney/PNG/Green/Default/button_rectangle_flat.png" Middle(4, 4, 96, 32) Smooth;
         TextureFocused = None;
-        TextureHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gradient.png" Middle(4, 4, 96, 32) Smooth;
+        TextureHover = "../tgui/kenney/PNG/Green/Default/button_rectangle_depth_gradient.png" Middle(4, 4, 96, 32) Smooth;
         TransparentTexture = False;
     }
 }
@@ -140,13 +140,13 @@ Button.cancel_button {
         TextStyleDownHover = Regular;
         TextStyleFocused = Regular;
         TextStyleHover = Regular;
-        Texture = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
+        Texture = "../tgui/kenney/PNG/Red/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
         TextureDisabled = None;
         TextureDown = None;
         TextureDownFocused = None;
-        TextureDownHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_flat.png" Middle(4, 4, 96, 32) Smooth;
+        TextureDownHover = "../tgui/kenney/PNG/Red/Default/button_rectangle_flat.png" Middle(4, 4, 96, 32) Smooth;
         TextureFocused = None;
-        TextureHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gradient.png" Middle(4, 4, 96, 32) Smooth;
+        TextureHover = "../tgui/kenney/PNG/Red/Default/button_rectangle_depth_gradient.png" Middle(4, 4, 96, 32) Smooth;
         TransparentTexture = False;
     }
 }

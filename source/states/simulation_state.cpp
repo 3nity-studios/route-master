@@ -13,7 +13,7 @@
 #include "states/achievements_state.hpp"
 #include "utils/calc_view.hpp"
 
-SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), person_texture (sf::Image(sf::Vector2u(100, 50), sf::Color::White))
+SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), person_texture (sf::Image(sf::Vector2u(100, 50), sf::Color::White)), _view_dragger(std::make_unique<util::ViewDragger>(*_data->window))
 {
     std::ifstream info_file("data/simulation_info.json");
     if (info_file.is_open())
@@ -150,6 +150,7 @@ void SimulationState::init_state()
     int buttonWidth = 150;
 
     auto exitButton = tgui::Button::create("Back to Menu");
+    exitButton->setRenderer(tgui::Theme::getDefault()->getRenderer("RedButton"));
     exitButton->setPosition(10, this->_data->window->getSize().y - (buttonHeight + 5));
     exitButton->setSize(buttonWidth, buttonHeight);
     exitButton->onPress([this] {
@@ -213,64 +214,19 @@ void SimulationState::init_state()
     this->_map.load("assets/maps/demo.tmx");
 }
 
-/// the last known mouse position
-sf::Vector2i previous_mouse_position;
-/// whether we are dragging or not
-bool dragging = false;
-
 void SimulationState::update_inputs()
 {
-    sf::RenderTarget &target{*this->_data->window};
     // Event Polling
     while (const std::optional event = this->_data->window->pollEvent())
     {
         this->gui.handleEvent(*event);
-
+        this->_view_dragger->handleEvent(*event);
         if (event->is<sf::Event::Closed>())
         {
             save();
             this->_data->city.save(); 
             this->_data->window->close();
             break;
-        }
-
-        if (const auto *keyPress = event->getIf<sf::Event::MouseButtonPressed>())
-        {
-            // if mouse button is pressed start dragging
-            if (keyPress->button == sf::Mouse::Button::Right)
-            {
-                dragging = true;
-                return;
-            }
-        }
-        if (const auto *keyPress = event->getIf<sf::Event::MouseButtonReleased>())
-        {
-            // if mouse button is released stop draggin
-            if (keyPress->button == sf::Mouse::Button::Right)
-            {
-                dragging = false;
-                return;
-            }
-        }
-        // if dragging mouse
-        if (const auto *keyPress = event->getIf<sf::Event::MouseMoved>())
-        {
-            // get mouse position
-            const sf::Vector2i mouse_position{keyPress->position.x, keyPress->position.y};
-            // if dragging, move view
-            if (dragging)
-            {
-                // calculate how far mouse has moved in view
-                const auto delta =
-                    target.mapPixelToCoords(mouse_position) - target.mapPixelToCoords(previous_mouse_position);
-                // apply negatively to view
-                auto view = target.getView();
-                view.move(-delta);
-                target.setView(view);
-            }
-            // update previous mouse position
-            previous_mouse_position = mouse_position;
-            return;
         }
 
         if (const auto *keyPress = event->getIf<sf::Event::KeyPressed>())

@@ -13,6 +13,8 @@
 #include <tmxlite/Map.hpp>
 
 #include "engine/tmx_core.hpp"
+#include <memory>
+#include "utils/view_dragger.hpp"
 
 class SimulationState : public Engine::State
 {
@@ -34,11 +36,11 @@ class SimulationState : public Engine::State
     void pause_state() override;
     void add_simulation_info(SimulationInfo _simulation_info);
     SimulationInfo simulation_info_from_json(nlohmann::json j);
-    void save(); 
-    nlohmann::json simulation_info_to_json(); 
+    void save();
+    nlohmann::json simulation_info_to_json();
     void manage_collisions(SimulationInfo &info, int i);
     void check_is_visible(SimulationInfo &info_to_check);
-
+    
 
     void set_simulation_info(std::vector<SimulationInfo> _simulation_info);
     std::vector<SimulationInfo> get_simulation_info();
@@ -52,8 +54,10 @@ class SimulationState : public Engine::State
     sf::String status;
     sf::Texture bus_texture;
     sf::Texture bus_stops_texture;
-    sf::Texture person_texture; 
+    sf::Texture person_texture;
     int actual_stop;
+    int current_time;
     tgui::Gui gui; 
     tmx::Map _map;
+    std::unique_ptr<util::ViewDragger> _view_dragger;
 };

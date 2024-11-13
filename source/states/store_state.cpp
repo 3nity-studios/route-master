@@ -136,7 +136,7 @@ tgui::ScrollablePanel::Ptr StoreState::create_store_panel()
     // Add headers
     auto nameLabel = tgui::RichTextLabel::create("Item Name");
     nameLabel->setSize({200, 30});
-    nameLabel->getRenderer()->setTextColor(sf::Color::Black);
+    nameLabel->getRenderer()->setTextColor(sf::Color::White);
     nameLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     nameLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     nameLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -144,7 +144,7 @@ tgui::ScrollablePanel::Ptr StoreState::create_store_panel()
 
     auto priceLabel = tgui::RichTextLabel::create("Price");
     priceLabel->setSize({120, 30});
-    priceLabel->getRenderer()->setTextColor(sf::Color::Black);
+    priceLabel->getRenderer()->setTextColor(sf::Color::White);
     priceLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     priceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     priceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -152,7 +152,7 @@ tgui::ScrollablePanel::Ptr StoreState::create_store_panel()
 
     auto amountLabel = tgui::RichTextLabel::create("Amount");
     amountLabel->setSize({120, 30});
-    amountLabel->getRenderer()->setTextColor(sf::Color::Black);
+    amountLabel->getRenderer()->setTextColor(sf::Color::White);
     amountLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     amountLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     amountLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -165,21 +165,21 @@ tgui::ScrollablePanel::Ptr StoreState::create_store_panel()
 
         auto itemName = tgui::RichTextLabel::create(item.get_name());
         itemName->setSize({120, 30});
-        itemName->getRenderer()->setTextColor(sf::Color::Black);
+        itemName->getRenderer()->setTextColor(sf::Color::White);
         itemName->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         itemName->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(itemName, i+1, 0);
 
         auto itemPrice = tgui::RichTextLabel::create(std::to_string(item.get_price()));
         itemPrice->setSize({120, 30});
-        itemPrice->getRenderer()->setTextColor(sf::Color::Black);
+        itemPrice->getRenderer()->setTextColor(sf::Color::White);
         itemPrice->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         itemPrice->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(itemPrice, i+1, 1);
 
         auto itemAmount = tgui::RichTextLabel::create(std::to_string(item.get_amount()));
         itemAmount->setSize({120, 30});
-        itemAmount->getRenderer()->setTextColor(sf::Color::Black);
+        itemAmount->getRenderer()->setTextColor(sf::Color::White);
         itemAmount->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         itemAmount->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(itemAmount, i+1, 2);

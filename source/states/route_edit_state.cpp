@@ -3,6 +3,7 @@
 #include "config/global.hpp"
 #include "engine/input_manager.hpp"
 #include "states/route_list_state.hpp"
+#include "utils/calc_view.hpp"
 #include <SFML/Window/Mouse.hpp>
 #include <cmath>
 #include <string>
@@ -29,7 +30,7 @@ void RouteEditState::init_state()
     nameLabel->setText("Route Name:");
     nameLabel->setPosition({5.0f, 5.0f});
     nameLabel->setSize({150.0f, 30.0f});
-    nameLabel->getRenderer()->setTextColor(sf::Color::Black);
+    nameLabel->getRenderer()->setTextColor(sf::Color::White);
     panel->add(nameLabel);
 
     auto nameEditBox = tgui::EditBox::create();
@@ -87,7 +88,7 @@ void RouteEditState::init_state()
     this->canvas = tgui::CanvasSFML::create({800, 400});
     this->canvas->setPosition({5.0f, 40.0f});
     panel->add(this->canvas);
-
+    _view_dragger.emplace(this->canvas->getRenderTexture());
     this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this] {
         if (this->create_new_path)
         {
@@ -134,8 +135,8 @@ void RouteEditState::init_state()
         throw GameException("Couldn't find file: assets/img/map_icons.png");
     }
 
-    sf::View view(sf::FloatRect({0.f, 0.f}, {800.f, 600.f}));
-    this->canvas->setView(view);
+    sf::View view;
+    util::calc_view(this->canvas->getRenderTexture(), view);
 
     route_copy = route;
 
@@ -146,11 +147,6 @@ void RouteEditState::init_state()
 
     init_visual_elements();
 }
-
-/// the last known mouse position
-sf::Vector2i previous_mouse_pos;
-/// whether we are dragging or not
-bool is_dragging = false;
 
 void RouteEditState::update_inputs()
 {
@@ -192,12 +188,6 @@ this->_data->window->close();
 
                 return;
             }
-            // if mouse button is pressed start dragging
-            if (keyPress->button == sf::Mouse::Button::Right)
-            {
-                is_dragging = true;
-                return;
-            }
         }
 
         if (const auto *keyPress = event->getIf<sf::Event::MouseButtonReleased>())
@@ -205,12 +195,6 @@ this->_data->window->close();
             if (sprite_pressed)
             {
                 sprite_pressed = false;
-            }
-            // if mouse button is released stop draggin
-            if (keyPress->button == sf::Mouse::Button::Right)
-            {
-                is_dragging = false;
-                return;
             }
         }
 
@@ -259,29 +243,7 @@ this->_data->window->close();
                 }
             }
         }
-
-        // if dragging mouse
-        if (const auto *keyPress = event->getIf<sf::Event::MouseMoved>())
-        {
-            // get mouse position
-            const sf::Vector2i mouse_position{keyPress->position.x, keyPress->position.y};
-            // if dragging, move view
-            if (is_dragging)
-            {
-                sf::RenderTarget &target{this->canvas->getRenderTexture()};
-
-                // calculate how far mouse has moved in view
-                const auto delta =
-                    target.mapPixelToCoords(mouse_position) - target.mapPixelToCoords(previous_mouse_pos);
-                // apply negatively to view
-                auto view = target.getView();
-                view.move(-delta);
-                target.setView(view);
-            }
-            // update previous mouse position
-            previous_mouse_pos = mouse_position;
-            return;
-        }
+        this->_view_dragger->handleEvent(*event);
     }
 }
 
@@ -416,6 +378,12 @@ void RouteEditState::draw_lines()
         {
             std::get<0>(visual_element).setColor(sf::Color(75, 73, 71));
         }
+        //this the actual position clicks are getting checked against
+        //fix asap
+        // auto collisionRect = sf::RectangleShape(std::get<0>(visual_element).getGlobalBounds().size);
+        // collisionRect.setFillColor(sf::Color(100, 250, 50));
+        // collisionRect.move(std::get<0>(visual_element).getGlobalBounds().position);
+        // this->_data->window->draw(collisionRect);
     }
 }
 

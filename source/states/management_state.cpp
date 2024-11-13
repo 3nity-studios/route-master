@@ -100,7 +100,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_payroll_panel()
     // Add headers
     auto nameLabel = tgui::RichTextLabel::create("Name");
     nameLabel->setSize({columnWidth, 30});
-    nameLabel->getRenderer()->setTextColor(sf::Color::Black);
+    nameLabel->getRenderer()->setTextColor(sf::Color::White);
     nameLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     nameLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     nameLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -108,7 +108,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_payroll_panel()
 
     auto lastNameLabel = tgui::RichTextLabel::create("Last Name");
     lastNameLabel->setSize({columnWidth, 30});
-    lastNameLabel->getRenderer()->setTextColor(sf::Color::Black);
+    lastNameLabel->getRenderer()->setTextColor(sf::Color::White);
     lastNameLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     lastNameLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     lastNameLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -116,7 +116,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_payroll_panel()
 
     auto workTimeLabel = tgui::RichTextLabel::create("Total Work Hours");
     workTimeLabel->setSize({columnWidth, 35});
-    workTimeLabel->getRenderer()->setTextColor(sf::Color::Black);
+    workTimeLabel->getRenderer()->setTextColor(sf::Color::White);
     workTimeLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     workTimeLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     workTimeLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -124,7 +124,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_payroll_panel()
 
     auto hourlyRateLabel = tgui::RichTextLabel::create("Hourly Rate");
     hourlyRateLabel->setSize({columnWidth, 35});
-    hourlyRateLabel->getRenderer()->setTextColor(sf::Color::Black);
+    hourlyRateLabel->getRenderer()->setTextColor(sf::Color::White);
     hourlyRateLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     hourlyRateLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     hourlyRateLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -132,7 +132,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_payroll_panel()
 
     auto paycheckLabel = tgui::RichTextLabel::create("Paycheck");
     paycheckLabel->setSize({columnWidth, 30});
-    paycheckLabel->getRenderer()->setTextColor(sf::Color::Black);
+    paycheckLabel->getRenderer()->setTextColor(sf::Color::White);
     paycheckLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     paycheckLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     paycheckLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -145,28 +145,28 @@ tgui::ScrollablePanel::Ptr ManagementState::create_payroll_panel()
 
         auto nameLabel = tgui::RichTextLabel::create(employee.get_name());
         nameLabel->setSize({columnWidth, 30});
-        nameLabel->getRenderer()->setTextColor(sf::Color::Black);
+        nameLabel->getRenderer()->setTextColor(sf::Color::White);
         nameLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         nameLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(nameLabel, i + 1, 0);
 
         auto lastNameLabel = tgui::RichTextLabel::create(employee.get_last_name());
         lastNameLabel->setSize({columnWidth, 30});
-        lastNameLabel->getRenderer()->setTextColor(sf::Color::Black);
+        lastNameLabel->getRenderer()->setTextColor(sf::Color::White);
         lastNameLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         lastNameLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(lastNameLabel, i + 1, 1);
 
         auto workTimeLabel = tgui::RichTextLabel::create(std::to_string(employee.get_total_work_hours()));
         workTimeLabel->setSize({columnWidth, 30});
-        workTimeLabel->getRenderer()->setTextColor(sf::Color::Black);
+        workTimeLabel->getRenderer()->setTextColor(sf::Color::White);
         workTimeLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         workTimeLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(workTimeLabel, i + 1, 2);
 
         auto hourlyRateLabel = tgui::RichTextLabel::create(std::to_string(employee.get_hourly_rate()));
         hourlyRateLabel->setSize({columnWidth, 30});
-        hourlyRateLabel->getRenderer()->setTextColor(sf::Color::Black);
+        hourlyRateLabel->getRenderer()->setTextColor(sf::Color::White);
         hourlyRateLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         hourlyRateLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(hourlyRateLabel, i + 1, 3);
@@ -174,7 +174,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_payroll_panel()
         auto paycheckLabel =
             tgui::RichTextLabel::create(std::to_string(employee.get_hourly_rate() * employee.get_total_work_hours()));
         paycheckLabel->setSize({columnWidth, 30});
-        paycheckLabel->getRenderer()->setTextColor(sf::Color::Black);
+        paycheckLabel->getRenderer()->setTextColor(sf::Color::White);
         paycheckLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         paycheckLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(paycheckLabel, i + 1, 4);
@@ -213,7 +213,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_inventory_panel()
     // Add headers
     auto busLabel = tgui::RichTextLabel::create("Bus");
     busLabel->setSize({columnWidth, 30});
-    busLabel->getRenderer()->setTextColor(sf::Color::Black);
+    busLabel->getRenderer()->setTextColor(sf::Color::White);
     busLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     busLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     busLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -221,7 +221,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_inventory_panel()
 
     auto engineLabel = tgui::RichTextLabel::create("Engine");
     engineLabel->setSize({columnWidth, 30});
-    engineLabel->getRenderer()->setTextColor(sf::Color::Black);
+    engineLabel->getRenderer()->setTextColor(sf::Color::White);
     engineLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     engineLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     engineLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -229,7 +229,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_inventory_panel()
 
     auto breaksLabel = tgui::RichTextLabel::create("Breaks");
     breaksLabel->setSize({columnWidth, 30});
-    breaksLabel->getRenderer()->setTextColor(sf::Color::Black);
+    breaksLabel->getRenderer()->setTextColor(sf::Color::White);
     breaksLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     breaksLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     breaksLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -237,7 +237,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_inventory_panel()
 
     auto tiresLabel = tgui::RichTextLabel::create("Tires");
     tiresLabel->setSize({columnWidth, 30});
-    tiresLabel->getRenderer()->setTextColor(sf::Color::Black);
+    tiresLabel->getRenderer()->setTextColor(sf::Color::White);
     tiresLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     tiresLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     tiresLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -245,7 +245,7 @@ tgui::ScrollablePanel::Ptr ManagementState::create_inventory_panel()
 
     auto fuelLabel = tgui::RichTextLabel::create("Fuel");
     fuelLabel->setSize({columnWidth, 30});
-    fuelLabel->getRenderer()->setTextColor(sf::Color::Black);
+    fuelLabel->getRenderer()->setTextColor(sf::Color::White);
     fuelLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     fuelLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     fuelLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -258,35 +258,35 @@ tgui::ScrollablePanel::Ptr ManagementState::create_inventory_panel()
 
         auto busLabel = tgui::RichTextLabel::create(bus.get_name());
         busLabel->setSize({columnWidth, 30});
-        busLabel->getRenderer()->setTextColor(sf::Color::Black);
+        busLabel->getRenderer()->setTextColor(sf::Color::White);
         busLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         busLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(busLabel, i + 1, 0);
 
         auto engineLabel = tgui::RichTextLabel::create(std::to_string(bus.get_engine_state()));
         engineLabel->setSize({columnWidth, 30});
-        engineLabel->getRenderer()->setTextColor(sf::Color::Black);
+        engineLabel->getRenderer()->setTextColor(sf::Color::White);
         engineLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         engineLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(engineLabel, i + 1, 1);
 
         auto breaksLabel = tgui::RichTextLabel::create(std::to_string(bus.get_breaks_state()));
         breaksLabel->setSize({columnWidth, 30});
-        breaksLabel->getRenderer()->setTextColor(sf::Color::Black);
+        breaksLabel->getRenderer()->setTextColor(sf::Color::White);
         breaksLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         breaksLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(breaksLabel, i + 1, 2);
 
         auto tiresLabel = tgui::RichTextLabel::create(std::to_string(bus.get_tires_state()));
         tiresLabel->setSize({columnWidth, 30});
-        tiresLabel->getRenderer()->setTextColor(sf::Color::Black);
+        tiresLabel->getRenderer()->setTextColor(sf::Color::White);
         tiresLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         tiresLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(tiresLabel, i + 1, 3);
 
         auto fuelLabel = tgui::RichTextLabel::create(std::to_string(bus.get_fuel()));
         fuelLabel->setSize({columnWidth, 30});
-        fuelLabel->getRenderer()->setTextColor(sf::Color::Black);
+        fuelLabel->getRenderer()->setTextColor(sf::Color::White);
         fuelLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         fuelLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(fuelLabel, i + 1, 4);

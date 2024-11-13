@@ -87,7 +87,7 @@ tgui::ScrollablePanel::Ptr RouteListState::create_route_list()
     // Add headers
     auto nameLabel = tgui::RichTextLabel::create("Route Name");
     nameLabel->setSize({200, 30});
-    nameLabel->getRenderer()->setTextColor(sf::Color::Black);
+    nameLabel->getRenderer()->setTextColor(sf::Color::White);
     nameLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     nameLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     nameLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -95,7 +95,7 @@ tgui::ScrollablePanel::Ptr RouteListState::create_route_list()
 
     auto priceLabel = tgui::RichTextLabel::create("Length");
     priceLabel->setSize({120, 30});
-    priceLabel->getRenderer()->setTextColor(sf::Color::Black);
+    priceLabel->getRenderer()->setTextColor(sf::Color::White);
     priceLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     priceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     priceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -103,7 +103,7 @@ tgui::ScrollablePanel::Ptr RouteListState::create_route_list()
 
     auto amountLabel = tgui::RichTextLabel::create("Number of stops");
     amountLabel->setSize({120, 30});
-    amountLabel->getRenderer()->setTextColor(sf::Color::Black);
+    amountLabel->getRenderer()->setTextColor(sf::Color::White);
     amountLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     amountLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     amountLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -116,7 +116,7 @@ tgui::ScrollablePanel::Ptr RouteListState::create_route_list()
 
         auto routeName = tgui::RichTextLabel::create(route.name);
         routeName->setSize({120, 30});
-        routeName->getRenderer()->setTextColor(sf::Color::Black);
+        routeName->getRenderer()->setTextColor(sf::Color::White);
         routeName->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         routeName->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(routeName, i+1, 0);

@@ -50,18 +50,22 @@ void BusMaintenanceState::init_state()
     auto engineCheckbox = tgui::CheckBox::create();
     engineCheckbox->setWidgetName("EngineCheckbox");
     engineCheckbox->setText("Repair Engine");
+    engineCheckbox->setSize(27, 27);
 
     auto breaksCheckbox = tgui::CheckBox::create();
     breaksCheckbox->setWidgetName("BreaksCheckbox");
     breaksCheckbox->setText("Repair Breaks");
+    breaksCheckbox->setSize(27, 27);
 
     auto tiresCheckbox = tgui::CheckBox::create();
     tiresCheckbox->setWidgetName("TiresCheckbox");
     tiresCheckbox->setText("Repair Tires");
+    tiresCheckbox->setSize(27, 27);
 
     auto fuelCheckbox = tgui::CheckBox::create();
     fuelCheckbox->setWidgetName("FuelCheckbox");
     fuelCheckbox->setText("Refuel");
+    fuelCheckbox->setSize(27, 27);
 
     this->_data->gui.get<tgui::Button>("confirm_button")->onPress([this, item, engineCheckbox, breaksCheckbox, tiresCheckbox, fuelCheckbox] {
         this->_data->store.buy_bus_maintenance(item.get_id(),
@@ -80,7 +84,7 @@ void BusMaintenanceState::init_state()
 
     // Create labels for the item details
     auto itemLabel = tgui::Label::create(item.get_name());
-    itemLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    itemLabel->getRenderer()->setTextColor(sf::Color::White);
     itemLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     itemLabel->setSize({150, 35});
     itemLabel->getRenderer()->setTextSize(20);
@@ -89,7 +93,7 @@ void BusMaintenanceState::init_state()
     grid->addWidget(itemLabel, 0, 0);
 
     auto stateHeaderLabel = tgui::Label::create("State (%)");
-    stateHeaderLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    stateHeaderLabel->getRenderer()->setTextColor(sf::Color::White);
     stateHeaderLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     stateHeaderLabel->setSize({columnWidth, 30});
     stateHeaderLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
@@ -97,7 +101,7 @@ void BusMaintenanceState::init_state()
     grid->addWidget(stateHeaderLabel, 1, 1);
 
     auto priceHeaderLabel = tgui::Label::create("Price ($)");
-    priceHeaderLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    priceHeaderLabel->getRenderer()->setTextColor(sf::Color::White);
     priceHeaderLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     priceHeaderLabel->setSize({columnWidth, 30});
     priceHeaderLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
@@ -105,63 +109,63 @@ void BusMaintenanceState::init_state()
     grid->addWidget(priceHeaderLabel, 1, 2);
 
     auto engineStateLabel = tgui::Label::create(std::to_string(item.get_engine_state()) + "%");
-    engineStateLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    engineStateLabel->getRenderer()->setTextColor(sf::Color::White);
     engineStateLabel->setSize({columnWidth, 30});
     engineStateLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     engineStateLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(engineStateLabel, 2, 1);
 
     auto enginePriceLabel = tgui::Label::create("$" + std::to_string(prices.at(0)));
-    enginePriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    enginePriceLabel->getRenderer()->setTextColor(sf::Color::White);
     enginePriceLabel->setSize({columnWidth, 30});
     enginePriceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     enginePriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(enginePriceLabel, 2, 2);
 
     auto breaksStateLabel = tgui::Label::create(std::to_string(item.get_breaks_state()) + "%");
-    breaksStateLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    breaksStateLabel->getRenderer()->setTextColor(sf::Color::White);
     breaksStateLabel->setSize({columnWidth, 30});
     breaksStateLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     breaksStateLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(breaksStateLabel, 3, 1);
 
     auto breaksPriceLabel = tgui::Label::create("$" + std::to_string(prices.at(1)));
-    breaksPriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    breaksPriceLabel->getRenderer()->setTextColor(sf::Color::White);
     breaksPriceLabel->setSize({columnWidth, 30});
     breaksPriceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     breaksPriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(breaksPriceLabel, 3, 2);
 
     auto tiresStateLabel = tgui::Label::create(std::to_string(item.get_tires_state()) + "%");
-    tiresStateLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    tiresStateLabel->getRenderer()->setTextColor(sf::Color::White);
     tiresStateLabel->setSize({columnWidth, 30});
     tiresStateLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     tiresStateLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(tiresStateLabel, 4, 1);
 
     auto tiresPriceLabel = tgui::Label::create("$" + std::to_string(prices.at(2)));
-    tiresPriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    tiresPriceLabel->getRenderer()->setTextColor(sf::Color::White);
     tiresPriceLabel->setSize({columnWidth, 30});
     tiresPriceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     tiresPriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(tiresPriceLabel, 4, 2);
 
     auto fuelStateLabel = tgui::Label::create(std::to_string(item.get_fuel()) + "%");
-    fuelStateLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    fuelStateLabel->getRenderer()->setTextColor(sf::Color::White);
     fuelStateLabel->setSize({columnWidth, 30});
     fuelStateLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     fuelStateLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(fuelStateLabel, 5, 1);
 
     auto fuelPriceLabel = tgui::Label::create("$" + std::to_string(prices.at(3)));
-    fuelPriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    fuelPriceLabel->getRenderer()->setTextColor(sf::Color::White);
     fuelPriceLabel->setSize({columnWidth, 30});
     fuelPriceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     fuelPriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(fuelPriceLabel, 5, 2);
 
     auto totalPriceLabel = tgui::Label::create("Total: $" + std::to_string(prices.at(0) + prices.at(1) + prices.at(2)));
-    totalPriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    totalPriceLabel->getRenderer()->setTextColor(sf::Color::White);
     totalPriceLabel->setSize({150, 30});
     totalPriceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     totalPriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
