@@ -235,6 +235,13 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             simulation_info.path_index++;
             simulation_info.previous_time = 0; 
             simulation_info.projection_clock.restart();
+
+            if(simulation_info.bus->get_is_broken())
+            {
+                simulation_info.route_completed = true; 
+                simulation_info.time_state = std::make_pair<int, int>(1, 0); 
+                continue; 
+            }
         }
         else if (bus_stop)
         {

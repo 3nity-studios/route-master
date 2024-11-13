@@ -23,6 +23,7 @@ struct SimulationInfo
     sf::Vector2f projection_bus_speed;
     sf::Texture projection_bus_texture;
     float previous_time; 
+    bool need_to_pay; 
 
     std::vector<std::string> track_names;
     std::vector<int> track_times;

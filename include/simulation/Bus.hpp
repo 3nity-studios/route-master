@@ -48,6 +48,7 @@ class Bus
     int get_tires_state() const noexcept;
     int get_fuel() const noexcept; 
     bool get_in_route() const noexcept; 
+    bool get_is_broken(); 
 
     int leave_passengers(BusStop &current_stop);
     int add_passengers(const float &simulation_time, BusStop &bus_stop, std::vector<std::shared_ptr<VisualElement>> path, int path_index);
