@@ -84,7 +84,7 @@ void MessagesState::draw_state(float dt __attribute__((unused)))
     this->_data->window->display();
 }
 
-tgui::Panel::Ptr MessagesState::create_message_box(const Message &message, int message_number)
+tgui::Panel::Ptr MessagesState::create_message_box(Message &message, int message_number)
 {
     auto panel = tgui::Panel::create();
     panel->getRenderer()->setBackgroundColor(tgui::Color(50, 185, 242));
@@ -116,8 +116,8 @@ tgui::Panel::Ptr MessagesState::create_message_box(const Message &message, int m
     }	
     executeButton->setSize({150, 35});
     executeButton->setPosition({panel->getSize().x * 3 / 4, (panel->getSize().y - 35) / 2});
-    executeButton->onPress([message] {
-        // message.execute();
+    executeButton->onPress([this, &message] {
+        message.execute(this->_data->store, this->_data->player, this->_data->messages);
     });
     panel->add(executeButton);
 

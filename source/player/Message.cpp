@@ -51,7 +51,7 @@ void Message::set_type(const MessageType &_type)
     type = _type;
 }
 
-void Message::execute(Store &store, Player &player, std::vector<std::shared_ptr<Message>> &messages)
+void Message::execute(Store &store, Player &player, std::vector<Message> &messages)
 {
     switch (type)
     {
@@ -71,7 +71,7 @@ void Message::execute(Store &store, Player &player, std::vector<std::shared_ptr<
     // Remove the message from the vector
     for (auto it = messages.begin(); it != messages.end(); ++it)
     {
-        if ((*it)->get_timestamp() == timestamp)
+        if ((it)->get_timestamp() == timestamp)
         {
             messages.erase(it);
             break;

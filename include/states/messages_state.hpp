@@ -23,5 +23,5 @@ class MessagesState : public Engine::State
     GameDataRef _data;
     tgui::ScrollablePanel::Ptr messages_panel;
     Designar::SLList<Item> items_to_show;
-    tgui::Panel::Ptr create_message_box(const Message &message, int message_number);
+    tgui::Panel::Ptr create_message_box(Message &message, int message_number);
 };

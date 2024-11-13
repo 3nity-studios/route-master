@@ -34,5 +34,5 @@ class Message
         void set_content(const std::string &_content);
         void set_type(const MessageType &_type);
         void set_timestamp(int _timestamp);
-        void execute(Store &store, Player &player, std::vector<std::shared_ptr<Message>> &messages);
+        void execute(Store &store, Player &player, std::vector<Message> &messages);
 };
