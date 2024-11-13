@@ -81,7 +81,7 @@ void BusImprovementsState::init_state()
 
     // Create labels for the item details
     auto itemLabel = tgui::Label::create(item.get_name());
-    itemLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    itemLabel->getRenderer()->setTextColor(sf::Color::White);
     itemLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     itemLabel->setSize({150, 35});
     itemLabel->getRenderer()->setTextSize(20);
@@ -90,7 +90,7 @@ void BusImprovementsState::init_state()
     grid->addWidget(itemLabel, 0, 0);
 
     auto levelHeaderLabel = tgui::Label::create("Level");
-    levelHeaderLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    levelHeaderLabel->getRenderer()->setTextColor(sf::Color::White);
     levelHeaderLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     levelHeaderLabel->setSize({columnWidth, 30});
     levelHeaderLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
@@ -98,7 +98,7 @@ void BusImprovementsState::init_state()
     grid->addWidget(levelHeaderLabel, 1, 1);
 
     auto priceHeaderLabel = tgui::Label::create("Price ($)");
-    priceHeaderLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    priceHeaderLabel->getRenderer()->setTextColor(sf::Color::White);
     priceHeaderLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
     priceHeaderLabel->setSize({columnWidth, 30});
     priceHeaderLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
@@ -106,63 +106,63 @@ void BusImprovementsState::init_state()
     grid->addWidget(priceHeaderLabel, 1, 2);
 
     auto engineLevelLabel = tgui::Label::create(std::to_string(item.get_feature_info("engine").current_level));
-    engineLevelLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    engineLevelLabel->getRenderer()->setTextColor(sf::Color::White);
     engineLevelLabel->setSize({columnWidth, 30});
     engineLevelLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     engineLevelLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(engineLevelLabel, 2, 1);
 
     auto enginePriceLabel = tgui::Label::create("$" + std::to_string(prices.at(0)));
-    enginePriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    enginePriceLabel->getRenderer()->setTextColor(sf::Color::White);
     enginePriceLabel->setSize({columnWidth, 30});
     enginePriceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     enginePriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(enginePriceLabel, 2, 2);
 
     auto breaksLevelLabel = tgui::Label::create(std::to_string(item.get_feature_info("breaks").current_level));
-    breaksLevelLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    breaksLevelLabel->getRenderer()->setTextColor(sf::Color::White);
     breaksLevelLabel->setSize({columnWidth, 30});
     breaksLevelLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     breaksLevelLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(breaksLevelLabel, 3, 1);
 
     auto breaksPriceLabel = tgui::Label::create("$" + std::to_string(prices.at(1)));
-    breaksPriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    breaksPriceLabel->getRenderer()->setTextColor(sf::Color::White);
     breaksPriceLabel->setSize({columnWidth, 30});
     breaksPriceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     breaksPriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(breaksPriceLabel, 3, 2);
 
     auto tiresLevelLabel = tgui::Label::create(std::to_string(item.get_feature_info("tires").current_level));
-    tiresLevelLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    tiresLevelLabel->getRenderer()->setTextColor(sf::Color::White);
     tiresLevelLabel->setSize({columnWidth, 30});
     tiresLevelLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     tiresLevelLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(tiresLevelLabel, 4, 1);
 
     auto tiresPriceLabel = tgui::Label::create("$" + std::to_string(prices.at(2)));
-    tiresPriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    tiresPriceLabel->getRenderer()->setTextColor(sf::Color::White);
     tiresPriceLabel->setSize({columnWidth, 30});
     tiresPriceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     tiresPriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(tiresPriceLabel, 4, 2);
 
     auto fuelLevelLabel = tgui::Label::create(std::to_string(item.get_feature_info("fuel").current_level));
-    fuelLevelLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    fuelLevelLabel->getRenderer()->setTextColor(sf::Color::White);
     fuelLevelLabel->setSize({columnWidth, 30});
     fuelLevelLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     fuelLevelLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(fuelLevelLabel, 5, 1);
 
     auto fuelPriceLabel = tgui::Label::create("$" + std::to_string(prices.at(3)));
-    fuelPriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    fuelPriceLabel->getRenderer()->setTextColor(sf::Color::White);
     fuelPriceLabel->setSize({columnWidth, 30});
     fuelPriceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     fuelPriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(fuelPriceLabel, 5, 2);
 
     auto totalPriceLabel = tgui::Label::create("Total: $" + std::to_string(prices.at(0) + prices.at(1) + prices.at(2)));
-    totalPriceLabel->getRenderer()->setTextColor(tgui::Color::Black);
+    totalPriceLabel->getRenderer()->setTextColor(sf::Color::White);
     totalPriceLabel->setSize({150, 30});
     totalPriceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     totalPriceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);

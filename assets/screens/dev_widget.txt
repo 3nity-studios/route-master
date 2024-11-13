@@ -1,0 +1,454 @@
+Picture.Picture1 {
+    Position = (-10, -10);
+    Size = (929, 608.944);
+
+    Renderer {
+        Texture = "../img/bg/title_screen.png" Smooth;
+        TransparentTexture = false;
+    }
+}
+
+Label.credits {
+    AutoSize = true;
+    HorizontalAlignment = Center;
+    Position = (250, 580);
+    Size = (308, 17);
+    Text = "Trinity Studios 2024";
+    TextSize = 15;
+
+    Renderer {
+        BorderColor = None;
+        Font = "../tgui/kenney/Font/PressStart2P.ttf";
+        TextColor = white;
+        TextOutlineColor = black;
+        TextOutlineThickness = 2;
+        TextureBackground = None;
+
+        Scrollbar {
+            ArrowBackgroundColor = None;
+            ArrowBackgroundColorHover = None;
+            ArrowColor = None;
+            ArrowColorHover = None;
+            TextureArrowDown = "../tgui/kenney/PNG/Blue/Default/arrow_basic_s_small.png" Smooth;
+            TextureArrowDownHover = "../tgui/kenney/PNG/Extra/Default/icon_arrow_down_outline.png" Smooth;
+            TextureArrowUp = "../tgui/kenney/PNG/Blue/Default/arrow_basic_n_small.png" Smooth;
+            TextureArrowUpHover = "../tgui/kenney/PNG/Extra/Default/icon_arrow_up_outline.png" Smooth;
+            TextureThumb = None;
+            TextureThumbHover = None;
+            TextureTrack = None;
+            TextureTrackHover = None;
+            ThumbColor = #35BAF3;
+            ThumbColorHover = #55FFFF;
+            TrackColor = #C3C3C3;
+            TrackColorHover = #DDDDDD;
+        }
+    }
+}
+
+Button.play_button {
+    Position = (310, 350);
+    Size = (180, 63);
+    Text = Play;
+    TextSize = 30;
+
+    Renderer {
+        BackgroundColor = None;
+        BackgroundColorDisabled = None;
+        BackgroundColorDown = None;
+        BackgroundColorDownFocused = None;
+        BackgroundColorDownHover = None;
+        BackgroundColorFocused = None;
+        BackgroundColorHover = None;
+        BorderColor = None;
+        BorderColorDisabled = None;
+        BorderColorDown = None;
+        BorderColorDownFocused = None;
+        BorderColorDownHover = None;
+        BorderColorFocused = None;
+        BorderColorHover = None;
+        Borders = (0, 0, 0, 0);
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        Opacity = 1;
+        OpacityDisabled = -1;
+        RoundedBorderRadius = 5;
+        TextColor = #EEEEEE;
+        TextColorDisabled = #7D7D7D;
+        TextColorDown = #3C3C3C;
+        TextColorDownFocused = #FFFFFF;
+        TextColorDownHover = #DDDDDD;
+        TextColorFocused = #FFFFFF;
+        TextColorHover = #FFFFFF;
+        TextOutlineColor = black;
+        TextOutlineThickness = 2;
+        TextStyle = Regular;
+        TextStyleDisabled = Regular;
+        TextStyleDown = Regular;
+        TextStyleDownFocused = Regular;
+        TextStyleDownHover = Regular;
+        TextStyleFocused = Regular;
+        TextStyleHover = Regular;
+        Texture = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
+        TextureDisabled = None;
+        TextureDown = None;
+        TextureDownFocused = None;
+        TextureDownHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_flat.png" Middle(4, 4, 96, 32) Smooth;
+        TextureFocused = None;
+        TextureHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gradient.png" Middle(4, 4, 96, 32) Smooth;
+        TransparentTexture = False;
+    }
+}
+
+Button.exit_button {
+    Position = (310, 420);
+    Size = (180, 63);
+    Text = Exit;
+    TextSize = 30;
+
+    Renderer {
+        BackgroundColor = None;
+        BackgroundColorDisabled = None;
+        BackgroundColorDown = None;
+        BackgroundColorDownFocused = None;
+        BackgroundColorDownHover = None;
+        BackgroundColorFocused = None;
+        BackgroundColorHover = None;
+        BorderColor = None;
+        BorderColorDisabled = None;
+        BorderColorDown = None;
+        BorderColorDownFocused = None;
+        BorderColorDownHover = None;
+        BorderColorFocused = None;
+        BorderColorHover = None;
+        Borders = (0, 0, 0, 0);
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        Opacity = 1;
+        OpacityDisabled = -1;
+        RoundedBorderRadius = 5;
+        TextColor = #EEEEEE;
+        TextColorDisabled = #7D7D7D;
+        TextColorDown = #3C3C3C;
+        TextColorDownFocused = #FFFFFF;
+        TextColorDownHover = #DDDDDD;
+        TextColorFocused = #FFFFFF;
+        TextColorHover = #FFFFFF;
+        TextOutlineColor = black;
+        TextOutlineThickness = 2;
+        TextStyle = Regular;
+        TextStyleDisabled = Regular;
+        TextStyleDown = Regular;
+        TextStyleDownFocused = Regular;
+        TextStyleDownHover = Regular;
+        TextStyleFocused = Regular;
+        TextStyleHover = Regular;
+        Texture = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
+        TextureDisabled = None;
+        TextureDown = None;
+        TextureDownFocused = None;
+        TextureDownHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_flat.png" Middle(4, 4, 96, 32) Smooth;
+        TextureFocused = None;
+        TextureHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gradient.png" Middle(4, 4, 96, 32) Smooth;
+        TransparentTexture = False;
+    }
+}
+
+Picture.Picture2 {
+    Position = (210, 40);
+    Size = (386, 217.125);
+
+    Renderer {
+        Texture = "../img/logo.png" Smooth;
+        TransparentTexture = false;
+    }
+}
+
+Scrollbar.Scrollbar1 {
+    Maximum = 10;
+    Position = (140, 210);
+    ScrollAmount = 1;
+    ScrollbarPolicy = Automatic;
+    Size = (26, 260);
+    Value = 0;
+    ViewportSize = 1;
+
+    Renderer {
+        ArrowBackgroundColor = None;
+        ArrowBackgroundColorHover = None;
+        ArrowColor = None;
+        ArrowColorHover = None;
+        TextureArrowDown = "../tgui/kenney/PNG/Blue/Default/arrow_basic_s_small.png" Smooth;
+        TextureArrowDownHover = "../tgui/kenney/PNG/Grey/Default/arrow_basic_s_small.png" Smooth;
+        TextureArrowUp = "../tgui/kenney/PNG/Blue/Default/arrow_basic_n_small.png" Smooth;
+        TextureArrowUpHover = "../tgui/kenney/PNG/Grey/Default/arrow_basic_n_small.png" Smooth;
+        TextureThumb = "../tgui/kenney/PNG/Blue/Default/check_square_color.png" Middle(8, 8, 16, 16) Smooth;
+        TextureThumbHover = "../tgui/kenney/PNG/Grey/Default/check_square_grey.png" Middle(8, 8, 16, 16) Smooth;
+        TextureTrack = None;
+        TextureTrackHover = None;
+        ThumbColor = None;
+        ThumbColorHover = None;
+        TrackColor = #0A739B;
+        TrackColorHover = #16A0D8;
+    }
+}
+
+ListView.ListView1 {
+    ExpandLastColumn = 0;
+    HeaderHeight = 0;
+    HeaderSeparatorHeight = 0;
+    HeaderVisible = true;
+    HorizontalScrollbarPolicy = Always;
+    ItemHeight = 19;
+    Position = (540, 270);
+    ResizableColumns = false;
+    SeparatorWidth = 1;
+    ShowVerticalGridLines = 1;
+    Size = (438, 268.947);
+    TextSize = 20;
+    VerticalScrollbarPolicy = Always;
+
+    Renderer {
+        BackgroundColor = rgb(80, 80, 80);
+        BackgroundColorHover = rgb(100, 100, 100);
+        BorderColor = None;
+        Borders = (0, 0, 0, 0);
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        GridLinesColor = #35BAF3;
+        HeaderBackgroundColor = #FF0D00;
+        HeaderTextColor = #FFFFFF;
+        Padding = (0, 0, 0, 0);
+        ScrollbarWidth = 10;
+        SelectedBackgroundColor = #35BAF3;
+        SelectedBackgroundColorHover = #0E7EA9;
+        SelectedTextColor = #FFFFFF;
+        SeparatorColor = #0E7EA9;
+        TextColor = #3C3C3C;
+        TextColorHover = #EEEEEE;
+        TextureBackground = "../tgui/kenney/PNG/Extra/Default/button_rectangle_line.png" Part(0, 9, 192, 54) Middle(9, 9, 96, 26) Smooth;
+        TextureHeaderBackground = "../tgui/kenney/PNG/Blue/Default/button_rectangle_gradient.png" Part(0, 0, 192, 54) Middle(9, 9, 96, 29) Smooth;
+
+        Scrollbar {
+            ArrowBackgroundColor = None;
+            ArrowBackgroundColorHover = None;
+            ArrowColor = None;
+            ArrowColorHover = None;
+            TextureArrowDown = "../tgui/kenney/PNG/Blue/Default/arrow_basic_s_small.png" Smooth;
+            TextureArrowDownHover = "../tgui/kenney/PNG/Grey/Default/arrow_basic_s_small.png" Smooth;
+            TextureArrowUp = "../tgui/kenney/PNG/Blue/Default/arrow_basic_n_small.png" Smooth;
+            TextureArrowUpHover = "../tgui/kenney/PNG/Grey/Default/arrow_basic_n_small.png" Smooth;
+            TextureThumb = "../tgui/kenney/PNG/Blue/Default/check_square_color.png" Middle(8, 8, 16, 16) Smooth;
+            TextureThumbHover = "../tgui/kenney/PNG/Grey/Default/check_square_grey.png" Middle(8, 8, 16, 16) Smooth;
+            TextureTrack = None;
+            TextureTrackHover = None;
+            ThumbColor = None;
+            ThumbColorHover = None;
+            TrackColor = #0A739B;
+            TrackColorHover = #16A0D8;
+        }
+    }
+
+    Column {
+        AutoResize = true;
+        Expanded = true;
+        Text = asdfas;
+        Width = 15;
+    }
+
+    Column {
+        AutoResize = true;
+        Expanded = true;
+        Text = 2232;
+        Width = 10;
+    }
+
+    Column {
+        Alignment = Center;
+        AutoResize = true;
+        Expanded = true;
+        Text = dfhsdfg;
+        Width = 5;
+    }
+}
+
+ComboBox.ComboBox1 {
+    ChangeItemOnScroll = false;
+    Items = [asdfasd, dsfsdfsdf, sdsdfsd, sdfsdfsdfsdfs, sdfsdfsdfsdfsdfsdfs, sdfsdfsdf, sdfsaszcv, asdvzxcv, sdfsdfsaszvxcv];
+    ItemsToDisplay = 0;
+    MaximumItems = 0;
+    Position = (50, 340);
+    Size = (150, 21);
+    TextSize = 13;
+
+    Renderer {
+        ArrowBackgroundColor = rgb(80, 80, 80);
+        ArrowColor = rgb(190, 190, 190);
+        BackgroundColor = rgb(80, 80, 80);
+        BorderColor = Black;
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        Padding = (3, 3, 3, 3);
+        TextColor = white;
+        TextureArrow = "../tgui/kenney/PNG/Extra/Default/icon_arrow_down_light.png" Smooth;
+        TextureArrowDisabled = None;
+        TextureArrowHover = "../tgui/kenney/PNG/Extra/Default/icon_arrow_down_outline.png" Smooth;
+        TextureBackground = "../tgui/kenney/PNG/Blue/Default/button_square_depth_gradient.png" Middle(16, 16, 32, 32) Smooth;
+        TextureBackgroundDisabled = None;
+
+        ListBox {
+            BackgroundColor = None;
+            BackgroundColorHover = None;
+            BorderColor = None;
+            Borders = (0, 0, 0, 0);
+            Font = "../tgui/kenney/Font/Pixellari.ttf";
+            Padding = (10, 10, 10, 10);
+            ScrollbarWidth = 10;
+            SelectedBackgroundColor = #35BAF3;
+            SelectedBackgroundColorHover = #0E7EA9;
+            SelectedTextColor = white;
+            SelectedTextColorHover = None;
+            TextColor = #3C3C3C;
+            TextColorHover = #35BAF3;
+            TextSize = 20;
+            TextureBackground = "../tgui/kenney/PNG/Extra/Default/button_rectangle_line.png" Middle(9, 9, 172, 44) Smooth;
+
+            Scrollbar {
+                    ArrowBackgroundColor = None;
+                    ArrowBackgroundColorHover = None;
+                    ArrowColor = None;
+                    ArrowColorHover = None;
+                    TextureArrowDown = "../tgui/kenney/PNG/Blue/Default/arrow_basic_s_small.png" Smooth;
+                    TextureArrowDownHover = "../tgui/kenney/PNG/Grey/Default/arrow_basic_s_small.png" Smooth;
+                    TextureArrowUp = "../tgui/kenney/PNG/Blue/Default/arrow_basic_n_small.png" Smooth;
+                    TextureArrowUpHover = "../tgui/kenney/PNG/Grey/Default/arrow_basic_n_small.png" Smooth;
+                    TextureThumb = "../tgui/kenney/PNG/Blue/Default/check_square_color.png" Middle(8, 8, 16, 16) Smooth;
+                    TextureThumbHover = "../tgui/kenney/PNG/Grey/Default/check_square_grey.png" Middle(8, 8, 16, 16) Smooth;
+                    TextureTrack = None;
+                    TextureTrackHover = None;
+                    ThumbColor = None;
+                    ThumbColorHover = None;
+                    TrackColor = #0A739B;
+                    TrackColorHover = #16A0D8;
+                }
+        }
+    }
+}
+
+CheckBox.CheckBox1 {
+    Checked = true;
+    Position = (220, 340);
+    Size = (27, 27);
+    TextSize = 13;
+
+    Renderer {
+        BackgroundColor = None;
+        BackgroundColorDisabled = None;
+        BackgroundColorHover = None;
+        BorderColor = None;
+        BorderColorCheckedFocused = #35BAF3;
+        BorderColorDisabled = None;
+        BorderColorFocused = #35BAF3;
+        BorderColorHover = None;
+        Borders = (2, 2, 2, 2);
+        CheckColor = None;
+        CheckColorDisabled = None;
+        CheckColorHover = None;
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        TextColor = black;
+        TextColorDisabled = None;
+        TextColorHover = None;
+        TextDistanceRatio = 0.2;
+        TextureChecked = "../tgui/kenney/PNG/Blue/Default/check_square_grey_checkmark.png" Middle(5, 6, 22, 20) Smooth;
+        TextureCheckedDisabled = None;
+        TextureCheckedFocused = None;
+        TextureCheckedHover = None;
+        TextureUnchecked = "../tgui/kenney/PNG/Blue/Default/check_square_grey.png" Middle(7, 7, 16, 16) Smooth;
+        TextureUncheckedDisabled = None;
+        TextureUncheckedFocused = None;
+        TextureUncheckedHover = None;
+    }
+}
+
+ListBox.ListBox1 {
+    ItemHeight = 19;
+    Items = [sdfsd, fdfdf, "", "", dg, dg, "", asdfasdf, asdfasdfa];
+    MaximumItems = 0;
+    Position = (160, 370);
+    ScrollbarPolicy = Automatic;
+    Size = (150, 135);
+    TextSize = 13;
+
+    Renderer {
+        BackgroundColor = None;
+        BackgroundColorHover = None;
+        BorderColor = None;
+        Borders = (0, 0, 0, 0);
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        Padding = (10, 10, 10, 10);
+        ScrollbarWidth = 10;
+        SelectedBackgroundColor = #35BAF3;
+        SelectedBackgroundColorHover = #0E7EA9;
+        SelectedTextColor = white;
+        SelectedTextColorHover = None;
+        TextColor = #3C3C3C;
+        TextColorHover = #35BAF3;
+        TextureBackground = "../tgui/kenney/PNG/Extra/Default/button_rectangle_line.png" Middle(9, 9, 172, 44) Smooth;
+
+        Scrollbar {
+            ArrowBackgroundColor = None;
+            ArrowBackgroundColorHover = None;
+            ArrowColor = None;
+            ArrowColorHover = None;
+            TextureArrowDown = "../tgui/kenney/PNG/Blue/Default/arrow_basic_s_small.png" Smooth;
+            TextureArrowDownHover = "../tgui/kenney/PNG/Grey/Default/arrow_basic_s_small.png" Smooth;
+            TextureArrowUp = "../tgui/kenney/PNG/Blue/Default/arrow_basic_n_small.png" Smooth;
+            TextureArrowUpHover = "../tgui/kenney/PNG/Grey/Default/arrow_basic_n_small.png" Smooth;
+            TextureThumb = "../tgui/kenney/PNG/Blue/Default/check_square_color.png" Middle(8, 8, 16, 16) Smooth;
+            TextureThumbHover = "../tgui/kenney/PNG/Grey/Default/check_square_grey.png" Middle(8, 8, 16, 16) Smooth;
+            TextureTrack = None;
+            TextureTrackHover = None;
+            ThumbColor = None;
+            ThumbColorHover = None;
+            TrackColor = #0A739B;
+            TrackColorHover = #16A0D8;
+        }
+    }
+}
+
+Panel.Panel1 {
+    Position = (70, 20);
+    Size = (555.238, 310);
+
+    Renderer {
+        BackgroundColor = None;
+        BorderColor = Black;
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        Padding = (10, 10, 10, 10);
+        TextureBackground = "../tgui/kenney/PNG/Extra/Default/button_rectangle_line.png" Middle(9, 9, 172, 44) Smooth;
+    }
+
+    Tabs.Tabs1 {
+        AutoSize = 0;
+        Position = (20, 30);
+        Size = (397, 86.3578);
+        Tabs = [Tab, tab2, tab3];
+        TextSize = 20;
+
+        Renderer {
+            BackgroundColor = None;
+            BorderColor = None;
+            BorderColorHover = None;
+            DistanceToSide = 2;
+            Font = "../tgui/kenney/Font/Pixellari.ttf";
+            SelectedBackgroundColor = None;
+            SelectedBorderColor = None;
+            SelectedBorderColorHover = None;
+            SelectedTextColor = #C4FFFF;
+            SelectedTextColorHover = black;
+            TextColor = white;
+            TextColorDisabled = #595F6C;
+            TextColorHover = None;
+            TextureDisabledTab = "../tgui/kenney/PNG/Grey/Default/button_rectangle_depth_gloss.png" Middle(9, 9, 175, 40) Smooth;
+            TextureSelectedTab = "../tgui/kenney/PNG/Blue/Default/button_rectangle_flat.png" Middle(4, 4, 96, 32) Smooth;
+            TextureSelectedTabHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_border.png" Middle(4, 4, 96, 32) Smooth;
+            TextureTab = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
+            TextureTabHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gradient.png" Middle(4, 4, 96, 32) Smooth;
+        }
+    }
+}

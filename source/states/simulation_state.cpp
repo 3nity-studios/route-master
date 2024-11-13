@@ -147,6 +147,7 @@ void SimulationState::init_state()
     int buttonWidth = 150;
 
     auto exitButton = tgui::Button::create("Back to Menu");
+    exitButton->setRenderer(tgui::Theme::getDefault()->getRenderer("RedButton"));
     exitButton->setPosition(10, this->_data->window->getSize().y - (buttonHeight + 5));
     exitButton->setSize(buttonWidth, buttonHeight);
     exitButton->onPress([this] {
