@@ -100,7 +100,7 @@ tgui::Panel::Ptr BusSelectState::create_selection_panel()
     info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
                         new_simulation_info.employee->get_name() + "\nRoute: ");
     info_label->setPosition(5.0f, 5.0f);
-    info_label->getRenderer()->setTextColor(tgui::Color::Black);
+    info_label->getRenderer()->setTextColor(sf::Color::White);
     panel->add(info_label);
 
     auto horizontalLayout = tgui::HorizontalLayout::create();

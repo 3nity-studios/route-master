@@ -50,18 +50,22 @@ void BusMaintenanceState::init_state()
     auto engineCheckbox = tgui::CheckBox::create();
     engineCheckbox->setWidgetName("EngineCheckbox");
     engineCheckbox->setText("Repair Engine");
+    engineCheckbox->setSize(27, 27);
 
     auto breaksCheckbox = tgui::CheckBox::create();
     breaksCheckbox->setWidgetName("BreaksCheckbox");
     breaksCheckbox->setText("Repair Breaks");
+    breaksCheckbox->setSize(27, 27);
 
     auto tiresCheckbox = tgui::CheckBox::create();
     tiresCheckbox->setWidgetName("TiresCheckbox");
     tiresCheckbox->setText("Repair Tires");
+    tiresCheckbox->setSize(27, 27);
 
     auto fuelCheckbox = tgui::CheckBox::create();
     fuelCheckbox->setWidgetName("FuelCheckbox");
     fuelCheckbox->setText("Refuel");
+    fuelCheckbox->setSize(27, 27);
 
     this->_data->gui.get<tgui::Button>("confirm_button")
         ->onPress([this, item, engineCheckbox, breaksCheckbox, tiresCheckbox, fuelCheckbox] {

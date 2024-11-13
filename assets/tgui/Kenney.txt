@@ -15,7 +15,7 @@ Button {
     BorderColorFocused           = None;
     BorderColorHover             = None;
     Borders                      = (0, 0, 0, 0);
-    Font                         = "kenney/Font/Kenney Future.ttf";
+    Font                         = "kenney/Font/Pixellari.ttf";
     Opacity                      =  1;
     OpacityDisabled              = -1;
     RoundedBorderRadius          =  5;
@@ -26,8 +26,9 @@ Button {
     TextColorDownHover           = #DDDDDD;
     TextColorFocused             = #FFFFFF;
     TextColorHover               = #FFFFFF;
-    TextOutlineColor             = None;
-    TextOutlineThickness         = 0;
+    TextOutlineColor             = Black;
+    TextOutlineThickness         =  2;
+    TextSize                     =  20;
     TextStyle                    = Regular;
     TextStyleDisabled            = Regular;
     TextStyleDown                = Regular;
@@ -51,24 +52,24 @@ Scrollbar {
     ArrowColor                   = None;
     ArrowColorHover              = None;
     TextureArrowDown             = "kenney/PNG/Blue/Default/arrow_basic_s_small.png" Smooth;
-    TextureArrowDownHover        = "kenney/PNG/Extra/Default/icon_arrow_down_outline.png" Smooth;
+    TextureArrowDownHover        = "kenney/PNG/Grey/Default/arrow_basic_s_small.png" Smooth;
     TextureArrowUp               = "kenney/PNG/Blue/Default/arrow_basic_n_small.png" Smooth;
-    TextureArrowUpHover          = "kenney/PNG/Extra/Default/icon_arrow_up_outline.png" Smooth;
-    TextureThumb                 = None;
-    TextureThumbHover            = None;
+    TextureArrowUpHover          = "kenney/PNG/Grey/Default/arrow_basic_n_small.png" Smooth;
+    TextureThumb                 = "kenney/PNG/Blue/Default/check_square_color.png" Middle(8, 8, 16, 16) Smooth;
+    TextureThumbHover            = "kenney/PNG/Grey/Default/check_square_grey.png" Middle(8, 8, 16, 16) Smooth;
     TextureTrack                 = None;
     TextureTrackHover            = None;
-    ThumbColor                   = #35BAF3;
-    ThumbColorHover              = #55FFFF;
-    TrackColor                   = #C3C3C3;
-    TrackColorHover              = #DDDDDD;
+    ThumbColor                   = None;
+    ThumbColorHover              = None;
+    TrackColor                   = #0A739B;
+    TrackColorHover              = #16A0D8;
 }
 
 ChatBox {
     BackgroundColor              = None;
     BorderColor                  = None;
     Borders                      = (0, 0, 0, 0);
-    Font                         = "kenney/Font/Kenney Future.ttf";
+    Font                         = "kenney/Font/Pixellari.ttf";
     Padding                      = (10, 10, 10, 10);
     ScrollbarWidth               =  10;
     TextureBackground            = "kenney/PNG/Extra/Default/button_rectangle_line.png" Middle(7, 7, 96, 32) Smooth;
@@ -96,7 +97,7 @@ CheckBox {
     CheckColor                   = None;
     CheckColorDisabled           = None;
     CheckColorHover              = None;
-    Font                         = "kenney/Font/Kenney Future.ttf";
+    Font                         = "kenney/Font/Pixellari.ttf";
     TextColor                    = black;
     TextColorDisabled            = None;
     TextColorHover               = None;
@@ -124,7 +125,7 @@ ChildWindow {
     TitleBarColor                = None;
     TitleColor                   = #FFFFFF;
     TitleBarHeight               =  25;
-    Font                         = "kenney/Font/Kenney Future.ttf";
+    Font                         = "kenney/Font/Pixellari.ttf";
 
     CloseButton {
         BackgroundColor          = None;
@@ -192,14 +193,14 @@ ChildWindow {
 }
 
 ComboBox {
-    ArrowBackgroundColor         = rgb(80, 80, 80);
-    ArrowColor                   = rgb(190, 190, 190);
-    BackgroundColor              = rgb(80, 80, 80);
+    ArrowBackgroundColor         = None;
+    ArrowColor                   = None;
+    BackgroundColor              = None;
     BorderColor                  = Black;
-    Font                         = "kenney/Font/Kenney Future.ttf";
+    Font                         = "kenney/Font/Pixellari.ttf";
     Padding                      = (3, 3, 3, 3);
     TextColor                    = white;
-    TextureArrow                 = "kenney/PNG/Extra/Default/icon_arrow_down_light.png" Smooth;
+    TextureArrow                 = "kenney/PNG/Grey/Default/arrow_basic_s_small.png" Smooth;
     TextureArrowDisabled         = None;
     TextureArrowHover            = "kenney/PNG/Extra/Default/icon_arrow_down_outline.png" Smooth;
     TextureBackground            = "kenney/PNG/Blue/Default/button_square_depth_gradient.png" Middle(16, 16, 32, 32) Smooth;
@@ -207,17 +208,39 @@ ComboBox {
 }
 
 ListBox {
-    BackgroundColor              = rgb(80, 80, 80);
-    BackgroundColorHover         = rgb(100, 100, 100);
-    Borders                      = (0, 0, 0, 0);
-    BorderColor                  = None;
-    Padding                      = (10, 10, 10, 10);
-    SelectedBackgroundColor      = #35BAF3;
-    SelectedBackgroundColorHover = #0E7EA9;
-    SelectedTextColor            = #FFFFFF;
-    TextColor                    = #3C3C3C;
-    TextColorHover               = #EEEEEE;
-    TextureBackground            = "kenney/PNG/Extra/Default/button_rectangle_line.png" Part(0, 9, 192, 54) Middle(9, 9, 96, 26) Smooth;
+        BackgroundColor = None;
+        BackgroundColorHover = None;
+        BorderColor = None;
+        Borders = (0, 0, 0, 0);
+        Font = "kenney/Font/Pixellari.ttf";
+        Padding = (10, 10, 10, 10);
+        ScrollbarWidth = 10;
+        SelectedBackgroundColor = #35BAF3;
+        SelectedBackgroundColorHover = #0E7EA9;
+        SelectedTextColor = white;
+        SelectedTextColorHover = None;
+        TextColor = #3C3C3C;
+        TextColorHover = #35BAF3;
+        TextureBackground = "kenney/PNG/Extra/Default/button_rectangle_line.png" Middle(9, 9, 172, 44) Smooth;
+        TextSize = 20;
+        Scrollbar {
+            ArrowBackgroundColor = None;
+            ArrowBackgroundColorHover = None;
+            ArrowColor = None;
+            ArrowColorHover = None;
+            TextureArrowDown = "kenney/PNG/Blue/Default/arrow_basic_s_small.png" Smooth;
+            TextureArrowDownHover = "kenney/PNG/Grey/Default/arrow_basic_s_small.png" Smooth;
+            TextureArrowUp = "kenney/PNG/Blue/Default/arrow_basic_n_small.png" Smooth;
+            TextureArrowUpHover = "kenney/PNG/Grey/Default/arrow_basic_n_small.png" Smooth;
+            TextureThumb = "kenney/PNG/Blue/Default/check_square_color.png" Middle(8, 8, 16, 16) Smooth;
+            TextureThumbHover = "kenney/PNG/Grey/Default/check_square_grey.png" Middle(8, 8, 16, 16) Smooth;
+            TextureTrack = None;
+            TextureTrackHover = None;
+            ThumbColor = None;
+            ThumbColorHover = None;
+            TrackColor = #0A739B;
+            TrackColorHover = #16A0D8;
+        }
 }
 
 EditBox {
@@ -228,7 +251,7 @@ EditBox {
     CaretWidth                   = 2;
     DefaultTextColor             = #3C3C3C;
     DefaultTextStyle             = Regular;
-    Font                         = "kenney/Font/Kenney Future.ttf";
+    Font                         = "kenney/Font/Pixellari.ttf";
     Padding                      = (10, 10, 10, 10);
     SelectedTextBackgroundColor  = #35BAF3;
     SelectedTextColor            = White;
@@ -251,98 +274,78 @@ Knob {
 
 Label {
     BorderColor                  = None;
-    Font                         = "kenney/Font/Kenney Future.ttf";
+    Font                         = "kenney/Font/Pixellari.ttf";
     TextColor                    = white;
     TextureBackground            = None;
+    TextOutlineColor             = Black;
+    TextOutlineThickness         =  2;
 }
 
 ListView {
-    HeaderBackgroundColor        = #35BAF3;
-    HeaderTextColor              = #FFFFFF;
-    Font                         = "kenney/Font/Kenney Future.ttf";
-    Borders                      = (1, 1, 1, 1);
-    BackgroundColor              = rgb(80, 80, 80);
-    BackgroundColorHover         = rgb(100, 100, 100);
-    Borders                      = (0, 0, 0, 0);
-    BorderColor                  = None;
-    Padding                      = (10, 10, 10, 10);
-    SelectedBackgroundColor      = #35BAF3;
-    SelectedBackgroundColorHover = #0E7EA9;
-    SelectedTextColor            = #FFFFFF;
-    TextColor                    = #3C3C3C;
-    TextColorHover               = #EEEEEE;
-    TextureBackground            = "kenney/PNG/Extra/Default/button_rectangle_line.png" Part(0, 9, 192, 54) Middle(9, 9, 96, 26) Smooth;
-}
+        BackgroundColor = None;
+        BackgroundColorHover = None;
+        BorderColor = None;
+        Borders = (0, 0, 0, 0);
+        Font = "kenney/Font/Pixellari.ttf";
+        GridLinesColor = #35BAF3;
+        HeaderBackgroundColor = None;
+        HeaderTextColor = #FFFFFF;
+        Padding = (0, 0, 0, 0);
+        ScrollbarWidth = 10;
+        SelectedBackgroundColor = #35BAF3;
+        SelectedBackgroundColorHover = #0E7EA9;
+        SelectedTextColor = #FFFFFF;
+        SeparatorColor = #0E7EA9;
+        TextColor = #3C3C3C;
+        TextColorHover = #EEEEEE;
+        TextureBackground = "kenney/PNG/Extra/Default/button_rectangle_line.png" Part(0, 9, 192, 54) Middle(9, 9, 96, 26) Smooth;
+        TextureHeaderBackground = "kenney/PNG/Blue/Default/button_rectangle_gradient.png" Part(0, 0, 192, 54) Middle(9, 9, 96, 29) Smooth;
 
-MenuBar {
-    TextureBackground             = "Black.png" Part(45, 247, 8, 6) Middle(2, 2) NoSmooth;
-    TextureItemBackground         = "Black.png" Part(78, 105, 8, 4) Middle(2, 0, 4, 2) NoSmooth;
-    TextureSelectedItemBackground = "Black.png" Part(113, 238, 8, 6) Middle(2, 2) NoSmooth;
-    DistanceToSide                = 5;
-}
+        Scrollbar {
+            ArrowBackgroundColor = None;
+            ArrowBackgroundColorHover = None;
+            ArrowColor = None;
+            ArrowColorHover = None;
+            TextureArrowDown = "kenney/PNG/Blue/Default/arrow_basic_s_small.png" Smooth;
+            TextureArrowDownHover = "kenney/PNG/Grey/Default/arrow_basic_s_small.png" Smooth;
+            TextureArrowUp = "kenney/PNG/Blue/Default/arrow_basic_n_small.png" Smooth;
+            TextureArrowUpHover = "kenney/PNG/Grey/Default/arrow_basic_n_small.png" Smooth;
+            TextureThumb = "kenney/PNG/Blue/Default/check_square_color.png" Middle(8, 8, 16, 16) Smooth;
+            TextureThumbHover = "kenney/PNG/Grey/Default/check_square_grey.png" Middle(8, 8, 16, 16) Smooth;
+            TextureTrack = None;
+            TextureTrackHover = None;
+            ThumbColor = None;
+            ThumbColorHover = None;
+            TrackColor = #0A739B;
+            TrackColorHover = #16A0D8;
+        }
+    }
 
-ProgressBar {
-    TextureBackground = "Black.png" Part(1, 1, 90, 40) Middle(20, 0) Smooth;
-    TextureFill       = "Black.png" Part(1, 43, 90, 40) Middle(16, 0) Smooth;
-    TextColorFilled   = rgb(250, 250, 250);
-}
-
-RadioButton {
-    TextureUnchecked        = "Black.png" Part(219, 137, 32, 32) Smooth;
-    TextureChecked          = "Black.png" Part(187, 35, 32, 32) Smooth;
-    TextureUncheckedHover   = "Black.png" Part(187, 69, 32, 32) Smooth;
-    TextureCheckedHover     = "Black.png" Part(253, 137, 32, 32) Smooth;
-    TextureUncheckedFocused = "Black.png" Part(253, 103, 32, 32) Smooth;
-    TextureCheckedFocused   = "Black.png" Part(187, 1, 32, 32) Smooth;
-}
-
-Scrollbar {
-    TextureTrack          = "Black.png" Part(255, 1, 20, 20) Smooth;
-    TextureTrackHover     = "Black.png" Part(284, 203, 20, 20) Smooth;
-    TextureThumb          = "Black.png" Part(23, 230, 20, 20) Smooth;
-    TextureThumbHover     = "Black.png" Part(306, 193, 20, 20) Smooth;
-    TextureArrowUp        = "Black.png" Part(284, 225, 20, 20) Middle(0, 0, 20, 19) Smooth;
-    TextureArrowUpHover   = "Black.png" Part(285, 171, 20, 20) Middle(0, 0, 20, 19) Smooth;
-    TextureArrowDown      = "Black.png" Part(1, 230, 20, 20) Middle(0, 1, 20, 19) Smooth;
-    TextureArrowDownHover = "Black.png" Part(306, 225, 20, 20) Middle(0, 1, 20, 19) Smooth;
-}
-
-Slider {
-    TextureTrack      = "Black.png" Part(172, 209, 20, 45) Middle(0, 15) Smooth;
-    TextureTrackHover = "Black.png" Part(194, 209, 20, 45) Middle(0, 15) Smooth;
-    TextureThumb      = "Black.png" Part(253, 171, 30, 30) Smooth;
-}
-
-SpinButton {
-    TextureArrowUp        = "Black.png" Part(284, 225, 20, 20) Middle(0, 0, 20, 19) Smooth;
-    TextureArrowUpHover   = "Black.png" Part(285, 171, 20, 20) Middle(0, 0, 20, 19) Smooth;
-    TextureArrowDown      = "Black.png" Part(1, 230, 20, 20) Middle(0, 1, 20, 19) Smooth;
-    TextureArrowDownHover = "Black.png" Part(306, 225, 20, 20) Middle(0, 1, 20, 19) Smooth;
-    BorderBetweenArrows    = 0;
+Panel {
+    BackgroundColor = None;
+    BorderColor = Black;
+    Font = "kenney/Font/Pixellari.ttf";
+    Padding = (10, 10, 10, 10);
+    TextureBackground = "kenney/PNG/Extra/Default/button_rectangle_line.png" Middle(9, 9, 172, 44) Smooth;
 }
 
 Tabs {
-    Font               = "kenney/Font/Kenney Future.ttf";
-    TextureTab         = "kenney/PNG/Blue/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
+    BackgroundColor = None;
+    BorderColor = None;
+    BorderColorHover = None;
+    DistanceToSide = 2;
+    Font = "kenney/Font/Pixellari.ttf";
+    SelectedBackgroundColor = None;
+    SelectedBorderColor = None;
+    SelectedBorderColorHover = None;
+    SelectedTextColor = white;
+    SelectedTextColorHover = black;
+    TextColor = #FEFEFE;
+    TextColorDisabled = #595F6C;
+    TextColorHover = None;
+    TextureDisabledTab = "kenney/PNG/Grey/Default/button_rectangle_depth_gloss.png" Middle(9, 9, 175, 40) Smooth;
     TextureSelectedTab = "kenney/PNG/Blue/Default/button_rectangle_flat.png" Middle(4, 4, 96, 32) Smooth;
-    TextColor          = #3C3C3C;
-    TextColorHover     = #EEEEEE;
-    DistanceToSide     = 8;
-}
-
-TextArea {
-    TextureBackground = "Black.png" Part(63, 146, 48, 48) Middle(16) Smooth;
-    CaretColor        = rgb(110, 110, 255);
-    Padding           = (3, 3, 3, 3);
-}
-
-ToolTip {
-    BackgroundColor = rgb(80, 80, 80);
-    Borders         = (1, 1, 1, 1);
-    Padding         = (2, 2, 2, 2);
-}
-
-ToggleButton {
-    Texture     = "Black.png" Part(140, 53, 45, 50) Middle(10, 0) Smooth;
-    TextureDown = "Black.png" Part(125, 105, 45, 50) Middle(10, 0) Smooth;
+    TextureSelectedTabHover = "kenney/PNG/Blue/Default/button_rectangle_border.png" Middle(4, 4, 96, 32) Smooth;
+    TextureTab = "kenney/PNG/Blue/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
+    TextureTabHover = "kenney/PNG/Blue/Default/button_rectangle_depth_gradient.png" Middle(4, 4, 96, 32) Smooth;
 }

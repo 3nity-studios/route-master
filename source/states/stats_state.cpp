@@ -84,14 +84,14 @@ void StatsState::draw_state(float dt __attribute__((unused)))
     busLabel->setText("Bus: " + this->_data->simulation_info[current_info].bus->get_name());
     busLabel->setPosition({0.0f, 0.0f});
     busLabel->setSize({200.0f, 30.0f});
-    busLabel->getRenderer()->setTextColor(sf::Color::Black);
+    busLabel->getRenderer()->setTextColor(sf::Color::White);
     grid->addWidget(busLabel, 0, 0, tgui::Grid::Alignment::Left);
 
     auto employeeLabel = tgui::Label::create();
     employeeLabel->setText("Employee: " + this->_data->simulation_info[current_info].employee->get_name() + " " + this->_data->simulation_info[current_info].employee->get_last_name());
     employeeLabel->setPosition({0.0f, 30.0f});
     employeeLabel->setSize({200.0f, 30.0f});
-    employeeLabel->getRenderer()->setTextColor(sf::Color::Black);
+    employeeLabel->getRenderer()->setTextColor(sf::Color::White);
     grid->addWidget(employeeLabel, 1, 0, tgui::Grid::Alignment::Left);
 
     auto timesListView = tgui::ListView::create();

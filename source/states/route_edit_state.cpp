@@ -30,7 +30,7 @@ void RouteEditState::init_state()
     nameLabel->setText("Route Name:");
     nameLabel->setPosition({5.0f, 5.0f});
     nameLabel->setSize({150.0f, 30.0f});
-    nameLabel->getRenderer()->setTextColor(sf::Color::Black);
+    nameLabel->getRenderer()->setTextColor(sf::Color::White);
     panel->add(nameLabel);
 
     auto nameEditBox = tgui::EditBox::create();
