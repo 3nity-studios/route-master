@@ -417,12 +417,46 @@ void SimulationState::update_bus()
     {
         if (info.route_completed)
         {
-            info.employee->set_in_route(false);
-            info.bus->set_in_route(false);
-            info.isVisible = false;
-            info.projection_bus.setTextureRect(sf::IntRect(sf::Vector2i(0.f, 0.f), sf::Vector2i(0.f, 0.f)));
-            status = "Route completed";
-            i++;
+            if (info.time_state.first == 1)
+            {
+                if (info.need_to_pay)
+                {
+                    continue; 
+                }
+                else
+                {
+                    auto messageBox = tgui::MessageBox::create();
+                    messageBox->setTitle("Warning");
+                    messageBox->setText(info.bus->get_name() + " broke down or ran out of fuel. \nYou need to pay 200 for a tow truck to pick it up");
+                    messageBox->addButton("Pay");
+                    messageBox->setPosition(this->_data->window->getSize().x / 2 - 200.0f,
+                                this->_data->window->getSize().y / 2 - 50.0f);
+                    messageBox->setSize(400.0f, 100.f);
+                    messageBox->onButtonPress([msgBox = messageBox.get(), this, &info](const tgui::String &button) {
+                    this->_data->player.decrease_balance(200);
+                    info.need_to_pay = false; 
+                    info.time_state.first = 0; 
+                    msgBox->getParent()->remove(msgBox->shared_from_this());
+                    });
+                    this->gui.add(messageBox);
+
+                    info.need_to_pay = true; 
+                }
+            }
+            else
+            {
+                if (info.time_state.first != 3)
+                {
+                    info.employee->set_in_route(false);
+                    info.bus->set_in_route(false);
+                    info.isVisible = false;
+                    info.projection_bus.setTextureRect(sf::IntRect(sf::Vector2i(0.f, 0.f), sf::Vector2i(0.f, 0.f)));
+                    status = "Route completed";
+                    info.time_state.first = 3; 
+                }
+                
+                i++;
+            }
             continue;
         }
 

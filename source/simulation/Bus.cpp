@@ -310,3 +310,15 @@ nlohmann::json Bus::to_json()
 
     return bus_json;
 }
+
+bool Bus::get_is_broken()
+{
+    if (get_engine_state() <= 0 || get_breaks_state() <= 0 || get_tires_state() <= 0 || get_fuel() <= 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false; 
+    }
+}
