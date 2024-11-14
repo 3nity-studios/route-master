@@ -252,6 +252,7 @@ void City::run_simulation(std::vector<SimulationInfo> &simulation_infos)
             simulation_info.passenger_stop_names.push_back(bus_stop->get_name());
             simulation_info.passengers_per_stop.push_back({passengers_on, passengers_off});
             simulation_info.previous_time = 0; 
+            simulation_info.money_collected = passengers_on*5; 
             simulation_info.projection_clock.restart();
         }
         else if (traffic_light)

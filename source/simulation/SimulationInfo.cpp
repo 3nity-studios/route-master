@@ -2,7 +2,7 @@
 
 SimulationInfo::SimulationInfo(Bus *_bus, Employee *_employee, StreetArcList _path) : bus(_bus), employee(_employee), time_state(std::make_pair<int, int>(-1, 0)), path_index(0),
           next_is_street(false), route_completed(false), projection_bus_texture(sf::Texture()),
-          projection_bus(projection_bus_texture), isVisible(true), previous_time(0), need_to_pay(false)
+          projection_bus(projection_bus_texture), isVisible(true), previous_time(0), need_to_pay(false), money_collected(0)
 {
     set_path(_path);
 }

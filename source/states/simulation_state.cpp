@@ -348,6 +348,12 @@ void SimulationState::update_bus()
 
     for (auto &info : this->_data->simulation_info)
     {
+        if (info.money_collected != 0)
+        {
+            this->_data->player.increase_balance(info.money_collected);
+            info.money_collected = 0; 
+        }
+
         if (info.route_completed)
         {
             if (info.time_state.first == 1)

@@ -24,6 +24,7 @@ struct SimulationInfo
     sf::Texture projection_bus_texture;
     float previous_time; 
     bool need_to_pay; 
+    int money_collected;  
 
     std::vector<std::string> track_names;
     std::vector<int> track_times;
