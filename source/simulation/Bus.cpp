@@ -140,21 +140,21 @@ int Bus::add_passengers(const float &simulation_time, BusStop &bus_stop, std::ve
             continue;
         }
 
-        bool get_on = false;
+        bool get_on = true;
 
-        for (int i = path_index + 1; i < path.size(); i++)
-        {
-            auto stop = std::dynamic_pointer_cast<BusStop>(path.at(i));
+        // for (int i = path_index + 1; i < path.size(); i++)
+        // {
+        //     auto stop = std::dynamic_pointer_cast<BusStop>(path.at(i));
 
-            if (stop)
-            {
-                if (first_passenger.get_bus_stop() == stop->get_id())
-                {
-                    get_on = true; 
-                    break;
-                }
-            }
-        }
+        //     if (stop)
+        //     {
+        //         if (first_passenger.get_bus_stop() == stop->get_id())
+        //         {
+        //             get_on = true; 
+        //             break;
+        //         }
+        //     }
+        // }
 
         if (get_on) 
         {
