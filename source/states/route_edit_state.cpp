@@ -135,7 +135,7 @@ void RouteEditState::init_state()
             });
             this->_data->gui.add(messageBox);
         }
-        else if (this->route.route.back()->get_id() != 36 || this->route.route.back()->get_id() != 37)
+        else if (this->route.route.back()->get_id() != 36 && this->route.route.back()->get_id() != 37)
         {
             auto messageBox = tgui::MessageBox::create();
             messageBox->setTitle("Warning");
