@@ -14,8 +14,6 @@ void BusSelectState::init_state()
     tgui::Theme::setDefault("assets/tgui/Kenney.txt");
     this->_data->gui.setWindow(*this->_data->window);
     this->_data->gui.loadWidgetsFromFile("assets/screens/bus_select.txt");
-    sf::FloatRect rect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1000, 600));
-    this->_data->window->setView(sf::View(rect));
 
     this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this] { this->_data->states.remove_state(); });
 
