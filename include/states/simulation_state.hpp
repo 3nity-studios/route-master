@@ -58,4 +58,5 @@ class SimulationState : public Engine::State
     tgui::Gui gui; 
     tmx::Map _map;
     std::unique_ptr<util::ViewDragger> _view_dragger;
+    sf::View _view;
 };

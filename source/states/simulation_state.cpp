@@ -143,8 +143,7 @@ void SimulationState::init_state()
         throw GameException("Couldn't find file: assets/img/person.png");
     }
 
-    sf::View view;
-    util::calc_view(*this->_data->window, view);
+    util::calc_view(*this->_data->window, this->_view);
 
     int buttonHeight = 35;
     int buttonWidth = 150;
@@ -264,6 +263,7 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     static MapLayer layerNine(_map, 9);
     static MapLayer layerTen(_map, 10);
     static MapLayer layerEleven(_map, 11);
+    static MapLayer layerTwelve(_map, 11);
 
     // sf::Clock globalClock;
     // sf::Time duration = globalClock.restart();
@@ -280,6 +280,7 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     layerNine.draw(*this->_data->window, sf::RenderStates::Default);
     layerTen.draw(*this->_data->window, sf::RenderStates::Default);
     layerEleven.draw(*this->_data->window, sf::RenderStates::Default);
+    layerTwelve.draw(*this->_data->window, sf::RenderStates::Default);
 
     // write text
     sf::Font font("assets/fonts/joystix.ttf");
@@ -560,6 +561,7 @@ void SimulationState::resume_state()
         info.projection_clock.start();
         i++;
     }
+    util::calc_view(*this->_data->window, this->_view);
 }
 
 void SimulationState::pause_state()
