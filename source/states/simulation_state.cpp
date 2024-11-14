@@ -217,7 +217,7 @@ void SimulationState::update_inputs()
     while (const std::optional event = this->_data->window->pollEvent())
     {
         this->gui.handleEvent(*event);
-        this->_view_dragger->handleEvent(*event);
+        this->_view_dragger->handleEvent(*event, this->_map.getBounds());
         if (event->is<sf::Event::Closed>())
         {
             save();
