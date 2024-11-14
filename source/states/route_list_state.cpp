@@ -93,13 +93,13 @@ tgui::ScrollablePanel::Ptr RouteListState::create_route_list()
     nameLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
     grid->addWidget(nameLabel, 0, 0);
 
-    auto priceLabel = tgui::RichTextLabel::create("Length");
-    priceLabel->setSize({120, 30});
-    priceLabel->getRenderer()->setTextColor(sf::Color::White);
-    priceLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
-    priceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
-    priceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
-    grid->addWidget(priceLabel, 0, 1);
+    // auto priceLabel = tgui::RichTextLabel::create("Length");
+    // priceLabel->setSize({120, 30});
+    // priceLabel->getRenderer()->setTextColor(sf::Color::White);
+    // priceLabel->getRenderer()->setTextStyle(tgui::TextStyle::Bold);
+    // priceLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
+    // priceLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
+    // grid->addWidget(priceLabel, 0, 1);
 
     auto amountLabel = tgui::RichTextLabel::create("Number of stops");
     amountLabel->setSize({120, 30});
@@ -120,6 +120,23 @@ tgui::ScrollablePanel::Ptr RouteListState::create_route_list()
         routeName->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
         routeName->setVerticalAlignment(tgui::VerticalAlignment::Center);
         grid->addWidget(routeName, i+1, 0);
+
+        auto busStopsNum = 0;
+        for (auto visual_element : route.route)
+        {
+            auto bus_stop = std::dynamic_pointer_cast<BusStop>(visual_element);
+            if (bus_stop)
+            {
+                busStopsNum++;
+            }
+        }
+
+        auto routeNumberStops = tgui::RichTextLabel::create(std::to_string(busStopsNum));
+        routeNumberStops->setSize({120, 30});
+        routeNumberStops->getRenderer()->setTextColor(sf::Color::White);
+        routeNumberStops->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
+        routeNumberStops->setVerticalAlignment(tgui::VerticalAlignment::Center);
+        grid->addWidget(routeNumberStops, i+1, 2);
 
         auto editButton = tgui::Button::create();
         editButton->setSize({120, 25});
