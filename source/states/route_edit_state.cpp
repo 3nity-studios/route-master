@@ -156,6 +156,9 @@ void RouteEditState::init_state()
     }
 
     init_visual_elements();
+
+    // this->_map.load("assets/maps/demo_editor.tmx");
+    this->_data->assets.load_texture("editorBackground", "assets/maps/demo_editor.png");
 }
 
 void RouteEditState::update_inputs()
@@ -268,7 +271,23 @@ void RouteEditState::draw_state(float dt __attribute__((unused)))
     // background color
     this->_data->gui.draw();
 
+    // static MapLayer layerZero(_map, 0);
+    // static MapLayer layerOne(_map, 1);
+    // static MapLayer layerTwo(_map, 2);
+    // static MapLayer layerThree(_map, 3);
+    // static MapLayer layerFour(_map, 4);
+
+    auto editorBackgroundTex = this->_data->assets.get_texture("editorBackground");
+    auto editorBackground = sf::Sprite(editorBackgroundTex);
     this->canvas->clear(sf::Color::White);
+    this->canvas->draw(editorBackground);
+
+    // layerZero.draw(this->canvas->getRenderTexture(), sf::RenderStates::Default);
+    // layerOne.draw(this->canvas->getRenderTexture(), sf::RenderStates::Default);
+    // layerTwo.draw(this->canvas->getRenderTexture(), sf::RenderStates::Default);
+    // layerThree.draw(this->canvas->getRenderTexture(), sf::RenderStates::Default);
+    // layerFour.draw(this->canvas->getRenderTexture(), sf::RenderStates::Default);
+
 
     draw_lines();
 
