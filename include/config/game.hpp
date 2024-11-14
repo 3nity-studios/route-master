@@ -12,6 +12,7 @@
 #include "player/Store.hpp"
 #include "player/AchievementManager.hpp"
 #include "simulation/City.hpp"
+#include "simulation/Route.hpp"
 
 struct GameData
 {

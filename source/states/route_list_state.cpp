@@ -3,6 +3,7 @@
 #include "config/game.hpp"
 #include "config/global.hpp"
 #include <string>
+#include "utils/JSON.hpp"
 
 RouteListState::RouteListState(GameDataRef data) : _data(data)
 {
@@ -42,6 +43,7 @@ void RouteListState::update_inputs()
 
         if (event->is<sf::Event::Closed>())
         {
+            util::save_route_vector(this->_data->routes);
             this->_data->window->close();
             break;
         }
@@ -51,6 +53,7 @@ void RouteListState::update_inputs()
             // When the enter key is pressed, switch to the next handler type
             if (keyPress->code == sf::Keyboard::Key::Escape)
             {
+                util::save_route_vector(this->_data->routes);
                 this->_data->window->close();
                 break;
             }
