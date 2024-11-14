@@ -12,6 +12,7 @@
 #include "states/stats_state.hpp"
 #include "states/achievements_state.hpp"
 #include "utils/calc_view.hpp"
+#include "utils/JSON.hpp"
 
 SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue)), bus_stops_texture(sf::Image(sf::Vector2u(100, 50), sf::Color::White)), person_texture (sf::Image(sf::Vector2u(100, 50), sf::Color::White)), _view_dragger(std::make_unique<util::ViewDragger>(*_data->window))
 {
@@ -23,7 +24,7 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
         
         for (auto info : info_json["simulation_info"])
         {
-            this->_data->simulation_info.push_back(simulation_info_from_json(info));
+            this->_data->simulation_info.push_back(util::simulation_info_from_json(info, this->_data));
         }
 
         info_file.close();
@@ -33,94 +34,6 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
 SimulationState::SimulationState(GameDataRef data, std::vector<SimulationInfo> _simulation_info)
                 : _data(data), first_time(true), status("Picking up passengers"), bus_texture(sf::Image(sf::Vector2u(200, 100), sf::Color::Blue))
 {
-}
-
-SimulationInfo SimulationState::simulation_info_from_json(nlohmann::json j)
-{
-    Bus aux_bus = j["bus"];
-    Bus *j_bus = &_data->player.get_bus(aux_bus.get_id());
-    Employee aux_employee = j["employee"];
-    Employee *j_employee = &_data->player.get_employee(aux_employee.get_id()); 
-
-    std::vector<VisualElement> elements_path_vector;
-
-    for (auto visual_element : j["elements_path"])
-    {
-        elements_path_vector.push_back(visual_element); 
-    }
-
-    std::vector<std::shared_ptr<VisualElement>> j_elements_path; 
-
-    for (auto visual_element : elements_path_vector)
-    {
-        for (auto element : this->_data->city.get_visual_elements())
-        {
-            if (visual_element.get_id() == element->get_info()->get_id())
-            {
-                j_elements_path.push_back(element->get_info());
-                break;
-            }
-        }
-    }
-
-    SimulationInfo simulation_info(j_bus, j_employee, {});
-    
-    simulation_info.elements_path = j_elements_path;
-    simulation_info.time_state.first = j["time_state_first"];
-    simulation_info.time_state.second = j["time_state_second"];
-    simulation_info.path_index = j["path_index"];
-    simulation_info.next_is_street = j["next_is_street"];
-    simulation_info.route_completed =  j["route_completed"]; 
-    simulation_info.previous_time = j["previous_time"];
-    simulation_info.isVisible = j["isVisible"];
-    simulation_info.projection_bus.setPosition(sf::Vector2f(j["position_x"], j["position_y"]));
-    simulation_info.projection_bus_speed = sf::Vector2f(j["speed_x"], j["speed_y"]);
-
-    for (auto time : j["times"])
-    {
-        simulation_info.track_times.push_back(time);
-    }
-
-    for (auto passengers : j["passengers_stop_first"])
-    {
-        simulation_info.passengers_per_stop.push_back(std::make_pair<int, int>(passengers, 0));
-    }
-
-    int i = 0; 
-    for (auto &passengers : simulation_info.passengers_per_stop)
-    {
-        passengers.second = j["passengers_stop_second"].at(i);
-        i++;
-    }
-
-    simulation_info.projection_clock.restart();
-
-    return simulation_info;
-}
-
-void SimulationState::save()
-{
-    std::ofstream info_file("data/simulation_info.json");
-    info_file << simulation_info_to_json().dump(4);
-    info_file.close();
-}
-
-nlohmann::json SimulationState::simulation_info_to_json()
-{
-    simulation_clock.stop(); 
-
-    nlohmann::json j; 
-
-    nlohmann::json simulation_info = nlohmann::json::array(); 
-
-    for (auto info : this->_data->simulation_info)
-    {
-        simulation_info.push_back(info.to_json());
-    }
-
-    j["simulation_info"] = simulation_info; 
-
-    return j; 
 }
 
 void SimulationState::init_state()
@@ -221,7 +134,7 @@ void SimulationState::update_inputs()
         this->_view_dragger->handleEvent(*event);
         if (event->is<sf::Event::Closed>())
         {
-            save();
+            util::save_simulation_info(_data);
             this->_data->city.save(); 
             this->_data->window->close();
             break;

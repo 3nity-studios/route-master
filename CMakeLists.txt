@@ -278,11 +278,13 @@ set(
   RM_UTILS_SRC
   ${INCROOT}/utils/filesystem.hpp
   ${INCROOT}/utils/street_factory.hpp
+  ${INCROOT}/utils/JSON.hpp
   ${SRCROOT}/utils/street_factory.cpp
   ${INCROOT}/utils/calc_view.hpp
   ${SRCROOT}/utils/calc_view.cpp
   ${INCROOT}/utils/view_dragger.hpp
   ${SRCROOT}/utils/view_dragger.cpp
+  ${SRCROOT}/utils/JSON.cpp
 )
 add_library(route_master_utils ${RM_UTILS_SRC})
 add_library(route_master::utils ALIAS route_master_utils)
