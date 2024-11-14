@@ -29,6 +29,22 @@ SimulationState::SimulationState(GameDataRef data) : _data(data), first_time(tru
 
         info_file.close();
     }
+
+    std::ifstream route_file("data/routes.json");
+    if (route_file.is_open())
+    {
+        std::vector<std::shared_ptr<VisualElement>> visual_elements;
+
+        for (auto visual_element : this->_data->city.get_visual_elements())
+        {
+            visual_elements.push_back(visual_element->get_info());
+        }
+
+        nlohmann::json route_json;
+        route_file >> route_json;
+        this->_data->routes = util::route_vector_from_json(route_json, visual_elements); 
+        route_file.close();
+    } 
 }
 
 SimulationState::SimulationState(GameDataRef data, std::vector<SimulationInfo> _simulation_info)
@@ -135,6 +151,7 @@ void SimulationState::update_inputs()
         if (event->is<sf::Event::Closed>())
         {
             util::save_simulation_info(_data);
+            util::save_route_vector(this->_data->routes);
             this->_data->city.save(); 
             this->_data->window->close();
             break;

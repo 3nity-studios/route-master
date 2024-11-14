@@ -3,6 +3,7 @@
 #include "simulation/City.hpp"
 #include "simulation/Street.hpp"
 #include "simulation/VisualElement.hpp"
+#include "simulation/Route.hpp"
 
 namespace util
 {
@@ -90,5 +91,40 @@ static void save_simulation_info(GameDataRef _data)
     std::ofstream info_file("data/simulation_info.json");
     info_file << simulation_info_to_json(_data).dump(4);
     info_file.close();
+}
+
+static nlohmann::json route_vector_to_json(std::vector<Route> routes)
+{
+    nlohmann::json j; 
+
+    nlohmann::json route_vector = nlohmann::json::array(); 
+
+    for (auto route : routes)
+    {
+        route_vector.push_back(route.to_json());
+    }
+
+    j["route_vector"] = route_vector; 
+
+    return j; 
+}
+
+static void save_route_vector(std::vector<Route> routes)
+{
+    std::ofstream route_file("data/routes.json");
+    route_file << route_vector_to_json(routes).dump(4);
+    route_file.close();
+}
+
+static std::vector<Route> route_vector_from_json(nlohmann::json j, std::vector<std::shared_ptr<VisualElement>> visual_elements)
+{
+    std::vector<Route> routes; 
+
+    for (auto jroute : j["route_vector"])
+    {
+        routes.push_back(Route(jroute, visual_elements));
+    }
+
+    return routes;
 }
 } // namespace util

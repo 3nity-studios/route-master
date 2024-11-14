@@ -270,45 +270,7 @@ void Game::init_variables()
         Street street44 = util::StreetFactory(_data, 44, "Street44", 15, 13, 10.f, 2.0f, 0.1f, 0.05f);
         Street street45 = util::StreetFactory(_data, 45, "Street45", 13, 28, 10.f, 2.0f, 0.1f, 0.05f);
         Street street46 = util::StreetFactory(_data, 46, "Street46", 28, 32, 10.f, 2.0f, 0.1f, 0.05f);
-    }
-
-    //StreetArcList path;
-
-    // for (int i = 1; i < 6; i++)
-    // {
-    //     for (auto street : this->_data->city.get_streets())
-    //     {
-    //         if (street->get_info().get_id() == i)
-    //         {
-    //             path.append(street);
-    //         }
-    //     }
-    // }
-
-    // StreetArcList path2;
-
-    // for (int i = 6; i < 11; i++)
-    // {
-    //     for (auto street : this->_data->city.get_streets())
-    //     {
-    //         if (street->get_info().get_id() == i)
-    //         {
-    //             path2.append(street);
-    //         }
-    //     }
-    // }
-
-    // Bus bus_sim(1, "Bus 1", 10, {}, 5, 100, 5, 80, 4, 60, 3, 40, 2);
-    // Employee driver_sim(1, "John", "Doe", 25, 50, 5, 0);
-
-    // Bus bus_sim2(2, "Bus 2", 15, {}, 5, 150, 7, 120, 6, 90, 5, 70, 3);
-    // Employee driver_sim2(2, "Rodrigo", "Hernandez", 23, 30, 12, 0);
-
-    // SimulationInfo simulation(&bus_sim, &driver_sim, path);
-    // SimulationInfo simulation2(&bus_sim2, &driver_sim2, path2);
-
-    // this->_data->routes.push_back(Route("Route 1", simulation.elements_path));
-    // this->_data->routes.push_back(Route("Route 2", simulation2.elements_path));
+    }   
 }
 void Game::init_window()
 {
