@@ -95,17 +95,17 @@ void StatsState::draw_state(float dt __attribute__((unused)))
     grid->addWidget(employeeLabel, 1, 0, tgui::Grid::Alignment::Left);
 
     auto timesListView = tgui::ListView::create();
-    timesListView->addColumn("Track");
-    timesListView->addColumn("Time");
+    timesListView->addColumn("Track", 150);
+    timesListView->addColumn("Time", 100);
     for(int i = 0; i < this->_data->simulation_info[current_info].track_times.size(); ++i)
     {
         timesListView->addItem({this->_data->simulation_info[current_info].track_names[i], std::to_string(this->_data->simulation_info[current_info].track_times[i])});
     }
 
     auto passengersListView = tgui::ListView::create();
-    passengersListView->addColumn("Bus Stop");
-    passengersListView->addColumn("On");
-    passengersListView->addColumn("Off");
+    passengersListView->addColumn("Bus Stop", 150);
+    passengersListView->addColumn("On", 50);
+    passengersListView->addColumn("Off", 50);
     for(int i = 0; i < this->_data->simulation_info[current_info].passenger_stop_names.size(); ++i)
     {
         passengersListView->addItem({
