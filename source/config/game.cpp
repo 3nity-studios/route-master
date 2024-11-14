@@ -163,6 +163,8 @@ void Game::init_variables()
         BusStop stop12(12, "Stop12", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 2976.f, 448.f);
         BusStop stop13(13, "Stop13", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 3744.f, 352.f);
         BusStop stop14(14, "Stop14", {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10}, 30.0, 15.0, 3.0, 6.0, 2.0, 3424.f, 1440.f);
+        BusStop stop15(36, "Stop15", {}, 0, 0, 0, 0, 0, 352.f, 736.f);
+        BusStop stop16(37, "Stop16", {}, 0, 0, 0, 0, 0, 3360.f, 736.f);
 
         VisualElement curve15(15, 3744.f, 128.f);
         VisualElement curve16(16, 2976.f, 128.f);
@@ -200,6 +202,8 @@ void Game::init_variables()
         this->_data->city.add_bus_stop(stop12);
         this->_data->city.add_bus_stop(stop13);
         this->_data->city.add_bus_stop(stop14);
+        this->_data->city.add_bus_stop(stop15);
+        this->_data->city.add_bus_stop(stop16);
         this->_data->city.add_curve(curve15);
         this->_data->city.add_curve(curve16);
         this->_data->city.add_curve(curve17);
@@ -230,13 +234,13 @@ void Game::init_variables()
         Street street4 = util::StreetFactory(_data, 4, "Street4", 17, 2, 50.0f, 2.0f, 0.1f, 0.05f);
         Street street5 = util::StreetFactory(_data, 5, "Street5", 2, 18, 50.0f, 2.0f, 0.1f, 0.05f);
         Street street6 = util::StreetFactory(_data, 6, "Street6", 18, 19, 50.0f, 2.0f, 0.1f, 0.05f);
-        Street street7 = util::StreetFactory(_data, 7, "Street7", 23, 20, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street7 = util::StreetFactory(_data, 7, "Street7", 23, 36, 50.0f, 2.0f, 0.1f, 0.05f);
         Street street8 = util::StreetFactory(_data, 8, "Street8", 20, 6, 50.0f, 2.0f, 0.1f, 0.05f);
         Street street9 = util::StreetFactory(_data, 9, "Street9", 6, 25, 50.0f, 2.0f, 0.1f, 0.05f);
         Street street10 = util::StreetFactory(_data, 10, "Street10", 25, 26, 50.0f, 2.0f, 0.1f, 0.05f);
         Street street11 = util::StreetFactory(_data, 11, "Street11", 26, 11, 50.0f, 2.0f, 0.1f, 0.05f);
         Street street12 = util::StreetFactory(_data, 12, "Street12", 11, 27, 50.0f, 2.0f, 0.1f, 0.05f);
-        Street street13 = util::StreetFactory(_data, 13, "Street13", 27, 28, 50.0f, 2.0f, 0.1f, 0.05f);
+        Street street13 = util::StreetFactory(_data, 13, "Street13", 27, 37, 50.0f, 2.0f, 0.1f, 0.05f);
         Street street14 = util::StreetFactory(_data, 14, "Street14", 32, 14, 50.0f, 2.0f, 0.1f, 0.05f);
         Street street15 = util::StreetFactory(_data, 15, "Street15", 14, 31, 50.0f, 2.0f, 0.1f, 0.05f);
         Street street16 = util::StreetFactory(_data, 16, "Street16", 31, 10, 50.0f, 2.0f, 0.1f, 0.05f);
@@ -249,7 +253,7 @@ void Game::init_variables()
         Street street23 = util::StreetFactory(_data, 23, "Street23", 33, 9, 50.0f, 2.0f, 0.1f, 0.05f);
         Street street24 = util::StreetFactory(_data, 24, "Street24", 9, 34, 50.0f, 2.0f, 0.1f, 0.05f);
         Street street25 = util::StreetFactory(_data, 25, "Street25", 34, 35, 50.0f, 2.0f, 0.1f, 0.05f);
-        Street street26 = util::StreetFactory(_data, 26, "Street26", 23, 24, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street26 = util::StreetFactory(_data, 26, "Street26", 24, 23, 10.f, 2.0f, 0.1f, 0.05f);
         Street street27 = util::StreetFactory(_data, 27, "Street27", 19, 3, 10.f, 2.0f, 0.1f, 0.05f);
         Street street28 = util::StreetFactory(_data, 28, "Street28", 3, 20, 10.f, 2.0f, 0.1f, 0.05f);
         Street street29 = util::StreetFactory(_data, 29, "Street29", 20, 21, 10.f, 2.0f, 0.1f, 0.05f);
@@ -270,6 +274,8 @@ void Game::init_variables()
         Street street44 = util::StreetFactory(_data, 44, "Street44", 15, 13, 10.f, 2.0f, 0.1f, 0.05f);
         Street street45 = util::StreetFactory(_data, 45, "Street45", 13, 28, 10.f, 2.0f, 0.1f, 0.05f);
         Street street46 = util::StreetFactory(_data, 46, "Street46", 28, 32, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street47 = util::StreetFactory(_data, 47, "Street47", 36, 20, 10.f, 2.0f, 0.1f, 0.05f);
+        Street street48 = util::StreetFactory(_data, 48, "Street48", 37, 28, 10.f, 2.0f, 0.1f, 0.05f);
     }   
 }
 void Game::init_window()

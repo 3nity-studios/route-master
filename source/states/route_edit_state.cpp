@@ -135,6 +135,20 @@ void RouteEditState::init_state()
             });
             this->_data->gui.add(messageBox);
         }
+        else if (this->route.route.back()->get_id() != 36 || this->route.route.back()->get_id() != 37)
+        {
+            auto messageBox = tgui::MessageBox::create();
+            messageBox->setTitle("Warning");
+            messageBox->setText("The route must end at a bus station");
+            messageBox->addButton("OK");
+            messageBox->setPosition(this->_data->window->getSize().x / 2 - 200.0f,
+                                this->_data->window->getSize().y / 2 - 50.0f);
+            messageBox->setSize(400.0f, 100.f);
+            messageBox->onButtonPress([msgBox = messageBox.get()](const tgui::String &button) {
+            msgBox->getParent()->remove(msgBox->shared_from_this());
+        });
+        this->_data->gui.add(messageBox);
+        } 
         else
         {
             util::save_route_vector(this->_data->routes);
@@ -405,10 +419,26 @@ void RouteEditState::draw_lines()
 
 bool RouteEditState::add_to_path(std::shared_ptr<VisualElement> visual_element)
 {
-    if (route.route.empty())
+    if (route.route.empty() && (visual_element->get_id() == 36 || visual_element->get_id() == 37))
     {
         route.route.push_back(visual_element);
         return true;
+    }
+    else if (route.route.empty() && (visual_element->get_id() != 36 || visual_element->get_id() != 37))
+    {
+        auto messageBox = tgui::MessageBox::create();
+        messageBox->setTitle("Warning");
+        messageBox->setText("The route must start at a bus station");
+        messageBox->addButton("OK");
+        messageBox->setPosition(this->_data->window->getSize().x / 2 - 200.0f,
+                                this->_data->window->getSize().y / 2 - 50.0f);
+        messageBox->setSize(400.0f, 100.f);
+        messageBox->onButtonPress([msgBox = messageBox.get()](const tgui::String &button) {
+            msgBox->getParent()->remove(msgBox->shared_from_this());
+        });
+        this->_data->gui.add(messageBox);
+
+        return false; 
     }
 
     bool connected = false;
