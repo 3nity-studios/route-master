@@ -5,6 +5,7 @@
 #include "states/route_list_state.hpp"
 #include "utils/calc_view.hpp"
 #include <SFML/Window/Mouse.hpp>
+#include <TGUI/Texture.hpp>
 #include <cmath>
 #include <string>
 
@@ -16,29 +17,41 @@ RouteEditState::RouteEditState(GameDataRef data, Route &_route)
 
 void RouteEditState::init_state()
 {
-    tgui::Theme::setDefault("assets/tgui/Kenney.txt");
+    tgui::Theme::setDefault("assets/tgui/Kenney.txt");    
     this->_data->gui.setWindow(*this->_data->window);
-    this->_data->gui.loadWidgetsFromFile("assets/screens/route_edit.txt");
 
-    auto panel = tgui::Panel::create();
-    panel->getRenderer()->setBackgroundColor(tgui::Color(217, 217, 217));
-    panel->setSize({this->_data->window->getSize().x - 20.0f, 370.0f});
-    panel->setPosition({10, 90});
-    this->_data->gui.add(panel);
-
+    this->canvas = tgui::CanvasSFML::create({800, 600});
+    this->_data->gui.add(this->canvas);
+    
     auto nameLabel = tgui::Label::create();
     nameLabel->setText("Route Name:");
     nameLabel->setPosition({5.0f, 5.0f});
     nameLabel->setSize({150.0f, 30.0f});
     nameLabel->getRenderer()->setTextColor(sf::Color::White);
-    panel->add(nameLabel);
+    this->_data->gui.add(nameLabel);
 
     auto nameEditBox = tgui::EditBox::create();
     nameEditBox->setSize({200.0f, 30.0f});
     nameEditBox->setPosition({150.0f, 5.0f});
     nameEditBox->setText(this->route.name);
     nameEditBox->onTextChange([this](const tgui::String &text) { this->route.name = text.toStdString(); });
-    panel->add(nameEditBox);
+    this->_data->gui.add(nameEditBox);
+
+    auto select_button = tgui::Button::create();
+    select_button->setText("Select");
+    select_button->setWidgetName("select_button");
+    select_button->setSize(180.f, 63.f);
+    select_button->setPosition(100.f, 500.f);
+    select_button->setRenderer(tgui::Theme::getDefault()->getRenderer("GreenButton"));
+    this->_data->gui.add(select_button);
+
+    auto cancel_button = tgui::Button::create();
+    cancel_button->setWidgetName("cancel_button");
+    cancel_button->setText("Cancel");
+    cancel_button->setSize(180.f, 63.f);
+    cancel_button->setPosition(300.f, 500.f);
+    cancel_button->setRenderer(tgui::Theme::getDefault()->getRenderer("RedButton"));
+    this->_data->gui.add(cancel_button);
 
     auto undoButton = tgui::Button::create();
     undoButton->setText("Undo");
@@ -60,7 +73,7 @@ void RouteEditState::init_state()
             }
         }
     });
-    panel->add(undoButton);
+    this->_data->gui.add(undoButton);
 
     auto redoButton = tgui::Button::create();
     redoButton->setText("Redo");
@@ -83,11 +96,8 @@ void RouteEditState::init_state()
             }
         }
     });
-    panel->add(redoButton);
+    this->_data->gui.add(redoButton);
 
-    this->canvas = tgui::CanvasSFML::create({800, 400});
-    this->canvas->setPosition({5.0f, 40.0f});
-    panel->add(this->canvas);
     _view_dragger.emplace(this->canvas->getRenderTexture());
     this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this] {
         if (this->create_new_path)
