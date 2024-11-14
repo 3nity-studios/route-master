@@ -151,7 +151,6 @@ void SimulationState::update_inputs()
         if (event->is<sf::Event::Closed>())
         {
             util::save_simulation_info(_data);
-            util::save_route_vector(this->_data->routes);
             this->_data->city.save(); 
             this->_data->window->close();
             break;

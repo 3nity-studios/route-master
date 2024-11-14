@@ -8,6 +8,7 @@
 #include <TGUI/Texture.hpp>
 #include <cmath>
 #include <string>
+#include "utils/JSON.hpp"
 
 RouteEditState::RouteEditState(GameDataRef data, Route &_route)
     : _data(data), map_icons_texture(sf::Image(sf::Vector2u(25, 25), sf::Color::Green)), sprite_pressed(false),
@@ -108,7 +109,7 @@ void RouteEditState::init_state()
         {
             this->route = route_copy;
         }
-
+        util::save_route_vector(this->_data->routes);
         this->_data->states.add_state(Engine::StateRef(new RouteListState(this->_data)), true);
     });
 
@@ -136,6 +137,7 @@ void RouteEditState::init_state()
         }
         else
         {
+            util::save_route_vector(this->_data->routes);
             this->_data->states.add_state(Engine::StateRef(new RouteListState(this->_data)), true);
         }
     });
@@ -167,8 +169,9 @@ void RouteEditState::update_inputs()
 
         if (event->is<sf::Event::Closed>())
         {
+            util::save_route_vector(this->_data->routes);
             this->_data->city.save();
-this->_data->window->close();
+            this->_data->window->close();
             break;
         }
 
