@@ -283,14 +283,14 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     layerTwelve.draw(*this->_data->window, sf::RenderStates::Default);
 
     // write text
-    sf::Font font("assets/fonts/joystix.ttf");
+    sf::Font font("assets/tgui/kenney/Font/Pixellari.ttf");
     sf::Text text(font);
 
     // throws error if can't load font
-    if (!font.openFromFile("assets/fonts/joystix.ttf"))
+    if (!font.openFromFile("assets/tgui/kenney/Font/Pixellari.ttf"))
     {
         // error...
-        throw GameException("Couldn't find file: assets/fonts/joystix.ttf");
+        throw GameException("Couldn't find file: assets/tgui/kenney/Font/Pixellari.ttf");
     }
 
     // set the string to display
@@ -344,9 +344,11 @@ void SimulationState::draw_passengers(sf::Font font)
 
         if (bus_stop)
         {
-            sf::Text amount(font); 
+            sf::Text amount(font);
+            amount.setOutlineColor(sf::Color::Black);
+            amount.setOutlineThickness(2.0f);
 
-            amount.setString(bus_stop->get_name() + ": " + std::to_string(this->_data->city.get_current_passengers().at(j)) + " passengers");
+            amount.setString(bus_stop->get_name() + ": " + std::to_string(this->_data->city.get_current_passengers().at(j)) + "");
             amount.setPosition(sf::Vector2f(bus_stop->get_x(), bus_stop->get_y()));
             amount.setCharacterSize(24); 
 
