@@ -142,6 +142,22 @@ tgui::Panel::Ptr BusSelectState::create_selection_panel()
     }
     employeeList->onItemSelect([this, info_label](const tgui::String& item, const tgui::String& value) {
         int employee_id = std::stoi(value.toStdString());
+
+        if(this->_data->player.get_employee(employee_id).get_total_work_hours() >= 40)
+        {
+            auto messageBox = tgui::MessageBox::create();
+            messageBox->setTitle("Warning");
+            messageBox->setText("The selected employee has exceeded 40 work \n hours without payment and cannot be \n assigned to a new route.");
+            messageBox->addButton("OK");
+            messageBox->setPosition(this->_data->window->getSize().x / 2 - 200.0f, this->_data->window->getSize().y / 2 - 50.0f);
+            messageBox->setSize(400.0f, 100.f);
+            messageBox->onButtonPress([msgBox = messageBox.get()](const tgui::String &button) {
+                msgBox->getParent()->remove(msgBox->shared_from_this());
+            });
+            this->_data->gui.add(messageBox);
+            return;
+        }
+
         this->new_simulation_info.employee = &this->_data->player.get_employee(employee_id);
         if (!this->_data->routes.empty() && this->selected_path != -1)
         {
