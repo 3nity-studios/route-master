@@ -116,20 +116,18 @@ tgui::Panel::Ptr BusSelectState::create_selection_panel()
             busList->addItem(bus.get_name(), std::to_string(bus.get_id()));
         }
     }
-    busList->onItemSelect([this, info_label](int index) {
-        if (index != -1)
+    busList->onItemSelect([this, info_label](const tgui::String& item, const tgui::String& value) {
+        int bus_id = std::stoi(value.toStdString());
+        this->new_simulation_info.bus = &this->_data->player.get_bus(bus_id);
+        if (!this->_data->routes.empty() && this->selected_path != -1)
         {
-            this->new_simulation_info.bus = &this->_data->player.get_bus(index);
-            if (!this->_data->routes.empty() && this->selected_path != -1)
-            {
-                info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
-                        new_simulation_info.employee->get_name() + "\nRoute: " + this->_data->routes[selected_path].name);
-            }
-            else
-            {
-                info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
-                        new_simulation_info.employee->get_name() + "\nRoute: ");
-            }
+            info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
+                    new_simulation_info.employee->get_name() + "\nRoute: " + this->_data->routes[selected_path].name);
+        }
+        else
+        {
+            info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
+                    new_simulation_info.employee->get_name() + "\nRoute: ");
         }
     });
     horizontalLayout->add(busList);
@@ -142,20 +140,18 @@ tgui::Panel::Ptr BusSelectState::create_selection_panel()
             employeeList->addItem(employee.get_name(), std::to_string(employee.get_id()));
         }  
     }
-    employeeList->onItemSelect([this, info_label](int index) {
-        if (index != -1)
+    employeeList->onItemSelect([this, info_label](const tgui::String& item, const tgui::String& value) {
+        int employee_id = std::stoi(value.toStdString());
+        this->new_simulation_info.employee = &this->_data->player.get_employee(employee_id);
+        if (!this->_data->routes.empty() && this->selected_path != -1)
         {
-            this->new_simulation_info.employee = &this->_data->player.get_employee(index);
-            if (!this->_data->routes.empty() && this->selected_path != -1)
-            {
-                info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
-                        new_simulation_info.employee->get_name() + "\nRoute: " + this->_data->routes[selected_path].name);
-            }
-            else
-            {
-                info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
-                        new_simulation_info.employee->get_name() + "\nRoute: ");
-            }
+            info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
+                    new_simulation_info.employee->get_name() + "\nRoute: " + this->_data->routes[selected_path].name);
+        }
+        else
+        {
+            info_label->setText("Bus: " + new_simulation_info.bus->get_name() + "\nDriver: " +
+                    new_simulation_info.employee->get_name() + "\nRoute: ");
         }
     });
     horizontalLayout->add(employeeList);
