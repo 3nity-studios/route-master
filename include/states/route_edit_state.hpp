@@ -35,6 +35,7 @@ class RouteEditState : public Engine::State
     Route route_copy;
     std::vector<std::shared_ptr<VisualElement>> redo_stack;
     std::optional<util::ViewDragger> _view_dragger;
+    tmx::Map _map;
 
     void init_visual_elements(); 
     void draw_lines();
