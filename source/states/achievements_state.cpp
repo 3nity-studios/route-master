@@ -28,15 +28,15 @@ void AchievementsState::init_state()
     verticalLayout->setPosition({260.0f, 5.0f});
 
     auto achievement_name = tgui::Label::create();
-    achievement_name->getRenderer()->setTextColor(sf::Color::Black);
+    achievement_name->getRenderer()->setTextColor(sf::Color::White);
     verticalLayout->add(achievement_name);
 
     auto achievement_description = tgui::Label::create();
-    achievement_description->getRenderer()->setTextColor(sf::Color::Black);
+    achievement_description->getRenderer()->setTextColor(sf::Color::White);
     verticalLayout->add(achievement_description);
 
     auto achievement_progress = tgui::ProgressBar::create();
-    achievement_progress->setSize({this->_data->window->getSize().x - 200.0f, 20.0f});
+    achievement_progress->setSize({this->_data->window->getSize().x - 200.0f, 20.0f}); //this not respected
     achievement_progress->setMinimum(0);
     achievement_progress->setMaximum(100);
     achievement_progress->setValue(50);
