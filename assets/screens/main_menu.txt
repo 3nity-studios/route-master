@@ -45,7 +45,7 @@ Label.credits {
 }
 
 Button.play_button {
-    Position = (310, 350);
+    Position = (310, 310);
     Size = (180, 63);
     Text = Play;
     TextSize = 30;
@@ -98,7 +98,7 @@ Button.play_button {
 }
 
 Button.exit_button {
-    Position = (310, 420);
+    Position = (310, 470);
     Size = (180, 63);
     Text = Exit;
     TextSize = 30;
@@ -157,5 +157,58 @@ Picture.Picture2 {
     Renderer {
         Texture = "../img/logo.png" Smooth;
         TransparentTexture = false;
+    }
+}
+
+Button.settings_button {
+    Position = (310, 390);
+    Size = (180, 63);
+    Text = Settings;
+    TextSize = 30;
+
+    Renderer {
+        BackgroundColor = None;
+        BackgroundColorDisabled = None;
+        BackgroundColorDown = None;
+        BackgroundColorDownFocused = None;
+        BackgroundColorDownHover = None;
+        BackgroundColorFocused = None;
+        BackgroundColorHover = None;
+        BorderColor = None;
+        BorderColorDisabled = None;
+        BorderColorDown = None;
+        BorderColorDownFocused = None;
+        BorderColorDownHover = None;
+        BorderColorFocused = None;
+        BorderColorHover = None;
+        Borders = (0, 0, 0, 0);
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        Opacity = 1;
+        OpacityDisabled = -1;
+        RoundedBorderRadius = 5;
+        TextColor = #EEEEEE;
+        TextColorDisabled = #7D7D7D;
+        TextColorDown = #3C3C3C;
+        TextColorDownFocused = #FFFFFF;
+        TextColorDownHover = #DDDDDD;
+        TextColorFocused = #FFFFFF;
+        TextColorHover = #FFFFFF;
+        TextOutlineColor = black;
+        TextOutlineThickness = 2;
+        TextStyle = Regular;
+        TextStyleDisabled = Regular;
+        TextStyleDown = Regular;
+        TextStyleDownFocused = Regular;
+        TextStyleDownHover = Regular;
+        TextStyleFocused = Regular;
+        TextStyleHover = Regular;
+        Texture = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
+        TextureDisabled = None;
+        TextureDown = None;
+        TextureDownFocused = None;
+        TextureDownHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_flat.png" Middle(4, 4, 96, 32) Smooth;
+        TextureFocused = None;
+        TextureHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gradient.png" Middle(4, 4, 96, 32) Smooth;
+        TransparentTexture = False;
     }
 }

@@ -6,6 +6,7 @@
 #include "states/state.hpp"
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Audio/Music.hpp>
 
 class MainMenuState : public Engine::State
 {
@@ -20,4 +21,5 @@ class MainMenuState : public Engine::State
 
   private:
     GameDataRef _data;
+    sf::Music music;
 };

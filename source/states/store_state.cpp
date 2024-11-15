@@ -78,6 +78,12 @@ void StoreState::init_state()
     });
     comboBox->setSelectedItem("All");
     this->_data->gui.add(comboBox);
+    if (music.openFromFile("assets/music/Stage-Door_Looping.mp3"))
+    {if (this->_data->is_music_on)
+    {
+        music.play();
+        music.setLooping(true);
+    }}
 }
 
 void StoreState::update_inputs()

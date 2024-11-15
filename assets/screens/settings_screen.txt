@@ -1,0 +1,322 @@
+Renderer.1 {
+    BackgroundColor = transparent;
+    BorderColor = #3C3C3C;
+    Borders = (0, 0, 0, 0);
+    TextColor = #3C3C3C;
+    TextureBackground = None;
+
+    Scrollbar {
+        ArrowBackgroundColor = #F5F5F5;
+        ArrowBackgroundColorHover = white;
+        ArrowColor = #3C3C3C;
+        ArrowColorHover = black;
+        TextureArrowDown = None;
+        TextureArrowDownHover = None;
+        TextureArrowUp = None;
+        TextureArrowUpHover = None;
+        TextureThumb = None;
+        TextureThumbHover = None;
+        TextureTrack = None;
+        TextureTrackHover = None;
+        ThumbColor = #DCDCDC;
+        ThumbColorHover = #E6E6E6;
+        TrackColor = #F5F5F5;
+    }
+}
+
+Picture.bg {
+    Size = (929, 608.944);
+
+    Renderer {
+        Texture = "../img/bg/title_screen.png" Smooth;
+        TransparentTexture = false;
+    }
+}
+
+Label.title {
+    AutoSize = true;
+    HorizontalAlignment = Center;
+    Position = (40%, 20);
+    Size = (156, 49);
+    Text = Settings;
+    TextSize = 40;
+    VerticalAlignment = Center;
+
+    Renderer {
+        BorderColor = None;
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        TextColor = white;
+        TextOutlineColor = Black;
+        TextOutlineThickness = 2;
+        TextureBackground = None;
+
+        Scrollbar {
+            ArrowBackgroundColor = None;
+            ArrowBackgroundColorHover = None;
+            ArrowColor = None;
+            ArrowColorHover = None;
+            TextureArrowDown = "../tgui/kenney/PNG/Blue/Default/arrow_basic_s_small.png" Smooth;
+            TextureArrowDownHover = "../tgui/kenney/PNG/Grey/Default/arrow_basic_s_small.png" Smooth;
+            TextureArrowUp = "../tgui/kenney/PNG/Blue/Default/arrow_basic_n_small.png" Smooth;
+            TextureArrowUpHover = "../tgui/kenney/PNG/Grey/Default/arrow_basic_n_small.png" Smooth;
+            TextureThumb = "../tgui/kenney/PNG/Blue/Default/check_square_color.png" Middle(8, 8, 16, 16) Smooth;
+            TextureThumbHover = "../tgui/kenney/PNG/Grey/Default/check_square_grey.png" Middle(8, 8, 16, 16) Smooth;
+            TextureTrack = None;
+            TextureTrackHover = None;
+            ThumbColor = None;
+            ThumbColorHover = None;
+            TrackColor = #0A739B;
+            TrackColorHover = #16A0D8;
+        }
+    }
+}
+
+Button.save_button {
+    Position = (600, 510);
+    Size = (180, 63);
+    Text = "Save settings";
+    TextSize = 30;
+
+    Renderer {
+        BackgroundColor = None;
+        BackgroundColorDisabled = None;
+        BackgroundColorDown = None;
+        BackgroundColorDownFocused = None;
+        BackgroundColorDownHover = None;
+        BackgroundColorFocused = None;
+        BackgroundColorHover = None;
+        BorderColor = None;
+        BorderColorDisabled = None;
+        BorderColorDown = None;
+        BorderColorDownFocused = None;
+        BorderColorDownHover = None;
+        BorderColorFocused = None;
+        BorderColorHover = None;
+        Borders = (0, 0, 0, 0);
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        Opacity = 1;
+        OpacityDisabled = -1;
+        RoundedBorderRadius = 5;
+        TextColor = #EEEEEE;
+        TextColorDisabled = #7D7D7D;
+        TextColorDown = #3C3C3C;
+        TextColorDownFocused = #FFFFFF;
+        TextColorDownHover = #DDDDDD;
+        TextColorFocused = #FFFFFF;
+        TextColorHover = #FFFFFF;
+        TextOutlineColor = black;
+        TextOutlineThickness = 2;
+        TextStyle = Regular;
+        TextStyleDisabled = Regular;
+        TextStyleDown = Regular;
+        TextStyleDownFocused = Regular;
+        TextStyleDownHover = Regular;
+        TextStyleFocused = Regular;
+        TextStyleHover = Regular;
+        Texture = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
+        TextureDisabled = None;
+        TextureDown = None;
+        TextureDownFocused = None;
+        TextureDownHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_flat.png" Middle(4, 4, 96, 32) Smooth;
+        TextureFocused = None;
+        TextureHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_depth_gradient.png" Middle(4, 4, 96, 32) Smooth;
+        TransparentTexture = False;
+    }
+}
+
+Button.back_button {
+    Position = (20, 510);
+    Size = (180, 63);
+    Text = "Back to menu";
+    TextSize = 30;
+
+    Renderer {
+        BackgroundColor = None;
+        BackgroundColorDisabled = None;
+        BackgroundColorDown = None;
+        BackgroundColorDownFocused = None;
+        BackgroundColorDownHover = None;
+        BackgroundColorFocused = None;
+        BackgroundColorHover = None;
+        BorderColor = None;
+        BorderColorDisabled = None;
+        BorderColorDown = None;
+        BorderColorDownFocused = None;
+        BorderColorDownHover = None;
+        BorderColorFocused = None;
+        BorderColorHover = None;
+        Borders = (0, 0, 0, 0);
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        Opacity = 1;
+        OpacityDisabled = -1;
+        RoundedBorderRadius = 5;
+        TextColor = #EEEEEE;
+        TextColorDisabled = #7D7D7D;
+        TextColorDown = #3C3C3C;
+        TextColorDownFocused = #FFFFFF;
+        TextColorDownHover = #DDDDDD;
+        TextColorFocused = #FFFFFF;
+        TextColorHover = #FFFFFF;
+        TextOutlineColor = black;
+        TextOutlineThickness = 2;
+        TextStyle = Regular;
+        TextStyleDisabled = Regular;
+        TextStyleDown = Regular;
+        TextStyleDownFocused = Regular;
+        TextStyleDownHover = Regular;
+        TextStyleFocused = Regular;
+        TextStyleHover = Regular;
+        Texture = "../tgui/kenney/PNG/Red/Default/button_rectangle_depth_gloss.png" Middle(4, 4, 96, 32) Smooth;
+        TextureDisabled = None;
+        TextureDown = None;
+        TextureDownFocused = None;
+        TextureDownHover = "../tgui/kenney/PNG/Red/Default/button_rectangle_flat.png" Middle(4, 4, 96, 32) Smooth;
+        TextureFocused = None;
+        TextureHover = "../tgui/kenney/PNG/Red/Default/button_rectangle_depth_gradient.png" Middle(4, 4, 96, 32) Smooth;
+        TransparentTexture = False;
+    }
+}
+
+Panel.settings_panel {
+    Position = (20, 80);
+    Size = (760, 420);
+
+    Renderer {
+        BackgroundColor = None;
+        BorderColor = Black;
+        Font = "../tgui/kenney/Font/Pixellari.ttf";
+        Padding = (10, 10, 10, 10);
+        TextureBackground = "../tgui/kenney/PNG/Extra/Default/button_rectangle_line.png" Middle(9, 9, 172, 44) Smooth;
+    }
+
+    CheckBox.chk_music {
+        Checked = true;
+        Position = (210, 300);
+        Size = (32, 32);
+        TextSize = 13;
+
+        Renderer {
+            BackgroundColor = None;
+            BackgroundColorDisabled = None;
+            BackgroundColorHover = None;
+            BorderColor = None;
+            BorderColorCheckedFocused = #35BAF3;
+            BorderColorDisabled = None;
+            BorderColorFocused = #35BAF3;
+            BorderColorHover = None;
+            Borders = (2, 2, 2, 2);
+            CheckColor = None;
+            CheckColorDisabled = None;
+            CheckColorHover = None;
+            Font = "../tgui/kenney/Font/Pixellari.ttf";
+            TextColor = black;
+            TextColorDisabled = None;
+            TextColorHover = None;
+            TextDistanceRatio = 0.2;
+            TextureChecked = "../tgui/kenney/PNG/Blue/Default/check_square_grey_checkmark.png" Middle(5, 6, 22, 20) Smooth;
+            TextureCheckedDisabled = None;
+            TextureCheckedFocused = None;
+            TextureCheckedHover = None;
+            TextureUnchecked = "../tgui/kenney/PNG/Blue/Default/check_square_grey.png" Middle(7, 7, 16, 16) Smooth;
+            TextureUncheckedDisabled = None;
+            TextureUncheckedFocused = None;
+            TextureUncheckedHover = None;
+        }
+    }
+
+    Label.lbl_name {
+        AutoSize = true;
+        Position = (10, 20);
+        Renderer = &1;
+        Size = (176, 37);
+        Text = "Player name:";
+        TextSize = 30;
+    }
+
+    EditBox.inp_name {
+        Position = (10, 60);
+        Size = (720, 37.8);
+        TextSize = 13;
+
+        Renderer {
+            BackgroundColor = None;
+            BackgroundColorHover = None;
+            BorderColor = None;
+            CaretColor = #35BAF3;
+            CaretWidth = 2;
+            DefaultTextColor = #3C3C3C;
+            DefaultTextStyle = Regular;
+            Font = "../tgui/kenney/Font/Pixellari.ttf";
+            Padding = (10, 10, 10, 10);
+            SelectedTextBackgroundColor = #35BAF3;
+            SelectedTextColor = White;
+            TextColor = #3C3C3C;
+            Texture = "../tgui/kenney/PNG/Extra/Default/input_rectangle.png" Middle(9, 9, 96, 32) Smooth;
+            TextureDisabled = None;
+            TextureFocused = "../tgui/kenney/PNG/Blue/Default/button_rectangle_line.png" Middle(9, 9, 96, 32) Smooth;
+            TextureHover = "../tgui/kenney/PNG/Blue/Default/button_rectangle_border.png" Middle(9, 9, 96, 32) Smooth;
+        }
+    }
+
+    Label.lbl_simspeed {
+        AutoSize = true;
+        Position = (10, 130);
+        Renderer = &1;
+        Size = (238, 37);
+        Text = "Simulation speed:";
+        TextSize = 30;
+        Visible = false;
+    }
+
+    Slider.sld_simspeed {
+        ChangeValueOnScroll = true;
+        InvertedDirection = false;
+        Maximum = 4;
+        Minimum = 1;
+        Position = (20, 190);
+        Size = (700, 26);
+        Step = 1;
+        Value = 2;
+        Visible = false;
+
+        Renderer {
+            BorderColor = None;
+            TextureThumb = "../tgui/kenney/PNG/Blue/Default/slide_hangle.png" Smooth;
+            TextureThumbHover = "../tgui/kenney/PNG/Grey/Default/slide_hangle.png" Smooth;
+            TextureTrack = "../tgui/kenney/PNG/Blue/Default/slide_horizontal_color.png" Middle(17, 0, 60, 16) Smooth;
+            TextureTrackHover = None;
+            ThumbColor = None;
+            TrackColor = None;
+        }
+    }
+
+    Label.lbl_music {
+        AutoSize = true;
+        Position = (10, 300);
+        Renderer = &1;
+        Size = (186, 37);
+        Text = "Enable music:";
+        TextSize = 30;
+    }
+
+    Label.xzerofive {
+        AutoSize = true;
+        Position = (10, 220);
+        Renderer = &1;
+        Size = (61, 37);
+        Text = "x0.5";
+        TextSize = 30;
+        Visible = false;
+    }
+
+    Label.xtwo {
+        AutoSize = true;
+        HorizontalAlignment = Right;
+        Position = (680, 220);
+        Renderer = &1;
+        Size = (36, 37);
+        Text = x2;
+        TextSize = 30;
+        Visible = false;
+    }
+}

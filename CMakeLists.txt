@@ -206,6 +206,8 @@ set(
   ${SRCROOT}/states/stats_state.cpp
   ${INCROOT}/states/achievements_state.hpp
   ${SRCROOT}/states/achievements_state.cpp
+  ${INCROOT}/states/settings_state.hpp
+  ${SRCROOT}/states/settings_state.cpp
 )
 add_library(route_master_states ${RM_STATES_SRC})
 add_library(route_master::states ALIAS route_master_states)

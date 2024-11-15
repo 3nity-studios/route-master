@@ -1,6 +1,7 @@
 #include "states/main_menu_state.hpp"
 #include "config/game.hpp"
 #include "config/global.hpp"
+#include "states/settings_state.hpp"
 #include "states/simulation_state.hpp"
 #include <string>
 
@@ -20,6 +21,15 @@ void MainMenuState::init_state()
         this->_data->city.save();
         this->_data->window->close();
     });
+    this->_data->gui.get<tgui::Button>("settings_button")->onPress([this] {
+        this->_data->states.add_state(Engine::StateRef(new SettingsState(this->_data)), true);
+    });
+    if (music.openFromFile("assets/music/While-the-City-Sleeps_Looping.mp3"))
+    {if (this->_data->is_music_on)
+    {
+        music.play();
+        music.setLooping(true);
+    }}
 }
 
 void MainMenuState::update_inputs()

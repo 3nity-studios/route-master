@@ -152,6 +152,12 @@ void SimulationState::init_state()
     init_bus();
 
     this->_map.load("assets/maps/demo.tmx");
+    if (music.openFromFile("assets/music/Dreaming-of-Puzzles.mp3"))
+    {if (this->_data->is_music_on)
+    {
+        music.play();
+        music.setLooping(true);
+    }}
 }
 
 void SimulationState::update_inputs()
@@ -295,7 +301,6 @@ void SimulationState::draw_passengers(sf::Font font)
                              std::to_string(this->_data->city.get_current_passengers().at(j)) + "");
             amount.setPosition(sf::Vector2f(bus_stop->get_x(), bus_stop->get_y()));
             amount.setCharacterSize(24);
-
             this->_data->window->draw(amount);
 
             j++;
@@ -499,7 +504,10 @@ std::vector<SimulationInfo> SimulationState::get_simulation_info()
 void SimulationState::resume_state()
 {
     init_bus();
-
+    if (this->_data->is_music_on)
+    {
+        music.play();
+    }
     simulation_clock.start();
 
     int i = 0;
@@ -529,6 +537,7 @@ void SimulationState::pause_state()
     {
         info.projection_clock.stop();
     }
+    music.pause();
 }
 
 void SimulationState::add_simulation_info(SimulationInfo _simulation_info)

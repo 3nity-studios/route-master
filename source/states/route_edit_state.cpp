@@ -175,6 +175,12 @@ void RouteEditState::init_state()
 
     // this->_map.load("assets/maps/demo_editor.tmx");
     this->_data->assets.load_texture("editorBackground", "assets/maps/demo_editor.png");
+    if (music.openFromFile("assets/music/Mellow-Mind_Looping.mp3"))
+    {if (this->_data->is_music_on)
+    {
+        music.play();
+        music.setLooping(true);
+    }}
 }
 
 void RouteEditState::update_inputs()

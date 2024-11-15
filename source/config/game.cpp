@@ -277,6 +277,7 @@ void Game::init_variables()
         Street street47 = util::StreetFactory(_data, 47, "Street47", 36, 20, 10.f, 2.0f, 0.1f, 0.05f);
         Street street48 = util::StreetFactory(_data, 48, "Street48", 37, 28, 10.f, 2.0f, 0.1f, 0.05f);
     }   
+    this->_data->is_music_on = true;
 }
 void Game::init_window()
 {
