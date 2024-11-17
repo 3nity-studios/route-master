@@ -5,7 +5,7 @@ Employee::Employee() : id(0), name(""), last_name(""), age(0), shift_len(0), fat
     //empty
 }
 
-Employee::Employee(int _id, std::string _name, std::string _last_name, ushort _age, int _hourly_rate, ushort _shift_len, ushort _fatigue) 
+Employee::Employee(int _id, std::string _name, std::string _last_name, unsigned short _age, int _hourly_rate, unsigned short _shift_len, unsigned short _fatigue) 
     : id(_id), name(_name), last_name(_last_name), age(_age), hourly_rate(_hourly_rate), total_work_hours(0), shift_len(_shift_len), fatigue(_fatigue), in_route(false)
 {
     //empty
@@ -39,17 +39,17 @@ std::string Employee::get_last_name() const noexcept
     return last_name; 
 }
 
-ushort Employee::get_age() const noexcept
+unsigned short Employee::get_age() const noexcept
 {
     return age; 
 }
 
-ushort Employee::get_shift_len() const noexcept
+unsigned short Employee::get_shift_len() const noexcept
 {
     return shift_len; 
 }
 
-ushort Employee::get_fatigue() const noexcept
+unsigned short Employee::get_fatigue() const noexcept
 {
     return fatigue; 
 }
@@ -84,17 +84,17 @@ void Employee::set_last_name(const std::string& _last_name)
     last_name = _last_name; 
 }
 
-void Employee::set_age(const ushort& _age)
+void Employee::set_age(const unsigned short& _age)
 {
     age = _age; 
 }
 
-void Employee::set_shift_len(const ushort& _shift_len)
+void Employee::set_shift_len(const unsigned short& _shift_len)
 {
     shift_len = _shift_len; 
 }
 
-void Employee::set_fatigue(const ushort& _fatigue)
+void Employee::set_fatigue(const unsigned short& _fatigue)
 {
     fatigue = _fatigue; 
 }

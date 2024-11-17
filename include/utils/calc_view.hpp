@@ -8,8 +8,8 @@ namespace util
 
 static void calc_view(sf::RenderWindow &game_window, sf::View &view)
 {
-    uint x_size = game_window.getSize().x;
-    uint y_size = game_window.getSize().y;
+    unsigned int x_size = game_window.getSize().x;
+    unsigned int y_size = game_window.getSize().y;
 
     float x_float = static_cast<float>(x_size / game_window.getSize().x);
     float y_float = static_cast<float>(y_size / game_window.getSize().y);
@@ -21,8 +21,8 @@ static void calc_view(sf::RenderWindow &game_window, sf::View &view)
 
 static void calc_view(sf::RenderTexture &game_window, sf::View &view)
 {
-    uint x_size = game_window.getSize().x;
-    uint y_size = game_window.getSize().y;
+    unsigned int x_size = game_window.getSize().x;
+    unsigned int y_size = game_window.getSize().y;
 
     float x_float = static_cast<float>(x_size / game_window.getSize().x);
     float y_float = static_cast<float>(y_size / game_window.getSize().y);

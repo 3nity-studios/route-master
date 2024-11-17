@@ -47,11 +47,11 @@ void WindowsPlatform::set_icon(const sf::WindowHandle &in_handle)
 /******************************************************************************
  *
  *****************************************************************************/
-void WindowsPlatform::toggle_fullscreen(const sf::WindowHandle &in_handle, const sf::Uint32 inStyle,
+void WindowsPlatform::toggle_fullscreen(const sf::WindowHandle &in_handle, const std::uint32_t inStyle,
                                         const bool inWindowed, const sf::Vector2u &inResolution)
 {
     DWORD win32Style = sfml_window_style_to_win3(inStyle);
-    UINT flags = SWP_DRAWFRAME | SWP_FRAMECHANGED;
+    unsigned int flags = SWP_DRAWFRAME | SWP_FRAMECHANGED;
 
     if (inWindowed)
     {
@@ -167,10 +167,10 @@ HICON WindowsPlatform::get_icon_from_icon_directory(PBYTE inIconDirectory, const
 /******************************************************************************
  * Takes an SFML window style and matches it back to the Win32 equivalent
  *****************************************************************************/
-DWORD WindowsPlatform::sfml_window_style_to_win3(const sf::Uint32 inStyle)
+DWORD WindowsPlatform::sfml_window_style_to_win3(const std::uint32_t inStyle)
 {
     DWORD style = 0;
-    if (inStyle == sf::Style::None || inStyle == sf::Style::Fullscreen)
+    if (inStyle == sf::Style::None)
     {
         style = WS_VISIBLE | WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
     }
