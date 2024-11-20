@@ -154,6 +154,7 @@ tgui::ScrollablePanel::Ptr RouteListState::create_route_list()
         deleteButton->setText("Delete");
         deleteButton->onPress([this, i] { 
             this->_data->routes.erase(this->_data->routes.begin() + i);
+            init_state(); 
         });
         grid->addWidget(deleteButton, i+1, 4);
     }

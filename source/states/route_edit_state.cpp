@@ -14,6 +14,14 @@ RouteEditState::RouteEditState(GameDataRef data, Route &_route)
     : _data(data), map_icons_texture(sf::Image(sf::Vector2u(25, 25), sf::Color::Green)), sprite_pressed(false),
       route(_route), create_new_path(false)
 {
+    if (route.route.empty())
+    {
+        create_new_path = true; 
+    }
+    else
+    {
+        route_copy = route;
+    }
 }
 
 void RouteEditState::init_state()
@@ -103,7 +111,8 @@ void RouteEditState::init_state()
     this->_data->gui.get<tgui::Button>("cancel_button")->onPress([this] {
         if (this->create_new_path)
         {
-            this->_data->routes.pop_back();
+            this->_data->routes.back().route.clear(); 
+            this->_data->routes.pop_back(); 
         }
         else
         {
@@ -163,13 +172,6 @@ void RouteEditState::init_state()
 
     sf::View view;
     util::calc_view(this->canvas->getRenderTexture(), view);
-
-    route_copy = route;
-
-    if (route.route.empty())
-    {
-        create_new_path = true;
-    }
 
     init_visual_elements();
 
