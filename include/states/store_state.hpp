@@ -7,6 +7,8 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
 
+#include <SFML/Audio/Music.hpp>
+
 class StoreState : public Engine::State
 {
   public:
@@ -23,4 +25,5 @@ class StoreState : public Engine::State
     GameDataRef _data;
     Designar::SLList<Item> items_to_show;
     tgui::ScrollablePanel::Ptr create_store_panel();
+    sf::Music music;
 };

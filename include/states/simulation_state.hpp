@@ -16,6 +16,7 @@
 #include <memory>
 #include "utils/view_dragger.hpp"
 
+#include <SFML/Audio/Music.hpp>
 class SimulationState : public Engine::State
 {
   public:
@@ -56,4 +57,5 @@ class SimulationState : public Engine::State
     tmx::Map _map;
     std::unique_ptr<util::ViewDragger> _view_dragger;
     sf::View _view;
+    sf::Music music;
 };

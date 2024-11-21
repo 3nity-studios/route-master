@@ -28,6 +28,7 @@ struct GameData
     City city;
     std::vector<SimulationInfo> simulation_info;
     AchievementManager achievement_manager;
+    bool is_music_on;
 };
 
 typedef std::shared_ptr<GameData> GameDataRef;

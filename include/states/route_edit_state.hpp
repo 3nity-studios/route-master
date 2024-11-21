@@ -13,6 +13,8 @@
 #include <memory>
 #include "utils/view_dragger.hpp"
 
+#include <SFML/Audio/Music.hpp>
+
 class RouteEditState : public Engine::State
 {
   public:
@@ -40,4 +42,5 @@ class RouteEditState : public Engine::State
     void init_visual_elements(); 
     void draw_lines();
     bool add_to_path(std::shared_ptr<VisualElement> visual_element);
+    sf::Music music;
 };
