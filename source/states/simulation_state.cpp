@@ -68,6 +68,20 @@ void SimulationState::init_state()
         throw GameException("Couldn't find file: assets/img/buses/encava_base.png");
     }
 
+    this->_data->assets.load_texture("encava_1", "assets/img/buses/encava_1.png");
+    this->_data->assets.load_texture("encava_2", "assets/img/buses/encava_2.png");
+    this->_data->assets.load_texture("encava_3", "assets/img/buses/encava_3.png");
+    this->_data->assets.load_texture("encava_4", "assets/img/buses/encava_4.png");
+    this->_data->assets.load_texture("encava_5", "assets/img/buses/encava_5.png");
+    this->_data->assets.load_texture("encava_6", "assets/img/buses/encava_6.png");
+    this->_data->assets.load_texture("encava_7", "assets/img/buses/encava_7.png");
+    this->_data->assets.load_texture("encava_8", "assets/img/buses/encava_8.png");
+    this->_data->assets.load_texture("encava_9", "assets/img/buses/encava_9.png");
+    this->_data->assets.load_texture("encava_10", "assets/img/buses/encava_10.png");
+    this->_data->assets.load_texture("encava_11", "assets/img/buses/encava_11.png");
+    this->_data->assets.load_texture("encava_12", "assets/img/buses/encava_12.png");
+    this->_data->assets.load_texture("encava_13", "assets/img/buses/encava_13.png");
+
     if (!bus_stops_texture.loadFromFile("assets/img/bus_stop_sprites.png"))
     {
         throw GameException("Couldn't find file: assets/img/bus_stop_sprites.png");
@@ -251,7 +265,7 @@ void SimulationState::draw_state(float dt __attribute__((unused)))
     text.setPosition(sf::Vector2f(300.f, 500.f));
 
     // inside the main loop, between window.clear() and window.display()
-    this->_data->window->draw(text);
+    // this->_data->window->draw(text);
 
     for (auto bus_stop : bus_stops)
     {
@@ -288,14 +302,14 @@ void SimulationState::draw_passengers(sf::Font font)
         if (bus_stop)
         {
             sf::Text amount(font);
-            amount.setOutlineColor(sf::Color::Black);
+            amount.setFillColor(sf::Color(255,255,255,128));
+            amount.setOutlineColor(sf::Color(0,0,0,128));
             amount.setOutlineThickness(2.0f);
 
             amount.setString(bus_stop->get_name() + ": " +
                              std::to_string(this->_data->city.get_current_passengers().at(j)) + "");
             amount.setPosition(sf::Vector2f(bus_stop->get_x(), bus_stop->get_y()));
             amount.setCharacterSize(24);
-
             this->_data->window->draw(amount);
 
             j++;
@@ -305,13 +319,17 @@ void SimulationState::draw_passengers(sf::Font font)
 
 void SimulationState::init_bus()
 {
+    static std::random_device rd; // obtain a random number from hardware
+    static std::mt19937 gen(rd()); // seed the generator
+    static std::uniform_int_distribution<> distr(1, 12); // define the range
+
     sf::IntRect bus_rect(sf::Vector2i(0, 0), sf::Vector2i(48, 32));
 
     for (auto &info : this->_data->simulation_info)
     {
         if (info.time_state.first == -1 || info.previous_time != 0)
         {
-            info.projection_bus.setTexture(bus_texture);
+            info.projection_bus.setTexture(this->_data->assets.get_texture("encava_"+std::to_string(distr(gen))));
             info.projection_bus.setTextureRect(bus_rect);
             sf::FloatRect bounds = info.projection_bus.getLocalBounds();
             info.projection_bus.setOrigin(bounds.getCenter());
