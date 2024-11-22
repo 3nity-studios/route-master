@@ -288,8 +288,8 @@ void Game::init_window()
     float screen_scaling_factor = _platform.get_screen_scaling_factor(this->_data->window->getNativeHandle());
 
     // Use the screenScalingFactor to create video mode and set screen size - 720p by default
-    this->_video_mode.size = {static_cast<uint>(SCREEN_WIDTH * screen_scaling_factor),
-                              static_cast<uint>(SCREEN_HEIGHT * screen_scaling_factor)};
+    this->_video_mode.size = {static_cast<unsigned int>(SCREEN_WIDTH * screen_scaling_factor),
+                              static_cast<unsigned int>(SCREEN_HEIGHT * screen_scaling_factor)};
 
     // creating our window view using the video mode and disabling resizablilty
     this->_data->window->create(this->_video_mode, "Route Master", sf::Style::Titlebar | sf::Style::Close);

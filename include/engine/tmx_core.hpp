@@ -318,23 +318,23 @@ class MapLayer final : public sf::Drawable
 
         tmx::TileLayer::Tile getTile(std::int32_t x, std::int32_t y) const
         {
-            return m_chunkTileIDs[static_cast<uint>(calcIndexFrom(x, y))];
+            return m_chunkTileIDs[static_cast<unsigned int>(calcIndexFrom(x, y))];
         }
 
         void setTile(std::int32_t x, std::int32_t y, tmx::TileLayer::Tile tile, bool refresh)
         {
-            m_chunkTileIDs[static_cast<uint>(calcIndexFrom(x, y))] = tile;
+            m_chunkTileIDs[static_cast<unsigned int>(calcIndexFrom(x, y))] = tile;
             maybeRegenerate(refresh);
         }
 
         sf::Color getColor(std::int32_t x, std::int32_t y) const
         {
-            return m_chunkColors[static_cast<uint>(calcIndexFrom(x, y))];
+            return m_chunkColors[static_cast<unsigned int>(calcIndexFrom(x, y))];
         }
 
         void setColor(std::int32_t x, std::int32_t y, sf::Color color, bool refresh)
         {
-            m_chunkColors[static_cast<uint>(calcIndexFrom(x, y))] = color;
+            m_chunkColors[static_cast<unsigned int>(calcIndexFrom(x, y))] = color;
             maybeRegenerate(refresh);
         }
 
@@ -544,13 +544,13 @@ class MapLayer final : public sf::Drawable
 
     Chunk::Ptr &getChunkAndTransform(std::int32_t x, std::int32_t y, sf::Vector2u &chunkRelative)
     {
-        std::uint32_t chunkX = (static_cast<uint>(x) * m_mapTileSize.x) / static_cast<std::uint32_t>(m_chunkSize.x);
-        std::uint32_t chunkY = (static_cast<uint>(y) * m_mapTileSize.y) / static_cast<std::uint32_t>(m_chunkSize.y);
+        std::uint32_t chunkX = (static_cast<unsigned int>(x) * m_mapTileSize.x) / static_cast<std::uint32_t>(m_chunkSize.x);
+        std::uint32_t chunkY = (static_cast<unsigned int>(y) * m_mapTileSize.y) / static_cast<std::uint32_t>(m_chunkSize.y);
         chunkRelative.x =
-            ((static_cast<uint>(x) * m_mapTileSize.x) - chunkX * static_cast<std::uint32_t>(m_chunkSize.x)) /
+            ((static_cast<unsigned int>(x) * m_mapTileSize.x) - chunkX * static_cast<std::uint32_t>(m_chunkSize.x)) /
             m_mapTileSize.x;
         chunkRelative.y =
-            ((static_cast<uint>(y) * m_mapTileSize.y) - chunkY * static_cast<std::uint32_t>(m_chunkSize.y)) /
+            ((static_cast<unsigned int>(y) * m_mapTileSize.y) - chunkY * static_cast<std::uint32_t>(m_chunkSize.y)) /
             m_mapTileSize.y;
         return m_chunks[chunkX + chunkY * m_chunkCount.x];
     }

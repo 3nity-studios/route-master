@@ -10,9 +10,9 @@ class Employee
     int id;
     std::string name; 
     std::string last_name;
-    ushort age;
-    ushort shift_len;
-    ushort fatigue; 
+    unsigned short age;
+    unsigned short shift_len;
+    unsigned short fatigue; 
     float total_work_hours;
     int hourly_rate;
     bool in_route; 
@@ -20,15 +20,15 @@ class Employee
     public:
 
     Employee();
-    Employee(int _id, std::string _name, std::string _last_name, ushort _age, int _hourly_rate, ushort _shift_len, ushort _fatigue); 
+    Employee(int _id, std::string _name, std::string _last_name, unsigned short _age, int _hourly_rate, unsigned short _shift_len, unsigned short _fatigue); 
     Employee(nlohmann::json j);
 
     int get_id() const noexcept;
     std::string get_name() const noexcept;
     std::string get_last_name() const noexcept;
-    ushort get_age() const noexcept;
-    ushort get_shift_len() const noexcept;
-    ushort get_fatigue() const noexcept;
+    unsigned short get_age() const noexcept;
+    unsigned short get_shift_len() const noexcept;
+    unsigned short get_fatigue() const noexcept;
     float get_total_work_hours()const noexcept;
     int get_hourly_rate() const noexcept;
     bool get_in_route() const noexcept; 
@@ -36,9 +36,9 @@ class Employee
     void set_id(const int& _id);
     void set_name(const std::string& _name);
     void set_last_name(const std::string& _last_name);
-    void set_age(const ushort& _age);
-    void set_shift_len(const ushort& _shift_len);
-    void set_fatigue(const ushort& _fatigue);
+    void set_age(const unsigned short& _age);
+    void set_shift_len(const unsigned short& _shift_len);
+    void set_fatigue(const unsigned short& _fatigue);
     void set_total_work_hours(const float& time);
     void set_hourly_rate(const int& rate);
     void set_in_route(const bool& _in_route);
