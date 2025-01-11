@@ -63,10 +63,9 @@ if(RM_USE_SYSTEM_DESIGNAR)
 else()
   FetchContent_Declare(
     Designar
-    GIT_REPOSITORY https://github.com/3nity-studios/DeSiGNAR.git
-    GIT_TAG        35295635b580fd0d7aedae4af31f5221652a0d37 # v2.0.1
-    GIT_SHALLOW    ON
-    GIT_PROGRESS TRUE
+    URL      https://github.com/3nity-studios/DeSiGNAR/archive/refs/tags/v2.0.0.1.zip
+    URL_HASH SHA256=d13004a71e94632a4653a0ef3aeb7e568b688c0755e3e337e395a7e0206738b4
+    TLS_VERIFY TRUE
     EXCLUDE_FROM_ALL
     SYSTEM
   )
@@ -82,10 +81,9 @@ if(RM_USE_SYSTEM_SFML)
 else()
   FetchContent_Declare(
     SFML
-    GIT_REPOSITORY   https://github.com/SFML/SFML.git
-    GIT_TAG          2116a3ba85673e3e30dc637a2cf2e20d1c4aa710 # 3.0.0-rc.1
-    GIT_SHALLOW      ON
-    GIT_PROGRESS     TRUE
+    URL      https://github.com/SFML/SFML/archive/refs/tags/3.0.0.zip
+    URL_HASH SHA256=8cc41db46b59f07c44ecf21c74a0f956d37735dec9d90ff4522856cb162ba642
+    TLS_VERIFY TRUE
     EXCLUDE_FROM_ALL
     SYSTEM
   )
@@ -100,10 +98,9 @@ if(RM_USE_SYSTEM_TMXLITE)
 else()
   FetchContent_Declare(
     tmxlite
-    GIT_REPOSITORY   https://github.com/3nity-studios/tmxlite.git
-    GIT_TAG          74c313750219c089996c2b591ee04a5bf288fe19 # v1.4.4.1
-    GIT_SHALLOW      ON
-    GIT_PROGRESS     TRUE
+    URL      https://github.com/3nity-studios/tmxlite/archive/refs/tags/v1.4.4.1.zip
+    URL_HASH SHA256=38b803faa8952cf262a728ae5516fefaa7b9e14c597b16b43321055807cd8f48
+    TLS_VERIFY TRUE
     SOURCE_SUBDIR    tmxlite
     EXCLUDE_FROM_ALL
     SYSTEM
@@ -119,10 +116,9 @@ if(RM_USE_SYSTEM_TGUI)
 else()
   FetchContent_Declare(
     TGUI
-    GIT_REPOSITORY   https://github.com/texus/TGUI.git
-    GIT_TAG          2c355bcc67b97dc6abf8b5d8b8cd1874338000e4 # v1.5.0
-    GIT_SHALLOW      ON
-    GIT_PROGRESS     TRUE
+    URL      https://github.com/texus/TGUI/archive/refs/tags/v1.7.0.zip
+    URL_HASH SHA256=fd5e9feb7783cce50d86ac4cb0742388e02a2c08c151e386d1726f3842207170
+    TLS_VERIFY TRUE
     EXCLUDE_FROM_ALL
     SYSTEM
   )
@@ -138,10 +134,9 @@ if(RM_DEVELOPER_MODE)
   else()
     FetchContent_Declare(
       Catch2
-      GIT_REPOSITORY   https://github.com/catchorg/Catch2.git
-      GIT_TAG          31588bb4f56b638dd5afc28d3ebff9b9dcefb88d # v3.7.0
-      GIT_SHALLOW      ON
-      GIT_PROGRESS     TRUE
+      URL      https://github.com/catchorg/Catch2/archive/refs/tags/v3.8.0.zip
+      URL_HASH SHA256=bffd2c45a84e5a4b0c17e695798e8d2f65931cbaf5c7556d40388d1d8d04eb83
+      TLS_VERIFY     TRUE
       EXCLUDE_FROM_ALL
       SYSTEM
     )
