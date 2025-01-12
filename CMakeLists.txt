@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.30 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
 include(cmake/prelude.cmake)
 
 # avoid warning about deduplicating libraries when linking in CMake 3.29+:

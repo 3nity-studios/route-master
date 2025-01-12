@@ -1,14 +1,19 @@
-block(SCOPE_FOR VARIABLES)
-
 # disable warnings, tools and flags so the build process doesn't crumble down
+set(BAK_CMAKE_CXX_CPPCHECK ${CMAKE_CXX_CPPCHECK})
 unset(CMAKE_CXX_CPPCHECK)
+set(BAK_CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 set(CMAKE_CXX_FLAGS "-w")
+set(BAK_CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS})
 unset(CMAKE_EXE_LINKER_FLAGS)
+set(BAK_CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS})
 unset(CMAKE_SHARED_LINKER_FLAGS)
+set(BAK_CMAKE_CXX_CLANG_TIDY ${CMAKE_CXX_CLANG_TIDY})
 unset(CMAKE_CXX_CLANG_TIDY)
+set(BAK_CXX_CLANG_TIDY ${CXX_CLANG_TIDY})
 unset(CXX_CLANG_TIDY)
 set(CMAKE_SUPPRESS_DEVELOPER_WARNINGS TRUE CACHE INTERNAL "Suppress dev warnings" FORCE)
 
+set(BAK_CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE})
 set(CMAKE_BUILD_TYPE "Release")
 
 include(FetchContent)
@@ -52,7 +57,6 @@ else()
     URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
     URL_HASH SHA256=d6c65aca6b1ed68e7a182f4757257b107ae403032760ed6ef121c9d55e81757d
     TLS_VERIFY TRUE
-    EXCLUDE_FROM_ALL
     SYSTEM
   )
   FetchContent_MakeAvailable(json)
@@ -66,7 +70,6 @@ else()
     URL      https://github.com/3nity-studios/DeSiGNAR/archive/refs/tags/v2.0.0.1.zip
     URL_HASH SHA256=d13004a71e94632a4653a0ef3aeb7e568b688c0755e3e337e395a7e0206738b4
     TLS_VERIFY TRUE
-    EXCLUDE_FROM_ALL
     SYSTEM
   )
   FetchContent_MakeAvailable(Designar)
@@ -84,7 +87,6 @@ else()
     URL      https://github.com/SFML/SFML/archive/refs/tags/3.0.0.zip
     URL_HASH SHA256=8cc41db46b59f07c44ecf21c74a0f956d37735dec9d90ff4522856cb162ba642
     TLS_VERIFY TRUE
-    EXCLUDE_FROM_ALL
     SYSTEM
   )
   FetchContent_MakeAvailable(SFML)
@@ -99,10 +101,9 @@ else()
   FetchContent_Declare(
     tmxlite
     URL      https://github.com/3nity-studios/tmxlite/archive/refs/tags/v1.4.4.1.zip
-    URL_HASH SHA256=38b803faa8952cf262a728ae5516fefaa7b9e14c597b16b43321055807cd8f48
+    URL_HASH SHA256=3059984c0f5cb84488ea77dcc1a106e0a3c22190f21493fca49d4ab6088180f4
     TLS_VERIFY TRUE
     SOURCE_SUBDIR    tmxlite
-    EXCLUDE_FROM_ALL
     SYSTEM
   )
   FetchContent_MakeAvailable(tmxlite)
@@ -119,7 +120,6 @@ else()
     URL      https://github.com/texus/TGUI/archive/refs/tags/v1.7.0.zip
     URL_HASH SHA256=fd5e9feb7783cce50d86ac4cb0742388e02a2c08c151e386d1726f3842207170
     TLS_VERIFY TRUE
-    EXCLUDE_FROM_ALL
     SYSTEM
   )
   FetchContent_MakeAvailable(TGUI)
@@ -137,8 +137,7 @@ if(RM_DEVELOPER_MODE)
       URL      https://github.com/catchorg/Catch2/archive/refs/tags/v3.8.0.zip
       URL_HASH SHA256=bffd2c45a84e5a4b0c17e695798e8d2f65931cbaf5c7556d40388d1d8d04eb83
       TLS_VERIFY     TRUE
-      EXCLUDE_FROM_ALL
-      SYSTEM
+        SYSTEM
     )
     FetchContent_MakeAvailable(Catch2)
     list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
@@ -146,4 +145,11 @@ if(RM_DEVELOPER_MODE)
   include(Catch)
 endif()
 
-endblock()
+# restore building flags
+set(CMAKE_CXX_CPPCHECK ${BAK_CMAKE_CXX_CPPCHECK})
+set(CMAKE_CXX_FLAGS ${BAK_CMAKE_CXX_FLAGS})
+set(CMAKE_EXE_LINKER_FLAGS ${BAK_CMAKE_EXE_LINKER_FLAGS})
+set(CMAKE_SHARED_LINKER_FLAGS ${BAK_CMAKE_SHARED_LINKER_FLAGS})
+set(CMAKE_CXX_CLANG_TIDY ${BAK_CMAKE_CXX_CLANG_TIDY})
+set(CXX_CLANG_TIDY ${BAK_CXX_CLANG_TIDY})
+set(CMAKE_BUILD_TYPE ${BAK_CMAKE_BUILD_TYPE})
