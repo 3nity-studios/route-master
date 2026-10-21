@@ -46,11 +46,23 @@ jobs:
 
       - name: Package Release (.zip)
         run: |
-          # Modifica 'route-master_exe' y 'assets' si la carpeta de salida varía
-          mkdir -p package_dir
-          cp -r build/bin/* package_dir/ 2>/dev/null || cp build/route-master_exe package_dir/ 2>/dev/null || true
-          [ -d "assets" ] && cp -r assets package_dir/
-          cd package_dir
+          # 1. Create a clean temporary directory outside the project root
+          mkdir -p /tmp/package_dir
+
+          # 2. Copy the compiled executable(s)
+          if [ -d "build/bin" ]; then
+            cp -r build/bin/* /tmp/package_dir/
+          elif [ -f "build/route-master_exe" ]; then
+            cp build/route-master_exe /tmp/package_dir/
+          fi
+
+          # 3. Copy assets into the package directory if it exists
+          if [ -d "assets" ]; then
+            cp -r assets /tmp/package_dir/
+          fi
+
+          # 4. Zip the packaged contents into the workspace root
+          cd /tmp/package_dir
           zip -r "${{ github.workspace }}/RouteMaster-${{ github.ref_name }}-Linux.zip" .
 
       - name: Upload Release to GitHub
