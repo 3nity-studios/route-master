@@ -46,23 +46,24 @@ jobs:
 
       - name: Package Release (.zip)
         run: |
-          # 1. Create a clean temporary directory outside the project root
-          mkdir -p /tmp/package_dir
+          # 1. Clean staging directory
+          rm -rf /tmp/staging
+          mkdir -p /tmp/staging
 
-          # 2. Copy the compiled executable(s)
+          # 2. Copy compiled executable
           if [ -d "build/bin" ]; then
-            cp -r build/bin/* /tmp/package_dir/
-          elif [ -f "build/route-master_exe" ]; then
-            cp build/route-master_exe /tmp/package_dir/
+            cp -r build/bin/* /tmp/staging/
+          fi
+          if [ -f "build/route-master_exe" ]; then
+            cp build/route-master_exe /tmp/staging/
           fi
 
-          # 3. Copy assets into the package directory if it exists
-          if [ -d "assets" ]; then
-            cp -r assets /tmp/package_dir/
-          fi
+          # 3. Copy project assets and data folders
+          [ -d "assets" ] && cp -r assets /tmp/staging/
+          [ -d "res" ] && cp -r res /tmp/staging/
 
-          # 4. Zip the packaged contents into the workspace root
-          cd /tmp/package_dir
+          # 4. Create release archive
+          cd /tmp/staging
           zip -r "${{ github.workspace }}/RouteMaster-${{ github.ref_name }}-Linux.zip" .
 
       - name: Upload Release to GitHub
