@@ -26,6 +26,9 @@ jobs:
             libx11-dev \
             libxcursor-dev \
             libxrandr-dev \
+            libxinerama-dev \
+            libxi-dev \
+            libgl1-mesa-dev \
             libudev-dev \
             libgl-dev \
             libflac-dev \
