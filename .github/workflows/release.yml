@@ -1,0 +1,85 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+# Otorga permisos explícitos de escritura para crear releases en GitHub
+permissions:
+  contents: write
+
+jobs:
+  build-linux:
+    name: Build on Ubuntu (Linux)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libfreetype-dev \
+            libx11-dev \
+            libxcursor-dev \
+            libxrandr-dev \
+            libudev-dev \
+            libgl-dev \
+            libflac-dev \
+            libvorbis-dev \
+            libopenal-dev \
+            zip
+
+      - name: Configure CMake
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build Project
+        run: |
+          cmake --build build --config Release
+
+      - name: Package Release (.zip)
+        run: |
+          # Modifica 'route-master_exe' y 'assets' si la carpeta de salida varía
+          mkdir -p package_dir
+          cp -r build/bin/* package_dir/ 2>/dev/null || cp build/route-master_exe package_dir/ 2>/dev/null || true
+          [ -d "assets" ] && cp -r assets package_dir/
+          cd package_dir
+          zip -r "${{ github.workspace }}/RouteMaster-${{ github.ref_name }}-Linux.zip" .
+
+      - name: Upload Release to GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          files: RouteMaster-*.zip
+          generate_release_notes: false
+
+      - name: Upload Artifact for Itch.io
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-linux
+          path: RouteMaster-*.zip
+          retention-days: 1
+
+  publish-itch:
+    name: Publish to Itch.io
+    needs: build-linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Linux Build
+        uses: actions/download-artifact@v4
+        with:
+          name: build-linux
+          path: itchio-builds
+
+      - name: Push Linux to Itch.io
+        uses: manleydev/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_API_KEY }}
+          ITCH_USER: SebastianRami32
+          ITCH_GAME: route-master
+          CHANNEL: linux
+          PACKAGE: itchio-builds/RouteMaster-${{ github.ref_name }}-Linux.zip
+          VERSION: ${{ github.ref_name }}
