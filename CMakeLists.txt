@@ -29,6 +29,13 @@ project(
     LANGUAGES CXX
 )
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if(MSVC)
+  add_compile_options(/Zc:alternateTokens)
+endif()
+
 include(cmake/variables.cmake)
 include(cmake/folders.cmake)
 include(cmake/symlink-dirs.cmake)

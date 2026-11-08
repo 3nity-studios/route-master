@@ -76,6 +76,10 @@ else()
   )
   FetchContent_MakeAvailable(Designar)
 
+  if(TARGET Designar AND MSVC)
+    target_compile_options(Designar PUBLIC /Zc:alternateTokens)
+  endif()
+
   # Ensure DeSiGNAR map.hpp is patched even if restored from cache or without PATCH_COMMAND
   if(EXISTS "${designar_SOURCE_DIR}/include/Designar/map.hpp")
     file(READ "${designar_SOURCE_DIR}/include/Designar/map.hpp" _MAP_CONTENT)
@@ -87,6 +91,20 @@ else()
       )
       file(WRITE "${designar_SOURCE_DIR}/include/Designar/map.hpp" "${_MAP_PATCHED}")
       message(STATUS "Patched DeSiGNAR map.hpp for MSVC compatibility")
+    endif()
+  endif()
+
+  # Ensure DeSiGNAR hash.hpp is patched even if restored from cache or without PATCH_COMMAND
+  if(EXISTS "${designar_SOURCE_DIR}/include/Designar/hash.hpp")
+    file(READ "${designar_SOURCE_DIR}/include/Designar/hash.hpp" _HASH_CONTENT)
+    if(_HASH_CONTENT MATCHES "while \\(i < set_ptr->get_capacity\\(\\) and")
+      string(REPLACE
+        "while (i < set_ptr->get_capacity() and"
+        "while (i < set_ptr->get_capacity() &&"
+        _HASH_PATCHED "${_HASH_CONTENT}"
+      )
+      file(WRITE "${designar_SOURCE_DIR}/include/Designar/hash.hpp" "${_HASH_PATCHED}")
+      message(STATUS "Patched DeSiGNAR hash.hpp for MSVC compatibility")
     endif()
   endif()
 endif()
