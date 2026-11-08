@@ -27,11 +27,11 @@ class SimulationState : public Engine::State
     void init_state();
     void init_bus();
     void update_inputs();
-    void update_state(float dt __attribute__((unused)));
+    void update_state(float dt);
     void update_bus();
     void update_bus_stops();
     void draw_passengers(sf::Font font);
-    void draw_state(float dt __attribute__((unused)));
+    void draw_state(float dt);
     void resume_state() override;
     void pause_state() override;
     void add_simulation_info(SimulationInfo _simulation_info);

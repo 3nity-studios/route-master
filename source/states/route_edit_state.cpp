@@ -286,12 +286,12 @@ void RouteEditState::update_inputs()
 }
 
 // marks dt to not warn compiler
-void RouteEditState::update_state(float dt __attribute__((unused)))
+void RouteEditState::update_state([[maybe_unused]] float dt)
 {
 }
 
 // marks dt to not warn compiler
-void RouteEditState::draw_state(float dt __attribute__((unused)))
+void RouteEditState::draw_state([[maybe_unused]] float dt)
 {
     // background color
     this->_data->gui.draw();

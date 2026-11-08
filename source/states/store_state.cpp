@@ -114,12 +114,12 @@ this->_data->window->close();
 }
 
 // marks dt to not warn compiler
-void StoreState::update_state(float dt __attribute__((unused)))
+void StoreState::update_state([[maybe_unused]] float dt)
 {
 }
 
 // marks dt to not warn compiler
-void StoreState::draw_state(float dt __attribute__((unused)))
+void StoreState::draw_state([[maybe_unused]] float dt)
 {
     this->_data->gui.draw();
     

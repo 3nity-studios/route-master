@@ -62,12 +62,12 @@ void RouteListState::update_inputs()
 }
 
 // marks dt to not warn compiler
-void RouteListState::update_state(float dt __attribute__((unused)))
+void RouteListState::update_state([[maybe_unused]] float dt)
 {
 }
 
 // marks dt to not warn compiler
-void RouteListState::draw_state(float dt __attribute__((unused)))
+void RouteListState::draw_state([[maybe_unused]] float dt)
 {
     this->_data->gui.draw();
     

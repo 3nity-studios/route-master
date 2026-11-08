@@ -1,5 +1,9 @@
 #pragma once
 
+#if defined(_MSC_VER) && !defined(__attribute__)
+#define __attribute__(x)
+#endif
+
 #include <SFML/Window/Event.hpp>
 #include <optional>
 namespace Engine

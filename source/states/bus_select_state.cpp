@@ -77,12 +77,12 @@ this->_data->window->close();
 }
 
 // marks dt to not warn compiler
-void BusSelectState::update_state(float dt __attribute__((unused)))
+void BusSelectState::update_state([[maybe_unused]] float dt)
 {
 }
 
 // marks dt to not warn compiler
-void BusSelectState::draw_state(float dt __attribute__((unused)))
+void BusSelectState::draw_state([[maybe_unused]] float dt)
 {
     this->_data->gui.draw();
     // Displays rendered objects

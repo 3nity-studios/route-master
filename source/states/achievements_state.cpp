@@ -126,12 +126,12 @@ void AchievementsState::update_inputs()
 }
 
 // marks dt to not warn compiler
-void AchievementsState::update_state(float dt __attribute__((unused)))
+void AchievementsState::update_state([[maybe_unused]] float dt)
 {
 }
 
 // marks dt to not warn compiler
-void AchievementsState::draw_state(float dt __attribute__((unused)))
+void AchievementsState::draw_state([[maybe_unused]] float dt)
 {
     this->_data->gui.draw();
 

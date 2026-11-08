@@ -77,7 +77,7 @@ else()
   FetchContent_MakeAvailable(Designar)
 
   if(TARGET Designar AND MSVC)
-    target_compile_options(Designar PUBLIC /Zc:alternateTokens)
+    target_compile_options(Designar PUBLIC /FIiso646.h)
   endif()
 
   # Ensure DeSiGNAR map.hpp is patched even if restored from cache or without PATCH_COMMAND
@@ -105,6 +105,34 @@ else()
       )
       file(WRITE "${designar_SOURCE_DIR}/include/Designar/hash.hpp" "${_HASH_PATCHED}")
       message(STATUS "Patched DeSiGNAR hash.hpp for MSVC compatibility")
+    endif()
+  endif()
+
+  # Ensure DeSiGNAR array.hpp is patched even if restored from cache or without PATCH_COMMAND
+  if(EXISTS "${designar_SOURCE_DIR}/include/Designar/array.hpp")
+    file(READ "${designar_SOURCE_DIR}/include/Designar/array.hpp" _ARRAY_CONTENT)
+    if(_ARRAY_CONTENT MATCHES "BaseArray::get_capacity\\(\\) \\* RESIZE_FACTOR or")
+      string(REPLACE
+        "BaseArray::get_capacity() * RESIZE_FACTOR or"
+        "BaseArray::get_capacity() * RESIZE_FACTOR ||"
+        _ARRAY_PATCHED "${_ARRAY_CONTENT}"
+      )
+      file(WRITE "${designar_SOURCE_DIR}/include/Designar/array.hpp" "${_ARRAY_PATCHED}")
+      message(STATUS "Patched DeSiGNAR array.hpp for MSVC compatibility")
+    endif()
+  endif()
+
+  # Ensure DeSiGNAR queue.hpp is patched even if restored from cache or without PATCH_COMMAND
+  if(EXISTS "${designar_SOURCE_DIR}/include/Designar/queue.hpp")
+    file(READ "${designar_SOURCE_DIR}/include/Designar/queue.hpp" _QUEUE_CONTENT)
+    if(_QUEUE_CONTENT MATCHES "BaseArray::get_capacity\\(\\) \\* RESIZE_FACTOR or")
+      string(REPLACE
+        "BaseArray::get_capacity() * RESIZE_FACTOR or"
+        "BaseArray::get_capacity() * RESIZE_FACTOR ||"
+        _QUEUE_PATCHED "${_QUEUE_CONTENT}"
+      )
+      file(WRITE "${designar_SOURCE_DIR}/include/Designar/queue.hpp" "${_QUEUE_PATCHED}")
+      message(STATUS "Patched DeSiGNAR queue.hpp for MSVC compatibility")
     endif()
   endif()
 endif()

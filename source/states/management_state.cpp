@@ -71,12 +71,12 @@ void ManagementState::update_inputs()
 }
 
 // marks dt to not warn compiler
-void ManagementState::update_state(float dt __attribute__((unused)))
+void ManagementState::update_state([[maybe_unused]] float dt)
 {
 }
 
 // marks dt to not warn compiler
-void ManagementState::draw_state(float dt __attribute__((unused)))
+void ManagementState::draw_state([[maybe_unused]] float dt)
 {
     this->_data->gui.draw();
 

@@ -55,11 +55,11 @@ void SettingsState::update_inputs()
     }
 }
 
-void SettingsState::update_state(float dt __attribute__((unused)))
+void SettingsState::update_state([[maybe_unused]] float dt)
 {
 }
 
-void SettingsState::draw_state(float dt __attribute__((unused)))
+void SettingsState::draw_state([[maybe_unused]] float dt)
 {
     this->_data->window->clear(sf::Color::Black);
     this->_data->gui.draw();

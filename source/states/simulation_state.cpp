@@ -202,14 +202,14 @@ void SimulationState::update_inputs()
 }
 
 // marks dt to not warn compiler
-void SimulationState::update_state(float dt __attribute__((unused)))
+void SimulationState::update_state([[maybe_unused]] float dt)
 {
     update_bus();
     update_bus_stops();
 }
 
 // marks dt to not warn compiler
-void SimulationState::draw_state(float dt __attribute__((unused)))
+void SimulationState::draw_state([[maybe_unused]] float dt)
 {
     // background color
     this->_data->window->clear(sf::Color::Black);

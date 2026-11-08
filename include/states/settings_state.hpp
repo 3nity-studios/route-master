@@ -25,8 +25,8 @@ class SettingsState : public Engine::State
 
     void init_state();
     void update_inputs();
-    void update_state(float dt __attribute__((unused)));
-    void draw_state(float dt __attribute__((unused)));
+    void update_state(float dt);
+    void draw_state(float dt);
     
     void save_settings();
 
