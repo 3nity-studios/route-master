@@ -1,3 +1,8 @@
+# Support legacy subprojects (e.g. freetype in SFML) under CMake 3.30+
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.30.0")
+  set(CMAKE_POLICY_VERSION_MINIMUM "3.5" CACHE STRING "Minimum policy version for subprojects" FORCE)
+endif()
+
 cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
 include(cmake/prelude.cmake)
 

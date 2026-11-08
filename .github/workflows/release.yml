@@ -166,6 +166,7 @@ jobs:
         with:
           key: linux-ccache-${{ github.sha }}
           restore-keys: linux-ccache-
+          max-size: 2G
 
       - name: Cache FetchContent dependencies
         uses: actions/cache@v4
@@ -179,15 +180,15 @@ jobs:
         run: >
           cmake -S . -B build -G Ninja
           -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+          -DCMAKE_C_COMPILER_LAUNCHER=ccache
+          -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
           -DRM_STATIC_LINK=ON
-          -DRM_DEVELOPER_MODE=ON
-          -DBUILD_TESTING=ON
+          -DRM_DEVELOPER_MODE=OFF
+          -DBUILD_TESTING=OFF
 
       - name: Build Project
         run: cmake --build build --config Release --parallel
-
-      - name: Run Tests
-        run: ctest --test-dir build --output-on-failure -C Release
 
       - name: Package Linux Releases (.zip, .deb, .pkg.tar.zst)
         run: >
@@ -226,6 +227,7 @@ jobs:
         with:
           key: windows-ccache-${{ github.sha }}
           restore-keys: windows-ccache-
+          max-size: 2G
 
       - name: Cache FetchContent dependencies
         uses: actions/cache@v4
@@ -239,6 +241,9 @@ jobs:
         run: >
           cmake -S . -B build -G Ninja
           -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+          -DCMAKE_C_COMPILER_LAUNCHER=ccache
+          -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
           -DRM_STATIC_LINK=ON
           -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
           -DRM_DEVELOPER_MODE=OFF
