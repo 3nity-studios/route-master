@@ -34,6 +34,7 @@ if(RM_STATIC_LINK)
   set(BUILD_SHARED_LIBS OFF)
 
   set(SFML_STATIC_LIBRARIES TRUE)
+  set(SFML_USE_STATIC_STD_LIBS ON CACHE BOOL "Use static std libs for SFML" FORCE)
   add_compile_definitions(SFML_STATIC)
   
   option(TMXLITE_STATIC_LIBRARIES "Search for tmxlite static dependencies" ON)
@@ -43,7 +44,14 @@ if(RM_STATIC_LINK)
   set(TMXLITE_FETCH_EXTLIBS TRUE CACHE INTERNAL "Automatically download TMXLITE dependencies")
 
   set(DESIGNAR_STATIC_LIBRARIES TRUE)
+  set(DESIGNAR_USE_STATIC_STD_LIBS ON CACHE BOOL "Use static std libs for DeSiGNAR" FORCE)
+
   set(TGUI_STATIC_LIBRARIES TRUE)
+  set(TGUI_SHARED_LIBS OFF CACHE BOOL "Build static TGUI library" FORCE)
+  set(TGUI_USE_STATIC_STD_LIBS ON CACHE BOOL "Use static std libs for TGUI" FORCE)
+  set(TGUI_BUILD_GUI_BUILDER OFF CACHE BOOL "Disable TGUI GUI builder" FORCE)
+  set(TGUI_BUILD_EXAMPLES OFF CACHE BOOL "Disable TGUI examples" FORCE)
+  set(TGUI_BUILD_TESTS OFF CACHE BOOL "Disable TGUI tests" FORCE)
   add_compile_definitions(TGUI_STATIC)
   set(TGUI_BACKEND SFML_GRAPHICS)
 else()
