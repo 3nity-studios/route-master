@@ -99,11 +99,11 @@ def make_nsis_installer(binary_path: Path, assets_dir: Path, source_dir: Path, v
     # Prepare NSIS script
     staging_nsi = output_dir / "_installer.nsi"
 
-    # Normalize paths with forward slashes for NSIS
-    norm_bin = str(binary_path.resolve()).replace("\\", "/")
-    norm_assets = str(assets_dir.resolve()).replace("\\", "/")
-    norm_icon = str(icon_path.resolve()).replace("\\", "/") if icon_path.exists() else ""
-    norm_out = str(installer_path.resolve()).replace("\\", "/")
+    # Use native resolved paths for NSIS
+    norm_bin = str(binary_path.resolve())
+    norm_assets = str(assets_dir.resolve())
+    norm_icon = str(icon_path.resolve()) if icon_path.exists() else ""
+    norm_out = str(installer_path.resolve())
 
     icon_directives = ""
     if norm_icon:
@@ -144,11 +144,11 @@ Section "Route Master (required)" SecCore
     SetOutPath "$INSTDIR"
 
     ; Main executable
-    File "/oname=route_master.exe" "{norm_bin}"
+    File "{norm_bin}"
 
     ; Copy game assets
     SetOutPath "$INSTDIR\\assets"
-    File /r "{norm_assets}/*.*"
+    File /r "{norm_assets}\\*.*"
 
     ; Create data directory for user saves
     CreateDirectory "$INSTDIR\\data"
@@ -198,6 +198,10 @@ SectionEnd
     cmd = [makensis, str(staging_nsi)]
     try:
         subprocess.check_call(cmd)
+    except Exception as e:
+        print("NSIS script failed. Generated script content:")
+        print(nsis_content)
+        raise e
     finally:
         staging_nsi.unlink(missing_ok=True)
 
