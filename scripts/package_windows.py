@@ -40,6 +40,8 @@ def find_makensis() -> str:
         r"C:\Program Files (x86)\NSIS\makensis.exe",
         r"C:\Program Files\NSIS\makensis.exe",
         r"C:\ProgramData\chocolatey\bin\makensis.exe",
+        r"C:\Program Files (x86)\NSIS\Bin\makensis.exe",
+        r"C:\Program Files\NSIS\Bin\makensis.exe",
     ]
     for p in default_paths:
         if os.path.isfile(p):
@@ -84,6 +86,8 @@ def make_nsis_installer(binary_path: Path, assets_dir: Path, source_dir: Path, v
 
     makensis = find_makensis()
     if not makensis:
+        if os.environ.get("CI"):
+            raise RuntimeError("'makensis' not found in PATH or standard locations, but running in CI environment!")
         print("  [WARN] 'makensis' not found in PATH or standard locations; skipping installer creation.")
         return None
 
