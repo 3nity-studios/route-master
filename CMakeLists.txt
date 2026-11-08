@@ -31,6 +31,12 @@ include(cmake/symlink-dirs.cmake)
 # ---- Configurable options ----
 
 option(RM_STATIC_LINK "Link all libraries statically to produce a single-file executable" ON)
+if(RM_STATIC_LINK)
+  if(MSVC)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE STRING "" FORCE)
+    set(SFML_USE_STATIC_STD_LIBS ON CACHE BOOL "Use static std libs" FORCE)
+  endif()
+endif()
 option(RM_USE_SYSTEM_JSON "Use system's installation of nlohmann's JSON library" OFF)
 option(RM_USE_SYSTEM_DESIGNAR "Use system's installation of DeSiGNAR library" OFF)
 option(RM_USE_SYSTEM_SFML "Use system's installation of SFML library" OFF)
@@ -58,6 +64,7 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/source)
 include_directories(${SRCROOT})
 include_directories(${INCROOT})
 include_directories(${CMAKE_BINARY_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR})
 
 # ---- config
 
@@ -363,6 +370,17 @@ symlink_common_dirs(route_master::exe)
 if(SFML_STATIC_LIBRARIES AND NOT IOS AND NOT WIN32)
   find_package(OpenGL REQUIRED)
   target_link_libraries(route_master_exe PRIVATE OpenGL::GL)
+endif()
+
+# ---- Static Linking Options ----
+if(RM_STATIC_LINK)
+  if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    if(NOT APPLE AND NOT WIN32)
+      target_link_options(route_master_exe PRIVATE -static-libgcc -static-libstdc++)
+    elseif(MINGW)
+      target_link_options(route_master_exe PRIVATE -static -static-libgcc -static-libstdc++)
+    endif()
+  endif()
 endif()
 
 # ---- Install rules ----

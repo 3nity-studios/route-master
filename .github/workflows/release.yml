@@ -1,101 +1,362 @@
-name: Build and Release
+name: CI/CD & Automated Release
 
 on:
   push:
+    branches:
+      - main
+      - master
     tags:
       - 'v*'
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release type to publish'
+        required: true
+        type: choice
+        default: 'nightly'
+        options:
+          - 'nightly'
+          - 'versioned'
+          - 'none (build and test only)'
+      custom_tag:
+        description: 'Custom version tag (e.g. v1.0.0, required if release_type is versioned)'
+        required: false
+        type: string
+        default: ''
+      dry_run:
+        description: 'Skip publishing release (build and package artifacts only)'
+        required: false
+        type: boolean
+        default: false
 
-# Otorga permisos explícitos de escritura para crear releases en GitHub
 permissions:
   contents: write
 
 jobs:
-  build-linux:
-    name: Build on Ubuntu (Linux)
+  prepare:
+    name: Prepare Release Context
     runs-on: ubuntu-latest
-
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      display_version: ${{ steps.version.outputs.display_version }}
+      release_tag: ${{ steps.version.outputs.release_tag }}
+      is_nightly: ${{ steps.version.outputs.is_nightly }}
+      should_publish: ${{ steps.version.outputs.should_publish }}
     steps:
-      - name: Checkout code
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Determine Version and Metadata
+        id: version
+        shell: python
+        run: |
+          import os
+          from datetime import datetime, timezone
+
+          ref = os.environ.get("GITHUB_REF", "")
+          event = os.environ.get("GITHUB_EVENT_NAME", "")
+          sha = os.environ.get("GITHUB_SHA", "")[:7]
+          now_str = datetime.now(timezone.utc).strftime("%Y%m%d")
+
+          input_rel_type = os.environ.get("INPUT_RELEASE_TYPE", "nightly")
+          input_custom_tag = os.environ.get("INPUT_CUSTOM_TAG", "").strip()
+          input_dry_run = os.environ.get("INPUT_DRY_RUN", "false").lower() == "true"
+
+          if event == "workflow_dispatch":
+              if input_dry_run or input_rel_type == "none (build and test only)":
+                  raw_ver = f"manual-{now_str}-{sha}"
+                  clean_ver = f"0.0.0-manual.{now_str}.{sha}"
+                  tag = ""
+                  is_nightly = "false"
+                  should_pub = "false"
+              elif input_rel_type == "versioned":
+                  tag = input_custom_tag if input_custom_tag else f"v0.1.0-manual.{now_str}"
+                  raw_ver = tag
+                  clean_ver = tag.lstrip("v")
+                  is_nightly = "false"
+                  should_pub = "true"
+              else:  # nightly
+                  tag = "nightly"
+                  raw_ver = f"nightly-{now_str}-{sha}"
+                  clean_ver = f"0.0.0-nightly.{now_str}.{sha}"
+                  is_nightly = "true"
+                  should_pub = "true"
+          elif ref.startswith("refs/tags/v"):
+              raw_ver = ref.replace("refs/tags/", "")
+              clean_ver = raw_ver.lstrip("v")
+              tag = raw_ver
+              is_nightly = "false"
+              should_pub = "true"
+          elif event == "pull_request":
+              raw_ver = f"pr-{sha}"
+              clean_ver = f"0.0.0-pr.{sha}"
+              tag = ""
+              is_nightly = "false"
+              should_pub = "false"
+          else:
+              # Push to default branch
+              raw_ver = f"nightly-{now_str}-{sha}"
+              clean_ver = f"0.0.0-nightly.{now_str}.{sha}"
+              tag = "nightly"
+              is_nightly = "true"
+              should_pub = "true"
+
+          output_path = os.environ.get("GITHUB_OUTPUT")
+          if output_path:
+              with open(output_path, "a", encoding="utf-8") as f:
+                  f.write(f"version={clean_ver}\n")
+                  f.write(f"display_version={raw_ver}\n")
+                  f.write(f"release_tag={tag}\n")
+                  f.write(f"is_nightly={is_nightly}\n")
+                  f.write(f"should_publish={should_pub}\n")
+
+          print(f"Computed metadata:")
+          print(f"  version: {clean_ver}")
+          print(f"  display_version: {raw_ver}")
+          print(f"  release_tag: {tag}")
+          print(f"  is_nightly: {is_nightly}")
+          print(f"  should_publish: {should_pub}")
+        env:
+          INPUT_RELEASE_TYPE: ${{ inputs.release_type }}
+          INPUT_CUSTOM_TAG: ${{ inputs.custom_tag }}
+          INPUT_DRY_RUN: ${{ inputs.dry_run }}
+
+  build-linux:
+    name: Build Linux (Ubuntu/Debian/Arch)
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Install System Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libfreetype-dev \
-            libx11-dev \
-            libxcursor-dev \
-            libxrandr-dev \
-            libxinerama-dev \
-            libxi-dev \
-            libgl1-mesa-dev \
-            libudev-dev \
-            libgl-dev \
-            libflac-dev \
-            libvorbis-dev \
-            libopenal-dev \
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: >-
+            libfreetype-dev
+            libx11-dev
+            libxcursor-dev
+            libxrandr-dev
+            libxinerama-dev
+            libxi-dev
+            libgl1-mesa-dev
+            libudev-dev
+            libflac-dev
+            libvorbis-dev
+            libopenal-dev
+            zstd
             zip
+            ninja-build
+            dpkg-dev
+          version: 1.1
+
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: linux-ccache-${{ github.sha }}
+          restore-keys: linux-ccache-
+
+      - name: Cache FetchContent dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/_deps
+          key: linux-deps-${{ hashFiles('cmake/third-party.cmake', 'CMakeLists.txt') }}
+          restore-keys: |
+            linux-deps-
 
       - name: Configure CMake
-        run: |
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        run: >
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DRM_STATIC_LINK=ON
+          -DRM_DEVELOPER_MODE=ON
+          -DBUILD_TESTING=ON
 
       - name: Build Project
-        run: |
-          cmake --build build --config Release
+        run: cmake --build build --config Release --parallel
 
-      - name: Package Release (.zip)
-        run: |
-          # 1. Clean staging directory
-          rm -rf /tmp/staging
-          mkdir -p /tmp/staging
+      - name: Run Tests
+        run: ctest --test-dir build --output-on-failure -C Release
 
-          # 2. Copy compiled executable
-          if [ -d "build/bin" ]; then
-            cp -r build/bin/* /tmp/staging/
-          fi
-          if [ -f "build/route-master_exe" ]; then
-            cp build/route-master_exe /tmp/staging/
-          fi
+      - name: Package Linux Releases (.zip, .deb, .pkg.tar.zst)
+        run: >
+          python3 scripts/package_linux.py
+          --build-dir build
+          --source-dir .
+          --version "${{ needs.prepare.outputs.version }}"
+          --display-version "${{ needs.prepare.outputs.display_version }}"
+          --output-dir dist
 
-          # 3. Copy project assets and data folders
-          [ -d "assets" ] && cp -r assets /tmp/staging/
-          [ -d "res" ] && cp -r res /tmp/staging/
-
-          # 4. Create release archive
-          cd /tmp/staging
-          zip -r "${{ github.workspace }}/RouteMaster-${{ github.ref_name }}-Linux.zip" .
-
-      - name: Upload Release to GitHub
-        uses: softprops/action-gh-release@v2
-        with:
-          files: RouteMaster-*.zip
-          generate_release_notes: false
-
-      - name: Upload Artifact for Itch.io
+      - name: Upload Linux Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: build-linux
-          path: RouteMaster-*.zip
-          retention-days: 1
+          name: linux-artifacts
+          path: dist/*
+          retention-days: 5
+
+  build-windows:
+    name: Build Windows (Portable Zip & Installer)
+    needs: prepare
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup MSVC Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: windows-ccache-${{ github.sha }}
+          restore-keys: windows-ccache-
+
+      - name: Cache FetchContent dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/_deps
+          key: windows-deps-${{ hashFiles('cmake/third-party.cmake', 'CMakeLists.txt') }}
+          restore-keys: |
+            windows-deps-
+
+      - name: Configure CMake
+        run: >
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DRM_STATIC_LINK=ON
+          -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
+          -DRM_DEVELOPER_MODE=OFF
+          -DBUILD_TESTING=OFF
+
+      - name: Build Project
+        run: cmake --build build --config Release --parallel
+
+      - name: Package Windows Releases (.zip, .exe installer)
+        run: >
+          python scripts/package_windows.py
+          --build-dir build
+          --source-dir .
+          --version "${{ needs.prepare.outputs.version }}"
+          --display-version "${{ needs.prepare.outputs.display_version }}"
+          --output-dir dist
+
+      - name: Upload Windows Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-artifacts
+          path: dist/*
+          retention-days: 5
+
+  publish-release:
+    name: Publish GitHub Release
+    needs: [prepare, build-linux, build-windows]
+    if: needs.prepare.outputs.should_publish == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: Generate SHA256 Checksums
+        run: python3 scripts/generate_checksums.py --dist-dir release-assets
+
+      - name: Publish to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.prepare.outputs.release_tag }}
+          name: ${{ needs.prepare.outputs.is_nightly == 'true' && 'Route Master Nightly Build' || format('Route Master {0}', needs.prepare.outputs.display_version) }}
+          prerelease: ${{ needs.prepare.outputs.is_nightly == 'true' }}
+          make_latest: ${{ needs.prepare.outputs.is_nightly == 'true' && 'false' || 'true' }}
+          generate_release_notes: ${{ needs.prepare.outputs.is_nightly != 'true' }}
+          body: |
+            ${{ needs.prepare.outputs.is_nightly == 'true' && format('### Route Master Nightly Build
+
+            - **Commit**: {0}
+            - **Ref**: {1}
+            - **Build Date**: {2}
+
+            *Automated bleeding-edge build compiled directly from the latest commit.*
+
+            #### Installation Notes
+            - **Linux Portable**: Extract `.zip` and run `./route_master`
+            - **Ubuntu/Debian**: Install `.deb` package with `sudo apt install ./RouteMaster-*.deb`
+            - **Arch Linux**: Install package with `sudo pacman -U route-master-*.pkg.tar.zst`
+            - **Windows Portable**: Extract `.zip` and run `route_master.exe`
+            - **Windows Installer**: Run `RouteMaster-*-Installer.exe`
+            ', github.sha, github.ref, github.event.head_commit.timestamp) || '' }}
+          files: |
+            release-assets/*
 
   publish-itch:
     name: Publish to Itch.io
-    needs: build-linux
+    needs: [prepare, build-linux, build-windows, publish-release]
+    if: needs.prepare.outputs.should_publish == 'true'
     runs-on: ubuntu-latest
     steps:
-      - name: Download Linux Build
+      - name: Check Itch.io Credentials
+        id: auth-check
+        shell: bash
+        run: |
+          if [ -n "$BUTLER_API_KEY" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "BUTLER_API_KEY secret is not set; skipping Itch.io upload."
+          fi
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+
+      - name: Download build artifacts
+        if: steps.auth-check.outputs.configured == 'true'
         uses: actions/download-artifact@v4
         with:
-          name: build-linux
           path: itchio-builds
+          merge-multiple: true
 
-      - name: Push Linux to Itch.io
+      - name: Push Linux build to Itch.io
+        if: steps.auth-check.outputs.configured == 'true'
         uses: manleydev/butler-publish-itchio-action@master
         env:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_API_KEY }}
           ITCH_USER: SebastianRami32
           ITCH_GAME: route-master
           CHANNEL: linux
-          PACKAGE: itchio-builds/RouteMaster-${{ github.ref_name }}-Linux.zip
-          VERSION: ${{ github.ref_name }}
+          PACKAGE: itchio-builds/RouteMaster-${{ needs.prepare.outputs.display_version }}-Linux-x86_64.zip
+          VERSION: ${{ needs.prepare.outputs.display_version }}
+
+      - name: Push Windows build to Itch.io
+        if: steps.auth-check.outputs.configured == 'true'
+        uses: manleydev/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_API_KEY }}
+          ITCH_USER: SebastianRami32
+          ITCH_GAME: route-master
+          CHANNEL: windows
+          PACKAGE: itchio-builds/RouteMaster-${{ needs.prepare.outputs.display_version }}-Windows-x86_64.zip
+          VERSION: ${{ needs.prepare.outputs.display_version }}
