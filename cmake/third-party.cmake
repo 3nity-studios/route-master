@@ -71,9 +71,24 @@ else()
     URL      https://github.com/3nity-studios/DeSiGNAR/archive/refs/tags/v2.0.0.1.zip
     URL_HASH SHA256=d13004a71e94632a4653a0ef3aeb7e568b688c0755e3e337e395a7e0206738b4
     TLS_VERIFY TRUE
+    PATCH_COMMAND ${CMAKE_COMMAND} -DSOURCE_DIR=<SOURCE_DIR> -P "${PROJECT_SOURCE_DIR}/cmake/patch-designar.cmake"
     SYSTEM
   )
   FetchContent_MakeAvailable(Designar)
+
+  # Ensure DeSiGNAR map.hpp is patched even if restored from cache or without PATCH_COMMAND
+  if(EXISTS "${designar_SOURCE_DIR}/include/Designar/map.hpp")
+    file(READ "${designar_SOURCE_DIR}/include/Designar/map.hpp" _MAP_CONTENT)
+    if(_MAP_CONTENT MATCHES "using BaseHash = HashSet<Item, CmpWrapperType, LHashTable>;")
+      string(REPLACE
+        "using BaseHash = HashSet<Item, CmpWrapperType, LHashTable>;"
+        "using BaseHash = HashSet<Item, CmpWrapperType, HashTableType>;"
+        _MAP_PATCHED "${_MAP_CONTENT}"
+      )
+      file(WRITE "${designar_SOURCE_DIR}/include/Designar/map.hpp" "${_MAP_PATCHED}")
+      message(STATUS "Patched DeSiGNAR map.hpp for MSVC compatibility")
+    endif()
+  endif()
 endif()
 
 if(RM_USE_SYSTEM_SFML)

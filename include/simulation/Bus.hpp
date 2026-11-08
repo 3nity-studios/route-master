@@ -7,7 +7,7 @@
 #include <nlohmann/json.hpp>
 #include "simulation/BusStop.hpp"
 
-static std::map<unsigned int, float> LevelMultiplier = {{1, 1.0}, {2, 1.25}, {3, 1.5}, {4, 2.0}, {5, 3.0}};
+static std::map<unsigned int, float> LevelMultiplier = {{1, 1.0f}, {2, 1.25f}, {3, 1.5f}, {4, 2.0f}, {5, 3.0f}};
 
 struct BusFeature
 {
