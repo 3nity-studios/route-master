@@ -300,6 +300,19 @@ jobs:
       - name: Generate SHA256 Checksums
         run: python3 scripts/generate_checksums.py --dist-dir release-assets
 
+      - name: Clean up older Nightly Release Assets
+        if: needs.prepare.outputs.is_nightly == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view nightly >/dev/null 2>&1; then
+            echo "Removing older nightly release assets..."
+            for asset in $(gh release view nightly --json assets -q '.assets[].name'); do
+              gh release delete-asset nightly "$asset" -y || true
+            done
+          fi
+
       - name: Publish to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
