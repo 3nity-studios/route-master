@@ -1,6 +1,10 @@
 #ifndef UTIL_WINDOWS_PLATFORM_HPP
 #define UTIL_WINDOWS_PLATFORM_HPP
 
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
 #include <Windows.h>
 #include <array>
 #include "platform/iplatform.hpp"

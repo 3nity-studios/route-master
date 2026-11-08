@@ -1,5 +1,9 @@
 #ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #include "platform/win32/windows_platform.hpp"
+#include <algorithm>
 #include <winuser.h>
 #include "platform/win32/resource.h"
 
@@ -26,9 +30,9 @@ void WindowsPlatform::set_icon(const sf::WindowHandle &in_handle)
     std::array<int, 5> icons = {16, 32, 48, 64, 128};
 
     std::size_t indexSmallIcon = static_cast<std::size_t>(
-        std::min(std::max(std::ceil(m_screenScalingFactor - 1.0f), 0.0f), static_cast<float>(icons.size()) - 1.0f));
-    std::size_t indexBigIcon = static_cast<std::size_t>(std::min(
-        std::max(std::ceil(m_screenScalingFactor - 1.0f), 0.0f) + 1.0f, static_cast<float>(icons.size()) - 1.0f));
+        (std::min)((std::max)(std::ceil(m_screenScalingFactor - 1.0f), 0.0f), static_cast<float>(icons.size()) - 1.0f));
+    std::size_t indexBigIcon = static_cast<std::size_t>((std::min)(
+        (std::max)(std::ceil(m_screenScalingFactor - 1.0f), 0.0f) + 1.0f, static_cast<float>(icons.size()) - 1.0f));
 
     HICON smallIcon = get_icon_from_icon_directory(iconDirectory, icons[indexSmallIcon]);
     HICON bigIcon = get_icon_from_icon_directory(iconDirectory, icons[indexBigIcon]);

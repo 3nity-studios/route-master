@@ -81,9 +81,9 @@ void Game::init_variables()
             [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_buses().size() >= 10; }
         },
         {
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_buses().size() / 1) * 100; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_buses().size() / 5) * 100; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_buses().size() / 10) * 100; }
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return static_cast<int>((player.get_buses().size() / 1) * 100); },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return static_cast<int>((player.get_buses().size() / 5) * 100); },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return static_cast<int>((player.get_buses().size() / 10) * 100); }
         },
         {10000, 20000, 100000}
     ));
@@ -97,9 +97,9 @@ void Game::init_variables()
             [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return player.get_employees().size() >= 10; }
         },
         {
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_employees().size() / 1) * 100; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_employees().size() / 5) * 100; },
-            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return (player.get_employees().size() / 10) * 100; }
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return static_cast<int>((player.get_employees().size() / 1) * 100); },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return static_cast<int>((player.get_employees().size() / 5) * 100); },
+            [](Player &player, Store &store, std::vector<SimulationInfo> &simulation_info) { return static_cast<int>((player.get_employees().size() / 10) * 100); }
         },
         {5000, 10000, 50000}
     ));
